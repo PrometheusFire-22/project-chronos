@@ -49,7 +49,7 @@ repos:
 
       - id: check-added-large-files
         name: Prevent large files (>1MB)
-        args: ['--maxkb=1000']
+        args: ["--maxkb=1000"]
 
       - id: check-merge-conflict
         name: Check for merge conflict markers
@@ -128,6 +128,5 @@ default_language_version:
 
 # Fail fast on first error
 fail_fast: false
-
 # Verbose output
 # verbose: false
