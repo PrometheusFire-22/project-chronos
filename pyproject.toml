@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "project-chronos"
-version = "0.2.0" # Incremented version to reflect our recent work
+version = "0.2.0"
 description = "Production-grade macroeconomic data platform"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -29,11 +29,10 @@ dev = [
     "ruff>=0.1.9",
     "thefuck",
     "pre-commit>=3.0.0",
-    "ipython", # Good to have for debugging
-    "ipdb",    # Good to have for debugging
+    "ipython",
+    "ipdb",
 ]
 
-# THIS IS THE NEW SECTION THAT REPLACES THE LOGIC FROM setup.py
 [tool.setuptools.packages.find]
 where = ["src"]
 
@@ -44,3 +43,9 @@ target-version = ["py311"]
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+
+# THIS NEW SECTION HOLDS ALL PYTEST CONFIGURATION
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-ra -q --cov=src/chronos --cov-report=term-missing"
