@@ -97,3 +97,16 @@ gis_data/raw/USA/
         ├── zipped/
         └── unzipped/
 ```
+
+
+
+``` mermaid
+graph TD
+    A["<b>DevOps (The 'Why')</b><br/>The overall philosophy and practice of unifying development and operations."] --> B & C & D
+
+    subgraph "Implementation Areas (The 'How')"
+        B["<b>Orchestration & Environment</b><br/>Managing the runtime environment and services.<br/><i>(e.g., Docker, GitHub Actions CI)</i>"]
+        C["<b>Automation</b><br/>Writing scripts to automate repetitive tasks.<br/><i>(e.g., Ingestion scripts, test automation)</i>"]
+        D["<b>Tooling & DevEx</b><br/>Improving the developer's tools and workflow.<br/><i>(e.g., VS Code extensions, Linters, Debuggers)</i>"]
+    end
+```
