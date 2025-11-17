@@ -157,3 +157,124 @@ To standardize and accelerate the creation of Jira issues, we will use the follo
 ```
 
 ---
+```markdown
+### **🔬 JIRA SPIKE STORY GENERATION RFP**
+
+**1. Story Title Generation:**
+*   **Story Type:** `spike`
+*   **Scope (strategy, tooling, db, etc.):** `[e.g., strategy]`
+*   **Goal of the Story (imperative verb):** `[e.g., Research and select a CRM for lead management]`
+
+**2. User Story Description Generation:**
+*   **User Persona (Developer, Founder, Data Architect):** `[e.g., Founder]`
+*   **Primary Business Benefit:** `[e.g., To make a fast, data-driven decision on a critical business tool.]`
+
+**3. Acceptance Criteria Generation:**
+*   **Guidance:** "The AC for a spike is the *decision itself*. The deliverable is a documented choice."
+    *   `- [ ] A new Confluence page 'ADR: [Topic]' is created using the Spike Research template.`
+    *   `- [ ] The ADR contains a clear, final decision.`
+    *   `- [ ] The ADR documents the rationale for the decision.`
+
+**4. Labels:**
+*   **Guidance:** "Must include `discovery` and `research`."
+```
+
+## 🎯 SPRINT PLANNING PROTOCOL
+
+```markdown
+### Sprint Planning Protocol ###
+
+## Gating Decision 1: Define the Sprint's Strategic Goal
+
+Before any stories are selected, the Product Owner must define the single, most important business objective for the upcoming time-box.
+*   *Example:* "My goal is to produce a compelling MVP to support the investor pitch."
+
+## Gating Decision 2: Select the Lead Epic
+
+Based on the strategic goal, select the primary Epic that will be the focus of the sprint.
+*   *Example:* For the MVP goal, the lead epic is `MVP Showcase & Outreach`.
+
+## Gating Decision 3: Sprint Backlog Selection & RICE Analysis
+
+1.  Filter the Jira backlog to show all stories in the lead Epic.
+2.  Perform a rapid, informal RICE analysis on these stories.
+3.  Select a realistic number of the highest-scoring stories to commit to for the sprint.
+4.  **Optional:** Pull in 1-2 high-priority stories from *other* Epics (e.g., a critical `tech-debt` item) if capacity allows. This creates a "multi-thematic" sprint.
+```
+
+---
+
+## **5. 🚀 The Agile Ceremony Toolkit (Templates)**
+
+Here are the complete, final templates for your sprint ceremonies. They are designed to be copied directly into new Confluence pages.
+
+### **Template 1: Daily Stand-up**
+Create this as a new template in Confluence for easy daily use.
+**Page Title:** `YYYY-MM-DD - Daily Stand-up`
+
+```markdown
+#  Daily Stand-up: YYYY-MM-DD
+
+## 1. Yesterday's Progress (What did I complete?)
+*   *Moved `CHRONOS-X` to 'Done'.*
+*   *Completed the SQL view for the Toronto dashboard.*
+
+## 2. Today's Plan (What is my #1 priority now?)
+*   *My focus today is on `CHRONOS-Y`: [Story Title].*
+*   *Specifically, I will complete the following sub-task: [Sub-task title].*
+
+## 3. Blockers (What is stopping me?)
+*   *None.*
+*   *I am blocked by [Blocker description]. My plan to unblock is [Action].*
+```
+
+### **Template 2: Sprint Review**
+Create this page at the end of a sprint.
+**Page Title:** `Sprint X Review: [Sprint Name]`
+
+```markdown
+# Sprint X Review: [Sprint Name]
+
+*   **Date:** YYYY-MM-DD
+*   **Sprint Goal:** "[Paste the Sprint Goal here]"
+
+## 1. Goal Assessment
+*   [ ] **Goal Met**
+*   [ ] **Goal Partially Met**
+*   [ ] **Goal Not Met**
+
+*   **Summary:** *A brief, honest assessment of whether we achieved the sprint's primary mission.*
+
+## 2. Completed Work (The Demo)
+*The following stories were completed and are being demonstrated:*
+
+| Ticket | Story Title | Business Value Delivered |
+| :--- | :--- | :--- |
+| `CHRONOS-X` | `feat(mvp): Build Dashboard` | A functional, interactive demo is now available for the investor pitch. |
+| `CHRONOS-Y` | `...` | ... |
+
+## 3. Stakeholder Feedback
+*   *Notes from the demo (even if the stakeholder is just you). What was impressive? What was confusing? What new ideas were sparked?*
+```
+
+#### **Template 3: Sprint Retrospective**
+Create this page immediately after the Sprint Review.
+**Page Title:** `Sprint X Retrospective: [Sprint Name]`
+
+```markdown
+# Sprint X Retrospective: [Sprint Name]
+
+## 1. What Went Well? (Keep Doing)
+*   *The new RFP templates made creating stories much faster.*
+*   *The 'Focus Enforcer' protocol helped me stay on task.*
+
+## 2. What Could Be Improved? (Start Doing)
+*   *I spent too much time on a low-priority bug.*
+*   *The initial SQL query for the dashboard was slow and needed refactoring.*
+
+## 3. Actionable Improvement for Next Sprint
+*   **The Commitment:** *Based on the above, for the next sprint, we will commit to one specific process improvement.*
+    *   *Example: "We will time-box all bug fixes to a maximum of 90 minutes."*
+```
+
+---
