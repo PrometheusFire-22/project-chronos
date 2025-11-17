@@ -35,11 +35,14 @@
 				"yzhang.markdown-all-in-one",
 				"esbenp.prettier-vscode",
 				"excalidraw.excalidraw-vscode",
-				"GitHub.vscode-github-actions"
+				"GitHub.vscode-github-actions",
+				"Atlassian.atlascode",
+				"GitHub.vscode-pull-request-github",
+				"anthropic.claude-vscode",
+				"HubSpot.hubspot-vs-code"
 			]
 		}
 	},
-
 	"postCreateCommand": "pip install --upgrade pip && pip install -e '.[dev]' && pre-commit install && echo 'eval $(thefuck --alias)' >> ~/.zshrc",
 	"remoteUser": "vscode"
 }
