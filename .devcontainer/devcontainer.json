@@ -1,50 +1,188 @@
-	{
-		"name": "Project Chronos (Docker Compose)",
-		"dockerComposeFile": [
-			"../docker-compose.yml"
-		],
-		"service": "app",
-		"workspaceFolder": "/workspace",
-		"customizations": {
-			"vscode": {
-				"settings": {
-					"python.defaultInterpreterPath": "/usr/local/bin/python",
-					"terminal.integrated.defaultProfile.linux": "zsh",
-					"files.autoSave": "onFocusChange",
-					"editor.formatOnSave": true,
-					"prettier.printWidth": 100
+{
+	"name": "Project Chronos (Docker Compose)",
+	
+	// ==================================================================
+	// Docker Compose Configuration
+	// ==================================================================
+	"dockerComposeFile": [
+		"../docker-compose.yml"
+	],
+	"service": "app",
+	"workspaceFolder": "/workspace",
+	
+	// ==================================================================
+	// Container Environment Variables
+	// ==================================================================
+	"containerEnv": {
+		"PYTHONPATH": "/workspace/src",
+		"TERM": "xterm-256color"
+	},
+	
+	// ==================================================================
+	// Remote Environment Variables
+	// ==================================================================
+	"remoteEnv": {
+		"ENVIRONMENT": "development",
+		"LOG_LEVEL": "INFO"
+	},
+	
+	// ==================================================================
+	// VS Code Customizations
+	// ==================================================================
+	"customizations": {
+		"vscode": {
+			// Editor Settings
+			"settings": {
+				// Python
+				"python.defaultInterpreterPath": "/usr/local/bin/python",
+				"python.terminal.activateEnvironment": false,
+				"python.analysis.extraPaths": [
+					"/workspace/src"
+				],
+				
+				// Terminal
+				"terminal.integrated.defaultProfile.linux": "zsh",
+				"terminal.integrated.profiles.linux": {
+					"zsh": {
+						"path": "/usr/bin/zsh"
+					}
 				},
-				"extensions": [
-					"vscode-icons-team.vscode-icons",
-					"aaron-bond.better-comments",
-					"ms-python.python",
-					"ms-python.vscode-pylance",
-					"eamodio.gitlens",
-					"mhutchie.git-graph",
-					"donjayamanne.githistory",
-					"mtxr.sqltools",
-					"mtxr.sqltools-driver-pg",
-					"cweijan.vscode-postgresql-client2",
-					"Geographica.vscode-postgis",
-					"mechatroner.rainbow-csv",
-					"janisdd.vscode-edit-csv",
-					"grapecity.gc-excelviewer",
-					"tomoki1207.pdf",
-					"jebbs.plantuml",
-					"bierner.markdown-mermaid",
-					"yzhang.markdown-all-in-one",
-					"esbenp.prettier-vscode",
-					"excalidraw.excalidraw-vscode",
-					"GitHub.vscode-github-actions",
-					"Atlassian.atlascode",
-					"GitHub.vscode-pull-request-github",
-					"anthropic.claude-vscode",
-					"HubSpot.hubspot-vs-code",
-					"ms-toolsai.datawrangler",
-					"ms-vscode.vscode-jupyter"
-				]
-			}
+				
+				// Editor
+				"files.autoSave": "onFocusChange",
+				"editor.formatOnSave": true,
+				"editor.rulers": [88, 100],
+				"editor.tabSize": 4,
+				
+				// Formatting
+				"[python]": {
+					"editor.defaultFormatter": "ms-python.black-formatter",
+					"editor.formatOnSave": true
+				},
+				"[markdown]": {
+					"editor.defaultFormatter": "esbenp.prettier-vscode"
+				},
+				"[json]": {
+					"editor.defaultFormatter": "esbenp.prettier-vscode"
+				},
+				"prettier.printWidth": 100,
+				
+				// Git
+				"git.autofetch": true,
+				"git.confirmSync": false,
+				
+				// Files
+				"files.exclude": {
+					"**/__pycache__": true,
+					"**/.pytest_cache": true,
+					"**/.ruff_cache": true,
+					"**/*.pyc": true
+				}
+			},
+			
+			// Extensions to Install
+			"extensions": [
+				// Icons & UI
+				"vscode-icons-team.vscode-icons",
+				"aaron-bond.better-comments",
+				
+				// Python Development
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-python.black-formatter",
+				"charliermarsh.ruff",
+				
+				// Git Integration
+				"eamodio.gitlens",
+				"mhutchie.git-graph",
+				"donjayamanne.githistory",
+				
+				// Database Tools
+				"mtxr.sqltools",
+				"mtxr.sqltools-driver-pg",
+				"cweijan.vscode-postgresql-client2",
+				"Geographica.vscode-postgis",
+				
+				// Data Science
+				"ms-toolsai.jupyter",
+				"ms-toolsai.datawrangler",
+				
+				// File Viewers
+				"mechatroner.rainbow-csv",
+				"janisdd.vscode-edit-csv",
+				"grapecity.gc-excelviewer",
+				"tomoki1207.pdf",
+				
+				// Diagramming
+				"jebbs.plantuml",
+				"bierner.markdown-mermaid",
+				"excalidraw.excalidraw-vscode",
+				
+				// Markdown
+				"yzhang.markdown-all-in-one",
+				"esbenp.prettier-vscode",
+				
+				// CI/CD & DevOps
+				"GitHub.vscode-github-actions",
+				
+				// Project Management
+				"Atlassian.atlascode",
+				"GitHub.vscode-pull-request-github",
+				"HubSpot.hubspot-vs-code",
+				
+				// AI Assistance
+				"anthropic.claude-vscode"
+			]
+		}
+	},
+	
+	// ==================================================================
+	// Container Lifecycle Commands
+	// ==================================================================
+	
+	// Run AFTER container is created (first time only)
+	"postCreateCommand": "pip install --upgrade pip && pip install -e '.[dev]' && pre-commit install",
+	
+	// Run EVERY time container starts
+	"postStartCommand": "echo '✅ Project Chronos dev container ready!'",
+	
+	// ==================================================================
+	// Additional Configuration
+	// ==================================================================
+	
+	"remoteUser": "vscode",
+	
+	// Forward ports automatically
+	"forwardsPort": [5432, 3000, 5050, 8025],
+	
+	// Port attributes
+	"portsAttributes": {
+		"5432": {
+			"label": "PostgreSQL",
+			"onAutoForward": "silent"
 		},
-		"postCreateCommand": "pip install --upgrade pip && pip install -e '.[dev]' && pre-commit install && echo 'eval $(thefuck --alias)' >> ~/.zshrc",
-		"remoteUser": "vscode"
-	}
+		"3000": {
+			"label": "Metabase",
+			"onAutoForward": "notify"
+		},
+		"5050": {
+			"label": "pgAdmin",
+			"onAutoForward": "notify"
+		},
+		"8025": {
+			"label": "MailHog",
+			"onAutoForward": "ignore"
+		}
+	},
+	
+	// Mount SSH keys
+	"mounts": [
+		"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,readonly,type=bind"
+	]
+	
+	// NOTE: Removed "features" section that was causing GitHub CLI 500 error
+	// GitHub CLI can be installed manually if needed:
+	// curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+	// echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+	// sudo apt update && sudo apt install gh
+}

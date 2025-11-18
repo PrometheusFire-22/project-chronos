@@ -1,44 +1,85 @@
-# Use the official Microsoft Dev Container Python image as a more robust base
-# This image already includes a 'vscode' user and many necessary tools.
-FROM mcr.microsoft.com/devcontainers/python:3.11-bullseye
+# ==============================================================================
+# Project Chronos: Development Container
+# ==============================================================================
+# Base: Microsoft Dev Container Python 3.11 on Debian 12 (Bookworm)
+# Purpose: Provides a complete development environment with all necessary tools
+# ==============================================================================
+
+FROM mcr.microsoft.com/devcontainers/python:3.11-bookworm
+
+LABEL maintainer="Project Chronos"
+LABEL description="Development environment with PostgreSQL 16 client and geospatial tools"
 
 # Set environment variables for Python
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    DEBIAN_FRONTEND=noninteractive
 
-# Switch to the root user to install system packages
+# Switch to root for system package installation
 USER root
 
-# This is the single, correct, and comprehensive RUN command block.
+# ==============================================================================
+# System Dependencies
+# ==============================================================================
+
 RUN apt-get update && \
-    # Add prerequisites for adding new repositories
-    apt-get install -y lsb-release curl gnupg && \
-    # Add the official PostgreSQL repository for the v16 client
-    curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /usr/share/keyrings/postgres-archive-keyring.gpg && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/postgres-archive-keyring.gpg] http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
-    # Update package lists again to include the new repository
+    # Add PostgreSQL repository for version 16
+    apt-get install -y --no-install-recommends \
+        lsb-release curl gnupg ca-certificates && \
+    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | \
+        gpg --dearmor -o /usr/share/keyrings/postgres-archive-keyring.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/postgres-archive-keyring.gpg] http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > \
+        /etc/apt/sources.list.d/pgdg.list && \
+    # Update and install all dependencies
     apt-get update && \
-    # Install all system dependencies
-    apt-get install -y \
-        bat build-essential cron default-jre dnsutils fzf gdal-bin git graphviz \
-        htop iputils-ping jq less libpq-dev lsof nano net-tools postgresql-client-16 \
-        procps ripgrep sudo tree unzip vim wget zsh && \
-    # Clean up APT cache to keep the final image size smaller
+    apt-get install -y --no-install-recommends \
+        # Core utilities
+        bat build-essential cron dnsutils fzf git htop iputils-ping jq \
+        less lsof nano net-tools procps ripgrep sudo tree unzip vim wget zsh \
+        # Database and geospatial tools
+        postgresql-client-16 postgis gdal-bin \
+        # Development tools
+        default-jre graphviz \
+        # Build dependencies for Python packages
+        libpq-dev && \
+    # Clean up to reduce image size
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# The 'mcr.microsoft.com/devcontainers/python' base image already creates a 'vscode' user.
-# We just need to add them to the sudo group.
-RUN usermod -aG sudo vscode
+# ==============================================================================
+# User Configuration
+# ==============================================================================
 
-# Switch back to the non-root 'vscode' user
+# The devcontainer base image already creates 'vscode' user
+# Just ensure they have sudo access
+RUN usermod -aG sudo vscode && \
+    echo "vscode ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/vscode
+
+# ==============================================================================
+# Python Environment
+# ==============================================================================
+
+# Switch to vscode user for Python setup
 USER vscode
 
-# Set the working directory
+# Set working directory
 WORKDIR /workspace
 
-# Set the PATH to include user-installed pip packages
+# Add user Python bin to PATH
 ENV PATH="/home/vscode/.local/bin:${PATH}"
 
-# This command keeps the container running for VS Code to attach to
+# ==============================================================================
+# Container Startup
+# ==============================================================================
+
+# Keep container running for VS Code to attach
 CMD ["sleep", "infinity"]
+
+# ==============================================================================
+# Labels for Docker metadata
+# ==============================================================================
+
+LABEL version="2.0"
+LABEL description.python="3.11"
+LABEL description.os="Debian 12 (Bookworm)"
+LABEL description.postgresql="16"

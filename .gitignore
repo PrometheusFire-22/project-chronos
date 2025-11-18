@@ -81,3 +81,6 @@ backups/weekly/
 backups/monthly/
 backups/logs/*.log
 !backups/logs/.gitkeep
+backups/pgdump/
+scripts/backup_production.sh
+scripts/restore_production.sh
