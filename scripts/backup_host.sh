@@ -52,9 +52,9 @@ check_container() {
 
 create_backup() {
     local backup_file="${HOST_BACKUP_DIR}/chronos_${TIMESTAMP}.dump"
-    
+
     log "🔄 Creating backup..."
-    
+
     # Use pg_dump with custom format (best for restoration)
     docker exec "$CONTAINER_NAME" pg_dump \
         -U "$DB_USER" \
@@ -65,7 +65,7 @@ create_backup() {
         --no-acl \
         --verbose \
         2>&1 | grep -v "^pg_dump:" > "${backup_file}"
-    
+
     if [ -s "$backup_file" ]; then
         local size=$(du -h "$backup_file" | cut -f1)
         log "✅ Backup created: $(basename $backup_file) ($size)"
@@ -78,13 +78,13 @@ create_backup() {
 
 copy_to_archives() {
     local source_file="$1"
-    
+
     # Weekly backup (every Sunday)
     if [ "$(date +%u)" -eq 7 ]; then
         cp "$source_file" "${WEEKLY_DIR}/chronos_weekly_${DATE}.dump"
         log "✅ Weekly backup created"
     fi
-    
+
     # Monthly backup (1st of month)
     if [ "$(date +%d)" -eq 01 ]; then
         cp "$source_file" "${MONTHLY_DIR}/chronos_monthly_${DATE}.dump"
@@ -94,24 +94,24 @@ copy_to_archives() {
 
 cleanup_old_backups() {
     log "🧹 Cleaning up old backups..."
-    
+
     # Daily backups
     find "$HOST_BACKUP_DIR" -name "*.dump" -mtime +${DAILY_RETENTION} -delete 2>/dev/null || true
-    
+
     # Weekly backups
     find "$WEEKLY_DIR" -name "*.dump" -mtime +${WEEKLY_RETENTION} -delete 2>/dev/null || true
-    
+
     # Monthly backups
     find "$MONTHLY_DIR" -name "*.dump" -mtime +${MONTHLY_RETENTION} -delete 2>/dev/null || true
-    
+
     log "✅ Cleanup complete"
 }
 
 verify_backup() {
     local backup_file="$1"
-    
+
     log "🔍 Verifying backup integrity..."
-    
+
     # Test that pg_restore can read the file
     if docker exec "$CONTAINER_NAME" pg_restore --list - < "$backup_file" > /dev/null 2>&1; then
         log "✅ Backup integrity verified"
@@ -131,17 +131,17 @@ main() {
     log "Running from: HOST machine"
     log "Project dir: $PROJECT_DIR"
     log "Target: $CONTAINER_NAME"
-    
+
     create_directories
     check_container
-    
+
     backup_file=$(create_backup)
     copy_to_archives "$backup_file"
     verify_backup "$backup_file"
     cleanup_old_backups
-    
+
     log "=========================================="
-    log "✅ Backup completed successfully!" 
+    log "✅ Backup completed successfully!"
     log "Location: $backup_file"
     log "Size: $(du -h $backup_file | cut -f1)"
     log "=========================================="
