@@ -25,25 +25,25 @@ usage() {
     echo ""
     echo "Available backups:"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    
+
     if [ -d "/home/prometheus/chronos-backups/daily" ]; then
         echo "📅 Daily backups:"
         ls -lht "/home/prometheus/chronos-backups/daily"/*.dump 2>/dev/null | head -5 | awk '{print "   "$9" ("$5")"}'
     fi
-    
+
     if [ -d "/home/prometheus/chronos-backups/weekly" ]; then
         echo ""
         echo "📆 Weekly backups:"
         ls -lht "/home/prometheus/chronos-backups/weekly"/*.dump 2>/dev/null | head -3 | awk '{print "   "$9" ("$5")"}'
     fi
-    
+
     echo ""
     exit 1
 }
 
 confirm_restore() {
     local backup_file="$1"
-    
+
     echo ""
     echo "⚠️  WARNING: DATABASE RESTORE"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -56,7 +56,7 @@ confirm_restore() {
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
     read -p "Type 'YES' to continue: " -r
-    
+
     if [ "$REPLY" != "YES" ]; then
         echo "Restore cancelled."
         exit 0
@@ -73,15 +73,15 @@ check_container() {
 
 restore_database() {
     local backup_file="$1"
-    
+
     log "🗑️  Dropping existing database..."
     docker exec "$CONTAINER_NAME" psql -U "$DB_USER" -d postgres \
         -c "DROP DATABASE IF EXISTS $DB_NAME;" 2>/dev/null
-    
+
     log "🏗️  Creating fresh database..."
     docker exec "$CONTAINER_NAME" psql -U "$DB_USER" -d postgres \
         -c "CREATE DATABASE $DB_NAME;"
-    
+
     log "📥 Restoring from backup..."
     docker exec -i "$CONTAINER_NAME" pg_restore \
         -U "$DB_USER" \
@@ -94,16 +94,16 @@ restore_database() {
 
 verify_restore() {
     log "🔍 Verifying restore..."
-    
+
     local table_count=$(docker exec "$CONTAINER_NAME" psql -U "$DB_USER" -d "$DB_NAME" -t \
         -c "SELECT count(*) FROM information_schema.tables WHERE table_schema NOT IN ('pg_catalog', 'information_schema');" | xargs)
-    
+
     local row_count=$(docker exec "$CONTAINER_NAME" psql -U "$DB_USER" -d "$DB_NAME" -t \
         -c "SELECT COUNT(*) FROM timeseries.economic_observations;" 2>/dev/null | xargs || echo "0")
-    
+
     log "✅ Found $table_count tables in database"
     log "✅ Found $row_count rows in economic_observations"
-    
+
     echo ""
     log "📊 Schema summary:"
     docker exec "$CONTAINER_NAME" psql -U "$DB_USER" -d "$DB_NAME" \
@@ -119,26 +119,26 @@ main() {
     if [ $# -eq 0 ]; then
         usage
     fi
-    
+
     BACKUP_FILE="$1"
-    
+
     # Validate backup file
     if [ ! -f "$BACKUP_FILE" ]; then
         log "❌ ERROR: Backup file not found: $BACKUP_FILE"
         usage
     fi
-    
+
     log "=========================================="
     log "🔄 Project Chronos Database Restore"
     log "=========================================="
     log "Backup file: $(basename $BACKUP_FILE)"
     log "Size: $(du -h $BACKUP_FILE | cut -f1)"
-    
+
     confirm_restore "$BACKUP_FILE"
     check_container
     restore_database "$BACKUP_FILE"
     verify_restore
-    
+
     log "=========================================="
     log "✅ Restore completed successfully!"
     log "=========================================="
