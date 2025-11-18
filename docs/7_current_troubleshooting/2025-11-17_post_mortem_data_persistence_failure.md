@@ -48,4 +48,11 @@ To build a resilient, production-grade system that is immune to this class of fa
 *   **Best Practice Solution:** For a scalable, production system, the standard is to offload this responsibility to a **managed cloud database service** (e.g., Amazon RDS, Google Cloud SQL). These services handle all the underlying infrastructure, security, patching, and—critically—**automated daily snapshots and point-in-time recovery** out of the box. While this introduces a cost, it drastically reduces operational risk and engineering time spent on database administration, allowing the focus to remain on application-level features. The system would be architected to connect to an external database endpoint instead of a local Docker container.
 
 ---
+## 5.  RESOLUTION UPDATE (2025-11-17)
+
+After the initial data loss, a subsequent debugging effort was launched to resolve the related `Atlassian CLI` launch error, which was the original trigger for the environment rebuild.
+
+*   **Final Root Cause:** The CLI failure was definitively diagnosed as a `GLIBC` version incompatibility between the CLI binary and the `Debian 11 (Bullseye)` base image of our dev container.
+*   **The Fix:** The `Dockerfile` was upgraded to use the `mcr.microsoft.com/devcontainers/python:3.11-bookworm` (Debian 12) base image.
+*   **The Outcome:** After a full container rebuild, all issues were resolved. The Atlassian CLI now functions correctly, and a new, properly **named Docker volume** has been established for the database, structurally preventing the initial data loss incident from recurring. The project is now on a stable, modern, and resilient foundation.
 --- END OF FILE ---
