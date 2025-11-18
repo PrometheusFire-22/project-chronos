@@ -1,48 +1,50 @@
-{
-	"name": "Project Chronos (Docker Compose)",
-	"dockerComposeFile": [
-		"../docker-compose.yml"
-	],
-	"service": "app",
-	"workspaceFolder": "/workspace",
-	"customizations": {
-		"vscode": {
-			"settings": {
-				"python.defaultInterpreterPath": "/usr/local/bin/python",
-				"terminal.integrated.defaultProfile.linux": "zsh",
-				"files.autoSave": "onFocusChange",
-				"editor.formatOnSave": true,
-				"prettier.printWidth": 100
-			},
-			"extensions": [
-				"vscode-icons-team.vscode-icons",
-				"aaron-bond.better-comments",
-				"ms-python.python",
-				"ms-python.vscode-pylance",
-				"eamodio.gitlens",
-				"mhutchie.git-graph",
-				"donjayamanne.githistory",
-				"mtxr.sqltools",
-				"mtxr.sqltools-driver-pg",
-				"cweijan.vscode-postgresql-client2",
-				"Geographica.vscode-postgis",
-				"mechatroner.rainbow-csv",
-				"janisdd.vscode-edit-csv",
-				"grapecity.gc-excelviewer",
-				"tomoki1207.pdf",
-				"jebbs.plantuml",
-				"bierner.markdown-mermaid",
-				"yzhang.markdown-all-in-one",
-				"esbenp.prettier-vscode",
-				"excalidraw.excalidraw-vscode",
-				"GitHub.vscode-github-actions",
-				"Atlassian.atlascode",
-				"GitHub.vscode-pull-request-github",
-				"anthropic.claude-vscode",
-				"HubSpot.hubspot-vs-code"
-			]
-		}
-	},
-	"postCreateCommand": "pip install --upgrade pip && pip install -e '.[dev]' && pre-commit install && echo 'eval $(thefuck --alias)' >> ~/.zshrc",
-	"remoteUser": "vscode"
-}
+	{
+		"name": "Project Chronos (Docker Compose)",
+		"dockerComposeFile": [
+			"../docker-compose.yml"
+		],
+		"service": "app",
+		"workspaceFolder": "/workspace",
+		"customizations": {
+			"vscode": {
+				"settings": {
+					"python.defaultInterpreterPath": "/usr/local/bin/python",
+					"terminal.integrated.defaultProfile.linux": "zsh",
+					"files.autoSave": "onFocusChange",
+					"editor.formatOnSave": true,
+					"prettier.printWidth": 100
+				},
+				"extensions": [
+					"vscode-icons-team.vscode-icons",
+					"aaron-bond.better-comments",
+					"ms-python.python",
+					"ms-python.vscode-pylance",
+					"eamodio.gitlens",
+					"mhutchie.git-graph",
+					"donjayamanne.githistory",
+					"mtxr.sqltools",
+					"mtxr.sqltools-driver-pg",
+					"cweijan.vscode-postgresql-client2",
+					"Geographica.vscode-postgis",
+					"mechatroner.rainbow-csv",
+					"janisdd.vscode-edit-csv",
+					"grapecity.gc-excelviewer",
+					"tomoki1207.pdf",
+					"jebbs.plantuml",
+					"bierner.markdown-mermaid",
+					"yzhang.markdown-all-in-one",
+					"esbenp.prettier-vscode",
+					"excalidraw.excalidraw-vscode",
+					"GitHub.vscode-github-actions",
+					"Atlassian.atlascode",
+					"GitHub.vscode-pull-request-github",
+					"anthropic.claude-vscode",
+					"HubSpot.hubspot-vs-code",
+					"ms-toolsai.datawrangler",
+					"ms-vscode.vscode-jupyter"
+				]
+			}
+		},
+		"postCreateCommand": "pip install --upgrade pip && pip install -e '.[dev]' && pre-commit install && echo 'eval $(thefuck --alias)' >> ~/.zshrc",
+		"remoteUser": "vscode"
+	}
