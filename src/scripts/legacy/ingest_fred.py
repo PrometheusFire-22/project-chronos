@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-Project Chronos: Bank of Canada Valet API Ingestion Script
-===========================================================
+Project Chronos: FRED Data Ingestion Script
+============================================
+Purpose: Command-line script to ingest FRED data into Chronos database
 
 Usage:
-    python src/scripts/ingest_valet.py --series FXUSDCAD
-    python src/scripts/ingest_valet.py --series FXUSDCAD --start-date 2020-01-01
+    python src/scripts/ingest_fred.py --series GDP UNRATE
+    python src/scripts/ingest_fred.py --series GDP --start-date 2020-01-01
 """
 
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import List, Optional
 
 import click
 from sqlalchemy import text
@@ -20,14 +20,14 @@ from sqlalchemy import text
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from chronos.database.connection import get_db_session, verify_database_connection
-from chronos.ingestion.valet import ValetIngestor
-from chronos.utils.logging import get_logger
+from chronos.ingestion.fred import FREDIngestor
 from chronos.utils.exceptions import ChronosBaseException
+from chronos.utils.logging import get_logger
 
 logger = get_logger(__name__)
 
 
-def log_ingestion_start(session, source_id: int, series_ids: List[str]) -> int:
+def log_ingestion_start(session, source_id: int, series_ids: list[str]) -> int:
     """Create ingestion log entry at start of process."""
     result = session.execute(
         text(
@@ -42,12 +42,13 @@ def log_ingestion_start(session, source_id: int, series_ids: List[str]) -> int:
         {"source_id": source_id, "series_count": len(series_ids)},
     )
     log_id = result.fetchone()[0]
+    # NOTE: We commit here because this is a separate transaction from data ingestion
     session.commit()
     return log_id
 
 
 def log_ingestion_end(
-    session, log_id: int, status: str, records_inserted: int, error_message: Optional[str] = None
+    session, log_id: int, status: str, records_inserted: int, error_message: str | None = None
 ) -> None:
     """Update ingestion log entry at end of process."""
     session.execute(
@@ -68,6 +69,7 @@ def log_ingestion_end(
             "error_message": error_message,
         },
     )
+    # NOTE: We commit here because this is a separate transaction from data ingestion
     session.commit()
 
 
@@ -77,7 +79,7 @@ def log_ingestion_end(
     "-s",
     multiple=True,
     required=True,
-    help="Bank of Canada series IDs (e.g., FXUSDCAD, FXEURCAD)",
+    help="FRED series IDs to ingest (e.g., GDP, UNRATE)",
 )
 @click.option(
     "--start-date",
@@ -91,12 +93,12 @@ def log_ingestion_end(
 )
 @click.option("--verify-only", is_flag=True, help="Only verify database connection")
 def main(
-    series: tuple, start_date: Optional[datetime], end_date: Optional[datetime], verify_only: bool
+    series: tuple, start_date: datetime | None, end_date: datetime | None, verify_only: bool
 ) -> None:
-    """Ingest Bank of Canada Valet API data into Chronos database."""
+    """Ingest FRED macroeconomic data into Chronos database."""
 
     logger.info(
-        "valet_ingestion_started",
+        "ingestion_started",
         series_ids=list(series),
         start_date=start_date.date() if start_date else None,
         end_date=end_date.date() if end_date else None,
@@ -119,11 +121,11 @@ def main(
     log_id = None
 
     try:
-        # Single transaction scope for all data operations
+        # IMPORTANT: Single transaction scope for all data operations
         with get_db_session() as session:
-            ingestor = ValetIngestor(session)
+            ingestor = FREDIngestor(session)
 
-            # Log ingestion start
+            # Log ingestion start (separate transaction)
             log_id = log_ingestion_start(session, ingestor.source_id, list(series))
             click.echo(f"📊 Ingestion log ID: {log_id}")
 
@@ -142,9 +144,11 @@ def main(
                 click.echo(f"\n📥 Processing: {source_series_id}")
                 click.echo(f"   {metadata['series_name']}")
 
+                # Register series (no internal commit)
                 series_id = ingestor.register_series(metadata)
                 click.echo(f"   Series ID: {series_id}")
 
+                # Fetch observations
                 observations = ingestor.fetch_observations(
                     source_series_id, start_date=start_date, end_date=end_date
                 )
@@ -153,13 +157,16 @@ def main(
                     click.echo("   ⚠️  No observations found")
                     continue
 
+                # Store observations (no internal commit)
                 records_count = ingestor.store_observations(series_id, observations)
                 total_records += records_count
 
                 click.echo(f"   ✅ Stored {records_count} observations")
                 click.echo(f"   📅 {observations[0]['date']} to {observations[-1]['date']}")
 
-        # Finalize ingestion log
+            # Transaction automatically committed here by get_db_session()
+
+        # Finalize ingestion log (separate transaction)
         with get_db_session() as session:
             log_ingestion_end(session, log_id, "success", total_records)
 
@@ -171,14 +178,12 @@ def main(
         click.echo(f"{'='*60}")
 
         logger.info(
-            "valet_ingestion_completed",
-            series_count=len(metadata_list),
-            records_inserted=total_records,
+            "ingestion_completed", series_count=len(metadata_list), records_inserted=total_records
         )
 
     except ChronosBaseException as e:
         error_msg = f"Ingestion failed: {str(e)}"
-        logger.error("valet_ingestion_failed", error=str(e))
+        logger.error("ingestion_failed", error=str(e))
         click.echo(f"\n❌ {error_msg}", err=True)
 
         if log_id:
@@ -192,7 +197,7 @@ def main(
 
     except Exception as e:
         error_msg = f"Unexpected error: {str(e)}"
-        logger.error("valet_ingestion_error_unexpected", error=str(e))
+        logger.error("ingestion_error_unexpected", error=str(e))
         click.echo(f"\n❌ {error_msg}", err=True)
 
         if log_id:

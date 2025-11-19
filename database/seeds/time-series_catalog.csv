@@ -1,21 +1,4 @@
 asset_id,asset_type,name,source,category,sub_category,granularity,status,rationale,api_endpoint_or_link,sprint,created_timestamp
-USA_STATES,geospatial,US States,TIGER/Line,Boundaries,,national,Ingested,Geospatial Sprint,,3,2025-11-14 23:25:22
-USA_COUNTIES,geospatial,US Counties,TIGER/Line,Boundaries,,national,Ingested,Geospatial Sprint,,3,2025-11-14 23:25:22
-USA_TRACTS,geospatial,US Census Tracts,TIGER/Line,Boundaries,,admin_1,Ingested,Geospatial Sprint,,3,2025-11-14 23:25:22
-USA_PUMAS,geospatial,US Public Use Microdata Areas,TIGER/Line,Boundaries,,admin_1,Ingested,Geospatial Sprint,,3,2025-11-14 23:25:22
-USA_ZCTA,geospatial,US ZIP Code Tabulation Areas,TIGER/Line,Boundaries,,local,Ingested,Geospatial Sprint,,3,2025-11-14 23:25:22
-USA_URBAN_AREAS,geospatial,US Urban Areas,TIGER/Line,Boundaries,,local,Ingested,Geospatial Sprint,,3,2025-11-14 23:25:22
-USA_CBSA,geospatial,US Core-Based Statistical Areas,TIGER/Line,Boundaries,,metro_area,Ingested,Geospatial Sprint,,3,2025-11-14 23:25:22
-USA_CSA,geospatial,US Combined Statistical Areas,TIGER/Line,Boundaries,,metro_area,Ingested,Geospatial Sprint,,3,2025-11-14 23:25:22
-USA_METDIV,geospatial,US Metropolitan Divisions,TIGER/Line,Boundaries,,metro_area,Ingested,Geospatial Sprint,,3,2025-11-14 23:25:22
-CAN_PROVINCES,geospatial,Provinces and Territories,StatCan,Boundaries,,national,Ingested,Geospatial Sprint,,3,2025-11-14 23:25:22
-CAN_CENSUS_DIVISIONS,geospatial,Census Divisions,StatCan,Boundaries,,national,Ingested,Geospatial Sprint,,3,2025-11-14 23:25:22
-CAN_CENSUS_SUBDIVISIONS,geospatial,Census Subdivisions (Municipalities),StatCan,Boundaries,,national,Ingested,Geospatial Sprint,,3,2025-11-14 23:25:22
-CAN_CMA,geospatial,Census Metropolitan Areas / Agglomerations,StatCan,Boundaries,,metro_area,Ingested,Geospatial Sprint,,3,2025-11-14 23:25:22
-CAN_DISSEMINATION_AREAS,geospatial,Dissemination Areas,StatCan,Boundaries,,admin_1,Candidate,Geospatial Sprint,,3,2025-11-14 23:25:22
-CAN_FED_ELECTORAL_DISTRICTS,geospatial,Federal Electoral Districts,StatCan,Boundaries,,national,Candidate,Geospatial Sprint,,3,2025-11-14 23:25:22
-CAN_PROV_ELECTORAL_DISTRICTS,geospatial,Provincial Electoral Districts,StatCan,Boundaries,,national,Candidate,Geospatial Sprint,,3,2025-11-14 23:25:22
-CAN_CT,geospatial,Census Tracts,StatCan,Boundaries,,admin_1,Candidate,Geospatial Sprint,,3,2025-11-14 23:25:22
 STLFSI3,time-series,St. Louis Fed Financial Stress Index,FRED,Financial Stress,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
 GSCPI,time-series,St. Louis Fed Financial Stress Index,FRED,Supply Chain,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
 TEDRATE,time-series,St. Louis Fed Financial Stress Index,FRED,Financial Stress,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
@@ -27,53 +10,64 @@ SURVEY.CS.CS_V2,time-series,St. Louis Fed Financial Stress Index,Valet,Consumer,
 CREDIT.HH.TOTAL_V2,time-series,St. Louis Fed Financial Stress Index,Valet,Monetary Policy,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
 CREDIT.BUS.TOTAL_V2,time-series,St. Louis Fed Financial Stress Index,Valet,Monetary Policy,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
 Ivey.PMI,time-series,St. Louis Fed Financial Stress Index,Valet,Production,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
-DEXUSEU,time-series,U.S. Dollars to Euro Spot Exchange Rate,FRED,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-DEXUSUK,time-series,U.S. Dollars to U.K. Pound Sterling Spot Exchange Rate,FRED,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-DEXJPUS,time-series,Japanese Yen to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-DEXCAUS,time-series,Canadian Dollars to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-DEXCHUS,time-series,Swiss Francs to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-DEXMXUS,time-series,Mexican Pesos to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-DEXUSAL,time-series,Australian Dollars to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-DEXUSNZ,time-series,New Zealand Dollars to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-DEXINUS,time-series,Indian Rupees to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-DEXKOUS,time-series,South Korean Won to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-DEXSZUS,time-series,South African Rand to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-DEXTHUS,time-series,Thai Baht to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-FEDFUNDS,time-series,Federal Funds Effective Rate,FRED,Interest Rates,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-DFF,time-series,Federal Funds Effective Rate,FRED,Interest Rates,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-DGS2,time-series,Market Yield on U.S. Treasury Securities at 2-Year Constant Maturity,FRED,Interest Rates,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-DGS5,time-series,Market Yield on U.S. Treasury Securities at 5-Year Constant Maturity,FRED,Interest Rates,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-DGS10,time-series,Market Yield on U.S. Treasury Securities at 10-Year Constant Maturity,FRED,Interest Rates,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-DGS30,time-series,Market Yield on U.S. Treasury Securities at 30-Year Constant Maturity,FRED,Interest Rates,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-MORTGAGE15US,time-series,15-Year Fixed Rate Mortgage Average in the United States,FRED,Interest Rates,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-MORTGAGE30US,time-series,30-Year Fixed Rate Mortgage Average in the United States,FRED,Interest Rates,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-CPIAUCSL,time-series,Consumer Price Index for All Urban Consumers: All Items,FRED,Inflation,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-CPILFESL,time-series,Consumer Price Index for All Urban Consumers: All Items Less Food and Energy,FRED,Inflation,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-PCEPI,time-series,Personal Consumption Expenditures: Price Index,FRED,Inflation,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-PCEPILFE,time-series,Personal Consumption Expenditures Excluding Food and Energy (Chain-Type Price Index),FRED,Inflation,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-GDP,time-series,Gross Domestic Product (Nominal),FRED,GDP & Growth,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-GDPC1,time-series,Real Gross Domestic Product,FRED,GDP & Growth,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-UNRATE,time-series,Unemployment Rate,FRED,Labor Market,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-PAYEMS,time-series,"All Employees, Total Nonfarm",FRED,Labor Market,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-CIVPART,time-series,Civilian Labor Force Participation Rate,FRED,Labor Market,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-INDPRO,time-series,Industrial Production Index,FRED,Production,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-HOUST,time-series,Housing Starts: Total,FRED,Housing,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-PERMIT,time-series,New Private Housing Units Authorized by Building Permits,FRED,Housing,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-RSXFS,time-series,Advance Retail Sales: Retail Trade,FRED,Consumer,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-UMCSENT,time-series,University of Michigan: Consumer Sentiment,FRED,Consumer,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-M2SL,time-series,M2 Money Stock,FRED,Monetary Policy,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-FXUSDCAD,time-series,USD/CAD Exchange Rate,Valet,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-FXEURCAD,time-series,EUR/CAD Exchange Rate,Valet,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-FXGBPCAD,time-series,GBP/CAD Exchange Rate,Valet,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-FXJPYCAD,time-series,JPY/CAD Exchange Rate,Valet,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-FXCHFCAD,time-series,CHF/CAD Exchange Rate,Valet,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-FXAUDCAD,time-series,AUD/CAD Exchange Rate,Valet,FX,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-V122530,time-series,Bank of Canada Policy Interest Rate,Valet,Interest Rates,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-V122531,time-series,Overnight Repo Rate,Valet,Interest Rates,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-V122514,time-series,1-Month Bankers' Acceptance Rate,Valet,Interest Rates,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-V122515,time-series,3-Month Bankers' Acceptance Rate,Valet,Interest Rates,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-V41552796,time-series,M1+ Money Supply,Valet,Monetary Policy,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
-V122495,time-series,Government of Canada 10-Year Bond Yield,Valet,Interest Rates,,national,Ingested,Initial Ingestion,,0,2025-11-14 23:25:22
+DEXUSEU,time-series,U.S. Dollars to Euro Spot Exchange Rate,FRED,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+DEXUSUK,time-series,U.S. Dollars to U.K. Pound Sterling Spot Exchange Rate,FRED,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+DEXJPUS,time-series,Japanese Yen to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+DEXCAUS,time-series,Canadian Dollars to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+DEXCHUS,time-series,Swiss Francs to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+DEXMXUS,time-series,Mexican Pesos to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+DEXUSAL,time-series,Australian Dollars to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+DEXUSNZ,time-series,New Zealand Dollars to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+DEXINUS,time-series,Indian Rupees to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+DEXKOUS,time-series,South Korean Won to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+DEXSZUS,time-series,South African Rand to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+DEXTHUS,time-series,Thai Baht to U.S. Dollar Spot Exchange Rate,FRED,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+FEDFUNDS,time-series,Federal Funds Effective Rate,FRED,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+DFF,time-series,Federal Funds Effective Rate,FRED,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+DGS2,time-series,Market Yield on U.S. Treasury Securities at 2-Year Constant Maturity,FRED,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+DGS5,time-series,Market Yield on U.S. Treasury Securities at 5-Year Constant Maturity,FRED,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+DGS10,time-series,Market Yield on U.S. Treasury Securities at 10-Year Constant Maturity,FRED,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+DGS30,time-series,Market Yield on U.S. Treasury Securities at 30-Year Constant Maturity,FRED,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+MORTGAGE15US,time-series,15-Year Fixed Rate Mortgage Average in the United States,FRED,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+MORTGAGE30US,time-series,30-Year Fixed Rate Mortgage Average in the United States,FRED,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+CPIAUCSL,time-series,Consumer Price Index for All Urban Consumers: All Items,FRED,Inflation,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+CPILFESL,time-series,Consumer Price Index for All Urban Consumers: All Items Less Food and Energy,FRED,Inflation,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+PCEPI,time-series,Personal Consumption Expenditures: Price Index,FRED,Inflation,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+PCEPILFE,time-series,Personal Consumption Expenditures Excluding Food and Energy (Chain-Type Price Index),FRED,Inflation,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+GDP,time-series,Gross Domestic Product (Nominal),FRED,GDP & Growth,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+GDPC1,time-series,Real Gross Domestic Product,FRED,GDP & Growth,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+UNRATE,time-series,Unemployment Rate,FRED,Labor Market,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+PAYEMS,time-series,"All Employees, Total Nonfarm",FRED,Labor Market,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+CIVPART,time-series,Civilian Labor Force Participation Rate,FRED,Labor Market,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+INDPRO,time-series,Industrial Production Index,FRED,Production,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+HOUST,time-series,Housing Starts: Total,FRED,Housing,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+PERMIT,time-series,New Private Housing Units Authorized by Building Permits,FRED,Housing,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+RSXFS,time-series,Advance Retail Sales: Retail Trade,FRED,Consumer,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+UMCSENT,time-series,University of Michigan: Consumer Sentiment,FRED,Consumer,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+M2SL,time-series,M2 Money Stock,FRED,Monetary Policy,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+FXUSDCAD,time-series,USD/CAD Exchange Rate,Valet,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+FXEURCAD,time-series,EUR/CAD Exchange Rate,Valet,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+FXGBPCAD,time-series,GBP/CAD Exchange Rate,Valet,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+FXJPYCAD,time-series,JPY/CAD Exchange Rate,Valet,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+FXCHFCAD,time-series,CHF/CAD Exchange Rate,Valet,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+FXAUDCAD,time-series,AUD/CAD Exchange Rate,Valet,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+V122530,time-series,Bank of Canada Policy Interest Rate,Valet,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+V122531,time-series,Overnight Repo Rate,Valet,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+V122514,time-series,1-Month Bankers' Acceptance Rate,Valet,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+V122515,time-series,3-Month Bankers' Acceptance Rate,Valet,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+V41552796,time-series,M1+ Money SupplyFXUSDCAD,time-series,USD/CAD Exchange Rate,Valet,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+FXEURCAD,time-series,EUR/CAD Exchange Rate,Valet,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+FXGBPCAD,time-series,GBP/CAD Exchange Rate,Valet,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+FXJPYCAD,time-series,JPY/CAD Exchange Rate,Valet,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+FXCHFCAD,time-series,CHF/CAD Exchange Rate,Valet,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+FXAUDCAD,time-series,AUD/CAD Exchange Rate,Valet,FX,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+V122530,time-series,Bank of Canada Policy Interest Rate,Valet,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+V122531,time-series,Overnight Repo Rate,Valet,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+V122514,time-series,1-Month Bankers' Acceptance Rate,Valet,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+V122515,time-series,3-Month Bankers' Acceptance Rate,Valet,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+V41552796,time-series,M1+ Money Supply,Valet,Monetary Policy,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+V122495,time-series,Government of Canada 10-Year Bond Yield,Valet,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22,Valet,Monetary Policy,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
+V122495,time-series,Government of Canada 10-Year Bond Yield,Valet,Interest Rates,,national,Planned,Initial Ingestion,,0,2025-11-14 23:25:22
 M1SL,time-series,M1 Money Stock,FRED,Monetary Policy,,national,Deprecated,Initial Ingestion,,0,2025-11-14 23:25:22
 M1SL,time-series,M1 Money Stock,FRED,Monetary Policy,,national,Deprecated,Initial Ingestion,,0,2025-11-14 23:25:22
 EXCAUS,time-series,Canada / U.S. Foreign Exchange Rate (Discontinued),FRED,FX,,national,Deprecated,Initial Ingestion,,0,2025-11-14 23:25:22

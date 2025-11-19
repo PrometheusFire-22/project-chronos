@@ -5,12 +5,12 @@ Purpose: SQLAlchemy engine and session factory with connection pooling
 Pattern: Context manager pattern for automatic session cleanup
 """
 
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Generator
 
 from sqlalchemy import create_engine, event, text
 from sqlalchemy.engine import Engine
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import QueuePool
 
 from chronos.config.settings import settings

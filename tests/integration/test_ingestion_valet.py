@@ -3,8 +3,9 @@ Project Chronos: Bank of Canada Valet Ingestion Tests
 =====================================================
 """
 
-import pytest
 from datetime import datetime
+
+import pytest
 from sqlalchemy import text
 
 from chronos.database.connection import get_db_session

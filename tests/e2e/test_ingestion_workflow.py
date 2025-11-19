@@ -5,14 +5,14 @@ Purpose: Test complete data pipeline from API ingestion to analytics views
 Pattern: Integration tests that validate multi-layer functionality
 """
 
+from datetime import UTC, datetime, timedelta
+
 import pytest
-from datetime import datetime, timedelta
 from sqlalchemy import text
 
 from chronos.database.connection import get_db_session
 from chronos.ingestion.fred import FREDIngestor
 from chronos.ingestion.valet import ValetIngestor
-from datetime import timezone
 
 
 @pytest.mark.slow
@@ -304,7 +304,7 @@ class TestDataQualityAfterIngestion:
 
             # Most recent should be within last 30 days
             if most_recent:
-                days_since = (datetime.now(timezone.utc) - most_recent).days
+                days_since = (datetime.now(UTC) - most_recent).days
                 assert days_since < 30, f"No recent ingestions: {days_since} days old"
 
 
