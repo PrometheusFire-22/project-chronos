@@ -7,7 +7,7 @@ Pattern: Template Method pattern for consistent ingestion workflow
 
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import List, Dict, Any, Optional
+from typing import Any
 from uuid import UUID
 
 from sqlalchemy import text
@@ -65,7 +65,7 @@ class BaseIngestor(ABC):
         return row[0]
 
     @abstractmethod
-    def fetch_series_metadata(self, series_ids: List[str]) -> List[Dict[str, Any]]:
+    def fetch_series_metadata(self, series_ids: list[str]) -> list[dict[str, Any]]:
         """
         Fetch metadata for given series from external API.
 
@@ -88,9 +88,9 @@ class BaseIngestor(ABC):
     def fetch_observations(
         self,
         series_id: str,
-        start_date: Optional[datetime] = None,
-        end_date: Optional[datetime] = None,
-    ) -> List[Dict[str, Any]]:
+        start_date: datetime | None = None,
+        end_date: datetime | None = None,
+    ) -> list[dict[str, Any]]:
         """
         Fetch time-series observations from external API.
 
@@ -106,7 +106,7 @@ class BaseIngestor(ABC):
         """
         pass
 
-    def register_series(self, metadata: Dict[str, Any]) -> UUID:
+    def register_series(self, metadata: dict[str, Any]) -> UUID:
         """
         Register series in database (idempotent).
 
@@ -172,7 +172,7 @@ class BaseIngestor(ABC):
         )
         return series_id
 
-    def store_observations(self, series_id: UUID, observations: List[Dict[str, Any]]) -> int:
+    def store_observations(self, series_id: UUID, observations: list[dict[str, Any]]) -> int:
         """
         Store observations in database (idempotent via ON CONFLICT).
 

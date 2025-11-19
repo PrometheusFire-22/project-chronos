@@ -8,6 +8,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from sentence_transformers import SentenceTransformer
 from sqlalchemy import text
+
 from chronos.database.connection import get_db_session
 
 

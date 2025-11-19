@@ -5,16 +5,16 @@ Purpose: Ingest macroeconomic data from Federal Reserve Economic Data (FRED)
 API Docs: https://fred.stlouisfed.org/docs/api/fred/
 """
 
-from datetime import datetime
-from typing import List, Dict, Any, Optional
 import time
+from datetime import datetime
+from typing import Any
 
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
-from chronos.ingestion.base import BaseIngestor
 from chronos.config.settings import settings
+from chronos.ingestion.base import BaseIngestor
 from chronos.utils.exceptions import APIError, RateLimitError
 
 
@@ -69,7 +69,7 @@ class FREDIngestor(BaseIngestor):
         self.last_request_time = time.time()
         self.requests_made += 1
 
-    def _make_request(self, endpoint: str, params: Dict[str, Any]) -> Dict[str, Any]:
+    def _make_request(self, endpoint: str, params: dict[str, Any]) -> dict[str, Any]:
         """Make authenticated request to FRED API."""
         self._rate_limit_check()
 
@@ -92,7 +92,7 @@ class FREDIngestor(BaseIngestor):
         except requests.exceptions.RequestException as e:
             raise APIError(source="FRED", message=str(e))
 
-    def fetch_series_metadata(self, series_ids: List[str]) -> List[Dict[str, Any]]:
+    def fetch_series_metadata(self, series_ids: list[str]) -> list[dict[str, Any]]:
         """Fetch metadata for FRED series."""
         metadata_list = []
 
@@ -126,9 +126,9 @@ class FREDIngestor(BaseIngestor):
     def fetch_observations(
         self,
         series_id: str,
-        start_date: Optional[datetime] = None,
-        end_date: Optional[datetime] = None,
-    ) -> List[Dict[str, Any]]:
+        start_date: datetime | None = None,
+        end_date: datetime | None = None,
+    ) -> list[dict[str, Any]]:
         """Fetch time-series observations for a FRED series."""
         params = {"series_id": series_id}
 

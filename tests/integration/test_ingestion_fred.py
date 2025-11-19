@@ -4,8 +4,9 @@ Project Chronos: FRED Ingestion Integration Tests
 Purpose: Validate FRED API ingestion pipeline
 """
 
+from datetime import date, datetime
+
 import pytest
-from datetime import datetime, date
 from sqlalchemy import text
 
 from chronos.database.connection import get_db_session

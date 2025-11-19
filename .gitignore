@@ -84,3 +84,5 @@ backups/logs/*.log
 backups/pgdump/
 scripts/backup_production.sh
 scripts/restore_production.sh
+backups/*.dump
+sprint3_bulk_import.csv

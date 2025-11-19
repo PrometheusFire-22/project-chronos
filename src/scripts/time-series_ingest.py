@@ -58,7 +58,7 @@ def log_ingestion_event(
 
     query = """
     INSERT INTO metadata.ingestion_log (
-        source_id, source_series_id, ingestion_status, 
+        source_id, source_series_id, ingestion_status,
         records_loaded, error_message, ingestion_timestamp
     ) VALUES (1, %s, %s, %s, %s, NOW())
     """
@@ -77,7 +77,7 @@ def load_catalog(catalog_path: Path):
     """Load asset catalog and filter for 'Planned' FRED series"""
     planned_series = []
 
-    with open(catalog_path, "r") as f:
+    with open(catalog_path) as f:
         reader = csv.DictReader(f)
         for row in reader:
             if not row.get("asset_id") or row.get("source") != "FRED":
@@ -143,12 +143,12 @@ def fetch_fred_data(series_id: str, max_retries=3, initial_delay=2):
 
         except requests.exceptions.Timeout:
             if attempt < max_retries - 1:
-                print(f"    ⏱️  Timeout - retrying...")
+                print("    ⏱️  Timeout - retrying...")
                 continue
             else:
                 raise
 
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException:
             if attempt < max_retries - 1:
                 wait_time = (attempt + 1) * 3
                 print(f"    ⏱️  Network error, retrying in {wait_time}s...")
@@ -188,11 +188,11 @@ def insert_series_metadata(conn, series_id: str, name: str, category: str, sub_c
 
     query = """
     INSERT INTO metadata.series_metadata (
-        source_id, source_series_id, series_name, 
+        source_id, source_series_id, series_name,
         frequency, category, geography
     ) VALUES (1, %s, %s, %s, %s, %s)
-    ON CONFLICT (source_id, source_series_id) 
-    DO UPDATE SET 
+    ON CONFLICT (source_id, source_series_id)
+    DO UPDATE SET
         series_name = EXCLUDED.series_name,
         last_updated = NOW();
     """
@@ -209,7 +209,7 @@ def insert_observations(conn, series_id: str, observations: list):
     # Get internal series_id
     cursor.execute(
         """
-        SELECT series_id FROM metadata.series_metadata 
+        SELECT series_id FROM metadata.series_metadata
         WHERE source_id = 1 AND source_series_id = %s
     """,
         (series_id,),
@@ -240,10 +240,10 @@ def insert_observations(conn, series_id: str, observations: list):
             if len(batch) >= batch_size:
                 cursor.executemany(
                     """
-                    INSERT INTO timeseries.economic_observations 
+                    INSERT INTO timeseries.economic_observations
                     (series_id, observation_date, value, quality_flag)
                     VALUES (%s, %s, %s, %s)
-                    ON CONFLICT (series_id, observation_date) 
+                    ON CONFLICT (series_id, observation_date)
                     DO UPDATE SET value = EXCLUDED.value
                 """,
                     batch,
@@ -263,10 +263,10 @@ def insert_observations(conn, series_id: str, observations: list):
         try:
             cursor.executemany(
                 """
-                INSERT INTO timeseries.economic_observations 
+                INSERT INTO timeseries.economic_observations
                 (series_id, observation_date, value, quality_flag)
                 VALUES (%s, %s, %s, %s)
-                ON CONFLICT (series_id, observation_date) 
+                ON CONFLICT (series_id, observation_date)
                 DO UPDATE SET value = EXCLUDED.value
             """,
                 batch,
@@ -292,7 +292,9 @@ def main():
     start_time = datetime.now()
 
     # Locate catalog
-    catalog_path = Path(__file__).parent.parent.parent / "database" / "seeds" / "asset_catalog.csv"
+    catalog_path = (
+        Path(__file__).parent.parent.parent / "database" / "seeds" / "time-series_catalog.csv"
+    )
 
     if not catalog_path.exists():
         print(f"❌ Catalog not found: {catalog_path}")
@@ -335,8 +337,8 @@ def main():
             observations = fetch_fred_data(series_id, initial_delay=2 if i > 1 else 1)
 
             if not observations:
-                print(f"    ⚠️  No data returned")
-                #log_ingestion_event(conn, series_id, "failed", 0, "No data returned from API")
+                print("    ⚠️  No data returned")
+                # log_ingestion_event(conn, series_id, "failed", 0, "No data returned from API")
                 failed_series.append((series_id, "No data"))
                 continue
 
@@ -353,7 +355,7 @@ def main():
             print(f"    ✅ Inserted {inserted} observations (skipped {skipped})")
 
             # Log success
-            #log_ingestion_event(conn, series_id, "success", inserted)
+            # log_ingestion_event(conn, series_id, "success", inserted)
 
             total_observations += inserted
             successful_series += 1
@@ -362,14 +364,14 @@ def main():
             # Known error (series doesn't exist)
             error_msg = str(e)
             print(f"    ❌ {error_msg}")
-            #log_ingestion_event(conn, series_id, "failed", 0, error_msg)
+            # log_ingestion_event(conn, series_id, "failed", 0, error_msg)
             failed_series.append((series_id, error_msg))
 
         except Exception as e:
             # Unexpected error
             error_msg = f"{type(e).__name__}: {str(e)}"
             print(f"    ❌ Error: {error_msg}")
-            #log_ingestion_event(conn, series_id, "failed", 0, error_msg)
+            # log_ingestion_event(conn, series_id, "failed", 0, error_msg)
             failed_series.append((series_id, error_msg))
             conn.rollback()
 
@@ -385,7 +387,7 @@ def main():
     print("=" * 60)
     print("✅ INGESTION COMPLETE!")
     print("=" * 60)
-    print(f"\n📊 Summary:")
+    print("\n📊 Summary:")
     print(f"  Total series processed: {len(planned_series)}")
     print(f"  Successful: {successful_series}")
     print(f"  Failed: {len(failed_series)}")
@@ -394,7 +396,7 @@ def main():
     print(f"  Average: {duration.total_seconds() / len(planned_series):.1f}s per series")
 
     if failed_series:
-        print(f"\n⚠️  Failed series:")
+        print("\n⚠️  Failed series:")
         for series_id, error in failed_series:
             error_short = error[:80] + "..." if len(error) > 80 else error
             print(f"    - {series_id}: {error_short}")

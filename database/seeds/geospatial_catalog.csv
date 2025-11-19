@@ -1,0 +1,18 @@
+asset_id,asset_type,name,source,category,sub_category,granularity,status,rationale,api_endpoint_or_link,sprint,created_timestamp
+USA_STATES,geospatial,US States,TIGER/Line,Boundaries,,national,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
+USA_COUNTIES,geospatial,US Counties,TIGER/Line,Boundaries,,national,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
+USA_TRACTS,geospatial,US Census Tracts,TIGER/Line,Boundaries,,admin_1,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
+USA_PUMAS,geospatial,US Public Use Microdata Areas,TIGER/Line,Boundaries,,admin_1,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
+USA_ZCTA,geospatial,US ZIP Code Tabulation Areas,TIGER/Line,Boundaries,,local,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
+USA_URBAN_AREAS,geospatial,US Urban Areas,TIGER/Line,Boundaries,,local,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
+USA_CBSA,geospatial,US Core-Based Statistical Areas,TIGER/Line,Boundaries,,metro_area,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
+USA_CSA,geospatial,US Combined Statistical Areas,TIGER/Line,Boundaries,,metro_area,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
+USA_METDIV,geospatial,US Metropolitan Divisions,TIGER/Line,Boundaries,,metro_area,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
+CAN_PROVINCES,geospatial,Provinces and Territories,StatCan,Boundaries,,national,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
+CAN_CENSUS_DIVISIONS,geospatial,Census Divisions,StatCan,Boundaries,,national,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
+CAN_CENSUS_SUBDIVISIONS,geospatial,Census Subdivisions (Municipalities),StatCan,Boundaries,,national,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
+CAN_CMA,geospatial,Census Metropolitan Areas / Agglomerations,StatCan,Boundaries,,metro_area,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
+CAN_DISSEMINATION_AREAS,geospatial,Dissemination Areas,StatCan,Boundaries,,admin_1,Candidate,Geospatial Sprint,,3,2025-11-14 23:25:22
+CAN_FED_ELECTORAL_DISTRICTS,geospatial,Federal Electoral Districts,StatCan,Boundaries,,national,Candidate,Geospatial Sprint,,3,2025-11-14 23:25:22
+CAN_PROV_ELECTORAL_DISTRICTS,geospatial,Provincial Electoral Districts,StatCan,Boundaries,,national,Candidate,Geospatial Sprint,,3,2025-11-14 23:25:22
+CAN_CT,geospatial,Census Tracts,StatCan,Boundaries,,admin_1,Candidate,Geospatial Sprint,,3,2025-11-14 23:25:22

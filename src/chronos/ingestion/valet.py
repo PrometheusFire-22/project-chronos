@@ -13,9 +13,9 @@ Version: 2.0 (Fixed frequency extraction)
 Last Updated: 2024-10-28
 """
 
-from datetime import datetime
-from typing import List, Dict, Any, Optional
 import time
+from datetime import datetime
+from typing import Any
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -86,7 +86,7 @@ class ValetIngestor(BaseIngestor):
         self.last_request_time = time.time()
         self.requests_made += 1
 
-    def fetch_series_metadata(self, series_ids: List[str]) -> List[Dict[str, Any]]:
+    def fetch_series_metadata(self, series_ids: list[str]) -> list[dict[str, Any]]:
         """
         Fetch metadata for Valet series.
 
@@ -187,9 +187,9 @@ class ValetIngestor(BaseIngestor):
     def fetch_observations(
         self,
         series_id: str,
-        start_date: Optional[datetime] = None,
-        end_date: Optional[datetime] = None,
-    ) -> List[Dict[str, Any]]:
+        start_date: datetime | None = None,
+        end_date: datetime | None = None,
+    ) -> list[dict[str, Any]]:
         """
         Fetch time-series observations from Valet API.
 
@@ -348,7 +348,7 @@ class ValetIngestor(BaseIngestor):
         return mapping.get(freq.lower(), "D")
 
     @staticmethod
-    def _infer_units(series_id: str) -> Optional[str]:
+    def _infer_units(series_id: str) -> str | None:
         """
         Infer units from series ID naming conventions.
 
