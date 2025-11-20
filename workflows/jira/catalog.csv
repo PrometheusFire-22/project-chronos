@@ -2,3 +2,28 @@ status,issue_type,priority,summary,description,labels,story_points,epic_link,spr
 Created,Story,High,feat(valet): Add Valet API support,Add Valet to time-series ingestion.,data-ingestion;valet,5,,Sprint 3
 Created,Bug,High,fix(catalog): Remove 6 invalid FRED series,Clean invalid series.,data-quality,1,,Sprint 3
 Created,Task,Low,docs(valet): Document Valet ingestion,Create runbook.,documentation,2,,Sprint 3
+Pending,Story,Low,feat(boe): Add Bank of England data source,Implement BoE plugin with proper XML namespace handling. Resolve 403 errors.,data-ingestion;boe,3,,Backlog
+Pending,Story,Medium,feat(boe): Implement Bank of England API Integration,## Description,,,,
+Implement robust Bank of England API plugin with proper XML namespace handling and error recovery.,,,,,,,,
+## Current Issue,,,,,,,,
+Bank of England API calls are failing with no data returned for series:,,,,,,,,
+- IUQABEDR (UK Base Rate),,,,,,,,
+- IUDBEDR (UK Bank Rate) ,,,,,,,,
+- XUQABK67 (GBP/USD Exchange Rate),,,,,,,,
+## Root Cause,,,,,,,,
+The current XML parsing implementation doesn't properly handle SDMX namespaces and API response structure, leading to empty data extraction.,,,,,,,
+## Required Changes,,,,,,,,
+- Implement proper XML namespace registration and handling,,,,,,,,
+- Add fallback parsing methods for robustness,,,,,,,,
+- Enhance error handling and retry logic,,,,,,,,
+- Update request headers and parameters for API compatibility,,,,,,,,
+- Add comprehensive testing for BoE series,,,,,,,,
+## Acceptance Criteria,,,,,,,,
+- [ ] All three BoE series return valid data,,,,,,,,
+- [ ] Proper error handling for API rate limits and blocks,,,,,,,,
+- [ ] Support for both namespace and non-namespace XML parsing,,,,,,,,
+- [ ] Data quality validation for extracted observations,,,,,,,,
+## Technical Notes,,,,,,,,
+- API endpoint: https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp,,,,,,,,
+- Uses SDMX XML format with generic namespaces,,,,,,,,
+- Requires proper User-Agent and Referer headers,data-ingestion;boe;api-integration;bug-fix,3,,Backlog,,,,
