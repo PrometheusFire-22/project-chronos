@@ -137,6 +137,13 @@
 	},
 
 	// ==================================================================
+	// Container Features
+	// ==================================================================
+	"features": {
+		"ghcr.io/devcontainers/features/github-cli:1": {}
+	},
+
+	// ==================================================================
 	// Container Lifecycle Commands
 	// ==================================================================
 
@@ -153,7 +160,7 @@
 	"remoteUser": "vscode",
 
 	// Forward ports automatically
-	"forwardsPort": [5432, 3000, 5050, 8025],
+	"forwardPorts": [5432, 3000, 5050, 8025],
 
 	// Port attributes
 	"portsAttributes": {
@@ -179,10 +186,4 @@
 	"mounts": [
 		"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,readonly,type=bind"
 	]
-
-	// NOTE: Removed "features" section that was causing GitHub CLI 500 error
-	// GitHub CLI can be installed manually if needed:
-	// curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-	// echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-	// sudo apt update && sudo apt install gh
 }
