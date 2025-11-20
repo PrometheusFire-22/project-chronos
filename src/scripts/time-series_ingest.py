@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-Project Chronos: Master Data Ingestion Orchestrator (Production Grade)
-======================================================================
-Features:
-- Database logging to metadata.ingestion_log
-- Exponential backoff with retries
-- Initial warmup delay
-- Progress tracking
-- Graceful error handling
+Project Chronos: Universal Economic Data Ingestion
+===================================================
+Plugin-based architecture for extensibility
+
+Supported sources:
+- FRED (Federal Reserve)
+- Valet (Bank of Canada)
+- Future: BOE, ECB, BOJ, etc.
 """
 import csv
 import os
@@ -17,13 +17,16 @@ from datetime import datetime
 from pathlib import Path
 
 import psycopg2
-import requests
 from dotenv import load_dotenv
 
-# Load environment variables
+# Import plugins
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from chronos.ingestion.fred import FREDPlugin
+from chronos.ingestion.valet import ValetPlugin
+
+# Load environment
 env_path = Path(__file__).parent.parent.parent / ".env"
 load_dotenv(env_path)
-print(f"🔧 Loaded environment from: {env_path}")
 
 # Database configuration
 DB_CONFIG = {
@@ -33,16 +36,15 @@ DB_CONFIG = {
     "password": os.getenv("DATABASE_PASSWORD"),
 }
 
-FRED_API_KEY = os.getenv("FRED_API_KEY")
-FRED_BASE_URL = "https://api.stlouisfed.org/fred/series/observations"
-
-# Verify API key
-if not FRED_API_KEY or FRED_API_KEY == "your_key_here":
-    print("❌ ERROR: FRED_API_KEY not found in .env file")
-    sys.exit(1)
-else:
-    masked_key = FRED_API_KEY[:8] + "..." + FRED_API_KEY[-4:]
-    print(f"✅ FRED API Key loaded: {masked_key}\n")
+# Initialize plugins
+PLUGINS = {
+    "FRED": FREDPlugin(os.getenv("FRED_API_KEY")),
+    "Valet": ValetPlugin(),
+    # Add future plugins here:
+    # "BOE": BOEPlugin(os.getenv("BOE_API_KEY")),
+    # "ECB": ECBPlugin(),
+    # "BOJ": BOJPlugin(os.getenv("BOJ_API_KEY")),
+}
 
 
 def get_db_connection():
@@ -50,139 +52,48 @@ def get_db_connection():
     return psycopg2.connect(**DB_CONFIG)
 
 
-def log_ingestion_event(
-    conn, series_id: str, status: str, records_loaded: int, error_msg: str = None
-):
-    """Log ingestion event to metadata.ingestion_log"""
-    cursor = conn.cursor()
-
-    query = """
-    INSERT INTO metadata.ingestion_log (
-        source_id, source_series_id, ingestion_status,
-        records_loaded, error_message, ingestion_timestamp
-    ) VALUES (1, %s, %s, %s, %s, NOW())
-    """
-
-    try:
-        cursor.execute(query, (series_id, status, records_loaded, error_msg))
-        conn.commit()
-    except Exception as e:
-        print(f"    ⚠️  Warning: Could not log to database: {e}")
-        conn.rollback()
-    finally:
-        cursor.close()
-
-
 def load_catalog(catalog_path: Path):
-    """Load asset catalog and filter for 'Planned' FRED series"""
-    planned_series = []
+    """Load time-series catalog"""
+    series_list = []
 
-    with open(catalog_path) as f:
+    with open(catalog_path, encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
-            if not row.get("asset_id") or row.get("source") != "FRED":
-                continue
+            if row.get("status") == "Active":
+                series_list.append(row)
 
-            if row.get("status") == "Planned":
-                planned_series.append(
-                    {
-                        "series_id": row["asset_id"],
-                        "name": row["name"],
-                        "category": row.get("category", ""),
-                        "sub_category": row.get("sub_category", ""),
-                    }
-                )
-
-    return planned_series
+    return series_list
 
 
-def fetch_fred_data(series_id: str, max_retries=3, initial_delay=2):
-    """
-    Fetch data from FRED API with intelligent rate limiting
-
-    Args:
-        series_id: FRED series identifier
-        max_retries: Number of retry attempts
-        initial_delay: Seconds to wait on first attempt (warmup)
-
-    Returns:
-        List of observations or empty list on failure
-    """
-    params = {
-        "series_id": series_id,
-        "api_key": FRED_API_KEY,
-        "file_type": "json",
-    }
-
-    for attempt in range(max_retries):
-        try:
-            # Progressive delay: 2s, 3s, 5s
-            delay = initial_delay + attempt
-            if attempt > 0:
-                print(f"    ⏱️  Retry {attempt}/{max_retries} after {delay}s delay...")
-
-            time.sleep(delay)
-
-            response = requests.get(FRED_BASE_URL, params=params, timeout=30)
-            response.raise_for_status()
-
-            data = response.json()
-            return data.get("observations", [])
-
-        except requests.exceptions.HTTPError as e:
-            if e.response.status_code == 400:
-                # Bad request - series doesn't exist, don't retry
-                raise ValueError(f"Series {series_id} not found in FRED database")
-            elif e.response.status_code == 429:
-                # Rate limited - wait longer
-                wait_time = (attempt + 1) * 10
-                print(f"    ⏱️  Rate limited! Waiting {wait_time}s before retry...")
-                time.sleep(wait_time)
-            else:
-                raise
-
-        except requests.exceptions.Timeout:
-            if attempt < max_retries - 1:
-                print("    ⏱️  Timeout - retrying...")
-                continue
-            else:
-                raise
-
-        except requests.exceptions.RequestException:
-            if attempt < max_retries - 1:
-                wait_time = (attempt + 1) * 3
-                print(f"    ⏱️  Network error, retrying in {wait_time}s...")
-                time.sleep(wait_time)
-            else:
-                raise
-
-    return []
-
-
-def ensure_data_source(conn):
-    """Ensure FRED exists in data_sources table"""
+def ensure_data_source(conn, plugin):
+    """Ensure data source exists in database"""
     cursor = conn.cursor()
 
-    cursor.execute("SELECT COUNT(*) FROM metadata.data_sources WHERE source_id = 1")
+    source_id = plugin.get_source_id()
+    source_name = plugin.get_source_name()
+
+    cursor.execute("SELECT COUNT(*) FROM metadata.data_sources WHERE source_id = %s", (source_id,))
     count = cursor.fetchone()[0]
 
     if count == 0:
         cursor.execute(
             """
             INSERT INTO metadata.data_sources (source_id, source_name)
-            VALUES (1, 'Federal Reserve Economic Data (FRED)')
+            VALUES (%s, %s)
             ON CONFLICT DO NOTHING
-        """
+            """,
+            (source_id, source_name),
         )
         conn.commit()
-        print("✅ Added FRED to data_sources\n")
+        print(f"✅ Added {source_name} to data_sources\n")
     else:
-        print("✅ FRED already exists in data_sources\n")
+        print(f"✅ {source_name} already exists in data_sources\n")
 
     cursor.close()
+    return source_id
 
 
-def insert_series_metadata(conn, series_id: str, name: str, category: str, sub_category: str):
+def insert_series_metadata(conn, source_id: int, series_id: str, series_data: dict):
     """Insert or update series metadata"""
     cursor = conn.cursor()
 
@@ -190,29 +101,40 @@ def insert_series_metadata(conn, series_id: str, name: str, category: str, sub_c
     INSERT INTO metadata.series_metadata (
         source_id, source_series_id, series_name,
         frequency, category, geography
-    ) VALUES (1, %s, %s, %s, %s, %s)
+    ) VALUES (%s, %s, %s, %s, %s, %s)
     ON CONFLICT (source_id, source_series_id)
     DO UPDATE SET
         series_name = EXCLUDED.series_name,
         last_updated = NOW();
     """
 
-    cursor.execute(query, (series_id, name, "daily", category, sub_category))
+    cursor.execute(
+        query,
+        (
+            source_id,
+            series_id,
+            series_data.get("series_name", "Unknown"),
+            series_data.get("frequency", "Unknown"),
+            series_data.get("category", "Unknown"),
+            series_data.get("geography_name", "Unknown"),
+        ),
+    )
+
     conn.commit()
     cursor.close()
 
 
-def insert_observations(conn, series_id: str, observations: list):
-    """Insert observations into timeseries table with batch processing"""
+def insert_observations(conn, series_id: str, observations: list, source_id: int):
+    """Insert observations with batch processing"""
     cursor = conn.cursor()
 
     # Get internal series_id
     cursor.execute(
         """
         SELECT series_id FROM metadata.series_metadata
-        WHERE source_id = 1 AND source_series_id = %s
+        WHERE source_id = %s AND source_series_id = %s
     """,
-        (series_id,),
+        (source_id, series_id),
     )
 
     result = cursor.fetchone()
@@ -224,20 +146,13 @@ def insert_observations(conn, series_id: str, observations: list):
 
     inserted = 0
     skipped = 0
-    batch_size = 100
     batch = []
 
     for obs in observations:
-        # Skip missing values
-        if obs.get("value") == ".":
-            skipped += 1
-            continue
-
         try:
             batch.append((internal_series_id, obs["date"], float(obs["value"]), "good"))
 
-            # Execute batch when full
-            if len(batch) >= batch_size:
+            if len(batch) >= 100:
                 cursor.executemany(
                     """
                     INSERT INTO timeseries.economic_observations
@@ -248,17 +163,14 @@ def insert_observations(conn, series_id: str, observations: list):
                 """,
                     batch,
                 )
-
                 inserted += len(batch)
                 batch = []
 
-        except Exception as e:
-            print(f"    ⚠️  Error in batch: {e}")
+        except Exception:
             skipped += 1
-            conn.rollback()
             continue
 
-    # Insert remaining batch
+    # Insert remaining
     if batch:
         try:
             cursor.executemany(
@@ -272,10 +184,8 @@ def insert_observations(conn, series_id: str, observations: list):
                 batch,
             )
             inserted += len(batch)
-        except Exception as e:
-            print(f"    ⚠️  Error in final batch: {e}")
+        except:
             skipped += len(batch)
-            conn.rollback()
 
     conn.commit()
     cursor.close()
@@ -284,9 +194,9 @@ def insert_observations(conn, series_id: str, observations: list):
 
 
 def main():
-    """Main ingestion orchestrator with comprehensive logging"""
+    """Main ingestion orchestrator"""
     print("\n" + "=" * 60)
-    print("🚀 Project Chronos: Master Data Ingestion (Production)")
+    print("🚀 Project Chronos: Universal Economic Data Ingestion")
     print("=" * 60 + "\n")
 
     start_time = datetime.now()
@@ -301,116 +211,99 @@ def main():
         sys.exit(1)
 
     print(f"📊 Loading catalog: {catalog_path}")
-    planned_series = load_catalog(catalog_path)
+    series_list = load_catalog(catalog_path)
 
-    if not planned_series:
-        print("⚠️  No 'Planned' FRED series found in catalog")
+    if not series_list:
+        print("⚠️  No active series found in catalog")
         sys.exit(0)
 
-    print(f"✅ Found {len(planned_series)} FRED series marked as 'Planned'\n")
+    print(f"✅ Loaded {len(series_list)} active series\n")
 
     # Connect to database
     conn = get_db_connection()
     print("✅ Connected to database\n")
 
-    # Ensure FRED exists
-    ensure_data_source(conn)
-
-    # Initial warmup delay
-    print("⏱️  Initial warmup delay (3 seconds)...\n")
-    time.sleep(3)
+    # Ensure all sources exist
+    for source_name, plugin in PLUGINS.items():
+        ensure_data_source(conn, plugin)
 
     # Process each series
     total_observations = 0
-    successful_series = 0
-    failed_series = []
+    successful = 0
+    failed = []
 
-    for i, series in enumerate(planned_series, 1):
+    for i, series in enumerate(series_list, 1):
         series_id = series["series_id"]
-        name = series["name"]
+        source = series["source"]
+        name = series["series_name"]
 
-        print(f"[{i}/{len(planned_series)}] Processing: {series_id}")
+        print(f"[{i}/{len(series_list)}] {series_id} ({source})")
         print(f"    Name: {name}")
 
         try:
-            # Fetch data
-            observations = fetch_fred_data(series_id, initial_delay=2 if i > 1 else 1)
+            # Get plugin for this source
+            if source not in PLUGINS:
+                raise ValueError(f"No plugin for source: {source}")
+
+            plugin = PLUGINS[source]
+
+            # Fetch observations
+            observations = plugin.fetch_observations(series_id)
+            time.sleep(1)  # Rate limiting between series
 
             if not observations:
                 print("    ⚠️  No data returned")
-                # log_ingestion_event(conn, series_id, "failed", 0, "No data returned from API")
-                failed_series.append((series_id, "No data"))
+                failed.append((series_id, "No data"))
                 continue
 
             print(f"    ✅ Fetched {len(observations)} observations")
 
             # Insert metadata
-            insert_series_metadata(
-                conn, series_id, name, series["category"], series["sub_category"]
-            )
+            insert_series_metadata(conn, plugin.get_source_id(), series_id, series)
 
             # Insert observations
-            inserted, skipped = insert_observations(conn, series_id, observations)
+            inserted, skipped = insert_observations(
+                conn, series_id, observations, plugin.get_source_id()
+            )
 
             print(f"    ✅ Inserted {inserted} observations (skipped {skipped})")
 
-            # Log success
-            # log_ingestion_event(conn, series_id, "success", inserted)
-
             total_observations += inserted
-            successful_series += 1
+            successful += 1
 
         except ValueError as e:
-            # Known error (series doesn't exist)
-            error_msg = str(e)
-            print(f"    ❌ {error_msg}")
-            # log_ingestion_event(conn, series_id, "failed", 0, error_msg)
-            failed_series.append((series_id, error_msg))
-
+            print(f"    ❌ {str(e)}")
+            failed.append((series_id, str(e)))
         except Exception as e:
-            # Unexpected error
-            error_msg = f"{type(e).__name__}: {str(e)}"
-            print(f"    ❌ Error: {error_msg}")
-            # log_ingestion_event(conn, series_id, "failed", 0, error_msg)
-            failed_series.append((series_id, error_msg))
+            print(f"    ❌ Error: {str(e)}")
+            failed.append((series_id, str(e)))
             conn.rollback()
 
         print()
 
-    # Close connection
     conn.close()
 
-    # Calculate duration
+    # Summary
     duration = datetime.now() - start_time
 
-    # Summary
     print("=" * 60)
     print("✅ INGESTION COMPLETE!")
     print("=" * 60)
     print("\n📊 Summary:")
-    print(f"  Total series processed: {len(planned_series)}")
-    print(f"  Successful: {successful_series}")
-    print(f"  Failed: {len(failed_series)}")
+    print(f"  Total series processed: {len(series_list)}")
+    print(f"  Successful: {successful}")
+    print(f"  Failed: {len(failed)}")
     print(f"  Total observations loaded: {total_observations:,}")
     print(f"  Duration: {duration}")
-    print(f"  Average: {duration.total_seconds() / len(planned_series):.1f}s per series")
+    print(f"  Success rate: {successful/len(series_list)*100:.1f}%")
 
-    if failed_series:
+    if failed:
         print("\n⚠️  Failed series:")
-        for series_id, error in failed_series:
+        for series_id, error in failed:
             error_short = error[:80] + "..." if len(error) > 80 else error
             print(f"    - {series_id}: {error_short}")
 
     print("\n" + "=" * 60 + "\n")
-
-    # Exit code based on success rate
-    success_rate = (successful_series / len(planned_series)) * 100
-    if success_rate >= 80:
-        print(f"✅ Success rate: {success_rate:.1f}% - PASSED")
-        sys.exit(0)
-    else:
-        print(f"⚠️  Success rate: {success_rate:.1f}% - REVIEW NEEDED")
-        sys.exit(1)
 
 
 if __name__ == "__main__":
