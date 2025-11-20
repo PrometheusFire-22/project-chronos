@@ -1,0 +1,4 @@
+status,issue_type,priority,summary,description,labels,story_points,epic_link,sprint
+Created,Story,High,feat(valet): Add Valet API support,Add Valet to time-series ingestion.,data-ingestion;valet,5,,Sprint 3
+Created,Bug,High,fix(catalog): Remove 6 invalid FRED series,Clean invalid series.,data-quality,1,,Sprint 3
+Created,Task,Low,docs(valet): Document Valet ingestion,Create runbook.,documentation,2,,Sprint 3
