@@ -43,7 +43,12 @@ dependencies = [
     "pydantic>=2.5.2",
     "pydantic-settings>=2.1.0",
     "rich>=13.7.0",
-    "click>=8.1.7",
+    "structlog>=25.5.0",
+
+    # Confluence & Atlassian integration
+    "atlassian-python-api>=4.0.0",
+    "markdown2>=2.5.0",
+    "jmespath>=1.0.0",
 
     # Geospatial
     "geopandas>=0.14.1",
