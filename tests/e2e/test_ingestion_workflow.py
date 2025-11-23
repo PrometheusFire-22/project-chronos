@@ -11,8 +11,8 @@ import pytest
 from sqlalchemy import text
 
 from chronos.database.connection import get_db_session
-from chronos.ingestion.fred import FREDIngestor
-from chronos.ingestion.valet import ValetIngestor
+from chronos.ingestion.fred import FREDPlugin
+from chronos.ingestion.valet import ValetPlugin
 
 
 @pytest.mark.slow
@@ -22,7 +22,7 @@ class TestFREDCompleteWorkflow:
     def test_fred_full_pipeline_federal_funds_rate(self):
         """Test FRED: metadata → observations → analytics for FEDFUNDS."""
         with get_db_session() as session:
-            ingestor = FREDIngestor(session)
+            ingestor = FREDPlugin(session)
 
             # Step 1: Fetch metadata from API
             metadata_list = ingestor.fetch_series_metadata(["FEDFUNDS"])
@@ -102,7 +102,7 @@ class TestFREDCompleteWorkflow:
     def test_fred_fx_rate_appears_in_normalized_view(self):
         """Test FX rate flows from FRED to fx_rates_normalized view."""
         with get_db_session() as session:
-            ingestor = FREDIngestor(session)
+            ingestor = FREDPlugin(session)
 
             # Ingest USD/EUR rate (DEXUSEU)
             metadata_list = ingestor.fetch_series_metadata(["DEXUSEU"])
@@ -151,7 +151,7 @@ class TestValetCompleteWorkflow:
     def test_valet_full_pipeline_usd_cad(self):
         """Test Valet: metadata → observations → analytics for FXUSDCAD."""
         with get_db_session() as session:
-            ingestor = ValetIngestor(session)
+            ingestor = ValetPlugin(session)
 
             # Step 1: Fetch metadata
             metadata_list = ingestor.fetch_series_metadata(["FXUSDCAD"])
@@ -315,7 +315,7 @@ class TestIdempotency:
     def test_duplicate_series_registration_is_safe(self):
         """Registering same series twice should be idempotent."""
         with get_db_session() as session:
-            ingestor = FREDIngestor(session)
+            ingestor = FREDPlugin(session)
 
             # Fetch metadata
             metadata_list = ingestor.fetch_series_metadata(["GDP"])
@@ -335,7 +335,7 @@ class TestIdempotency:
     def test_duplicate_observations_upsert_correctly(self):
         """Storing same observations twice should upsert (not duplicate)."""
         with get_db_session() as session:
-            ingestor = FREDIngestor(session)
+            ingestor = FREDPlugin(session)
 
             # Get existing series
             result = session.execute(
