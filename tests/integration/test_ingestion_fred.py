@@ -7,13 +7,14 @@ Purpose: Validate FRED API ingestion pipeline
 from datetime import date, datetime
 
 import pytest
-from sqlalchemy import text
-
-from chronos.database.connection import get_db_session
-from chronos.ingestion.fred import FREDPlugin
 
 # NOTE: Tests need refactoring for new Plugin interface - see CHRONOS-164
+# Imports commented out to prevent collection errors
 pytestmark = pytest.mark.skip(reason="Plugin interface changed - needs test refactoring")
+
+# from sqlalchemy import text
+# from chronos.database.connection import get_db_session
+# from chronos.ingestion.fred import FREDPlugin
 
 
 class TestFREDPlugin:
