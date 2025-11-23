@@ -38,12 +38,12 @@ alembic/
 ├── script.py.mako   # Template for new migrations
 └── versions/        # Directory for migration scripts
 
-alembic.ini          # Alembic configuration file
+config/alembic.ini   # Alembic configuration file
 ```
 
 ### 3. Configure alembic.ini
 
-Edit `/workspace/alembic.ini`:
+Edit `/workspace/config/alembic.ini`:
 
 ```ini
 # Replace this line:
@@ -274,7 +274,7 @@ db-status: ## Show current migration status
 ## Next Steps
 
 1. Initialize Alembic: `alembic init alembic`
-2. Configure `alembic.ini` and `env.py`
+2. Configure `config/alembic.ini` and `env.py`
 3. Create baseline: `alembic revision -m "baseline"`
 4. Stamp database: `alembic stamp head`
 5. Test: Create a dummy migration and apply it

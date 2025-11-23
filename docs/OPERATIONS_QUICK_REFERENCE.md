@@ -233,7 +233,7 @@ To Do → In Progress → Code Review → Testing → Done
 - Environment: `/workspace/.env` (NEVER commit!)
 - Docker Compose: `/workspace/docker-compose.yml`
 - VS Code: `/workspace/.devcontainer/devcontainer.json`
-- Alembic: `/workspace/alembic.ini`
+- Alembic: `/workspace/config/alembic.ini`
 
 ### Scripts
 - Backup: `/workspace/scripts/backup_production.sh`
