@@ -5,7 +5,7 @@ Purpose: Domain-specific exceptions for better error handling
 """
 
 
-class ChronosBaseException(Exception):
+class ChronosBaseException(Exception):  # noqa: N818
     """Base exception for all Chronos errors."""
 
     pass

@@ -1,11 +1,6 @@
 #!/usr/bin/env python3
 """Generate embeddings for series descriptions using sentence-transformers."""
 
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).parent.parent))
-
 from sentence_transformers import SentenceTransformer
 from sqlalchemy import text
 

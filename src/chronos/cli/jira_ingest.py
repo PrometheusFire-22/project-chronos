@@ -82,7 +82,7 @@ def create_jira_ticket(ticket_data):
 
     # Add labels if present
     if ticket_data.get("labels"):
-        labels = [l.strip() for l in ticket_data["labels"].split(";") if l.strip()]
+        labels = [label.strip() for label in ticket_data["labels"].split(";") if label.strip()]
         if labels:
             payload["fields"]["labels"] = labels
 
@@ -178,7 +178,7 @@ def main():
 
     if failed:
         print("Failed tickets:")
-        for summary, error in failed:
+        for summary, _error in failed:
             print(f"  - {summary[:50]}")
 
 
