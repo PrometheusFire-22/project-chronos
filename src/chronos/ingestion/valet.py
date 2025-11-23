@@ -52,7 +52,7 @@ class ValetPlugin(DataSourcePlugin):
 
             except requests.exceptions.HTTPError as e:
                 if e.response.status_code == 404:
-                    raise ValueError(f"Series {series_id} not found in Valet")
+                    raise ValueError(f"Series {series_id} not found in Valet") from e
                 elif e.response.status_code == 429:
                     # Rate limited - wait longer
                     time.sleep(10 * (attempt + 1))

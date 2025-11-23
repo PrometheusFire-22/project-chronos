@@ -85,9 +85,6 @@ def create(summary, description, issue_type, priority, labels, points, sprint):
 
     console.print(Panel.fit("[bold cyan]Creating New Ticket[/bold cyan]", border_style="cyan"))
 
-    # Get next ID
-    next_id = get_next_ticket_id()
-
     # Build payload
     payload = {
         "fields": {
@@ -101,7 +98,7 @@ def create(summary, description, issue_type, priority, labels, points, sprint):
 
     # Add labels
     if labels:
-        payload["fields"]["labels"] = [l.strip() for l in labels.split(",")]
+        payload["fields"]["labels"] = [label.strip() for label in labels.split(",")]
 
     try:
         response = requests.post(
@@ -182,7 +179,7 @@ def read(ticket_id):
             try:
                 desc_text = fields["description"]["content"][0]["content"][0]["text"]
                 console.print(Markdown(desc_text))
-            except:
+            except (KeyError, IndexError, TypeError):
                 console.print("[dim]Unable to parse description[/dim]")
 
     except requests.exceptions.HTTPError as e:
@@ -221,7 +218,7 @@ def update(ticket_id, summary, description, status, priority, points, labels):
         updates["priority"] = {"name": priority}
 
     if labels:
-        updates["labels"] = [l.strip() for l in labels.split(",")]
+        updates["labels"] = [label.strip() for label in labels.split(",")]
 
     if not updates and not status:
         console.print("[yellow]⚠️  No updates specified[/yellow]")
