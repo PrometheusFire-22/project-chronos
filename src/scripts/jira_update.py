@@ -35,11 +35,7 @@ def get_ticket(ticket_key: str):
     """Get existing ticket data"""
     url = f"{JIRA_URL}/rest/api/3/issue/{ticket_key}"
 
-    response = requests.get(
-        url,
-        auth=(JIRA_EMAIL, JIRA_API_TOKEN),
-        timeout=30
-    )
+    response = requests.get(url, auth=(JIRA_EMAIL, JIRA_API_TOKEN), timeout=30)
 
     if response.status_code == 404:
         return None
@@ -59,7 +55,7 @@ def update_ticket(ticket_key: str, updates: dict):
         auth=(JIRA_EMAIL, JIRA_API_TOKEN),
         headers={"Content-Type": "application/json"},
         json=payload,
-        timeout=30
+        timeout=30,
     )
 
     response.raise_for_status()
@@ -73,6 +69,12 @@ def format_description(ticket_data: dict) -> str:
     labels = ticket_data.get("labels", "")
 
     # Build rich description
+    default_acceptance = "- Implementation complete\n- Tests passing\n- Documentation updated"
+    acceptance_text = acceptance if acceptance else default_acceptance
+    labels_formatted = ", ".join(
+        [f"`{label.strip()}`" for label in labels.split(";") if label.strip()]
+    )
+
     rich_desc = f"""## 📋 Overview
 
 {desc}
@@ -81,13 +83,13 @@ def format_description(ticket_data: dict) -> str:
 
 ## ✅ Acceptance Criteria
 
-{acceptance if acceptance else "- Implementation complete\n- Tests passing\n- Documentation updated"}
+{acceptance_text}
 
 ---
 
 ## 🏷️ Labels
 
-{', '.join([f'`{l.strip()}`' for l in labels.split(';') if l.strip()])}
+{labels_formatted}
 
 ---
 
@@ -98,7 +100,7 @@ def format_description(ticket_data: dict) -> str:
 **Sprint:** {ticket_data.get('sprint', 'Backlog')}
 """
 
-    if ticket_data.get('epic_link'):
+    if ticket_data.get("epic_link"):
         rich_desc += f"\n**Epic:** {ticket_data.get('epic_link')}"
 
     return rich_desc
@@ -166,11 +168,8 @@ def main():
                     "type": "doc",
                     "version": 1,
                     "content": [
-                        {
-                            "type": "paragraph",
-                            "content": [{"type": "text", "text": rich_desc}]
-                        }
-                    ]
+                        {"type": "paragraph", "content": [{"type": "text", "text": rich_desc}]}
+                    ],
                 }
 
             # Update summary if changed
@@ -179,7 +178,7 @@ def main():
 
             # Update labels
             if ticket.get("labels"):
-                labels = [l.strip() for l in ticket["labels"].split(";") if l.strip()]
+                labels = [label.strip() for label in ticket["labels"].split(";") if label.strip()]
                 if labels:
                     updates["labels"] = labels
 
