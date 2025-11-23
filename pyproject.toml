@@ -160,6 +160,10 @@ exclude = [
     "alembic/versions",
     "build",
     "dist",
+    # Skipped tests pending refactoring (CHRONOS-164)
+    "tests/integration/test_ingestion_fred.py",
+    "tests/integration/test_ingestion_valet.py",
+    "tests/e2e/test_ingestion_workflow.py",
 ]
 
 [tool.ruff.per-file-ignores]
