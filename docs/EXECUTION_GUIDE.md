@@ -426,7 +426,7 @@ Generating /workspace/alembic/env.py ... done
 
 **WHERE:** 💻 VS Code
 
-Open `/workspace/alembic.ini`
+Open `/workspace/config/alembic.ini`
 
 Find this line (around line 63):
 

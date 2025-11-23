@@ -142,7 +142,7 @@ git status
 git commit -m "feat(db): Initialize Alembic migration framework
 
 - Install Alembic package
-- Configure alembic.ini with database URL
+- Configure config/alembic.ini with database URL
 - Create baseline migration
 - Stamp database with current version
 

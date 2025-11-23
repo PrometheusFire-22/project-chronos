@@ -12,7 +12,13 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(cat:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(tree -L 3 src/)",
+      "Bash(tree -L 2 scripts/)",
+      "Bash(python3 src/scripts/jira_cli.py list --limit 5)",
+      "Bash(source .venv/bin/activate)",
+      "Bash(git checkout:*)",
+      "Bash(git mv:*)"
     ],
     "deny": [],
     "ask": []
