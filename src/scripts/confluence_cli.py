@@ -134,15 +134,12 @@ def create(title, space, body, body_file, parent, labels, jira_ticket):
         page_id = page["id"]
         page_url = f"{CONFLUENCE_URL}/wiki{page['_links']['webui']}"
 
-        # Add labels
+        # Add labels (one at a time)
         if labels:
-            label_list = [
-                {"prefix": "global", "name": label.strip()}
-                for label in labels.split(",")
-                if label.strip()
-            ]
-            if label_list:
-                confluence.set_page_label(page_id, label_list)
+            for label in labels.split(","):
+                label_name = label.strip()
+                if label_name:
+                    confluence.set_page_label(page_id, label_name)
 
         # Display result
         table = Table(title="✅ Page Created", box=box.ROUNDED)
