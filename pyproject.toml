@@ -239,7 +239,7 @@ show_missing = true
 # Project URLs
 # ==================================================================
 [project.urls]
-Homepage = "https://github.com/yourusername/project-chronos"
-Documentation = "https://github.com/yourusername/project-chronos/wiki"
+Homepage = "https://github.com/PrometheusFire-22/project-chronos"
+Documentation = "https://github.com/PrometheusFire-22/project-chronos/wiki"
 Repository = "https://github.com/yourusername/project-chronos"
 Issues = "https://automatonicai.atlassian.net/jira/software/projects/CHRONOS"
