@@ -268,3 +268,12 @@ Homepage = "https://github.com/PrometheusFire-22/project-chronos"
 Documentation = "https://github.com/PrometheusFire-22/project-chronos/wiki"
 Repository = "https://github.com/yourusername/project-chronos"
 Issues = "https://automatonicai.atlassian.net/jira/software/projects/CHRONOS"
+
+# ==================================================================
+# Console Scripts (CLI Entry Points)
+# ==================================================================
+[project.scripts]
+jira = "chronos.cli.jira_cli:cli"
+confluence = "chronos.cli.confluence_cli:cli"
+jira-ingest = "chronos.cli.jira_ingest:main"
+jira-update = "chronos.cli.jira_update:main"
