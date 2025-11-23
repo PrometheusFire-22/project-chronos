@@ -13,14 +13,13 @@ import csv
 import os
 import sys
 import time
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 import psycopg2
 from dotenv import load_dotenv
 
 # Import plugins
-sys.path.insert(0, str(Path(__file__).parent.parent))
 from chronos.ingestion.fred import FREDPlugin
 from chronos.ingestion.valet import ValetPlugin
 
@@ -184,7 +183,7 @@ def insert_observations(conn, series_id: str, observations: list, source_id: int
                 batch,
             )
             inserted += len(batch)
-        except:
+        except Exception:
             skipped += len(batch)
 
     conn.commit()
@@ -199,7 +198,7 @@ def main():
     print("🚀 Project Chronos: Universal Economic Data Ingestion")
     print("=" * 60 + "\n")
 
-    start_time = datetime.now()
+    start_time = datetime.now(UTC)
 
     # Locate catalog
     catalog_path = (
@@ -224,7 +223,7 @@ def main():
     print("✅ Connected to database\n")
 
     # Ensure all sources exist
-    for source_name, plugin in PLUGINS.items():
+    for _source_name, plugin in PLUGINS.items():
         ensure_data_source(conn, plugin)
 
     # Process each series
@@ -284,7 +283,7 @@ def main():
     conn.close()
 
     # Summary
-    duration = datetime.now() - start_time
+    duration = datetime.now(UTC) - start_time
 
     print("=" * 60)
     print("✅ INGESTION COMPLETE!")

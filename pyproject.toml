@@ -164,7 +164,19 @@ exclude = [
 
 [tool.ruff.per-file-ignores]
 "__init__.py" = ["F401"]  # Allow unused imports in __init__.py
-"tests/**/*.py" = ["S101"]  # Allow assert in tests
+"tests/**/*.py" = [
+    "S101",   # Allow assert in tests
+    "DTZ001", # Allow datetime without tzinfo in tests
+    "DTZ005", # Allow datetime.now() without tz in tests
+    "DTZ007", # Allow strptime without tzinfo in tests
+    "B017",   # Allow pytest.raises(Exception) in tests
+    "N806",   # Allow non-lowercase variable names in tests (e.g., Session)
+]
+
+# Import sorting configuration (isort)
+[tool.ruff.isort]
+known-first-party = ["chronos"]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
 
 # ==================================================================
 # MyPy Configuration

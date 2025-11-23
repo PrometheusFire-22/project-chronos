@@ -54,7 +54,7 @@ class FREDPlugin(DataSourcePlugin):
 
             except requests.exceptions.HTTPError as e:
                 if e.response.status_code == 400:
-                    raise ValueError(f"Series {series_id} not found in FRED")
+                    raise ValueError(f"Series {series_id} not found in FRED") from e
                 elif e.response.status_code == 429:
                     wait_time = (attempt + 1) * 10
                     time.sleep(wait_time)
