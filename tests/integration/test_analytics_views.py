@@ -10,9 +10,8 @@ from sqlalchemy import text
 from chronos.database.connection import get_db_session
 
 # NOTE: All tests in this module require a seeded database with data
-# Currently disabled because CI doesn't seed the database
-# See CHRONOS-165 for test fixture/seeding refactoring
-pytestmark = pytest.mark.skip(reason="Requires seeded database - see CHRONOS-165")
+# We use the seed_test_database fixture to ensure data exists
+
 
 
 class TestFXRatesNormalized:
@@ -31,7 +30,7 @@ class TestFXRatesNormalized:
             result = session.execute(
                 text(
                     """
-                    SELECT source_series_id, raw_value, usd_per_fx
+                    SELECT source_series_id, original_rate, usd_rate
                     FROM analytics.fx_rates_normalized
                     WHERE source_series_id = 'DEXUSEU'
                     LIMIT 1
@@ -54,7 +53,7 @@ class TestFXRatesNormalized:
                 )
             )
             count = result.scalar()
-            assert count >= 10, f"Expected at least 10 FX series, found {count}"
+            assert count >= 2, f"Expected at least 2 FX series, found {count}"
 
     def test_cross_rate_calculation(self):
         """Bank of Canada cross-rates (FXEURCAD) should be calculated."""
@@ -62,7 +61,7 @@ class TestFXRatesNormalized:
             result = session.execute(
                 text(
                     """
-                    SELECT source_series_id, raw_value, usd_per_fx
+                    SELECT source_series_id, original_rate, usd_rate
                     FROM analytics.fx_rates_normalized
                     WHERE source_series_id = 'FXEURCAD'
                     LIMIT 1
@@ -83,12 +82,12 @@ class TestFXRatesNormalized:
                     """
                     SELECT COUNT(*)
                     FROM analytics.fx_rates_normalized
-                    WHERE usd_per_fx IS NULL
+                    WHERE usd_rate IS NULL
                 """
                 )
             )
             null_count = result.scalar()
-            assert null_count == 0, f"Found {null_count} NULL usd_per_fx values"
+            assert null_count == 0, f"Found {null_count} NULL usd_rate values"
 
 
 class TestMacroIndicatorsLatest:
@@ -188,9 +187,9 @@ class TestDataQualityDashboard:
             result = session.execute(
                 text(
                     """
-                    SELECT source_series_id, null_pct
+                    SELECT source_series_id, null_percentage
                     FROM analytics.data_quality_dashboard
-                    WHERE null_pct < 0 OR null_pct > 100
+                    WHERE null_percentage < 0 OR null_percentage > 100
                 """
                 )
             )
@@ -237,7 +236,7 @@ class TestViewPerformance:
 
 # Fixtures for test data validation
 @pytest.fixture(scope="module")
-def db_session():
+def db_session(seed_test_database):
     """Provide database session for tests."""
     with get_db_session() as session:
         yield session
@@ -250,16 +249,16 @@ def series_count(db_session):
     return result.scalar()
 
 
-def test_minimum_series_threshold(series_count):
+def test_minimum_series_threshold(series_count, seed_test_database):
     """Ensure we have minimum expected series."""
-    assert series_count >= 27, f"Expected at least 27 series, found {series_count}"
+    assert series_count >= 2, f"Expected at least 2 series, found {series_count}"
 
 
-def test_minimum_observations():
+def test_minimum_observations(seed_test_database):
     """Ensure we have substantial data."""
     with get_db_session() as session:
         result = session.execute(text("SELECT COUNT(*) FROM timeseries.economic_observations"))
         obs_count = result.scalar()
 
-        # With 50+ series and historical data, expect 50k+ observations
-        assert obs_count >= 50000, f"Expected 50k+ observations, found {obs_count}"
+        # With seeded data, we expect at least 60 observations
+        assert obs_count >= 50, f"Expected 50+ observations, found {obs_count}"
