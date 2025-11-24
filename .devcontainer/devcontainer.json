@@ -1,15 +1,14 @@
 {
 	"name": "Project Chronos (Docker Compose)",
-
 	// ==================================================================
 	// Docker Compose Configuration
 	// ==================================================================
 	"dockerComposeFile": [
-		"../docker-compose.yml"
+		"../docker-compose.yml",
+		"../docker-compose.override.yml"
 	],
 	"service": "app",
 	"workspaceFolder": "/workspace",
-
 	// ==================================================================
 	// Container Environment Variables
 	// ==================================================================
@@ -17,7 +16,6 @@
 		"PYTHONPATH": "/workspace/src",
 		"TERM": "xterm-256color"
 	},
-
 	// ==================================================================
 	// Remote Environment Variables
 	// ==================================================================
@@ -25,7 +23,6 @@
 		"ENVIRONMENT": "development",
 		"LOG_LEVEL": "INFO"
 	},
-
 	// ==================================================================
 	// VS Code Customizations
 	// ==================================================================
@@ -39,7 +36,6 @@
 				"python.analysis.extraPaths": [
 					"/workspace/src"
 				],
-
 				// Terminal
 				"terminal.integrated.defaultProfile.linux": "zsh",
 				"terminal.integrated.profiles.linux": {
@@ -47,13 +43,14 @@
 						"path": "/usr/bin/zsh"
 					}
 				},
-
 				// Editor
 				"files.autoSave": "onFocusChange",
 				"editor.formatOnSave": true,
-				"editor.rulers": [88, 100],
+				"editor.rulers": [
+					88,
+					100
+				],
 				"editor.tabSize": 4,
-
 				// Formatting
 				"[python]": {
 					"editor.defaultFormatter": "ms-python.black-formatter",
@@ -66,11 +63,9 @@
 					"editor.defaultFormatter": "esbenp.prettier-vscode"
 				},
 				"prettier.printWidth": 100,
-
 				// Git
 				"git.autofetch": true,
 				"git.confirmSync": false,
-
 				// Files
 				"files.exclude": {
 					"**/__pycache__": true,
@@ -79,89 +74,75 @@
 					"**/*.pyc": true
 				}
 			},
-
 			// Extensions to Install
 			"extensions": [
 				// Icons & UI
 				"vscode-icons-team.vscode-icons",
 				"aaron-bond.better-comments",
-
 				// Python Development
 				"ms-python.python",
 				"ms-python.vscode-pylance",
 				"ms-python.black-formatter",
 				"charliermarsh.ruff",
-
 				// Git Integration
 				"eamodio.gitlens",
 				"mhutchie.git-graph",
 				"donjayamanne.githistory",
-
 				// Database Tools
 				"mtxr.sqltools",
 				"mtxr.sqltools-driver-pg",
 				"cweijan.vscode-postgresql-client2",
 				"Geographica.vscode-postgis",
-
 				// Data Science
 				"ms-toolsai.jupyter",
 				"ms-toolsai.datawrangler",
-
 				// File Viewers
 				"mechatroner.rainbow-csv",
 				"janisdd.vscode-edit-csv",
 				"grapecity.gc-excelviewer",
 				"tomoki1207.pdf",
-
 				// Diagramming
 				"jebbs.plantuml",
 				"bierner.markdown-mermaid",
 				"excalidraw.excalidraw-vscode",
-
 				// Markdown
 				"yzhang.markdown-all-in-one",
 				"esbenp.prettier-vscode",
-
 				// CI/CD & DevOps
 				"GitHub.vscode-github-actions",
-
 				// Project Management
 				"Atlassian.atlascode",
 				"GitHub.vscode-pull-request-github",
 				"HubSpot.hubspot-vs-code",
-
 				// AI Assistance
 				"anthropic.claude-vscode"
 			]
 		}
 	},
-
 	// ==================================================================
 	// Container Features
 	// ==================================================================
 	"features": {
 		"ghcr.io/devcontainers/features/github-cli:1": {}
 	},
-
 	// ==================================================================
 	// Container Lifecycle Commands
 	// ==================================================================
-
 	// Run AFTER container is created (first time only)
 	"postCreateCommand": "pip install --upgrade pip && pip install -e '.[dev]' && pre-commit install",
-
 	// Run EVERY time container starts
 	"postStartCommand": "echo '✅ Project Chronos dev container ready!'",
-
 	// ==================================================================
 	// Additional Configuration
 	// ==================================================================
-
 	"remoteUser": "vscode",
-
 	// Forward ports automatically
-	"forwardPorts": [5432, 3000, 5050, 8025],
-
+	"forwardPorts": [
+		5432,
+		3000,
+		5050,
+		8025
+	],
 	// Port attributes
 	"portsAttributes": {
 		"5432": {
@@ -181,9 +162,10 @@
 			"onAutoForward": "ignore"
 		}
 	},
-
 	// Mount SSH keys
 	"mounts": [
 		"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,readonly,type=bind"
-	]
+	],
+	// Shutdown Action
+	"shutdownAction": "stopCompose"
 }
