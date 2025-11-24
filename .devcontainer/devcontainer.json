@@ -115,7 +115,13 @@
 				"GitHub.vscode-pull-request-github",
 				"HubSpot.hubspot-vs-code",
 				// AI Assistance
-				"anthropic.claude-vscode"
+				"anthropic.claude-vscode",
+				"google.gemini-cli-vscode-ide-companion",
+				"google.geminicodeassist",
+				// Cloud & DevOps
+				"amazonwebservices.aws-toolkit-vscode",
+				// Type Checking
+				"ms-python.mypy-type-checker"
 			]
 		}
 	},
