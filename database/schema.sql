@@ -145,9 +145,9 @@ COMMENT ON SCHEMA analytics IS
 -- Data sources (FRED, Bank of Canada, etc.)
 CREATE TABLE IF NOT EXISTS metadata.data_sources (
     source_id SERIAL PRIMARY KEY,
-    source_name VARCHAR(100) NOT NULL UNIQUE,
+    source_name TEXT NOT NULL UNIQUE,
     source_description TEXT,
-    base_url VARCHAR(500),
+    base_url TEXT,
     api_key_required BOOLEAN DEFAULT TRUE,
     rate_limit_per_minute INTEGER,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -161,16 +161,16 @@ COMMENT ON TABLE metadata.data_sources IS
 CREATE TABLE IF NOT EXISTS metadata.series_metadata (
     series_id SERIAL PRIMARY KEY,
     source_id INTEGER NOT NULL REFERENCES metadata.data_sources(source_id),
-    source_series_id VARCHAR(100) NOT NULL,
-    series_name VARCHAR(255) NOT NULL,
+    source_series_id TEXT NOT NULL,
+    series_name TEXT NOT NULL,
     series_description TEXT,
-    series_type VARCHAR(50),
-    frequency VARCHAR(20),
-    units VARCHAR(100),
-    seasonal_adjustment VARCHAR(50),
+    series_type TEXT,
+    frequency TEXT,
+    units TEXT,
+    seasonal_adjustment TEXT,
     last_updated TIMESTAMPTZ,
-    geography VARCHAR(100),
-    category VARCHAR(100),
+    geography TEXT,
+    category TEXT,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     is_active BOOLEAN DEFAULT TRUE,  -- ADD THIS LINE
     description_embedding vector(384),
@@ -202,7 +202,7 @@ CREATE TABLE IF NOT EXISTS metadata.ingestion_log (
     records_fetched INTEGER,
     records_inserted INTEGER,
     records_updated INTEGER,
-    status VARCHAR(20) CHECK (status IN ('running', 'success', 'failed', 'partial')),
+    status TEXT CHECK (status IN ('running', 'success', 'failed', 'partial')),
     error_message TEXT,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
@@ -222,7 +222,7 @@ CREATE TABLE IF NOT EXISTS timeseries.economic_observations (
     series_id INTEGER NOT NULL REFERENCES metadata.series_metadata(series_id),
     observation_date DATE NOT NULL,
     value NUMERIC(20, 6),
-    quality_flag VARCHAR(10),
+    quality_flag TEXT,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (series_id, observation_date)
@@ -428,7 +428,7 @@ ON CONFLICT (source_name) DO NOTHING;
 -- ============================================================================
 
 CREATE TABLE IF NOT EXISTS metadata.schema_version (
-    version VARCHAR(20) PRIMARY KEY,
+    version TEXT PRIMARY KEY,
     applied_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     description TEXT
 );
