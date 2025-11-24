@@ -308,9 +308,13 @@ def list(status, limit):
 
     try:
         response = requests.get(
-            f"{JIRA_URL}/rest/api/3/search",
+            f"{JIRA_URL}/rest/api/3/search/jql",
             auth=(JIRA_EMAIL, JIRA_API_TOKEN),
-            params={"jql": jql, "maxResults": limit},
+            params={
+                "jql": jql,
+                "maxResults": limit,
+                "fields": "key,summary,status,issuetype",
+            },
             timeout=30,
         )
         response.raise_for_status()
