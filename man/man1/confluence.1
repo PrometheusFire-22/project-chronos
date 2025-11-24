@@ -1,0 +1,161 @@
+.TH CONFLUENCE 1 "2025-11-24" "Project Chronos 2.0" "User Commands"
+.SH NAME
+confluence \- Confluence page management CLI tool
+.SH SYNOPSIS
+.B confluence
+[\fIOPTION\fR]
+.I COMMAND
+[\fIARGS\fR]
+.SH DESCRIPTION
+.B confluence
+provides full CRUD operations for managing Confluence pages from the command line.
+Supports markdown-to-Confluence conversion, Jira integration, and page hierarchy management.
+.SH COMMANDS
+.TP
+.B create
+Create a new Confluence page
+.TP
+.B read
+Read page details
+.TP
+.B update
+Update an existing page
+.TP
+.B delete
+Delete a page
+.TP
+.B list
+List pages in a space
+.SH CREATE OPTIONS
+.TP
+.BR \-\-title " " \fITITLE\fR
+Page title (required)
+.TP
+.BR \-\-space " " \fISPACE\fR
+Confluence space key (required, e.g., PC)
+.TP
+.BR \-\-body " " \fIBODY\fR
+Inline page content in markdown format
+.TP
+.BR \-\-body\-file " " \fIFILE\fR
+Path to markdown file for page content
+.TP
+.BR \-\-parent " " \fIPARENT\fR
+Parent page title (for page hierarchy)
+.TP
+.BR \-\-labels " " \fILABELS\fR
+Comma-separated labels
+.TP
+.BR \-\-jira\-ticket " " \fITICKET\fR
+Link to Jira ticket (e.g., CHRONOS-167)
+.SH UPDATE OPTIONS
+.TP
+.BR \-\-new\-title " " \fITITLE\fR
+New page title (rename page)
+.TP
+.BR \-\-body " " \fIBODY\fR
+New inline content in markdown
+.TP
+.BR \-\-body\-file " " \fIFILE\fR
+Path to markdown file with new content
+.TP
+.BR \-\-labels " " \fILABELS\fR
+Replace all labels with new comma-separated list
+.SH LIST OPTIONS
+.TP
+.BR \-\-space " " \fISPACE\fR
+Confluence space key (required)
+.TP
+.BR \-\-limit " " \fILIMIT\fR
+Number of results to return (default: 20)
+.SH EXAMPLES
+.TP
+Create page from inline content:
+.B confluence create
+\-\-title "Page Title" \-\-space PC \-\-body "# Content"
+.TP
+Create page from file:
+.B confluence create
+\-\-title "Sprint 4 Summary" \-\-space PC \-\-body\-file summary.md \-\-labels "sprint,documentation"
+.TP
+Create page with Jira link:
+.B confluence create
+\-\-title "Bug Fix (CHRONOS-167)" \-\-space PC \-\-body\-file fix.md \-\-jira\-ticket CHRONOS-167
+.TP
+Read page:
+.B confluence read
+"Page Title" \-\-space PC
+.TP
+Update page content:
+.B confluence update
+"Page Title" \-\-space PC \-\-body\-file updated.md
+.TP
+Rename page:
+.B confluence update
+"Old Title" \-\-space PC \-\-new\-title "New Title"
+.TP
+List pages:
+.B confluence list
+\-\-space PC \-\-limit 10
+.TP
+Delete page:
+.B confluence delete
+"Page Title" \-\-space PC
+.SH MARKDOWN SUPPORT
+The CLI automatically converts markdown to Confluence storage format (XHTML).
+.PP
+Supported markdown features:
+.RS
+.IP \(bu 2
+Headers (H1-H6)
+.IP \(bu 2
+Bold and italic text
+.IP \(bu 2
+Links and images
+.IP \(bu 2
+Bullet and numbered lists
+.IP \(bu 2
+Code blocks with syntax highlighting
+.IP \(bu 2
+Tables
+.IP \(bu 2
+Blockquotes
+.IP \(bu 2
+Unicode emojis (✅ 🚧 📋 etc.)
+.RE
+.SH ENVIRONMENT
+.TP
+.B CONFLUENCE_URL
+Confluence instance URL (e.g., https://automatonicai.atlassian.net)
+.TP
+.B CONFLUENCE_EMAIL
+Confluence account email
+.TP
+.B CONFLUENCE_API_TOKEN
+Confluence API token for authentication
+.SH FILES
+.TP
+.I .env
+Environment configuration file
+.SH EXIT STATUS
+.TP
+.B 0
+Success
+.TP
+.B 1
+Error (authentication, network, or API failure)
+.SH SEE ALSO
+.BR jira (1),
+.BR markdown (7)
+.PP
+Full documentation:
+.I /workspace/docs/runbooks/confluence_cli_runbook.md
+.PP
+Page template:
+.I /workspace/docs/templates/confluence_page_template.md
+.SH BUGS
+Report bugs to: https://github.com/PrometheusFire-22/project-chronos/issues
+.SH AUTHOR
+Geoff Bevans <axiologycapital@gmail.com>
+.SH COPYRIGHT
+Copyright \(co 2025 Project Chronos. Proprietary License.
