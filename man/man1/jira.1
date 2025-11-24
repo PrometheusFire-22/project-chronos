@@ -1,0 +1,139 @@
+.TH JIRA 1 "2025-11-24" "Project Chronos 2.0" "User Commands"
+.SH NAME
+jira \- Jira ticket management CLI tool
+.SH SYNOPSIS
+.B jira
+[\fIOPTION\fR]
+.I COMMAND
+[\fIARGS\fR]
+.SH DESCRIPTION
+.B jira
+provides full CRUD operations for managing Jira tickets from the command line.
+Supports creating, reading, updating, deleting, and listing tickets with rich terminal formatting.
+.SH COMMANDS
+.TP
+.B create
+Create a new Jira ticket
+.TP
+.B read
+Read ticket details
+.TP
+.B update
+Update an existing ticket
+.TP
+.B delete
+Delete a ticket
+.TP
+.B list
+List tickets in the project
+.TP
+.B next-id
+Get the next available ticket ID
+.SH CREATE OPTIONS
+.TP
+.BR \-\-summary " " \fISUMMARY\fR
+Ticket summary (required). Use Conventional Commits format: type(scope): description
+.TP
+.BR \-\-description " " \fIDESCRIPTION\fR
+Detailed ticket description in markdown format
+.TP
+.BR \-\-type " " \fITYPE\fR
+Issue type: Story, Task, Bug, Epic (default: Story)
+.TP
+.BR \-\-priority " " \fIPRIORITY\fR
+Priority: Low, Medium, High, Critical (default: Medium)
+.TP
+.BR \-\-labels " " \fILABELS\fR
+Comma-separated labels
+.TP
+.BR \-\-points " " \fIPOINTS\fR
+Story points (integer)
+.TP
+.BR \-\-sprint " " \fISPRINT\fR
+Sprint name (default: Sprint 3)
+.SH UPDATE OPTIONS
+.TP
+.BR \-\-summary " " \fISUMMARY\fR
+New ticket summary
+.TP
+.BR \-\-description " " \fIDESCRIPTION\fR
+New description
+.TP
+.BR \-\-status " " \fISTATUS\fR
+New status: "To Do", "In Progress", "In Review", "Done"
+.TP
+.BR \-\-priority " " \fIPRIORITY\fR
+New priority
+.TP
+.BR \-\-points " " \fIPOINTS\fR
+Story points
+.TP
+.BR \-\-labels " " \fILABELS\fR
+Comma-separated labels
+.SH LIST OPTIONS
+.TP
+.BR \-\-status " " \fISTATUS\fR
+Filter by status
+.TP
+.BR \-\-limit " " \fILIMIT\fR
+Number of results to return (default: 20)
+.SH EXAMPLES
+.TP
+Create a new ticket:
+.B jira create
+\-\-summary "feat(api): Add user authentication" \-\-description "..." \-\-type Story \-\-priority High
+.TP
+Read ticket details:
+.B jira read
+CHRONOS-167
+.TP
+Update ticket status:
+.B jira update
+CHRONOS-167 \-\-status "In Progress"
+.TP
+List recent tickets:
+.B jira list
+\-\-limit 10
+.TP
+Delete a ticket:
+.B jira delete
+CHRONOS-999
+.SH ENVIRONMENT
+.TP
+.B JIRA_URL
+Jira instance URL (e.g., https://automatonicai.atlassian.net)
+.TP
+.B JIRA_EMAIL
+Jira account email
+.TP
+.B JIRA_API_TOKEN
+Jira API token for authentication
+.TP
+.B JIRA_PROJECT_KEY
+Jira project key (default: CHRONOS)
+.SH FILES
+.TP
+.I .env
+Environment configuration file
+.TP
+.I src/chronos/workflows/jira/LAST_TICKET.txt
+Tracker file for next ticket ID
+.SH EXIT STATUS
+.TP
+.B 0
+Success
+.TP
+.B 1
+Error (authentication, network, or API failure)
+.SH SEE ALSO
+.BR confluence (1),
+.BR gh (1)
+.PP
+Full documentation:
+.I /workspace/docs/runbooks/jira_cli_runbook.md
+.SH BUGS
+Report bugs to: https://github.com/PrometheusFire-22/project-chronos/issues
+.SH AUTHOR
+Geoff Bevans <axiologycapital@gmail.com>
+.SH COPYRIGHT
+Copyright \(co 2025 Project Chronos. Proprietary License.
