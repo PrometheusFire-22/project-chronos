@@ -1,0 +1,177 @@
+.et-fb-settings-options-tab .df_adh_heading svg,
+.et-fb-settings-options-tab .dfadh_heading_anim svg,
+.et-fb-settings-options-tab .difl_cfseven svg,
+.et-fb-settings-options-tab .difl_contentcarousel svg,
+.et-fb-settings-options-tab .difl_dual_button svg,
+.et-fb-settings-options-tab .difl_flipbox svg,
+.et-fb-settings-options-tab .difl_floatimage svg,
+.et-fb-settings-options-tab .difl_hoverbox svg,
+.et-fb-settings-options-tab .difl_imagecarousel svg,
+.et-fb-settings-options-tab .difl_imagegallery svg,
+.et-fb-settings-options-tab .difl_imagemask svg,
+.et-fb-settings-options-tab .difl_justifiedgallery svg,
+.et-fb-settings-options-tab .difl_logocarousel svg,
+.et-fb-settings-options-tab .difl_packerygallery svg,
+.et-fb-settings-options-tab .difl_testimonialcarousel svg,
+.et-fb-settings-options-tab .difl_tiltcard svg,
+.et-fb-settings-options-tab .difl_wpforms svg,
+.et-fb-settings-options-tab .difl_advanced_blurb svg,
+.et-fb-settings-options-tab .difl_imagehover svg,
+.et-fb-settings-options-tab .difl_advancedtab svg,
+.et-fb-settings-options-tab .difl_businesshours svg,
+.et-fb-settings-options-tab .difl_instagramcarousel svg,
+.et-fb-settings-options-tab .difl_instagramgallery svg,
+.et-fb-settings-options-tab .difl_compareimage svg,
+.et-fb-settings-options-tab .difl_imageaccordion svg,
+.et-fb-settings-options-tab .difl_postgrid svg,
+.et-fb-settings-options-tab .difl_blogcarousel svg,
+.et-fb-settings-options-tab .difl_datatable svg,
+.et-fb-settings-options-tab .difl_advanced_data_table svg,
+.et-fb-settings-options-tab .difl_advanced_person svg,
+.et-fb-settings-options-tab .difl_cptgrid svg,
+.et-fb-settings-options-tab .difl_productgrid svg,
+.et-fb-settings-options-tab .difl_typewriter_text svg,
+.et-fb-settings-options-tab .difl_cptfilter svg,
+.et-fb-settings-options-tab .difl_imagehotspot svg,
+.et-fb-settings-options-tab .difl_cptcarousel svg,
+.et-fb-settings-options-tab .difl_lottieimage svg,
+.et-fb-settings-options-tab .difl_contentswitcher svg
+{
+    max-width: 20px;
+    margin: 0 auto;
+}
+.et-fb-settings-options-tab .df_adh_heading, 
+.et-fb-settings-options-tab .dfadh_heading_anim,
+.et-fb-settings-options-tab .difl_cfseven,
+.et-fb-settings-options-tab .difl_contentcarousel,
+.et-fb-settings-options-tab .difl_dual_button,
+.et-fb-settings-options-tab .difl_flipbox,
+.et-fb-settings-options-tab .difl_floatimage,
+.et-fb-settings-options-tab .difl_hoverbox,
+.et-fb-settings-options-tab .difl_imagecarousel,
+.et-fb-settings-options-tab .difl_imagegallery,
+.et-fb-settings-options-tab .difl_imagemask,
+.et-fb-settings-options-tab .difl_justifiedgallery,
+.et-fb-settings-options-tab .difl_logocarousel,
+.et-fb-settings-options-tab .difl_packerygallery,
+.et-fb-settings-options-tab .difl_testimonialcarousel,
+.et-fb-settings-options-tab .difl_tiltcard,
+.et-fb-settings-options-tab .difl_wpforms,
+.et-fb-settings-options-tab .difl_imagehover,
+.et-fb-settings-options-tab .difl_advanced_blurb,
+.et-fb-settings-options-tab .difl_advancedtab,
+.et-fb-settings-options-tab .difl_businesshours,
+.et-fb-settings-options-tab .difl_instagramcarousel,
+.et-fb-settings-options-tab .difl_instagramgallery,
+.et-fb-settings-options-tab .difl_compareimage,
+.et-fb-settings-options-tab .difl_imageaccordion,
+.et-fb-settings-options-tab .difl_postgrid,
+.et-fb-settings-options-tab .difl_blogcarousel,
+.et-fb-settings-options-tab .difl_datatable,
+.et-fb-settings-options-tab .difl_advanced_data_table,
+.et-fb-settings-options-tab .difl_advanced_person,
+.et-fb-settings-options-tab .difl_cptgrid,
+.et-fb-settings-options-tab .difl_productgrid,
+.et-fb-settings-options-tab .difl_product_carousel,
+.et-fb-settings-options-tab .difl_typewriter_text,
+.et-fb-settings-options-tab .difl_cptfilter,
+.et-fb-settings-options-tab .difl_imagehotspot,
+.et-fb-settings-options-tab .difl_cptcarousel,
+.et-fb-settings-options-tab .difl_lottieimage,
+.et-fb-settings-options-tab .difl_contentswitcher
+{
+    background-image: url('./img/flash.png') !important;
+    background-size: initial !important;
+    background-repeat: no-repeat !important;
+    background-position: 4px 2px !important;
+}
+/* Only Builder */
+.df-product-outer-wrap .df-item-wrap.null_item_builder{
+    display: none !important;
+}
+p:empty {
+    display: none;
+}
+
+@media (min-width: 981px) { 
+    [data-item="1"] .swiper-slide{
+        width: calc(100%/1);
+    }
+    [data-item="2"] .swiper-slide{
+        width: calc(100%/2);
+    }
+    [data-item="3"] .swiper-slide{
+        width: calc(100%/3);
+    }
+    [data-item="4"] .swiper-slide{
+        width: calc(100%/4);
+    }
+    [data-item="5"] .swiper-slide{
+        width: calc(100%/5);
+    }
+    [data-item="6"] .swiper-slide{
+        width: calc(100%/6);
+    }
+    [data-item="7"] .swiper-slide{
+        width: calc(100%/7);
+    }
+}
+@media (max-width: 980px) and (min-width: 768px) {
+    [data-itemtablet="1"] .swiper-slide{
+        width: calc(100%/1);
+    }
+    [data-itemtablet="2"] .swiper-slide{
+        width: calc(100%/2);
+    }
+    [data-itemtablet="3"] .swiper-slide{
+        width: calc(100%/3);
+    }
+    [data-itemtablet="4"] .swiper-slide{
+        width: calc(100%/4);
+    }
+    [data-itemtablet="5"] .swiper-slide{
+        width: calc(100%/5);
+    }
+    [data-itemtablet="6"] .swiper-slide{
+        width: calc(100%/6);
+    }
+    [data-itemtablet="7"] .swiper-slide{
+        width: calc(100%/7);
+    }
+}
+@media (max-width: 767px) {
+    [data-itemphone="1"] .swiper-slide{
+        width: calc(100%/1);
+    }
+    [data-itemphone="2"] .swiper-slide{
+        width: calc(100%/2);
+    }
+    [data-itemphone="3"] .swiper-slide{
+        width: calc(100%/3);
+    }
+    [data-itemphone="4"] .swiper-slide{
+        width: calc(100%/4);
+    }
+    [data-itemphone="5"] .swiper-slide{
+        width: calc(100%/5);
+    }
+    [data-itemphone="6"] .swiper-slide{
+        width: calc(100%/6);
+    }
+    [data-itemphone="7"] .swiper-slide{
+        width: calc(100%/7);
+    }
+}
+
+/* CPT and blog Styles */
+.df-item-wrap {
+    overflow: hidden;
+    position: relative;
+}
+.df-item-wrap *:not(.et_pb_background_pattern):not(.et_pb_background_mask):not(.df-overlay):not(.df-icon-wrap) {
+    position: relative;
+}
+.df-acf-field-inner {
+    display: inherit;
+}
+

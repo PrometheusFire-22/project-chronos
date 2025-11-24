@@ -5,7 +5,7 @@ extensions=(
     "vscode-icons-team.vscode-icons"
     "aaron-bond.better-comments"
     "ms-python.python"
-    "ms-python.vscode-pylance"
+    # "ms-python.vscode-pylance"  # Failed to install
     "ms-python.black-formatter"
     "charliermarsh.ruff"
     "eamodio.gitlens"
@@ -13,24 +13,30 @@ extensions=(
     "donjayamanne.githistory"
     "mtxr.sqltools"
     "mtxr.sqltools-driver-pg"
-    "cweijan.vscode-postgresql-client2"
-    "Geographica.vscode-postgis"
+    # "cweijan.vscode-postgresql-client2"  # Failed to install
+    # "Geographica.vscode-postgis"        # Failed to install
     "ms-toolsai.jupyter"
-    "ms-toolsai.datawrangler"
+    # "ms-toolsai.datawrangler"          # Failed to install
     "mechatroner.rainbow-csv"
     "janisdd.vscode-edit-csv"
     "grapecity.gc-excelviewer"
     "tomoki1207.pdf"
     "jebbs.plantuml"
     "bierner.markdown-mermaid"
-    "excalidraw.excalidraw-vscode"
+    # "excalidraw.excalidraw-vscode"    # Failed to install
     "yzhang.markdown-all-in-one"
     "esbenp.prettier-vscode"
     "GitHub.vscode-github-actions"
     "Atlassian.atlascode"
     "GitHub.vscode-pull-request-github"
-    "HubSpot.hubspot-vs-code"
-    "anthropic.claude-vscode"
+    # "HubSpot.hubspot-vs-code"         # Failed to install
+    # "anthropic.claude-vscode"         # Failed to install
+
+    # New extensions
+    "amazonwebservices.aws-toolkit-vscode"
+    "google.gemini-cli-vscode-ide-companion"
+    "ms-python.mypy-type-checker"
+    # "Gemini Code Assist"  # TODO: add correct extension ID
 )
 
 # Determine which command to use

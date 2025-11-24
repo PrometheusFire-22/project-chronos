@@ -1,0 +1,45 @@
+/* job alerts theme */
+
+.sidebar .alert-widget .widget-title{
+	color: #4d637b;
+}
+
+.alert-widget .btn-subscribe{
+	background-color: #38b1ec;
+}
+
+	.alert-widget .btn-subscribe:hover{
+		background-color: #2e9bd0;
+	}
+
+body.red-blue .alert-widget .btn-subscribe{
+	background: #ea5f4c;
+}
+
+	body.red-blue .alert-widget .btn-subscribe:hover{
+		background: #d95746;
+	}
+
+body.blue .alert-widget .btn-subscribe{
+	background: #ea5f4c;
+}
+
+	body.blue .alert-widget .btn-subscribe:hover{
+		background: #d95746;
+	}
+
+body.gold .alert-widget .btn-subscribe{
+	background: #6a7a5c;
+}
+
+	body.gold .alert-widget .btn-subscribe:hover{
+		background: #546049;
+	}
+
+body.ams .alert-widget .btn-subscribe{
+	background: #ef1828;
+}
+
+	body.ams .alert-widget .btn-subscribe:hover{
+		background: #d01523;
+	}

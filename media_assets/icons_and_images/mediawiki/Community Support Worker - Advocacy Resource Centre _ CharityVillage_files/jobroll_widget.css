@@ -1,0 +1,30 @@
+.cl-jobroll-container{
+  margin: 12px; 
+  display: grid;
+  grid-template-columns: 33.333% 33.333% 33.333%;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-column-gap: 16px;
+  grid-row-gap: 16px;"
+}
+
+.cl-job-conainer{
+  font-size: 13px; 
+  margin-bottom: 10px; 
+  box-shadow: 0 0 5px; 
+  padding:25px;
+}
+
+.cl-job-title{
+  font-size: 18px !important; 
+  margin: 0px 0px 12px 0px !important;
+}
+
+.cl-job-summary{
+  max-height: 100px; 
+  overflow: hidden;
+}
+
+.cl-job-company-logo{
+  width:120px; 
+  margin-bottom: 12px;
+}
