@@ -1,9 +1,82 @@
 series_id,source,status,series_name,asset_class,geography_type,geography_name,frequency,category,subcategory
-STLFSI3,FRED,Active,St. Louis Fed Financial Stress Index,Financial Markets,National,United States,Weekly,Financial Stress,Market Indices
-TEDRATE,FRED,Active,TED Spread,Financial Markets,National,United States,Daily,Spreads,Interest Rate Spreads
+# US MACRO INDICATORS (20 series)
+GDP,FRED,Active,Gross Domestic Product,Macro,National,United States,Quarterly,Growth,GDP
+GDPC1,FRED,Active,Real Gross Domestic Product,Macro,National,United States,Quarterly,Growth,GDP
+INDPRO,FRED,Active,Industrial Production Index,Macro,National,United States,Monthly,Production,Manufacturing
+RSXFS,FRED,Active,Retail Sales,Macro,National,United States,Monthly,Consumption,Retail
+HOUST,FRED,Active,Housing Starts,Macro,National,United States,Monthly,Housing,Construction
+EXHOSLUSM495S,FRED,Active,Existing Home Sales,Macro,National,United States,Monthly,Housing,Sales
+UNRATE,FRED,Active,Unemployment Rate,Macro,National,United States,Monthly,Employment,Unemployment
+PAYEMS,FRED,Active,All Employees: Total Nonfarm,Macro,National,United States,Monthly,Employment,Payrolls
+CIVPART,FRED,Active,Labor Force Participation Rate,Macro,National,United States,Monthly,Employment,Labor Force
+U6RATE,FRED,Active,Total Unemployed Plus Marginally Attached,Macro,National,United States,Monthly,Employment,Unemployment
+CPIAUCSL,FRED,Active,Consumer Price Index: All Items,Macro,National,United States,Monthly,Inflation,CPI
+CPILFESL,FRED,Active,CPI: All Items Less Food & Energy,Macro,National,United States,Monthly,Inflation,CPI
+PCEPI,FRED,Active,Personal Consumption Expenditures Price Index,Macro,National,United States,Monthly,Inflation,PCE
+PCEPILFE,FRED,Active,PCE Less Food & Energy,Macro,National,United States,Monthly,Inflation,PCE
+PPIACO,FRED,Active,Producer Price Index: All Commodities,Macro,National,United States,Monthly,Inflation,PPI
+UMCSENT,FRED,Active,University of Michigan Consumer Sentiment,Macro,National,United States,Monthly,Sentiment,Consumer
+MICH,FRED,Active,University of Michigan Consumer Expectations,Macro,National,United States,Monthly,Sentiment,Consumer
+NAPM,FRED,Active,ISM Manufacturing PMI,Macro,National,United States,Monthly,Activity,Manufacturing
+NAPMNOI,FRED,Active,ISM Non-Manufacturing PMI,Macro,National,United States,Monthly,Activity,Services
+FEDFUNDS,FRED,Active,Federal Funds Effective Rate,Macro,National,United States,Monthly,Monetary Policy,Interest Rates
+# US FINANCIAL MARKETS (15 series)
+SP500,FRED,Active,S&P 500 Index,Financial Markets,National,United States,Daily,Equities,Indices
+NASDAQCOM,FRED,Active,NASDAQ Composite Index,Financial Markets,National,United States,Daily,Equities,Indices
+DJIA,FRED,Active,Dow Jones Industrial Average,Financial Markets,National,United States,Daily,Equities,Indices
+VIXCLS,FRED,Active,CBOE Volatility Index: VIX,Financial Markets,National,United States,Daily,Volatility,Market Volatility
+DGS2,FRED,Active,2-Year Treasury Constant Maturity Rate,Financial Markets,National,United States,Daily,Interest Rates,Treasury Rates
+DGS5,FRED,Active,5-Year Treasury Constant Maturity Rate,Financial Markets,National,United States,Daily,Interest Rates,Treasury Rates
 DGS10,FRED,Active,10-Year Treasury Constant Maturity Rate,Financial Markets,National,United States,Daily,Interest Rates,Treasury Rates
-FXUSDCAD,Valet,Active,USD/CAD Exchange Rate,Foreign Exchange,National,Canada,Daily,Currency,Exchange Rates
-V122530,Valet,Active,Bank of Canada Policy Rate,Monetary Policy,National,Canada,Irregular,Interest Rates,Policy Rates
-V122531,Valet,Active,Overnight Rate Target,Monetary Policy,National,Canada,Daily,Interest Rates,Policy Rates
-V41690973,Valet,Active,CPI All Items,Inflation,National,Canada,Monthly,CPI,All Items
-V41690914,Valet,Active,CPI Excluding Food & Energy,Inflation,National,Canada,Monthly,CPI,Core Inflation
+DGS30,FRED,Active,30-Year Treasury Constant Maturity Rate,Financial Markets,National,United States,Daily,Interest Rates,Treasury Rates
+T10Y2Y,FRED,Active,10-Year Treasury Minus 2-Year Treasury,Financial Markets,National,United States,Daily,Spreads,Yield Curve
+BAMLC0A0CM,FRED,Active,ICE BofA US Corporate Index Yield,Financial Markets,National,United States,Daily,Credit,Corporate Bonds
+BAMLH0A0HYM2,FRED,Active,ICE BofA US High Yield Index Spread,Financial Markets,National,United States,Daily,Credit,High Yield
+TEDRATE,FRED,Active,TED Spread,Financial Markets,National,United States,Daily,Spreads,Interest Rate Spreads
+DFEDTARU,FRED,Active,Federal Funds Target Range - Upper Limit,Financial Markets,National,United States,Daily,Monetary Policy,Policy Rates
+DFEDTARL,FRED,Active,Federal Funds Target Range - Lower Limit,Financial Markets,National,United States,Daily,Monetary Policy,Policy Rates
+STLFSI3,FRED,Active,St. Louis Fed Financial Stress Index,Financial Markets,National,United States,Weekly,Financial Stress,Market Indices
+# CANADA MACRO (25 series - EXPANDED FOR CROSS-GEOGRAPHY COMPARISON)
+V41690973,Valet,Active,Consumer Price Index: All Items,Macro,National,Canada,Monthly,Inflation,CPI
+V41690914,Valet,Active,CPI: All Items Excluding Food and Energy,Macro,National,Canada,Monthly,Inflation,CPI
+V41690973,Valet,Active,CPI: All Items,Macro,National,Canada,Monthly,Inflation,CPI
+V41693271,Valet,Active,CPI: Food,Macro,National,Canada,Monthly,Inflation,CPI
+V41693240,Valet,Active,CPI: Energy,Macro,National,Canada,Monthly,Inflation,CPI
+V62305752,Valet,Active,Real Gross Domestic Product,Macro,National,Canada,Quarterly,Growth,GDP
+V62305753,Valet,Active,Nominal Gross Domestic Product,Macro,National,Canada,Quarterly,Growth,GDP
+V2062815,Valet,Active,Real GDP at Market Prices,Macro,National,Canada,Quarterly,Growth,GDP
+V2091072,Valet,Active,Unemployment Rate,Macro,National,Canada,Monthly,Employment,Unemployment
+V2091073,Valet,Active,Employment,Macro,National,Canada,Monthly,Employment,Total Employment
+V2091074,Valet,Active,Labour Force,Macro,National,Canada,Monthly,Employment,Labor Force
+V2091075,Valet,Active,Participation Rate,Macro,National,Canada,Monthly,Employment,Labor Force
+V735,Valet,Active,Housing Starts: All Areas,Macro,National,Canada,Monthly,Housing,Construction
+V1992067,Valet,Active,Retail Trade,Macro,National,Canada,Monthly,Consumption,Retail
+V62305723,Valet,Active,Exports of Goods and Services,Macro,National,Canada,Monthly,Trade,Exports
+V62305724,Valet,Active,Imports of Goods and Services,Macro,National,Canada,Monthly,Trade,Imports
+V62305725,Valet,Active,Trade Balance,Macro,National,Canada,Monthly,Trade,Balance
+V122530,Valet,Active,Bank of Canada Policy Interest Rate,Macro,National,Canada,Irregular,Monetary Policy,Policy Rates
+V122531,Valet,Active,Overnight Rate Target,Macro,National,Canada,Daily,Monetary Policy,Policy Rates
+V39079,Valet,Active,Bank of Canada Balance Sheet,Macro,National,Canada,Weekly,Monetary Policy,Balance Sheet
+V80691311,Valet,Active,Industrial Product Price Index,Macro,National,Canada,Monthly,Inflation,PPI
+V41692930,Valet,Active,Raw Materials Price Index,Macro,National,Canada,Monthly,Inflation,Commodity Prices
+V52367348,Valet,Active,Business Confidence Index,Macro,National,Canada,Quarterly,Sentiment,Business
+V80245347,Valet,Active,Consumer Confidence Index,Macro,National,Canada,Monthly,Sentiment,Consumer
+V122620,Valet,Active,Manufacturing Sales,Macro,National,Canada,Monthly,Production,Manufacturing
+# CANADA FX (5 series)
+FXUSDCAD,Valet,Active,US Dollar to Canadian Dollar Exchange Rate,Foreign Exchange,National,Canada,Daily,Currency,Exchange Rates
+FXEURCAD,Valet,Active,Euro to Canadian Dollar Exchange Rate,Foreign Exchange,National,Canada,Daily,Currency,Exchange Rates
+FXGBPCAD,Valet,Active,UK Pound to Canadian Dollar Exchange Rate,Foreign Exchange,National,Canada,Daily,Currency,Exchange Rates
+FXJPYCAD,Valet,Active,Japanese Yen to Canadian Dollar Exchange Rate,Foreign Exchange,National,Canada,Daily,Currency,Exchange Rates
+FXCADMXN,Valet,Active,Canadian Dollar to Mexican Peso Exchange Rate,Foreign Exchange,National,Canada,Daily,Currency,Exchange Rates
+# COMMODITIES (5 series)
+DCOILWTICO,FRED,Active,Crude Oil Prices: West Texas Intermediate,Commodities,Global,World,Daily,Energy,Crude Oil
+DCOILBRENTEU,FRED,Active,Crude Oil Prices: Brent - Europe,Commodities,Global,World,Daily,Energy,Crude Oil
+DHHNGSP,FRED,Active,Henry Hub Natural Gas Spot Price,Commodities,Global,World,Daily,Energy,Natural Gas
+GOLDAMGBD228NLBM,FRED,Active,Gold Fixing Price: London Bullion Market,Commodities,Global,World,Daily,Metals,Precious Metals
+PCOPPUSDM,FRED,Active,Global Price of Copper,Commodities,Global,World,Monthly,Metals,Industrial Metals
+# MAJOR FX PAIRS (5 series)
+DEXUSEU,FRED,Active,US Dollar to Euro Exchange Rate,Foreign Exchange,Global,World,Daily,Currency,Major Pairs
+DEXUSUK,FRED,Active,US Dollar to UK Pound Exchange Rate,Foreign Exchange,Global,World,Daily,Currency,Major Pairs
+DEXJPUS,FRED,Active,Japanese Yen to US Dollar Exchange Rate,Foreign Exchange,Global,World,Daily,Currency,Major Pairs
+DEXCHUS,FRED,Active,Chinese Yuan to US Dollar Exchange Rate,Foreign Exchange,Global,World,Daily,Currency,Major Pairs
+DEXSZUS,FRED,Active,Swiss Franc to US Dollar Exchange Rate,Foreign Exchange,Global,World,Daily,Currency,Major Pairs
