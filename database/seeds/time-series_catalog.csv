@@ -17,8 +17,8 @@ PCEPILFE,FRED,Active,PCE Less Food & Energy,Macro,National,United States,Monthly
 PPIACO,FRED,Active,Producer Price Index: All Commodities,Macro,National,United States,Monthly,Inflation,PPI
 UMCSENT,FRED,Active,University of Michigan Consumer Sentiment,Macro,National,United States,Monthly,Sentiment,Consumer
 MICH,FRED,Active,University of Michigan Consumer Expectations,Macro,National,United States,Monthly,Sentiment,Consumer
-NAPM,FRED,Active,ISM Manufacturing PMI,Macro,National,United States,Monthly,Activity,Manufacturing
-NAPMNOI,FRED,Active,ISM Non-Manufacturing PMI,Macro,National,United States,Monthly,Activity,Services
+NAPM,FRED,Deprecated,ISM Manufacturing PMI,Macro,National,United States,Monthly,Activity,Manufacturing
+NAPMNOI,FRED,Deprecated,ISM Non-Manufacturing PMI,Macro,National,United States,Monthly,Activity,Services
 FEDFUNDS,FRED,Active,Federal Funds Effective Rate,Macro,National,United States,Monthly,Monetary Policy,Interest Rates
 # US FINANCIAL MARKETS (15 series)
 SP500,FRED,Active,S&P 500 Index,Financial Markets,National,United States,Daily,Equities,Indices
@@ -40,28 +40,28 @@ STLFSI3,FRED,Active,St. Louis Fed Financial Stress Index,Financial Markets,Natio
 V41690973,Valet,Active,Consumer Price Index: All Items,Macro,National,Canada,Monthly,Inflation,CPI
 V41690914,Valet,Active,CPI: All Items Excluding Food and Energy,Macro,National,Canada,Monthly,Inflation,CPI
 V41690973,Valet,Active,CPI: All Items,Macro,National,Canada,Monthly,Inflation,CPI
-V41693271,Valet,Active,CPI: Food,Macro,National,Canada,Monthly,Inflation,CPI
-V41693240,Valet,Active,CPI: Energy,Macro,National,Canada,Monthly,Inflation,CPI
-V62305752,Valet,Active,Real Gross Domestic Product,Macro,National,Canada,Quarterly,Growth,GDP
-V62305753,Valet,Active,Nominal Gross Domestic Product,Macro,National,Canada,Quarterly,Growth,GDP
-V2062815,Valet,Active,Real GDP at Market Prices,Macro,National,Canada,Quarterly,Growth,GDP
-V2091072,Valet,Active,Unemployment Rate,Macro,National,Canada,Monthly,Employment,Unemployment
-V2091073,Valet,Active,Employment,Macro,National,Canada,Monthly,Employment,Total Employment
-V2091074,Valet,Active,Labour Force,Macro,National,Canada,Monthly,Employment,Labor Force
-V2091075,Valet,Active,Participation Rate,Macro,National,Canada,Monthly,Employment,Labor Force
-V735,Valet,Active,Housing Starts: All Areas,Macro,National,Canada,Monthly,Housing,Construction
-V1992067,Valet,Active,Retail Trade,Macro,National,Canada,Monthly,Consumption,Retail
-V62305723,Valet,Active,Exports of Goods and Services,Macro,National,Canada,Monthly,Trade,Exports
-V62305724,Valet,Active,Imports of Goods and Services,Macro,National,Canada,Monthly,Trade,Imports
-V62305725,Valet,Active,Trade Balance,Macro,National,Canada,Monthly,Trade,Balance
+V41693271,Valet,Deprecated,CPI: Food,Macro,National,Canada,Monthly,Inflation,CPI
+V41693240,Valet,Deprecated,CPI: Energy,Macro,National,Canada,Monthly,Inflation,CPI
+V62305752,Valet,Deprecated,Real Gross Domestic Product,Macro,National,Canada,Quarterly,Growth,GDP
+V62305753,Valet,Deprecated,Nominal Gross Domestic Product,Macro,National,Canada,Quarterly,Growth,GDP
+V2062815,Valet,Deprecated,Real GDP at Market Prices,Macro,National,Canada,Quarterly,Growth,GDP
+V2091072,Valet,Deprecated,Unemployment Rate,Macro,National,Canada,Monthly,Employment,Unemployment
+V2091073,Valet,Deprecated,Employment,Macro,National,Canada,Monthly,Employment,Total Employment
+V2091074,Valet,Deprecated,Labour Force,Macro,National,Canada,Monthly,Employment,Labor Force
+V2091075,Valet,Deprecated,Participation Rate,Macro,National,Canada,Monthly,Employment,Labor Force
+V735,Valet,Deprecated,Housing Starts: All Areas,Macro,National,Canada,Monthly,Housing,Construction
+V1992067,Valet,Deprecated,Retail Trade,Macro,National,Canada,Monthly,Consumption,Retail
+V62305723,Valet,Deprecated,Exports of Goods and Services,Macro,National,Canada,Monthly,Trade,Exports
+V62305724,Valet,Deprecated,Imports of Goods and Services,Macro,National,Canada,Monthly,Trade,Imports
+V62305725,Valet,Deprecated,Trade Balance,Macro,National,Canada,Monthly,Trade,Balance
 V122530,Valet,Active,Bank of Canada Policy Interest Rate,Macro,National,Canada,Irregular,Monetary Policy,Policy Rates
 V122531,Valet,Active,Overnight Rate Target,Macro,National,Canada,Daily,Monetary Policy,Policy Rates
 V39079,Valet,Active,Bank of Canada Balance Sheet,Macro,National,Canada,Weekly,Monetary Policy,Balance Sheet
 V80691311,Valet,Active,Industrial Product Price Index,Macro,National,Canada,Monthly,Inflation,PPI
-V41692930,Valet,Active,Raw Materials Price Index,Macro,National,Canada,Monthly,Inflation,Commodity Prices
-V52367348,Valet,Active,Business Confidence Index,Macro,National,Canada,Quarterly,Sentiment,Business
-V80245347,Valet,Active,Consumer Confidence Index,Macro,National,Canada,Monthly,Sentiment,Consumer
-V122620,Valet,Active,Manufacturing Sales,Macro,National,Canada,Monthly,Production,Manufacturing
+V41692930,Valet,Deprecated,Raw Materials Price Index,Macro,National,Canada,Monthly,Inflation,Commodity Prices
+V52367348,Valet,Deprecated,Business Confidence Index,Macro,National,Canada,Quarterly,Sentiment,Business
+V80245347,Valet,Deprecated,Consumer Confidence Index,Macro,National,Canada,Monthly,Sentiment,Consumer
+V122620,Valet,Deprecated,Manufacturing Sales,Macro,National,Canada,Monthly,Production,Manufacturing
 # CANADA FX (5 series)
 FXUSDCAD,Valet,Active,US Dollar to Canadian Dollar Exchange Rate,Foreign Exchange,National,Canada,Daily,Currency,Exchange Rates
 FXEURCAD,Valet,Active,Euro to Canadian Dollar Exchange Rate,Foreign Exchange,National,Canada,Daily,Currency,Exchange Rates
@@ -72,7 +72,7 @@ FXCADMXN,Valet,Active,Canadian Dollar to Mexican Peso Exchange Rate,Foreign Exch
 DCOILWTICO,FRED,Active,Crude Oil Prices: West Texas Intermediate,Commodities,Global,World,Daily,Energy,Crude Oil
 DCOILBRENTEU,FRED,Active,Crude Oil Prices: Brent - Europe,Commodities,Global,World,Daily,Energy,Crude Oil
 DHHNGSP,FRED,Active,Henry Hub Natural Gas Spot Price,Commodities,Global,World,Daily,Energy,Natural Gas
-GOLDAMGBD228NLBM,FRED,Active,Gold Fixing Price: London Bullion Market,Commodities,Global,World,Daily,Metals,Precious Metals
+GOLDAMGBD228NLBM,FRED,Deprecated,Gold Fixing Price: London Bullion Market,Commodities,Global,World,Daily,Metals,Precious Metals
 PCOPPUSDM,FRED,Active,Global Price of Copper,Commodities,Global,World,Monthly,Metals,Industrial Metals
 # MAJOR FX PAIRS (5 series)
 DEXUSEU,FRED,Active,US Dollar to Euro Exchange Rate,Foreign Exchange,Global,World,Daily,Currency,Major Pairs
