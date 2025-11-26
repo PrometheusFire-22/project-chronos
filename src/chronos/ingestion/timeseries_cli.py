@@ -65,28 +65,33 @@ def load_catalog(catalog_path: Path):
 
 
 def ensure_data_source(conn, plugin):
-    """Ensure data source exists in database"""
+    """Ensure data source exists in database and return actual source_id"""
     cursor = conn.cursor()
 
-    source_id = plugin.get_source_id()
     source_name = plugin.get_source_name()
 
-    cursor.execute("SELECT COUNT(*) FROM metadata.data_sources WHERE source_id = %s", (source_id,))
-    count = cursor.fetchone()[0]
+    # Check if source exists by name
+    cursor.execute(
+        "SELECT source_id FROM metadata.data_sources WHERE source_name = %s", (source_name,)
+    )
+    result = cursor.fetchone()
 
-    if count == 0:
+    if result:
+        source_id = result[0]
+        print(f"✅ {source_name} already exists (ID: {source_id})\n")
+    else:
+        # Insert new source (let source_id auto-generate)
         cursor.execute(
             """
-            INSERT INTO metadata.data_sources (source_id, source_name)
-            VALUES (%s, %s)
-            ON CONFLICT DO NOTHING
+            INSERT INTO metadata.data_sources (source_name)
+            VALUES (%s)
+            RETURNING source_id
             """,
-            (source_id, source_name),
+            (source_name,),
         )
+        source_id = cursor.fetchone()[0]
         conn.commit()
-        print(f"✅ Added {source_name} to data_sources\n")
-    else:
-        print(f"✅ {source_name} already exists in data_sources\n")
+        print(f"✅ Added {source_name} to data_sources (ID: {source_id})\n")
 
     cursor.close()
     return source_id
@@ -200,9 +205,9 @@ def main():
 
     start_time = datetime.now(UTC)
 
-    # Locate catalog
+    # Locate catalog (go up 4 levels: file -> ingestion -> chronos -> src -> project root)
     catalog_path = (
-        Path(__file__).parent.parent.parent / "database" / "seeds" / "time-series_catalog.csv"
+        Path(__file__).parent.parent.parent.parent / "database" / "seeds" / "time-series_catalog.csv"
     )
 
     if not catalog_path.exists():
@@ -222,9 +227,11 @@ def main():
     conn = get_db_connection()
     print("✅ Connected to database\n")
 
-    # Ensure all sources exist
-    for _source_name, plugin in PLUGINS.items():
-        ensure_data_source(conn, plugin)
+    # Ensure all sources exist and store actual source_ids
+    source_id_map = {}
+    for source_name, plugin in PLUGINS.items():
+        actual_source_id = ensure_data_source(conn, plugin)
+        source_id_map[source_name] = actual_source_id
 
     # Process each series
     total_observations = 0
@@ -245,6 +252,7 @@ def main():
                 raise ValueError(f"No plugin for source: {source}")
 
             plugin = PLUGINS[source]
+            actual_source_id = source_id_map[source]
 
             # Fetch observations
             observations = plugin.fetch_observations(series_id)
@@ -258,11 +266,11 @@ def main():
             print(f"    ✅ Fetched {len(observations)} observations")
 
             # Insert metadata
-            insert_series_metadata(conn, plugin.get_source_id(), series_id, series)
+            insert_series_metadata(conn, actual_source_id, series_id, series)
 
             # Insert observations
             inserted, skipped = insert_observations(
-                conn, series_id, observations, plugin.get_source_id()
+                conn, series_id, observations, actual_source_id
             )
 
             print(f"    ✅ Inserted {inserted} observations (skipped {skipped})")
