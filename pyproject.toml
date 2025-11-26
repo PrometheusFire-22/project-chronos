@@ -52,6 +52,7 @@ dependencies = [
 
     # Geospatial
     "geopandas>=0.14.1",
+    "geoalchemy2>=0.18.0",
     "shapely>=2.0.2",
     "pyproj>=3.6.1",
 
