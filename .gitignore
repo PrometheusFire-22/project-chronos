@@ -89,3 +89,6 @@ sprint3_bulk_import.csv
 tmp/
 workflows/jira/exports/*.csv
 media_assets/
+
+.gemini/
+gha-creds-*.json

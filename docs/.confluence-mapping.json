@@ -1,0 +1,19 @@
+{
+  "docs/2_architecture/adrs/adr_011_documentation_ssot.md": {
+    "page_id": "6160386",
+    "space": "PC",
+    "last_synced": "2025-11-26T16:01:23.449026+00:00Z"
+  },
+  "docs/4_guides/ssot_workflow_test.md": {
+    "page_id": "6160414",
+    "space": "PC",
+    "last_synced": "2025-11-26T16:01:24.573625+00:00Z",
+    "title": "End-to-End SSOT Workflow Test Guide"
+  },
+  "docs/4_guides/ssot_automation_walkthrough.md": {
+    "page_id": "6225935",
+    "space": "PC",
+    "last_synced": "2025-11-26T16:01:25.397335+00:00Z",
+    "title": "SSOT Automation & Features Expansion Walkthrough"
+  }
+}

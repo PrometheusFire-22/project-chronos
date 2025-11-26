@@ -76,6 +76,19 @@ def markdown_to_confluence(markdown_text: str) -> str:
     return html
 
 
+def prepend_banner(html: str) -> str:
+    """Prepend Read-Only banner to HTML content"""
+    banner = (
+        '<p><ac:structured-macro ac:name="info" ac:schema-version="1">'
+        '<ac:parameter ac:name="title">Read Only</ac:parameter>'
+        "<ac:rich-text-body>"
+        "<p>This page is auto-generated from Git. Do not edit directly.</p>"
+        "</ac:rich-text-body>"
+        "</ac:structured-macro></p>"
+    )
+    return banner + html
+
+
 @click.group()
 def cli():
     """🎯 Confluence CLI Tool - Full CRUD Operations"""
@@ -90,7 +103,8 @@ def cli():
 @click.option("--parent", help="Parent page title (for hierarchy)")
 @click.option("--labels", default="", help="Comma-separated labels")
 @click.option("--jira-ticket", help="Link to Jira ticket (e.g., CHRONOS-123)")
-def create(title, space, body, body_file, parent, labels, jira_ticket):
+@click.option("--banner", is_flag=True, help="Add Read-Only banner")
+def create(title, space, body, body_file, parent, labels, jira_ticket, banner):
     """✨ Create new Confluence page"""
 
     console.print(Panel.fit("[bold cyan]Creating New Page[/bold cyan]", border_style="cyan"))
@@ -105,6 +119,9 @@ def create(title, space, body, body_file, parent, labels, jira_ticket):
 
     # Convert markdown to Confluence format
     confluence_body = markdown_to_confluence(body)
+
+    if banner:
+        confluence_body = prepend_banner(confluence_body)
 
     # Add Jira ticket link if provided
     if jira_ticket:
@@ -215,7 +232,8 @@ def read(title, space):
 @click.option("--body", help="New page body (markdown)")
 @click.option("--body-file", type=click.Path(exists=True), help="Path to markdown file")
 @click.option("--labels", help="Comma-separated labels")
-def update(title, space, new_title, body, body_file, labels):
+@click.option("--banner", is_flag=True, help="Add Read-Only banner")
+def update(title, space, new_title, body, body_file, labels, banner):
     """✏️ Update existing page"""
 
     console.print(Panel.fit(f"[bold cyan]Updating Page: {title}[/bold cyan]", border_style="cyan"))
@@ -242,6 +260,8 @@ def update(title, space, new_title, body, body_file, labels):
 
         if body:
             confluence_body = markdown_to_confluence(body)
+            if banner:
+                confluence_body = prepend_banner(confluence_body)
             updates["body"] = confluence_body
 
         # Update page
@@ -325,6 +345,66 @@ def list(space, limit):
                 page["title"][:47] + "..." if len(page["title"]) > 50 else page["title"],
                 str(page["version"]["number"]),
                 page["version"]["when"][:10],
+            )
+
+        console.print(table)
+
+    except Exception as e:
+        console.print(f"[bold red]❌ Error:[/bold red] {str(e)}")
+        sys.exit(1)
+
+
+@cli.command()
+@click.argument("title")
+@click.option("--space", required=True, help="Confluence space key")
+@click.option("--text", required=True, help="Comment text")
+def add_comment(title, space, text):
+    """💬 Add comment to page"""
+    try:
+        page = confluence.get_page_by_title(space=space, title=title)
+        if not page:
+            console.print(f"[bold red]❌ Page '{title}' not found[/bold red]")
+            sys.exit(1)
+
+        confluence.add_comment(page["id"], text)
+        console.print(f"[bold green]✅ Comment added to '{title}'[/bold green]")
+
+    except Exception as e:
+        console.print(f"[bold red]❌ Error:[/bold red] {str(e)}")
+        sys.exit(1)
+
+
+@cli.command()
+@click.argument("title")
+@click.option("--space", required=True, help="Confluence space key")
+def list_comments(title, space):
+    """💬 List comments on page"""
+    try:
+        page = confluence.get_page_by_title(space=space, title=title)
+        if not page:
+            console.print(f"[bold red]❌ Page '{title}' not found[/bold red]")
+            sys.exit(1)
+
+        comments = confluence.get_page_comments(page["id"], expand="body.view.value,version")
+
+        if not comments.get("results"):
+            console.print(f"[bold yellow]No comments found on '{title}'[/bold yellow]")
+            return
+
+        table = Table(title=f"💬 Comments: {title}", box=box.ROUNDED)
+        table.add_column("Author", style="cyan")
+        table.add_column("Date", style="yellow")
+        table.add_column("Comment", style="white")
+
+        for comment in comments["results"]:
+            # Strip HTML from comment body
+            import re
+
+            body = re.sub("<[^<]+?>", "", comment["body"]["view"]["value"])
+            table.add_row(
+                comment["version"]["by"]["displayName"],
+                comment["version"]["when"][:10],
+                body[:100] + "..." if len(body) > 100 else body,
             )
 
         console.print(table)

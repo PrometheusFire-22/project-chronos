@@ -80,6 +80,7 @@ confluence create \
 - `--labels`: Comma-separated labels
 - `--jira-ticket`: Link to Jira ticket (e.g., CHRONOS-123)
 - `--parent`: Parent page title (for hierarchy)
+- `--banner`: Add read-only banner (auto-generated from Git notice)
 
 ---
 
@@ -139,10 +140,42 @@ confluence update "Page Title" \
 - `--body`: New inline content
 - `--body-file`: New content from file
 - `--labels`: Replace all labels
+- `--banner`: Add read-only banner (auto-generated from Git notice)
 
 ---
 
-### 4. List Pages
+### 4. Add Comment
+
+**Add comment to page:**
+
+```bash
+confluence add-comment "Page Title" \
+  --space PC \
+  --text "Great work on this documentation!"
+```
+
+**Options:**
+- `--space` (required): Confluence space key
+- `--text` (required): Comment text
+
+---
+
+### 5. List Comments
+
+**List all comments on a page:**
+
+```bash
+confluence list-comments "Page Title" --space PC
+```
+
+Displays table with:
+- Author name
+- Comment date
+- Comment text (truncated to 100 chars)
+
+---
+
+### 6. List Pages
 
 **List all pages in space:**
 
@@ -158,7 +191,7 @@ confluence list --space PC --limit 10
 
 ---
 
-### 5. Delete Page
+### 7. Delete Page
 
 ```bash
 confluence delete "Page Title" --space PC

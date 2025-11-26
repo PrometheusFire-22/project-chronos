@@ -198,7 +198,8 @@ def read(ticket_id):
 @click.option("--priority", help="New priority")
 @click.option("--points", type=int, help="Story points")
 @click.option("--labels", help="Comma-separated labels")
-def update(ticket_id, summary, description, status, priority, points, labels):
+@click.option("--resolution", help="Resolution (Done, Cancelled, Superseded)")
+def update(ticket_id, summary, description, status, priority, points, labels, resolution):
     """✏️  Update existing ticket"""
 
     console.print(
@@ -219,6 +220,17 @@ def update(ticket_id, summary, description, status, priority, points, labels):
 
     if labels:
         updates["labels"] = [label.strip() for label in labels.split(",")]
+
+    if resolution:
+        # Map common resolution names to Jira resolution values
+        resolution_map = {
+            "done": "Done",
+            "cancelled": "Cancelled",
+            "canceled": "Cancelled",  # Support US spelling
+            "superseded": "Superseded",
+        }
+        resolution_name = resolution_map.get(resolution.lower(), resolution)
+        updates["resolution"] = {"name": resolution_name}
 
     if not updates and not status:
         console.print("[yellow]⚠️  No updates specified[/yellow]")
