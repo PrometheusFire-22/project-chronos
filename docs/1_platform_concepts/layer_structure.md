@@ -39,7 +39,7 @@ Apache AGE"}
 
   
 
-✅ Action: Replace the content of docs/6_strategy_and_outreach/diagrams/value_proposition_funnel.mmd with the code above. It will now render correctly.
+✅ Action: Replace the content of docs/0_project_vision_and_strategy/outreach/diagrams/value_proposition_funnel.mmd with the code above. It will now render correctly.
 🧭 Part 2: The Strategic Pivot: The Dual-Track Workflow
 
 You've articulated the core challenge of every solo technical founder. To solve this, we will adopt a "Dual-Track" Scrum model. From now on, our sprints will have two distinct but parallel goals:

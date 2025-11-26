@@ -303,7 +303,7 @@ confluence update "Page Title" \
 
 ## 🎨 Label Taxonomy
 
-Follow the ontology from `docs/2_data_governance/ontology_hub.md`:
+Follow the ontology from `docs/2_architecture/data_governance/ontology_hub.md`:
 
 **Page Type:**
 - `documentation`, `runbook`, `adr`, `sprint-summary`, `technical-doc`, `how-to`
