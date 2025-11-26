@@ -135,16 +135,20 @@
 	// ==================================================================
 	// Container Features
 	// ==================================================================
-	"features": {
-		"ghcr.io/devcontainers/features/github-cli:1": {},
-		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
-	},
+	// COMMENTED OUT: These cause Antigravity to freeze during container initialization
+	// Both tools are already available:
+	//   - GitHub CLI (gh): Included in base mcr.microsoft.com/devcontainers/python image
+	//   - Docker CLI: Installed in Dockerfile line 46
+	// "features": {
+	// 	"ghcr.io/devcontainers/features/github-cli:1": {},
+	// 	"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+	// },
 	// ==================================================================
 	// Container Lifecycle Commands
 	// ==================================================================
 	// Run AFTER container is created (first time only)
 	// Dependencies are pre-installed in Dockerfile, so this is fast (~10 seconds)
-	"postCreateCommand": "pip install -e . --no-deps && pre-commit install",
+	"postCreateCommand": "pip install -e . --no-deps && pre-commit install && echo '\n✅ Dev container ready! Run: cat .devcontainer/DOCKER_REFERENCE.md for Docker help'",
 	// Run EVERY time container starts
 	"postStartCommand": "echo '✅ Project Chronos dev container ready!'",
 	// ==================================================================

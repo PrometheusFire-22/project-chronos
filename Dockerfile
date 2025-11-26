@@ -42,11 +42,16 @@ RUN apt-get update && \
         default-jre graphviz \
         # Build dependencies for Python packages
         libpq-dev && \
-    # Install Docker CLI (static binary for reliability) - Latest version for API compatibility
+    # Install Docker CLI and Docker Compose (static binaries for reliability)
     curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-27.4.1.tgz -o /tmp/docker.tgz && \
     tar xzvf /tmp/docker.tgz --strip 1 -C /usr/local/bin docker/docker && \
     rm /tmp/docker.tgz && \
     chmod +x /usr/local/bin/docker && \
+    # Install Docker Compose plugin
+    curl -fsSL "https://github.com/docker/compose/releases/download/v2.32.4/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose && \
+    chmod +x /usr/local/bin/docker-compose && \
+    mkdir -p /usr/local/lib/docker/cli-plugins && \
+    ln -s /usr/local/bin/docker-compose /usr/local/lib/docker/cli-plugins/docker-compose && \
     # Clean up to reduce image size
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -56,9 +61,12 @@ RUN apt-get update && \
 # ==============================================================================
 
 # The devcontainer base image already creates 'vscode' user
-# Just ensure they have sudo access
+# Ensure they have sudo access and docker access
 RUN usermod -aG sudo vscode && \
-    echo "vscode ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/vscode
+    echo "vscode ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/vscode && \
+    # Create docker group with GID 984 to match host docker socket
+    groupadd -g 984 dockerhost 2>/dev/null || true && \
+    usermod -aG dockerhost vscode
 
 # ==============================================================================
 # Python Environment
