@@ -385,7 +385,7 @@ As a [USER_ROLE], I want [FEATURE], so that [BENEFIT].
 
 ### Labels (Use Ontology)
 
-Follow `docs/2_data_governance/ontology_hub.md`:
+Follow `docs/2_architecture/data_governance/ontology_hub.md`:
 
 **Work Type:**
 `feature`, `bugfix`, `tech-debt`, `spike`, `documentation`
@@ -553,7 +553,7 @@ python src/scripts/jira_cli.py update CHRONOS-XXX --status "Done"
 - Jira CLI Runbook: `docs/runbooks/jira_cli_runbook.md`
 - Git Commit Template: `docs/templates/git_commit_template.md`
 - GitHub PR Template: `docs/templates/github_pr_template.md`
-- Ontology Hub: `docs/2_data_governance/ontology_hub.md`
+- Ontology Hub: `docs/2_architecture/data_governance/ontology_hub.md`
 - Agile Workflow ADR: `docs/5_decisions/adr_003_pragmatic_agile_jira_workflow.md`
 
 ---

@@ -1,17 +1,19 @@
 docs/
 ├── README.md
+├── 0_project_vision_and_strategy/
+│   ├── outreach/
+│   └── project_tracking/
 ├── 1_platform_concepts/
 │   ├── architecture.md
 │   └── project_structure.md
-├── 2_data_governance/
-│   ├── asset_catalog_guide.md
-│   └── ontology_hub.md
-├── 3_analytical_design/
-│   ├── postgis_fundamentals.md
-│   └── abstractions/
-│       └── geospatial_abstractions.md
+├── 2_architecture/
+│   ├── adrs/
+│   ├── analytical_design/
+│   ├── data_governance/
+│   └── diagrams/
+├── 3_runbooks/
 ├── 4_guides/
 │   └── gis_workflow.md
-├── 5_decisions/
-│   └── adr_001_docker_compose.md
+├── 5_reference/
+├── 7_troubleshooting/
 └── _archive/
