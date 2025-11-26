@@ -1,7 +1,8 @@
 # ADR 013: Geospatial Data Ingestion Strategy
 
-**Status**: Proposed  
-**Date**: 2025-11-25  
+**Status**: Accepted
+**Date**: 2025-11-26
+**Implementation Date**: 2025-11-26  
 **Decision Makers**: Geoff Bevans, Claude Code  
 **Tags**: `geospatial`, `postgis`, `data-ingestion`, `tiger`, `statscan`
 

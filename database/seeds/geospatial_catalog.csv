@@ -1,18 +1,14 @@
-asset_id,asset_type,name,source,category,sub_category,granularity,status,rationale,api_endpoint_or_link,sprint,created_timestamp
-USA_STATES,geospatial,US States,TIGER/Line,Boundaries,,national,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
-USA_COUNTIES,geospatial,US Counties,TIGER/Line,Boundaries,,national,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
-USA_TRACTS,geospatial,US Census Tracts,TIGER/Line,Boundaries,,admin_1,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
-USA_PUMAS,geospatial,US Public Use Microdata Areas,TIGER/Line,Boundaries,,admin_1,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
-USA_ZCTA,geospatial,US ZIP Code Tabulation Areas,TIGER/Line,Boundaries,,local,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
-USA_URBAN_AREAS,geospatial,US Urban Areas,TIGER/Line,Boundaries,,local,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
-USA_CBSA,geospatial,US Core-Based Statistical Areas,TIGER/Line,Boundaries,,metro_area,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
-USA_CSA,geospatial,US Combined Statistical Areas,TIGER/Line,Boundaries,,metro_area,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
-USA_METDIV,geospatial,US Metropolitan Divisions,TIGER/Line,Boundaries,,metro_area,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
-CAN_PROVINCES,geospatial,Provinces and Territories,StatCan,Boundaries,,national,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
-CAN_CENSUS_DIVISIONS,geospatial,Census Divisions,StatCan,Boundaries,,national,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
-CAN_CENSUS_SUBDIVISIONS,geospatial,Census Subdivisions (Municipalities),StatCan,Boundaries,,national,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
-CAN_CMA,geospatial,Census Metropolitan Areas / Agglomerations,StatCan,Boundaries,,metro_area,Planned,Geospatial Sprint,,3,2025-11-14 23:25:22
-CAN_DISSEMINATION_AREAS,geospatial,Dissemination Areas,StatCan,Boundaries,,admin_1,Candidate,Geospatial Sprint,,3,2025-11-14 23:25:22
-CAN_FED_ELECTORAL_DISTRICTS,geospatial,Federal Electoral Districts,StatCan,Boundaries,,national,Candidate,Geospatial Sprint,,3,2025-11-14 23:25:22
-CAN_PROV_ELECTORAL_DISTRICTS,geospatial,Provincial Electoral Districts,StatCan,Boundaries,,national,Candidate,Geospatial Sprint,,3,2025-11-14 23:25:22
-CAN_CT,geospatial,Census Tracts,StatCan,Boundaries,,admin_1,Candidate,Geospatial Sprint,,3,2025-11-14 23:25:22
+layer_id,country,geographic_level,year,layer_name,table_name,shapefile_path,status,description
+# USA NATIONAL LAYERS
+us_states,USA,national,2024,US States,us_states,gis_data/raw/USA/national/unzipped/tl_2024_us_state/tl_2024_us_state.shp,Active,US State boundaries
+us_counties,USA,national,2024,US Counties,us_counties,gis_data/raw/USA/national/unzipped/tl_2024_us_county/tl_2024_us_county.shp,Active,US County boundaries
+us_cbsa,USA,national,2024,Core Based Statistical Areas,us_cbsa,gis_data/raw/USA/national/unzipped/tl_2024_us_cbsa/tl_2024_us_cbsa.shp,Active,Metropolitan and Micropolitan Statistical Areas
+us_csa,USA,national,2024,Combined Statistical Areas,us_csa,gis_data/raw/USA/national/unzipped/tl_2024_us_csa/tl_2024_us_csa.shp,Active,Combined Statistical Areas
+us_metdiv,USA,national,2024,Metropolitan Divisions,us_metdiv,gis_data/raw/USA/national/unzipped/tl_2024_us_metdiv/tl_2024_us_metdiv.shp,Active,Metropolitan Divisions
+us_zcta,USA,national,2020,ZIP Code Tabulation Areas,us_zcta,gis_data/raw/USA/national/unzipped/tl_2020_us_zcta520/tl_2020_us_zcta520.shp,Active,ZIP Code Tabulation Areas
+us_uac,USA,national,2020,Urban Areas,us_uac,gis_data/raw/USA/national/unzipped/tl_2020_us_uac20/tl_2020_us_uac20.shp,Active,Urban Areas
+# CANADA NATIONAL LAYERS
+ca_provinces,CAN,national,2021,Provinces and Territories,ca_provinces,gis_data/raw/CAN/national/unzipped/lpr_000b21a_e/lpr_000b21a_e.shp,Active,Canadian Provinces and Territories
+ca_census_divisions,CAN,national,2021,Census Divisions,ca_census_divisions,gis_data/raw/CAN/national/unzipped/lcd_000b21a_e/lcd_000b21a_e.shp,Active,Canadian Census Divisions
+ca_census_subdivisions,CAN,national,2021,Census Subdivisions,ca_census_subdivisions,gis_data/raw/CAN/national/unzipped/lcsd000b21a_e/lcsd000b21a_e.shp,Active,Canadian Census Subdivisions
+ca_cma,CAN,national,2021,Census Metropolitan Areas,ca_cma,gis_data/raw/CAN/national/unzipped/lcma000b21a_e/lcma000b21a_e.shp,Active,Canadian Census Metropolitan Areas
