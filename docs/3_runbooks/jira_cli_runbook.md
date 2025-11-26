@@ -279,7 +279,7 @@ python src/scripts/jira_cli.py update CHRONOS-XXX --status "Done"
 
 ## 🎨 Label Taxonomy
 
-Follow the ontology from `docs/2_data_governance/ontology_hub.md`:
+Follow the ontology from `docs/2_architecture/data_governance/ontology_hub.md`:
 
 **Work Type:**
 
@@ -417,7 +417,7 @@ fi
 ## 📚 Related Documentation
 
 - `docs/5_decisions/adr_003_pragmatic_agile_jira_workflow.md`
-- `docs/2_data_governance/ontology_hub.md`
+- `docs/2_architecture/data_governance/ontology_hub.md`
 - `docs/4_guides/git_workflow_guide.md`
 
 ---

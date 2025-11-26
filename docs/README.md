@@ -9,7 +9,7 @@ This directory contains all project documentation following the structure define
 ## 📚 Documentation Structure
 
 ### [0_project_vision_and_strategy/](0_project_vision_and_strategy/)
-Strategic vision, architectural deep dive, and long-term planning documents.
+Strategic vision, architectural deep dive, long-term planning, and project tracking documents.
 
 ### [1_platform_concepts/](1_platform_concepts/)
 Core platform concepts, architecture overview, project structure, and style guide.
@@ -37,8 +37,7 @@ Step-by-step guides for developers and operators.
 ### [5_reference/](5_reference/)
 API references, CLI references, and database schema documentation.
 
-### [6_project_tracking/](6_project_tracking/)
-Sprint summaries, investor materials, and project tracking documents.
+
 
 ### [7_troubleshooting/](7_troubleshooting/)
 Post-mortems, troubleshooting guides, and incident reports.

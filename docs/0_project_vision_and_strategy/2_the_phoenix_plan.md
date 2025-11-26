@@ -79,7 +79,7 @@ This roadmap organizes our prioritized backlog into three distinct, focused spri
 
 | PBI # | Epic | User Story | Acceptance Criteria |
 | :---- | :--- | :--- | :--- |
-| **PBI-7** | `strategy(pitch)` | **(Discovery Track)** As the Founder, I need a clear, one-page pitch script so that I can confidently and effectively communicate the project's value to my investor. | <ul><li>We have answered the "tough questions."</li><li>A final script exists in `docs/6_strategy_and_outreach/`.</li></ul> |
+| **PBI-7** | `strategy(pitch)` | **(Discovery Track)** As the Founder, I need a clear, one-page pitch script so that I can confidently and effectively communicate the project's value to my investor. | <ul><li>We have answered the "tough questions."</li><li>A final script exists in `docs/0_project_vision_and_strategy/outreach/`.</li></ul> |
 | **PBI-8** | `feat(mvp)` | **(Delivery Track)** As a Founder, I want an interactive dashboard comparing the Chicago and Toronto real estate markets to use as a powerful, concrete demo. | <ul><li>A new `analytics` view for Toronto exists.</li><li>A Metabase or Dash dashboard visualizes the key insights.</li></ul> |
 | **PBI-9** | `feat(mvp)` | **(Delivery Track)** As a Founder, I want a polished PDF report summarizing the key insights so that I have a professional artifact to share after the call. | <ul><li>A new `docs/reports/real_estate_mvp_v1.md` exists.</li><li>It contains screenshots, analysis, and can be exported to a clean PDF.</li></ul> |
 
