@@ -9,6 +9,13 @@
 	],
 	"service": "app",
 	"workspaceFolder": "/workspace",
+	"runServices": [
+		"app",
+		"timescaledb",
+		"metabase",
+		"pgadmin",
+		"mailhog"
+	],
 	// ==================================================================
 	// Container Environment Variables
 	// ==================================================================
@@ -129,13 +136,15 @@
 	// Container Features
 	// ==================================================================
 	"features": {
-		"ghcr.io/devcontainers/features/github-cli:1": {}
+		"ghcr.io/devcontainers/features/github-cli:1": {},
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
 	},
 	// ==================================================================
 	// Container Lifecycle Commands
 	// ==================================================================
 	// Run AFTER container is created (first time only)
-	"postCreateCommand": "pip install --upgrade pip && pip install -e '.[dev]' && pre-commit install",
+	// Dependencies are pre-installed in Dockerfile, so this is fast (~10 seconds)
+	"postCreateCommand": "pip install -e . --no-deps && pre-commit install",
 	// Run EVERY time container starts
 	"postStartCommand": "echo '✅ Project Chronos dev container ready!'",
 	// ==================================================================
@@ -168,9 +177,10 @@
 			"onAutoForward": "ignore"
 		}
 	},
-	// Mount SSH keys
+	// Mount SSH keys and Docker socket
 	"mounts": [
-		"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,readonly,type=bind"
+		"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,readonly,type=bind",
+		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
 	],
 	// Shutdown Action
 	"shutdownAction": "stopCompose"

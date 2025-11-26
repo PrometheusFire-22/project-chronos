@@ -42,6 +42,11 @@ RUN apt-get update && \
         default-jre graphviz \
         # Build dependencies for Python packages
         libpq-dev && \
+    # Install Docker CLI (static binary for reliability) - Latest version for API compatibility
+    curl -fsSL https://download.docker.com/linux/static/stable/x86_64/docker-27.4.1.tgz -o /tmp/docker.tgz && \
+    tar xzvf /tmp/docker.tgz --strip 1 -C /usr/local/bin docker/docker && \
+    rm /tmp/docker.tgz && \
+    chmod +x /usr/local/bin/docker && \
     # Clean up to reduce image size
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -67,6 +72,26 @@ WORKDIR /workspace
 
 # Add user Python bin to PATH
 ENV PATH="/home/vscode/.local/bin:${PATH}"
+
+# Pre-install common dev dependencies to speed up container startup
+# This prevents the 5-10 minute wait during postCreateCommand
+COPY --chown=vscode:vscode pyproject.toml ./
+RUN pip install --user --upgrade pip setuptools wheel && \
+    pip install --user \
+        # Testing frameworks
+        pytest pytest-cov pytest-mock pytest-asyncio \
+        # Code quality tools
+        black ruff mypy pre-commit \
+        # Type stubs
+        types-requests types-python-dateutil types-pytz \
+        # Documentation
+        sphinx sphinx-rtd-theme \
+        # Jupyter & Data Science
+        jupyter ipykernel matplotlib seaborn \
+    # Clean up pip cache to reduce image size
+    && pip cache purge \
+    # Remove pyproject.toml as it will be mounted from host
+    && rm pyproject.toml
 
 # ==============================================================================
 # Container Startup

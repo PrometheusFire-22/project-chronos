@@ -43,6 +43,7 @@ repos:
 
       - id: check-json
         name: Validate JSON syntax
+        exclude: \.devcontainer/devcontainer\.json$  # JSONC format (allows comments)
 
       - id: check-toml
         name: Validate TOML syntax
