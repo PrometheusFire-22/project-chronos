@@ -51,7 +51,7 @@ This layer defines the business purpose and governs the direction of the project
 | Component | Purpose | Key Artifact(s) |
 | :--- | :--- | :--- |
 | **Business Vision** | To create a "Relationship Intelligence Engine" that maps opaque private markets to generate proprietary deal flow. | `docs/6_strategy_and_outreach/` |
-| **Prioritization Framework** | The RICE framework provides a data-driven method for selecting the most valuable analytical verticals to pursue. | `docs/5_decisions/rice_analysis.csv` |
+| **Prioritization Framework** | The RICE framework provides a data-driven method for selecting the most valuable analytical verticals to pursue. | [RICE Analysis CSV](../2_architecture/adrs/rice_analysis.csv) |
 | **Data Governance** | The "Hub & Spoke" model ensures all data assets are consistently defined, cataloged, and understood. | `database/seeds/asset_catalog.csv` (The "Spoke")<br/>`database/seeds/ontology_hub.csv` (The "Hub") |
 
 #### **Critical Assessment:**

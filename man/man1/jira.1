@@ -70,6 +70,9 @@ Story points
 .TP
 .BR \-\-labels " " \fILABELS\fR
 Comma-separated labels
+.TP
+.BR \-\-resolution " " \fIRESOLUTION\fR
+Resolution: Done, Cancelled, Superseded (sets resolution when closing tickets)
 .SH LIST OPTIONS
 .TP
 .BR \-\-status " " \fISTATUS\fR
@@ -90,6 +93,10 @@ CHRONOS-167
 Update ticket status:
 .B jira update
 CHRONOS-167 \-\-status "In Progress"
+.TP
+Mark ticket as superseded:
+.B jira update
+CHRONOS-100 \-\-status "Done" \-\-resolution "Superseded"
 .TP
 List recent tickets:
 .B jira list

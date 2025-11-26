@@ -26,6 +26,12 @@ Delete a page
 .TP
 .B list
 List pages in a space
+.TP
+.B add-comment
+Add a comment to a page
+.TP
+.B list-comments
+List comments on a page
 .SH CREATE OPTIONS
 .TP
 .BR \-\-title " " \fITITLE\fR
@@ -48,6 +54,9 @@ Comma-separated labels
 .TP
 .BR \-\-jira\-ticket " " \fITICKET\fR
 Link to Jira ticket (e.g., CHRONOS-167)
+.TP
+.BR \-\-banner
+Add read-only banner to page (auto-generated from Git notice)
 .SH UPDATE OPTIONS
 .TP
 .BR \-\-new\-title " " \fITITLE\fR
@@ -61,6 +70,16 @@ Path to markdown file with new content
 .TP
 .BR \-\-labels " " \fILABELS\fR
 Replace all labels with new comma-separated list
+.TP
+.BR \-\-banner
+Add read-only banner to page (auto-generated from Git notice)
+.SH COMMENT OPTIONS
+.TP
+.BR \-\-space " " \fISPACE\fR
+Confluence space key (required)
+.TP
+.BR \-\-text " " \fITEXT\fR
+Comment text (required for add-comment)
 .SH LIST OPTIONS
 .TP
 .BR \-\-space " " \fISPACE\fR
@@ -74,9 +93,9 @@ Create page from inline content:
 .B confluence create
 \-\-title "Page Title" \-\-space PC \-\-body "# Content"
 .TP
-Create page from file:
+Create page from file with banner:
 .B confluence create
-\-\-title "Sprint 4 Summary" \-\-space PC \-\-body\-file summary.md \-\-labels "sprint,documentation"
+\-\-title "Sprint 4 Summary" \-\-space PC \-\-body\-file summary.md \-\-labels "sprint,documentation" \-\-banner
 .TP
 Create page with Jira link:
 .B confluence create
@@ -100,6 +119,14 @@ List pages:
 .TP
 Delete page:
 .B confluence delete
+"Page Title" \-\-space PC
+.TP
+Add comment:
+.B confluence add-comment
+"Page Title" \-\-space PC \-\-text "Great work!"
+.TP
+List comments:
+.B confluence list-comments
 "Page Title" \-\-space PC
 .SH MARKDOWN SUPPORT
 The CLI automatically converts markdown to Confluence storage format (XHTML).
