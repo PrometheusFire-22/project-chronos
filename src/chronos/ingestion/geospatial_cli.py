@@ -61,7 +61,7 @@ def ensure_schema(engine):
 
 def ingest_shapefile(engine, layer_id, table_name, shapefile_path, description):
     """Load single shapefile into PostGIS"""
-    print(f"  Reading shapefile...")
+    print("  Reading shapefile...")
 
     # Read shapefile
     gdf = gpd.read_file(shapefile_path)
@@ -71,7 +71,7 @@ def ingest_shapefile(engine, layer_id, table_name, shapefile_path, description):
 
     # Reproject to WGS84 if needed
     if gdf.crs and gdf.crs.to_epsg() != 4326:
-        print(f"  Reprojecting to EPSG:4326...")
+        print("  Reprojecting to EPSG:4326...")
         gdf = gdf.to_crs(epsg=4326)
 
     # Load to PostGIS
@@ -87,13 +87,17 @@ def ingest_shapefile(engine, layer_id, table_name, shapefile_path, description):
 
     # Create spatial index
     with engine.connect() as conn:
-        conn.execute(text(f"""
+        conn.execute(
+            text(
+                f"""
             CREATE INDEX IF NOT EXISTS idx_{table_name}_geom
             ON geospatial.{table_name} USING GIST(geometry)
-        """))
+        """
+            )
+        )
         conn.commit()
 
-    print(f"   Spatial index created")
+    print("   Spatial index created")
 
     return len(gdf)
 
@@ -108,19 +112,18 @@ def main():
 
     # Locate catalog
     catalog_path = (
-        Path(__file__).parent.parent.parent.parent
-        / "database" / "seeds" / "geospatial_catalog.csv"
+        Path(__file__).parent.parent.parent.parent / "database" / "seeds" / "geospatial_catalog.csv"
     )
 
     if not catalog_path.exists():
         print(f"L Catalog not found: {catalog_path}")
         sys.exit(1)
 
-    print(f"=Ê Loading catalog: {catalog_path}")
+    print(f"=ï¿½ Loading catalog: {catalog_path}")
     layers = load_catalog(catalog_path)
 
     if not layers:
-        print("   No active layers found in catalog")
+        print("ï¿½  No active layers found in catalog")
         sys.exit(0)
 
     print(f" Loaded {len(layers)} active layers\n")
@@ -177,7 +180,7 @@ def main():
     print("=" * 60)
     print(" INGESTION COMPLETE!")
     print("=" * 60)
-    print("\n=Ê Summary:")
+    print("\n=ï¿½ Summary:")
     print(f"  Total layers processed: {len(layers)}")
     print(f"  Successful: {successful}")
     print(f"  Failed: {len(failed)}")
@@ -186,7 +189,7 @@ def main():
     print(f"  Success rate: {successful/len(layers)*100:.1f}%")
 
     if failed:
-        print("\n   Failed layers:")
+        print("\nï¿½  Failed layers:")
         for layer_id, error in failed:
             error_short = error[:80] + "..." if len(error) > 80 else error
             print(f"    - {layer_id}: {error_short}")
