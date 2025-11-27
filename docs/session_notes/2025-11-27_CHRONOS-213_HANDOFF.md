@@ -37,7 +37,7 @@ Use Docker to connect since psql not installed locally:
 
 ```bash
 docker run --rm -it postgres:16-alpine psql \
-  "postgresql://chronos:DZ4eNOynmfYVOtG8c8TBlXIGVGlqkvWKQR5ixYYjAMs=@16.52.210.100:5432/chronos" \
+  "postgresql://chronos:[PASSWORD_FROM_KEEPASSXC]@16.52.210.100:5432/chronos" \
   -c "SELECT version();"
 ```
 
@@ -59,12 +59,12 @@ Host: 16.52.210.100
 Port: 5432
 Database: chronos
 Username: chronos
-Password: DZ4eNOynmfYVOtG8c8TBlXIGVGlqkvWKQR5ixYYjAMs=
+Password: [Stored in KeePassXC: Database/PostgreSQL Production]
 ```
 
 ### Connection String
 ```
-postgresql://chronos:DZ4eNOynmfYVOtG8c8TBlXIGVGlqkvWKQR5ixYYjAMs=@16.52.210.100:5432/chronos
+postgresql://chronos:[PASSWORD_FROM_KEEPASSXC]@16.52.210.100:5432/chronos
 ```
 
 ### SSH Access
