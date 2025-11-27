@@ -1,0 +1,24 @@
+name: Documentation Quality
+
+on:
+    pull_request:
+        paths:
+            - "docs/**/*.md"
+
+jobs:
+    lint-docs:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Markdown lint
+              uses: DavidAnson/markdownlint-cli2-action@v18
+              with:
+                  globs: "docs/**/*.md"
+
+            - name: Check for broken links
+              uses: lycheeverse/lychee-action@v2
+              with:
+                  args: --verbose --no-progress 'docs/**/*.md'
+                  fail: true

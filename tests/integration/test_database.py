@@ -8,9 +8,9 @@ import pytest
 from sqlalchemy import text
 
 from chronos.database.connection import (
+    get_connection_pool_status,
     get_db_session,
     verify_database_connection,
-    get_connection_pool_status,
 )
 
 
@@ -40,10 +40,9 @@ class TestDatabaseConnection:
 
     def test_transaction_rollback_on_error(self):
         """Test that failed transactions rollback properly."""
-        with pytest.raises(Exception):
-            with get_db_session() as session:
-                # This will fail (table doesn't exist)
-                session.execute(text("INSERT INTO invalid_table_xyz VALUES (1)"))
+        with pytest.raises(Exception), get_db_session() as session:
+            # This will fail (table doesn't exist)
+            session.execute(text("INSERT INTO invalid_table_xyz VALUES (1)"))
 
         # Database should still be accessible
         with get_db_session() as session:
@@ -72,13 +71,12 @@ class TestDatabaseConnection:
         results = []
 
         # Open multiple sessions simultaneously
-        with get_db_session() as session1:
-            with get_db_session() as session2:
-                result1 = session1.execute(text("SELECT 1"))
-                result2 = session2.execute(text("SELECT 2"))
+        with get_db_session() as session1, get_db_session() as session2:
+            result1 = session1.execute(text("SELECT 1"))
+            result2 = session2.execute(text("SELECT 2"))
 
-                results.append(result1.scalar())
-                results.append(result2.scalar())
+            results.append(result1.scalar())
+            results.append(result2.scalar())
 
         assert results == [1, 2]
 

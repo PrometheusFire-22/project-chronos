@@ -1,40 +1,297 @@
 [build-system]
-requires = ["setuptools>=68.0", "wheel"]
+requires = ["setuptools>=65.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "project-chronos"
-version = "0.1.0"
-description = "Production-grade macroeconomic data platform"
+version = "2.0.0"
+description = "Multi-modal data platform for relationship intelligence in private markets"
 readme = "README.md"
 requires-python = ">=3.11"
+license = {text = "Proprietary"}
+authors = [
+    {name = "Geoff Bevans", email = "axiologycapital@gmail.com"}
+]
+keywords = ["data-platform", "timeseries", "geospatial", "graph-database"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Office/Business :: Financial :: Investment",
+]
+
+# ==================================================================
+# Core Dependencies
+# ==================================================================
 dependencies = [
+    # Database & ORM
     "sqlalchemy>=2.0.23",
     "psycopg2-binary>=2.9.9",
-    "requests>=2.31.0",
+    "alembic>=1.13.0",
+
+    # Data Processing
     "pandas>=2.1.4",
-    "python-dotenv>=1.0.0",
-    "pydantic>=2.5.3",
-    "pydantic-settings>=2.1.0",
-    "structlog>=23.3.0",
+    "numpy>=1.26.2",
+
+    # API Clients
+    "requests>=2.31.0",
+    "aiohttp>=3.9.1",
+
+    # CLI & Configuration
     "click>=8.1.7",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.5.2",
+    "pydantic-settings>=2.1.0",
+    "rich>=13.7.0",
+    "structlog>=25.5.0",
+
+    # Confluence & Atlassian integration
+    "atlassian-python-api>=4.0.0",
+    "markdown2>=2.5.0",
+    "jmespath>=1.0.0",
+
+    # Geospatial
+    "geopandas>=0.14.1",
+    "geoalchemy2>=0.18.0",
+    "shapely>=2.0.2",
+    "pyproj>=3.6.1",
+
+    # Utilities
+    "python-dateutil>=2.8.2",
+    "pytz>=2023.3",
+    "tqdm>=4.66.1",
 ]
 
+# ==================================================================
+# Development Dependencies
+# ==================================================================
 [project.optional-dependencies]
 dev = [
+    # Testing
     "pytest>=7.4.3",
     "pytest-cov>=4.1.0",
-    "black>=23.12.1",
+    "pytest-mock>=3.12.0",
+    "pytest-asyncio>=0.21.1",
+
+    # Code Quality
+    "black>=23.12.0",
     "ruff>=0.1.9",
+    "mypy>=1.7.1",
+    "pre-commit>=3.6.0",
+
+    # Type Stubs
+    "types-requests>=2.31.0",
+    "types-python-dateutil>=2.8.19",
+    "types-pytz>=2023.3",
+
+    # Documentation
+    "sphinx>=7.2.6",
+    "sphinx-rtd-theme>=2.0.0",
+
+    # Jupyter & Data Science
+    "jupyter>=1.0.0",
+    "ipykernel>=6.27.1",
+    "matplotlib>=3.8.2",
+    "seaborn>=0.13.0",
 ]
 
-[tool.setuptools.packages.find]
-where = ["src"]
+# ==================================================================
+# Package Configuration
+# ==================================================================
+[tool.setuptools]
+packages = ["chronos"]
+package-dir = {"" = "src"}
 
+[tool.setuptools.package-data]
+chronos = ["py.typed"]
+
+# ==================================================================
+# Black Configuration
+# ==================================================================
 [tool.black]
 line-length = 100
 target-version = ["py311"]
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | migrations
+  | alembic/versions
+)/
+'''
 
+# ==================================================================
+# Ruff Configuration
+# ==================================================================
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "DTZ", # flake8-datetimez
+    "SIM", # flake8-simplify
+]
+ignore = [
+    "E501",  # line too long (handled by black)
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+exclude = [
+    ".git",
+    "__pycache__",
+    ".venv",
+    "venv",
+    "alembic/versions",
+    "build",
+    "dist",
+    # Skipped tests pending refactoring (CHRONOS-164)
+    "tests/integration/test_ingestion_fred.py",
+    "tests/integration/test_ingestion_valet.py",
+    "tests/e2e/test_ingestion_workflow.py",
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]  # Allow unused imports in __init__.py
+"tests/**/*.py" = [
+    "S101",   # Allow assert in tests
+    "DTZ001", # Allow datetime without tzinfo in tests
+    "DTZ005", # Allow datetime.now() without tz in tests
+    "DTZ007", # Allow strptime without tzinfo in tests
+    "B017",   # Allow pytest.raises(Exception) in tests
+    "N806",   # Allow non-lowercase variable names in tests (e.g., Session)
+]
+
+# Import sorting configuration (isort)
+[tool.ruff.isort]
+known-first-party = ["chronos"]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+
+# ==================================================================
+# MyPy Configuration
+# ==================================================================
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false  # Start lenient, tighten later
+ignore_missing_imports = true
+exclude = [
+    "venv",
+    ".venv",
+    "alembic/versions",
+]
+
+# ==================================================================
+# Pytest Configuration
+# ==================================================================
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--strict-markers",
+    "--tb=short",
+    "--cov=src/chronos",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+]
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "e2e: End-to-end tests",
+    "slow: Slow running tests",
+    "infrastructure: Infrastructure smoke tests",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+
+# ==================================================================
+# Coverage Configuration
+# ==================================================================
+[tool.coverage.run]
+source = ["src/chronos"]
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+    "*/__init__.py",
+    "*/migrations/*",
+    "*/alembic/versions/*",
+    "*/.venv/*",
+    "*/venv/*",
+    "*/site-packages/*",
+    "*/__pycache__/*",
+]
+branch = true
+parallel = false
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "def __str__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if __name__ == \"__main__\":",
+    "if TYPE_CHECKING:",
+    "if typing.TYPE_CHECKING:",
+    "@abstractmethod",
+    "@abc.abstractmethod",
+    "\\.\\.\\.",
+]
+precision = 2
+show_missing = true
+skip_covered = false
+fail_under = 75
+sort = "Cover"
+
+[tool.coverage.html]
+directory = "htmlcov"
+title = "Project Chronos Coverage Report"
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+[tool.coverage.json]
+output = "coverage.json"
+pretty_print = true
+
+# ==================================================================
+# Project URLs
+# ==================================================================
+[project.urls]
+Homepage = "https://github.com/PrometheusFire-22/project-chronos"
+Documentation = "https://github.com/PrometheusFire-22/project-chronos/wiki"
+Repository = "https://github.com/yourusername/project-chronos"
+Issues = "https://automatonicai.atlassian.net/jira/software/projects/CHRONOS"
+
+# ==================================================================
+# Console Scripts (CLI Entry Points)
+# ==================================================================
+[project.scripts]
+jira = "chronos.cli.jira_cli:cli"
+confluence = "chronos.cli.confluence_cli:cli"
+jira-ingest = "chronos.cli.jira_ingest:main"
+jira-update = "chronos.cli.jira_update:main"

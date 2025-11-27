@@ -5,8 +5,9 @@ Purpose: Centralized, type-safe configuration using Pydantic
 Pattern: 12-Factor App methodology (config via environment variables)
 """
 
-from typing import Literal
 from pathlib import Path
+from typing import Literal
+
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 

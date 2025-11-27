@@ -5,9 +5,10 @@ Purpose: Test mathematical calculations used in analytics views
 Pattern: Pure unit tests with no database dependencies
 """
 
-import pytest
-from decimal import Decimal, ROUND_HALF_UP
 from datetime import date
+from decimal import ROUND_HALF_UP, Decimal
+
+import pytest
 
 
 class TestYoYGrowthCalculations:

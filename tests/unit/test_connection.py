@@ -1,7 +1,9 @@
 """Unit tests for database connection module."""
 
-import pytest
 import os
+
+import pytest
+
 from chronos.database.connection import verify_database_connection
 
 

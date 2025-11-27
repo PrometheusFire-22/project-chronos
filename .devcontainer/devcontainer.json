@@ -1,37 +1,191 @@
 {
-	"name": "Project Chronos (Stable)",
-	"image": "mcr.microsoft.com/devcontainers/python:3.11-bullseye",
-	"features": {
-		"ghcr.io/devcontainers/features/docker-from-docker:1": {"version": "latest"},
-		"ghcr.io/devcontainers/features/common-utils:2": {
-			"installZsh": true,
-			"configureZshAsDefaultShell": true,
-			"username": "vscode"
-		}
-	},
-	"postCreateCommand": "sudo apt-get update && sudo apt-get install -y postgresql-client cron && pip install --upgrade pip && pip install -e '.[dev]' thefuck && echo 'eval $(thefuck --alias)' >> ~/.zshrc",
-	"customizations": {
-		"vscode": {
-			"settings": {
-				"python.defaultInterpreterPath": "/usr/local/bin/python",
-				"terminal.integrated.defaultProfile.linux": "zsh"
-			},
-			"extensions": ["ms-python.python", "ms-python.vscode-pylance", "mtxr.sqltools", "mtxr.sqltools-driver-pg", "eamodio.gitlens"]
-		}
-	},
+	"name": "Project Chronos (Docker Compose)",
+	// ==================================================================
+	// Docker Compose Configuration
+	// ==================================================================
+	"dockerComposeFile": [
+		"../docker-compose.yml",
+		"../docker-compose.override.yml"
+	],
+	"service": "app",
 	"workspaceFolder": "/workspace",
-	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
-	"mounts": ["source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,readonly,type=bind,consistency=cached"],
-	"forwardPorts": [5432, 8050],
+	"runServices": [
+		"app",
+		"timescaledb",
+		"metabase",
+		"pgadmin",
+		"mailhog"
+	],
+	// ==================================================================
+	// Container Environment Variables
+	// ==================================================================
 	"containerEnv": {
 		"PYTHONPATH": "/workspace/src",
-		"DATABASE_HOST": "chronos-db",
-		"DATABASE_PORT": "5432",
-		"DATABASE_NAME": "chronos_db",
-		"DATABASE_USER": "prometheus",
-		"DATABASE_PASSWORD": "Zarathustra22!"
+		"TERM": "xterm-256color"
 	},
+	// ==================================================================
+	// Remote Environment Variables
+	// ==================================================================
+	"remoteEnv": {
+		"ENVIRONMENT": "development",
+		"LOG_LEVEL": "INFO"
+	},
+	// ==================================================================
+	// VS Code Customizations
+	// ==================================================================
+	"customizations": {
+		"vscode": {
+			// Editor Settings
+			"settings": {
+				// Python
+				"python.defaultInterpreterPath": "/usr/local/bin/python",
+				"python.terminal.activateEnvironment": false,
+				"python.analysis.extraPaths": [
+					"/workspace/src"
+				],
+				// Terminal
+				"terminal.integrated.defaultProfile.linux": "zsh",
+				"terminal.integrated.profiles.linux": {
+					"zsh": {
+						"path": "/usr/bin/zsh"
+					}
+				},
+				// Editor
+				"files.autoSave": "onFocusChange",
+				"editor.formatOnSave": true,
+				"editor.rulers": [
+					88,
+					100
+				],
+				"editor.tabSize": 4,
+				// Formatting
+				"[python]": {
+					"editor.defaultFormatter": "ms-python.black-formatter",
+					"editor.formatOnSave": true
+				},
+				"[markdown]": {
+					"editor.defaultFormatter": "esbenp.prettier-vscode"
+				},
+				"[json]": {
+					"editor.defaultFormatter": "esbenp.prettier-vscode"
+				},
+				"prettier.printWidth": 100,
+				// Git
+				"git.autofetch": true,
+				"git.confirmSync": false,
+				// Files
+				"files.exclude": {
+					"**/__pycache__": true,
+					"**/.pytest_cache": true,
+					"**/.ruff_cache": true,
+					"**/*.pyc": true
+				}
+			},
+			// Extensions to Install
+			"extensions": [
+				// Icons & UI
+				"vscode-icons-team.vscode-icons",
+				"aaron-bond.better-comments",
+				// Python Development
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-python.black-formatter",
+				"charliermarsh.ruff",
+				// Git Integration
+				"eamodio.gitlens",
+				"mhutchie.git-graph",
+				"donjayamanne.githistory",
+				// Database Tools
+				"mtxr.sqltools",
+				"mtxr.sqltools-driver-pg",
+				"cweijan.vscode-postgresql-client2",
+				"Geographica.vscode-postgis",
+				// Data Science
+				"ms-toolsai.jupyter",
+				"ms-toolsai.datawrangler",
+				// File Viewers
+				"mechatroner.rainbow-csv",
+				"janisdd.vscode-edit-csv",
+				"grapecity.gc-excelviewer",
+				"tomoki1207.pdf",
+				// Diagramming
+				"jebbs.plantuml",
+				"bierner.markdown-mermaid",
+				"excalidraw.excalidraw-vscode",
+				// Markdown
+				"yzhang.markdown-all-in-one",
+				"esbenp.prettier-vscode",
+				// CI/CD & DevOps
+				"GitHub.vscode-github-actions",
+				// Project Management
+				"Atlassian.atlascode",
+				"GitHub.vscode-pull-request-github",
+				"HubSpot.hubspot-vs-code",
+				// AI Assistance
+				"anthropic.claude-vscode",
+				"google.gemini-cli-vscode-ide-companion",
+				"google.geminicodeassist",
+				// Cloud & DevOps
+				"amazonwebservices.aws-toolkit-vscode",
+				// Type Checking
+				"ms-python.mypy-type-checker"
+			]
+		}
+	},
+	// ==================================================================
+	// Container Features
+	// ==================================================================
+	// COMMENTED OUT: These cause Antigravity to freeze during container initialization
+	// Both tools are already available:
+	//   - GitHub CLI (gh): Included in base mcr.microsoft.com/devcontainers/python image
+	//   - Docker CLI: Installed in Dockerfile line 46
+	// "features": {
+	// 	"ghcr.io/devcontainers/features/github-cli:1": {},
+	// 	"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+	// },
+	// ==================================================================
+	// Container Lifecycle Commands
+	// ==================================================================
+	// Run AFTER container is created (first time only)
+	// Dependencies are pre-installed in Dockerfile, so this is fast (~10 seconds)
+	"postCreateCommand": "pip install -e . --no-deps && pre-commit install && echo '\n✅ Dev container ready! Run: cat .devcontainer/DOCKER_REFERENCE.md for Docker help'",
+	// Run EVERY time container starts
+	"postStartCommand": "echo '✅ Project Chronos dev container ready!'",
+	// ==================================================================
+	// Additional Configuration
+	// ==================================================================
 	"remoteUser": "vscode",
-	"runArgs": ["--network=workspace_chronos-network"],
-	"initializeCommand": "docker network inspect workspace_chronos-network >/dev/null 2>&1 || docker network create workspace_chronos-network"
+	// Forward ports automatically
+	"forwardPorts": [
+		5432,
+		3000,
+		5050,
+		8025
+	],
+	// Port attributes
+	"portsAttributes": {
+		"5432": {
+			"label": "PostgreSQL",
+			"onAutoForward": "silent"
+		},
+		"3000": {
+			"label": "Metabase",
+			"onAutoForward": "notify"
+		},
+		"5050": {
+			"label": "pgAdmin",
+			"onAutoForward": "notify"
+		},
+		"8025": {
+			"label": "MailHog",
+			"onAutoForward": "ignore"
+		}
+	},
+	// Mount SSH keys and Docker socket
+	"mounts": [
+		"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,readonly,type=bind",
+		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+	],
+	// Shutdown Action
+	"shutdownAction": "stopCompose"
 }

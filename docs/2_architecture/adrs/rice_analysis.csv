@@ -1,0 +1,33 @@
+level,name,parent_vertical,relevance,insight_potential,confidence,ease,rice_score,date_added,rationale,required_data_desc,required_data_ids
+Vertical,Real Estate,,3,3,3,3,12,2025-11-15,"Massive market. Our new PostGIS data is a huge, unique advantage.","HOUST, PERMIT, MORTGAGE30US"
+Vertical,Government / Macro,,3,2,3,3,11,2025-11-15,"Core to all users, but generating unique alpha is harder as the space is crowded.","GDP, CPI, UNRATE"
+Vertical,Financials,,3,3,2,2,10,2025-11-15,"Highly relevant audience. Powerful insights require new data (yield curve, stress indexes).","FEDFUNDS, T10Y2Y, STLFSI3"
+Vertical,Industrials,,2,2,2,3,9,2025-11-15,"Good for analyzing the 'real' economy. Can be correlated with supply chain data.","INDPRO, PAYEMS, GSCPI"
+Vertical,Consumer Discretionary,,2,2,2,2,8,2025-11-15,"Relies heavily on consumer sentiment and retail sales. High potential if we add credit card data.","UMCSENT, RSXFS"
+Vertical,Energy,,2,3,1,2,8,2025-11-15,"High alpha potential, but requires sourcing new, specific commodity price data (e.g., WTI).","FXUSDCAD, WTI Crude Price"
+Vertical,Materials,,1,2,1,2,6,2025-11-15,"Niche but potentially valuable. Requires new commodity price data (e.g., lumber, copper).","Lumber Prices, HOUST"
+Vertical,Information Technology,,2,2,1,1,6,2025-11-15,"Analysis requires deep, company-specific data (EDGAR) or high-frequency data. High effort.","Semiconductor Production, NASDAQ"
+Vertical,Communication Services,,1,1,1,1,4,2025-11-15,"Very difficult to analyze with macro data alone. Relies on company-specific metrics. Low-priority.",
+Vertical,Health Care,,1,1,1,1,4,2025-11-15,"Highly specialized sector. Analysis requires domain expertise beyond macro data. Low-priority.",
+Vertical,Utilities,,1,1,2,2,6,2025-11-15,"Stable, regulated sector. Can be analyzed with interest rate and energy price data, but alpha is lower.",
+Vertical,Consumer Staples,,1,1,2,2,6,2025-11-15,"Defensive sector. Less sensitive to the macro trends we currently track. Low-priority.",
+Insight,"The Core MVP: Affordability Ratio Over Time",Real Estate,3,3,2,3,11,2025-11-15,"The centerpiece of our analysis; answers a critical question for both cities. Requires sourcing comparable local HPI and Income data.","Local HPI; Local Income"
+Insight,"The ""Rate-Lock"" Effect (CAN vs. US)",Real Estate,3,2,3,3,11,2025-11-15,"Directly addresses a major current theme. Simple to build with existing national mortgage rate data and tells a powerful story about inventory.","MORTGAGE30US; BoC 5-Year Rate"
+Insight,"Toronto vs. Chicago: Home Price Index Momentum",Real Estate,3,2,2,3,10,2025-11-15,"A direct, high-level comparison of market heat. Excellent top-line chart for a report. Requires sourcing the Canadian HPI.","Local HPI (ATNHPIUS...); Teranet HPI"
+Insight,"Local GDP Growth vs. Home Price Appreciation",Government / Macro,2,3,2,2,9,2025-11-15,"Shows the link between the 'real' economy and asset prices. A sophisticated insight. Requires local GDP data.","Local GDP (GDPALL...); Local HPI"
+Insight,"Construction Pipeline Pressure Index",Real Estate,3,3,1,1,8,2025-11-15,"Powerful leading indicator, but requires sourcing granular, comparable permit/housing start data for BOTH metros, which is difficult.","Local Permits; Local Housing Starts"
+Insight,"Housing Inventory Crisis Tracker",Real Estate,3,2,1,2,8,2025-11-15,"Visually powerful, but finding a consistent, reliable, and free source for active listings in both Toronto and Chicago is very hard.","Active Listings Data (ACTLISCOU...)"
+Insight,"Inflation Breakdown: Shelter vs. Other Goods",Inflation,2,2,2,2,8,2025-11-15,"Isolates housing's contribution to inflation. Valuable, but requires finding specific CPI-Shelter series for both cities.","Local CPI for Shelter"
+Insight,"Mortgage Burden as a % of Income",Real Estate,3,3,1,1,8,2025-11-15,"A more nuanced affordability view, but requires complex assumptions about down payments and taxes, making it harder to implement quickly.","HPI; Income; Mortgage Rates; Tax data"
+Insight,"Credit Risk & Housing Downturn Map",Financials,2,3,1,1,7,2025-11-15,"Very high alpha, but near-impossible to get free, comparable, granular mortgage delinquency data for both countries.","Mortgage Delinquency Rates"
+Insight,"New Housing Supply vs. Population Growth",Real Estate,2,3,1,1,7,2025-11-15,"Great insight, but reliable, high-frequency (annual) net migration data at the metro level is very difficult to source.","Local Housing Starts; Net Migration"
+Insight,"Sales Volume vs. New Listings",Real Estate,3,2,1,1,7,2025-11-15,"Classic indicator, but requires access to proprietary real estate board data feeds (TRREB, CAR), which are usually paid.","Real Estate Board Data"
+Insight,"Delinquency Rate vs. Local Unemployment",Financials,2,2,1,2,7,2025-11-15,"Good leading indicator, but blocked by the difficulty of sourcing local delinquency data.","Mortgage Delinquency; Local Unemployment"
+Insight,"Impact of Central Bank Rate Hikes",Financials,2,2,2,1,7,2025-11-15,"Analysis is complex; requires careful handling of different mortgage term structures (US vs. CAN).","Central Bank Rates; Mortgage Rates"
+Insight,"Office Vacancy Rates vs. Downtown Mobility",Real Estate,2,3,1,1,7,2025-11-15,"Excellent 'post-pandemic' insight, but requires paid Commercial Real Estate data (CBRE, etc.) and mobility data.","CRE Data; Mobility Data"
+Insight,"Priced Out"": Net Migration vs. Affordability",Real Estate,2,3,1,1,7,2025-11-15,"Great narrative, but blocked by the difficulty of sourcing high-frequency migration data.","Net Migration; Affordability Ratio"
+Insight,"Single-Family vs. Multi-Family Trends",Real Estate,1,2,2,2,7,2025-11-15,"Interesting detail, but less impactful than the main affordability story. Requires finding permit data broken down by unit type.","Permits by Unit Type"
+Insight,"Commercial vs. Residential Divergence",Real Estate,2,2,1,1,6,2025-11-15,"Requires sourcing paid Commercial Real Estate data, which is a major effort.","CRE Data"
+Insight,"New Business Applications vs. Lease Rates",Industrials,1,2,1,1,5,2025-11-15,"Interesting but niche. Blocked by need for CRE data and business application data for Toronto.","Business Applications; CRE Lease Rates"
+Insight,"Local Unemployment vs. Transit Ridership",Labor Market,1,2,1,1,5,2025-11-15,"Interesting proxy for service sector health, but requires sourcing non-standard transit agency data for both cities.","Local Unemployment; Transit Data"
+Insight,"Restaurant Spending vs. Consumer Confidence",Consumer Discretionary,1,2,1,1,5,2025-11-15,"Very powerful, but requires access to proprietary credit card transaction data, which is extremely expensive.","Credit Card Data; Consumer Confidence"

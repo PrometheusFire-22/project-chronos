@@ -29,7 +29,7 @@ DROP VIEW IF EXISTS analytics.fx_rates_normalized CASCADE;
 -- VIEW: FX Rates Normalized (CORRECTED with Cross-Rate Calculations)
 -- ============================================================================
 -- Purpose: Standardize ALL FX rates to "USD per 1 unit of foreign currency"
--- 
+--
 -- Data Sources:
 -- - FRED DEX* series: Some are USD-based, some are not
 -- - Bank of Canada FX* series: ALL are CAD-based (require cross-rate conversion)
@@ -39,7 +39,7 @@ DROP VIEW IF EXISTS analytics.fx_rates_normalized CASCADE;
 
 CREATE OR REPLACE VIEW analytics.fx_rates_normalized AS
 WITH raw_fx AS (
-    SELECT 
+    SELECT
         eo.observation_date,
         sm.source_series_id,
         sm.series_id,
@@ -50,14 +50,14 @@ WITH raw_fx AS (
     FROM timeseries.economic_observations eo
     JOIN metadata.series_metadata sm ON eo.series_id = sm.series_id
     JOIN metadata.data_sources ds ON sm.source_id = ds.source_id
-    WHERE 
+    WHERE
         (sm.source_series_id LIKE 'DEX%' OR sm.source_series_id LIKE 'FX%')
         AND eo.value IS NOT NULL
         AND eo.value != 0
 ),
 -- Extract USD/CAD rate for cross-rate calculations
 usd_cad_rates AS (
-    SELECT 
+    SELECT
         observation_date,
         -- FXUSDCAD is CAD per USD, so invert to get USD per CAD
         1.0 / raw_value as usd_per_cad
@@ -66,45 +66,45 @@ usd_cad_rates AS (
 ),
 -- Also get FRED's USD/CAD rate for cross-validation
 fred_usd_cad AS (
-    SELECT 
+    SELECT
         observation_date,
         -- DEXCAUS is also CAD per USD, invert to get USD per CAD
         1.0 / raw_value as usd_per_cad
     FROM raw_fx
     WHERE source_series_id = 'DEXCAUS'
 )
-SELECT 
+SELECT
     rf.observation_date,
     rf.source_series_id,
     rf.series_id,
     rf.source_name,
     rf.raw_value,
     rf.geography,
-    
+
     -- ========================================================================
     -- CRITICAL: Correct normalization to USD per FX
     -- ========================================================================
-    CASE 
+    CASE
         -- ====================================================================
         -- Group 1: FRED rates already in USD per FX (no conversion needed)
         -- ====================================================================
-        WHEN rf.source_series_id IN ('DEXUSEU', 'DEXUSUK', 'DEXUSAL', 'DEXUSNZ') 
+        WHEN rf.source_series_id IN ('DEXUSEU', 'DEXUSUK', 'DEXUSAL', 'DEXUSNZ')
             THEN rf.raw_value
-        
+
         -- ====================================================================
         -- Group 2: FRED rates in FX per USD (simple inversion)
         -- ====================================================================
-        WHEN rf.source_series_id IN ('DEXCAUS', 'DEXJPUS', 'DEXCHUS', 'DEXMXUS', 
+        WHEN rf.source_series_id IN ('DEXCAUS', 'DEXJPUS', 'DEXCHUS', 'DEXMXUS',
                                       'DEXINUS', 'DEXKOUS', 'DEXSZUS', 'DEXTHUS',
                                       'DEXBZUS', 'DEXSFUS', 'DEXVZUS', 'DEXMAUS')
             THEN 1.0 / rf.raw_value
-        
+
         -- ====================================================================
         -- Group 3: Bank of Canada USD/CAD (simple inversion)
         -- ====================================================================
         WHEN rf.source_series_id = 'FXUSDCAD'
             THEN 1.0 / rf.raw_value
-        
+
         -- ====================================================================
         -- Group 4: Bank of Canada non-USD rates (CROSS-RATE CALCULATION)
         -- ====================================================================
@@ -113,16 +113,16 @@ SELECT
         -- ====================================================================
         WHEN rf.source_series_id LIKE 'FX%' AND rf.source_series_id != 'FXUSDCAD'
             THEN rf.raw_value * COALESCE(ucr.usd_per_cad, 0)
-        
+
         -- Default: return raw value (shouldn't hit this)
         ELSE rf.raw_value
     END as usd_per_fx,
-    
+
     -- ========================================================================
     -- Metadata: Transformation applied
     -- ========================================================================
-    CASE 
-        WHEN rf.source_series_id IN ('DEXUSEU', 'DEXUSUK', 'DEXUSAL', 'DEXUSNZ') 
+    CASE
+        WHEN rf.source_series_id IN ('DEXUSEU', 'DEXUSUK', 'DEXUSAL', 'DEXUSNZ')
             THEN 'none'
         WHEN rf.source_series_id IN ('DEXCAUS', 'DEXJPUS', 'DEXCHUS', 'DEXMXUS', 'FXUSDCAD')
             THEN 'inverted'
@@ -130,62 +130,62 @@ SELECT
             THEN 'cross_rate'
         ELSE 'unknown'
     END as transformation_type,
-    
+
     -- ========================================================================
     -- Human-readable description (CORRECTED)
     -- ========================================================================
-    CASE 
+    CASE
         -- FRED: Native USD rates
         WHEN rf.source_series_id = 'DEXUSEU' THEN 'USD per EUR'
         WHEN rf.source_series_id = 'DEXUSUK' THEN 'USD per GBP'
         WHEN rf.source_series_id = 'DEXUSAL' THEN 'USD per AUD'
         WHEN rf.source_series_id = 'DEXUSNZ' THEN 'USD per NZD'
-        
+
         -- FRED: Inverted rates
         WHEN rf.source_series_id = 'DEXCAUS' THEN 'USD per CAD (FRED)'
         WHEN rf.source_series_id = 'DEXJPUS' THEN 'USD per 100 JPY (FRED)'
         WHEN rf.source_series_id = 'DEXCHUS' THEN 'USD per CHF (FRED)'
         WHEN rf.source_series_id = 'DEXMXUS' THEN 'USD per MXN (FRED)'
-        
+
         -- Bank of Canada: USD/CAD
         WHEN rf.source_series_id = 'FXUSDCAD' THEN 'USD per CAD (Bank of Canada)'
-        
+
         -- Bank of Canada: Cross-rates (CORRECTED DESCRIPTIONS)
         WHEN rf.source_series_id = 'FXEURCAD' THEN 'USD per EUR (via CAD cross-rate)'
         WHEN rf.source_series_id = 'FXGBPCAD' THEN 'USD per GBP (via CAD cross-rate)'
         WHEN rf.source_series_id = 'FXJPYCAD' THEN 'USD per 100 JPY (via CAD cross-rate)'
         WHEN rf.source_series_id = 'FXCHFCAD' THEN 'USD per CHF (via CAD cross-rate)'
         WHEN rf.source_series_id = 'FXAUDCAD' THEN 'USD per AUD (via CAD cross-rate)'
-        
+
         -- Fallback
         ELSE 'USD per ' || SUBSTRING(rf.source_series_id FROM 3)
     END as rate_description,
-    
+
     -- Additional metadata for transparency
     ucr.usd_per_cad as usd_cad_rate_used,
     rf.raw_value as original_raw_value
-    
+
 FROM raw_fx rf
 LEFT JOIN usd_cad_rates ucr ON rf.observation_date = ucr.observation_date
-WHERE 
+WHERE
     -- Only include rows where we have USD/CAD rate for cross-rate calculations
-    (rf.source_series_id NOT LIKE 'FX%' 
+    (rf.source_series_id NOT LIKE 'FX%'
      OR rf.source_series_id = 'FXUSDCAD'
      OR (rf.source_series_id LIKE 'FX%' AND ucr.usd_per_cad IS NOT NULL));
 
-COMMENT ON VIEW analytics.fx_rates_normalized IS 
+COMMENT ON VIEW analytics.fx_rates_normalized IS
 'FX rates normalized to USD per 1 unit of foreign currency.
 
 Transformation Methods:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 1. NONE: Already USD-based (FRED DEXUSEU, DEXUSUK, etc.)
    - Raw value = USD per FX
-   
+
 2. INVERTED: FX per USD → invert to get USD per FX
    - FRED DEXCAUS, DEXJPUS, etc.
    - Bank of Canada FXUSDCAD
    - Formula: usd_per_fx = 1 / raw_value
-   
+
 3. CROSS_RATE: CAD-based → convert via USD/CAD rate
    - Bank of Canada FXEURCAD, FXGBPCAD, FXJPYCAD, etc.
    - Formula: usd_per_fx = (CAD per FX) × (USD per CAD)
@@ -207,7 +207,7 @@ Always query this view for cross-currency analysis, never use raw data directly.
 
 CREATE VIEW analytics.macro_indicators_latest AS
 WITH ranked_obs AS (
-    SELECT 
+    SELECT
         sm.series_id,
         sm.source_series_id,
         sm.series_name,
@@ -220,14 +220,14 @@ WITH ranked_obs AS (
         -- Rank observations by date (1 = most recent)
         ROW_NUMBER() OVER (PARTITION BY sm.series_id ORDER BY eo.observation_date DESC) as date_rank,
         -- Get value from 1 year ago based on frequency
-        LAG(eo.value, 
-            CASE sm.frequency 
-                WHEN 'D' THEN 365 
+        LAG(eo.value,
+            CASE sm.frequency
+                WHEN 'D' THEN 365
                 WHEN 'B' THEN 252  -- Business days
-                WHEN 'W' THEN 52 
-                WHEN 'M' THEN 12 
-                WHEN 'Q' THEN 4 
-                WHEN 'A' THEN 1 
+                WHEN 'W' THEN 52
+                WHEN 'M' THEN 12
+                WHEN 'Q' THEN 4
+                WHEN 'A' THEN 1
                 ELSE 12  -- Default to monthly
             END
         ) OVER (PARTITION BY sm.series_id ORDER BY eo.observation_date) as value_1y_ago
@@ -236,7 +236,7 @@ WITH ranked_obs AS (
     JOIN timeseries.economic_observations eo ON sm.series_id = eo.series_id
     WHERE sm.is_active = TRUE
 )
-SELECT 
+SELECT
     source_name,
     source_series_id,
     series_name,
@@ -247,14 +247,14 @@ SELECT
     value as latest_value,
     value_1y_ago,
     -- Calculate year-over-year growth percentage
-    CASE 
-        WHEN value_1y_ago IS NOT NULL AND value_1y_ago != 0 
+    CASE
+        WHEN value_1y_ago IS NOT NULL AND value_1y_ago != 0
         THEN ROUND(100.0 * (value - value_1y_ago) / value_1y_ago, 2)
         ELSE NULL
     END as yoy_growth_pct,
     -- Calculate absolute change
-    CASE 
-        WHEN value_1y_ago IS NOT NULL 
+    CASE
+        WHEN value_1y_ago IS NOT NULL
         THEN ROUND((value - value_1y_ago)::numeric, 2)
         ELSE NULL
     END as yoy_change_absolute
@@ -281,7 +281,7 @@ Use this for dashboard "current state" displays.';
 
 CREATE VIEW analytics.data_quality_dashboard AS
 WITH series_stats AS (
-    SELECT 
+    SELECT
         sm.series_id,
         ds.source_name,
         sm.source_series_id,
@@ -302,10 +302,10 @@ WITH series_stats AS (
     GROUP BY sm.series_id, ds.source_name, sm.source_series_id, sm.series_name, sm.frequency, sm.geography
 ),
 staleness_rules AS (
-    SELECT 
+    SELECT
         *,
         -- Define frequency-specific staleness thresholds
-        CASE 
+        CASE
             WHEN frequency = 'D' THEN 7       -- Daily: Max 7 days lag
             WHEN frequency = 'B' THEN 7       -- Business daily: Max 7 days lag
             WHEN frequency = 'W' THEN 14      -- Weekly: Max 14 days lag
@@ -315,9 +315,9 @@ staleness_rules AS (
             WHEN frequency IS NULL THEN 30    -- Unknown: Default 30 days
             ELSE 30
         END as max_acceptable_lag_days,
-        
+
         -- Warning threshold (triggers before stale)
-        CASE 
+        CASE
             WHEN frequency = 'D' THEN 3
             WHEN frequency = 'B' THEN 3
             WHEN frequency = 'W' THEN 7
@@ -329,7 +329,7 @@ staleness_rules AS (
         END as warning_threshold_days
     FROM series_stats
 )
-SELECT 
+SELECT
     source_name,
     source_series_id,
     series_name,
@@ -344,33 +344,33 @@ SELECT
     days_since_last_update,
     max_acceptable_lag_days,
     warning_threshold_days,
-    
+
     -- Status indicator with frequency-aware logic
-    CASE 
+    CASE
         WHEN days_since_last_update IS NULL THEN '⚪ NO DATA'
         WHEN days_since_last_update > max_acceptable_lag_days THEN '🔴 STALE'
         WHEN days_since_last_update > warning_threshold_days THEN '🟡 WARNING'
         ELSE '🟢 FRESH'
     END as freshness_status,
-    
+
     -- Expected next update date
-    CASE 
-        WHEN latest_date IS NOT NULL 
+    CASE
+        WHEN latest_date IS NOT NULL
         THEN latest_date + (max_acceptable_lag_days || ' days')::interval
         ELSE NULL
     END as expected_update_by,
-    
+
     -- Days remaining until stale
-    CASE 
+    CASE
         WHEN days_since_last_update IS NOT NULL
         THEN max_acceptable_lag_days - days_since_last_update
         ELSE NULL
     END as days_until_stale
-    
+
 FROM staleness_rules
-ORDER BY 
+ORDER BY
     -- Sort by severity: stale → warning → fresh
-    CASE 
+    CASE
         WHEN days_since_last_update IS NULL THEN 4
         WHEN days_since_last_update > max_acceptable_lag_days THEN 1
         WHEN days_since_last_update > warning_threshold_days THEN 2

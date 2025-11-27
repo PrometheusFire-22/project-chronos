@@ -40,7 +40,7 @@ RUN cd /tmp && \
     cd / && rm -rf /tmp/age
 
 # Configure PostgreSQL
-RUN echo "shared_preload_libraries = 'timescaledb,pg_stat_statements'" >> /usr/local/share/postgresql/postgresql.conf.sample
+RUN echo "shared_preload_libraries = 'timescaledb,pg_stat_statements,age'" >> /usr/local/share/postgresql/postgresql.conf.sample
 
 # Copy SQL initialization files
 COPY database/schema.sql /docker-entrypoint-initdb.d/01-schema.sql
