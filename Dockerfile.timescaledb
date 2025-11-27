@@ -5,11 +5,13 @@ LABEL description="Multi-modal database: TimescaleDB + PostGIS + pgvector + Apac
 
 USER root
 
-# Install build dependencies
+# Install build dependencies and AWS CLI v2
 RUN apk update && apk add --no-cache \
     build-base git wget cmake postgresql16-dev \
     clang15 llvm15 openssl-dev ca-certificates \
-    curl flex bison perl
+    curl flex bison perl \
+    aws-cli \
+    && aws --version
 
 # Install TimescaleDB
 RUN cd /tmp && \
