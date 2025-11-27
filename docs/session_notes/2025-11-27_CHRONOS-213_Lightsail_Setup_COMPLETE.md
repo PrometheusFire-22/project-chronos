@@ -196,7 +196,7 @@ SELECT extname, extversion FROM pg_extension WHERE extname IN ('timescaledb', 'p
 **Tested and verified:**
 ```bash
 docker run --rm postgres:16-alpine psql \
-  "postgresql://chronos:DZ4eNOynmfYVOtG8c8TBlXIGVGlqkvWKQR5ixYYjAMs=@16.52.210.100:5432/chronos" \
+  "postgresql://chronos:[PASSWORD_FROM_KEEPASSXC]@16.52.210.100:5432/chronos" \
   -c "SELECT version();"
 ```
 
@@ -286,8 +286,8 @@ aws lightsail delete-instance --region ca-central-1 --instance-name chronos-prod
 - **Port:** 5432
 - **Database:** chronos
 - **Username:** chronos
-- **Password:** DZ4eNOynmfYVOtG8c8TBlXIGVGlqkvWKQR5ixYYjAMs=
-- **Connection String:** postgresql://chronos:DZ4eNOynmfYVOtG8c8TBlXIGVGlqkvWKQR5ixYYjAMs=@16.52.210.100:5432/chronos
+- **Password:** [Stored in KeePassXC: Database/PostgreSQL Production]
+- **Connection String:** postgresql://chronos:[PASSWORD_FROM_KEEPASSXC]@16.52.210.100:5432/chronos
 - **Stored in:** Instance `/home/ubuntu/chronos-db/.env` (chmod 600) ✅
 
 ### Firewall Best Practices
