@@ -207,7 +207,10 @@ def main():
 
     # Locate catalog (go up 4 levels: file -> ingestion -> chronos -> src -> project root)
     catalog_path = (
-        Path(__file__).parent.parent.parent.parent / "database" / "seeds" / "time-series_catalog.csv"
+        Path(__file__).parent.parent.parent.parent
+        / "database"
+        / "seeds"
+        / "time-series_catalog.csv"
     )
 
     if not catalog_path.exists():
@@ -269,9 +272,7 @@ def main():
             insert_series_metadata(conn, actual_source_id, series_id, series)
 
             # Insert observations
-            inserted, skipped = insert_observations(
-                conn, series_id, observations, actual_source_id
-            )
+            inserted, skipped = insert_observations(conn, series_id, observations, actual_source_id)
 
             print(f"    ✅ Inserted {inserted} observations (skipped {skipped})")
 

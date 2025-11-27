@@ -13,7 +13,6 @@ from chronos.database.connection import get_db_session
 # We use the seed_test_database fixture to ensure data exists
 
 
-
 class TestFXRatesNormalized:
     """Test FX rate normalization logic."""
 
