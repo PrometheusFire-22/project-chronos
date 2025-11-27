@@ -92,3 +92,5 @@ media_assets/
 
 .gemini/
 gha-creds-*.json
+docs/.secrets-template.md
+*.kdbx
