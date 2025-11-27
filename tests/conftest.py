@@ -5,7 +5,6 @@ Shared test fixtures and configuration
 """
 
 import pytest
-
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
@@ -38,7 +37,11 @@ def seed_test_database(test_engine):
 
     with test_engine.connect() as conn:
         # Clear existing data to ensure clean state with correct schema
-        conn.execute(text("TRUNCATE TABLE timeseries.economic_observations, metadata.series_metadata, metadata.data_sources CASCADE"))
+        conn.execute(
+            text(
+                "TRUNCATE TABLE timeseries.economic_observations, metadata.series_metadata, metadata.data_sources CASCADE"
+            )
+        )
         conn.commit()
 
         # Insert Data Sources
