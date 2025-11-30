@@ -94,3 +94,8 @@ media_assets/
 gha-creds-*.json
 docs/.secrets-template.md
 *.kdbx
+
+# Secrets protection
+.secrets_tmp/
+*.secrets.md
+*_SECRETS_*.md
