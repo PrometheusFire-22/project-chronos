@@ -209,14 +209,22 @@ keepassxc /home/prometheus/security/chronos_secrets.kdbx
 
 ---
 
-## Automation (Future - CHRONOS-223)
+## Automation
 
-**Planned automation:**
-- Hourly rclone sync (cron job)
-- Daily Git commit (cron job)
-- Weekly verification report (email)
+**Active automation (as of 2025-11-30):**
+- Daily Git commit (cron job at 10:00 AM)
+- `kpush` / `kpull` commands for manual sync
+- Both `Master_Passwords.kdbx` and `chronos_secrets.kdbx` fully supported
 
-**Status:** Not yet implemented (see CHRONOS-223)
+**Cron job:** Runs `/home/prometheus/scripts/keepass_autover.sh` daily at 10:00 AM
+- Pulls both databases from Google Drive
+- Commits changes to Git LFS repository
+- Pushes to GitHub (`keepass-version-control`)
+
+**Future enhancements (CHRONOS-223):**
+- Hourly rclone sync (currently manual via `kpush`)
+- Weekly verification report (email/notification)
+- Automated integrity checks
 
 ---
 
@@ -391,6 +399,8 @@ cd /home/prometheus/security/keepass_versions && git log --oneline -3
 | 2025-11-30 | Added chronos_secrets.kdbx to Git version control | N/A |
 | 2025-11-30 | Added chronos_secrets.kdbx to Google Drive backup | N/A |
 | 2025-11-30 | Verified SSH key attachment in chronos_secrets.kdbx | N/A |
+| 2025-11-30 | Updated all automation scripts to handle both databases | N/A |
+| 2025-11-30 | Verified kpush/kpull/autover working with both databases | N/A |
 
 ---
 
