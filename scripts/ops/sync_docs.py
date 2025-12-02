@@ -4,9 +4,15 @@ Documentation Sync Script
 =========================
 Syncs local markdown files to Confluence based on .confluence-mapping.json.
 Leverages logic from src/chronos/cli/confluence_cli.py.
+
+Usage:
+    python3 sync_docs.py              # Sync content only
+    python3 sync_docs.py --organize   # Sync content + organize hierarchy
 """
 
+import argparse
 import json
+import subprocess
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -120,19 +126,79 @@ def sync_file(filepath, metadata, mapping):
         print(f"Error syncing {filepath}: {e}")
 
 
+def organize_hierarchy(dry_run=False):
+    """
+    Run the Confluence hierarchy organization script
+
+    Args:
+        dry_run: If True, run in dry-run mode (preview only)
+    """
+    script_path = current_dir / "organize_confluence_hierarchy.py"
+
+    if not script_path.exists():
+        print(f"Warning: Hierarchy script not found at {script_path}")
+        print("Skipping hierarchy organization.")
+        return False
+
+    print("\n" + "=" * 60)
+    print("📂 Organizing Confluence Hierarchy...")
+    print("=" * 60 + "\n")
+
+    cmd = [sys.executable, str(script_path)]
+    if dry_run:
+        cmd.append("--dry-run")
+
+    try:
+        result = subprocess.run(cmd, check=True, capture_output=False)
+        return result.returncode == 0
+    except subprocess.CalledProcessError as e:
+        print(f"Error organizing hierarchy: {e}")
+        return False
+
+
 def main():
-    print(f"Using mapping file: {MAPPING_FILE}")
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description="Sync local markdown documentation to Confluence")
+    parser.add_argument(
+        "--organize",
+        action="store_true",
+        help="Organize Confluence hierarchy after syncing (creates folder structure)",
+    )
+    parser.add_argument(
+        "--dry-run-organize",
+        action="store_true",
+        help="Preview hierarchy organization without making changes",
+    )
+    args = parser.parse_args()
+
+    # Step 1: Sync documentation content
+    print("=" * 60)
+    print("📄 Syncing Documentation Content")
+    print("=" * 60)
+    print(f"Using mapping file: {MAPPING_FILE}\n")
+
     mapping = load_mapping()
 
     if not mapping:
         print("No files to sync in mapping.")
-        return
+    else:
+        for filepath, metadata in mapping.items():
+            sync_file(filepath, metadata, mapping)
 
-    for filepath, metadata in mapping.items():
-        sync_file(filepath, metadata, mapping)
+        save_mapping(mapping)
+        print("\n✅ Content sync completed.")
 
-    save_mapping(mapping)
-    print("Sync completed.")
+    # Step 2: Organize hierarchy (if requested)
+    if args.organize or args.dry_run_organize:
+        success = organize_hierarchy(dry_run=args.dry_run_organize)
+        if success:
+            print("\n✅ Hierarchy organization completed.")
+        else:
+            print("\n⚠️ Hierarchy organization had issues (see above).")
+
+    print("\n" + "=" * 60)
+    print("🎉 All operations complete!")
+    print("=" * 60)
 
 
 if __name__ == "__main__":
