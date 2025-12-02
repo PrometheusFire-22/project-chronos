@@ -4,13 +4,21 @@ Operational automation scripts for Project Chronos.
 
 ## Available Scripts
 
-### `sync_docs.py`
-**Purpose:** Sync local markdown documentation to Confluence
+### `sync_docs.py` ⭐ ENHANCED
+**Purpose:** Sync local markdown documentation to Confluence (with optional hierarchy organization)
 
 **Usage:**
 ```bash
 source .venv/bin/activate
+
+# Sync content only
 python3 scripts/ops/sync_docs.py
+
+# Sync content + organize hierarchy (recommended!)
+python3 scripts/ops/sync_docs.py --organize
+
+# Preview hierarchy organization first
+python3 scripts/ops/sync_docs.py --dry-run-organize
 ```
 
 **What it does:**
@@ -18,11 +26,17 @@ python3 scripts/ops/sync_docs.py
 - Syncs content to existing Confluence pages
 - Updates `.confluence-mapping.json` with page IDs
 - Adds "Read Only" banner to auto-generated pages
+- **NEW:** Optionally organizes pages into hierarchical folder structure
+
+**Flags:**
+- `--organize` - Organize Confluence hierarchy after syncing
+- `--dry-run-organize` - Preview hierarchy changes without applying
 
 **When to run:**
 - After updating documentation locally
 - After creating new docs
 - Before sharing docs with team
+- **Use --organize flag monthly** for automatic hierarchy cleanup
 
 **Documentation:** `docs/3_runbooks/confluence_comprehensive_sync_guide.md`
 
@@ -66,27 +80,36 @@ python3 scripts/ops/organize_confluence_hierarchy.py
 
 ## Typical Workflow
 
+**Recommended (One Command!):**
+```bash
+# Activate virtual environment
+source .venv/bin/activate
+
+# Sync content + organize hierarchy in one command
+python3 scripts/ops/sync_docs.py --organize
+
+# Or use the quick alias:
+./scripts/organize
+
+# View results
+# Open: https://automatonicai.atlassian.net/wiki/spaces/PC/overview
+```
+
+**Advanced (Separate Steps):**
 ```bash
 # 1. Activate virtual environment
 source .venv/bin/activate
 
-# 2. Sync documentation content
+# 2. Sync documentation content only
 python3 scripts/ops/sync_docs.py
 
-# 3. Organize hierarchy (if new pages added)
+# 3. Organize hierarchy separately (if needed)
 python3 scripts/ops/organize_confluence_hierarchy.py --dry-run
 python3 scripts/ops/organize_confluence_hierarchy.py
 
-# 4. View results
-# Open: https://automatonicai.atlassian.net/wiki/spaces/PC/overview
-```
-
-## Future Automation (Planned)
-
-**Combined sync + organize:**
-```bash
-# TODO: Add --organize flag to sync_docs.py
-python3 scripts/ops/sync_docs.py --organize
+# Or use quick alias:
+./scripts/organize --dry-run
+./scripts/organize
 ```
 
 **Cron automation:**
