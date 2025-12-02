@@ -33,7 +33,7 @@ This guide documents the comprehensive Confluence sync system implemented on 202
 │  ├── 2_architecture/                                    │
 │  ├── 3_runbooks/                                        │
 │  ├── 4_guides/                                          │
-│  ├── 7_troubleshooting/                                 │
+│  ├── 6_troubleshooting/                                 │
 │  └── session_notes/                                     │
 └─────────────────┬───────────────────────────────────────┘
                   │
@@ -530,7 +530,7 @@ project-chronos/
 │   │   └── data_governance/              ← Ontology, asset catalog
 │   ├── 3_runbooks/                       ← Operational runbooks (6 synced)
 │   ├── 4_guides/                         ← How-to guides (6 synced)
-│   ├── 7_troubleshooting/                ← Post-mortems (1 synced)
+│   ├── 6_troubleshooting/                ← Post-mortems (1 synced)
 │   ├── session_notes/                    ← Session documentation (8 synced)
 │   ├── templates/                        ← Templates (NOT synced)
 │   ├── _archive/                         ← Old docs (NOT synced)

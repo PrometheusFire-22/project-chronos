@@ -2,302 +2,302 @@
   "docs/2_architecture/adrs/adr_011_documentation_ssot.md": {
     "page_id": "6160386",
     "space": "PC",
-    "last_synced": "2025-12-01T05:27:36.452656+00:00Z"
+    "last_synced": "2025-12-01T23:38:10.942010+00:00Z"
   },
   "docs/4_guides/ssot_workflow_test.md": {
     "page_id": "6160414",
     "space": "PC",
-    "last_synced": "2025-12-01T05:27:37.386960+00:00Z",
+    "last_synced": "2025-12-01T23:38:12.192129+00:00Z",
     "title": "End-to-End SSOT Workflow Test Guide"
   },
   "docs/4_guides/ssot_automation_walkthrough.md": {
     "page_id": "6225935",
     "space": "PC",
-    "last_synced": "2025-12-01T05:27:38.410551+00:00Z",
+    "last_synced": "2025-12-01T23:38:13.350482+00:00Z",
     "title": "SSOT Automation & Features Expansion Walkthrough"
   },
   "docs/session_notes/2025-11-27_AWS_CLI_SSO_Setup.md": {
     "page_id": "7045123",
     "space": "PC",
-    "last_synced": "2025-12-01T05:27:39.222836+00:00Z",
+    "last_synced": "2025-12-01T23:38:14.654968+00:00Z",
     "title": "AWS CLI v2 + IAM Identity Center (SSO) Setup Guide"
   },
   "docs/session_notes/2025-11-27_CHRONOS-213_Lightsail_Setup_COMPLETE.md": {
     "page_id": "7045146",
     "space": "PC",
-    "last_synced": "2025-12-01T05:27:40.350925+00:00Z",
+    "last_synced": "2025-12-01T23:38:15.768791+00:00Z",
     "title": "CHRONOS-213: AWS Lightsail PostgreSQL Setup - Complete"
   },
   "docs/session_notes/2025-11-27_SESSION_SUMMARY.md": {
     "page_id": "7208971",
     "space": "PC",
-    "last_synced": "2025-12-01T05:27:41.088802+00:00Z",
+    "last_synced": "2025-12-01T23:38:17.174915+00:00Z",
     "title": "Session Summary: 2025-11-27"
   },
   "docs/session_notes/2025-11-27_Sprint7_Execution_Plan.md": {
     "page_id": "7897116",
     "space": "PC",
-    "last_synced": "2025-12-01T05:27:42.014777+00:00Z",
+    "last_synced": "2025-12-01T23:38:18.526176+00:00Z",
     "title": "Sprint 7: AWS Infrastructure - Execution Plan"
   },
   "docs/session_notes/2025-11-30_AWS_Training_Belt_Progression.md": {
     "page_id": "7766060",
     "space": "PC",
-    "last_synced": "2025-12-01T05:27:43.011142+00:00Z",
+    "last_synced": "2025-12-01T23:38:19.861745+00:00Z",
     "title": "AWS Training: Belt Progression to Infrastructure Mastery"
   },
   "docs/4_guides/secrets_management_guide.md": {
     "page_id": "7897136",
     "space": "PC",
-    "last_synced": "2025-12-01T05:27:44.035497+00:00Z",
+    "last_synced": "2025-12-01T23:38:21.087989+00:00Z",
     "title": "Project Chronos - Secrets Management Guide"
   },
   "docs/3_runbooks/keepassxc_unified_workflow.md": {
     "page_id": "7012471",
     "space": "PC",
-    "last_synced": "2025-12-01T05:27:44.712184+00:00Z",
+    "last_synced": "2025-12-01T23:38:22.108879+00:00Z",
     "title": "KeePassXC Unified Workflow: Personal + Project Secrets"
   },
   "docs/2_architecture/adrs/adr_012_frontend_stack_architecture.md": {
     "space": "PC",
     "title": "ADR-012: Frontend Stack Architecture",
     "page_id": "7012570",
-    "last_synced": "2025-12-01T05:27:46.085974+00:00Z"
+    "last_synced": "2025-12-01T23:38:23.156231+00:00Z"
   },
   "docs/2_architecture/adrs/README.md": {
     "space": "PC",
     "page_id": "7012604",
-    "last_synced": "2025-12-01T05:27:48.335464+00:00Z"
+    "last_synced": "2025-12-01T23:38:24.080199+00:00Z"
   },
   "docs/2_architecture/adrs/adr_002_project_management_stack.md": {
     "space": "PC",
     "page_id": "7766148",
-    "last_synced": "2025-12-01T05:27:49.200073+00:00Z"
+    "last_synced": "2025-12-01T23:38:25.100909+00:00Z"
   },
   "docs/2_architecture/adrs/adr_003_pragmatic_agile_jira_workflow.md": {
     "space": "PC",
     "page_id": "7766168",
-    "last_synced": "2025-12-01T05:27:50.179691+00:00Z"
+    "last_synced": "2025-12-01T23:38:26.042942+00:00Z"
   },
   "docs/2_architecture/adrs/adr_004_git_workflow_and_branching_model.md": {
     "space": "PC",
     "page_id": "7766188",
-    "last_synced": "2025-12-01T05:27:50.975254+00:00Z"
+    "last_synced": "2025-12-01T23:38:26.934747+00:00Z"
   },
   "docs/2_architecture/adrs/adr_005_focus_enforcer_protocol.md": {
     "space": "PC",
     "page_id": "7176335",
-    "last_synced": "2025-12-01T05:27:51.869670+00:00Z"
+    "last_synced": "2025-12-01T23:38:27.960896+00:00Z"
   },
   "docs/2_architecture/adrs/adr_006_crm_selection.md": {
     "space": "PC",
     "page_id": "7012624",
-    "last_synced": "2025-12-01T05:27:52.739868+00:00Z"
+    "last_synced": "2025-12-01T23:38:28.805352+00:00Z"
   },
   "docs/2_architecture/adrs/adr_007_jira_first_workflow.md": {
     "space": "PC",
     "page_id": "7897215",
-    "last_synced": "2025-12-01T05:27:53.565402+00:00Z"
+    "last_synced": "2025-12-01T23:38:29.664288+00:00Z"
   },
   "docs/2_architecture/adrs/adr_008_backup_architecture.md": {
     "space": "PC",
     "page_id": "7012644",
-    "last_synced": "2025-12-01T05:27:54.480942+00:00Z"
+    "last_synced": "2025-12-01T23:38:30.756621+00:00Z"
   },
   "docs/2_architecture/adrs/adr_009_backup_strategy.md": {
     "space": "PC",
     "page_id": "7012674",
-    "last_synced": "2025-12-01T05:27:55.350564+00:00Z"
+    "last_synced": "2025-12-01T23:38:31.827000+00:00Z"
   },
   "docs/2_architecture/adrs/adr_013_geospatial_ingestion.md": {
     "space": "PC",
     "page_id": "7012702",
-    "last_synced": "2025-12-01T05:27:56.426412+00:00Z"
+    "last_synced": "2025-12-01T23:38:33.085302+00:00Z"
   },
   "docs/3_runbooks/complete_workflow_runbook.md": {
     "space": "PC",
     "page_id": "7012732",
-    "last_synced": "2025-12-01T05:27:57.347944+00:00Z"
+    "last_synced": "2025-12-01T23:38:34.422565+00:00Z"
   },
   "docs/3_runbooks/confluence_cli_runbook.md": {
     "space": "PC",
     "page_id": "7012752",
-    "last_synced": "2025-12-01T05:27:58.371742+00:00Z"
+    "last_synced": "2025-12-01T23:38:35.521575+00:00Z"
   },
   "docs/3_runbooks/confluence_daily_sync_cron.md": {
     "space": "PC",
     "page_id": "7897235",
-    "last_synced": "2025-12-01T05:27:59.006661+00:00Z"
+    "last_synced": "2025-12-01T23:38:36.137119+00:00Z"
   },
   "docs/3_runbooks/jira_cli_runbook.md": {
     "space": "PC",
     "page_id": "7766208",
-    "last_synced": "2025-12-01T05:28:00.438224+00:00Z"
+    "last_synced": "2025-12-01T23:38:37.161753+00:00Z"
   },
   "docs/3_runbooks/pgbackrest_backup_restore.md": {
     "space": "PC",
     "page_id": "7766228",
-    "last_synced": "2025-12-01T05:28:01.649281+00:00Z"
+    "last_synced": "2025-12-01T23:38:37.964014+00:00Z"
   },
   "docs/3_runbooks/valet_ingestion.md": {
     "space": "PC",
     "page_id": "7897255",
-    "last_synced": "2025-12-01T05:28:02.467504+00:00Z"
+    "last_synced": "2025-12-01T23:38:38.772252+00:00Z"
   },
   "docs/4_guides/alembic_migration_setup_guide.md": {
     "space": "PC",
     "page_id": "7012772",
-    "last_synced": "2025-12-01T05:28:03.287801+00:00Z"
+    "last_synced": "2025-12-01T23:38:39.727579+00:00Z"
   },
   "docs/4_guides/gis_workflow.md": {
     "space": "PC",
     "page_id": "7176355",
-    "last_synced": "2025-12-01T05:28:04.313189+00:00Z"
+    "last_synced": "2025-12-01T23:38:40.539296+00:00Z"
   },
   "docs/4_guides/git_workflow_guide.md": {
     "space": "PC",
     "page_id": "7176375",
-    "last_synced": "2025-12-01T05:28:05.436915+00:00Z"
+    "last_synced": "2025-12-01T23:38:41.478856+00:00Z"
   },
-  "docs/7_troubleshooting/2025-11-17_post_mortem_data_persistence_failure.md": {
+  "docs/6_troubleshooting/2025-11-17_post_mortem_data_persistence_failure.md": {
     "space": "PC",
     "page_id": "7766248",
-    "last_synced": "2025-12-01T05:28:06.207255+00:00Z"
+    "last_synced": "2025-12-01T23:38:42.195923+00:00Z"
   },
   "docs/session_notes/2025-11-27_CHRONOS-213_HANDOFF.md": {
     "space": "PC",
     "page_id": "7176395",
-    "last_synced": "2025-12-01T05:28:07.014137+00:00Z"
+    "last_synced": "2025-12-01T23:38:42.851860+00:00Z"
   },
   "docs/session_notes/2025-11-27_Sprint7_Phase1_COMPLETE.md": {
     "space": "PC",
     "page_id": "7766268",
-    "last_synced": "2025-12-01T05:28:07.897877+00:00Z"
+    "last_synced": "2025-12-01T23:38:43.895186+00:00Z"
   },
   "docs/session_notes/2025-11-27_sprint6_completion_session.md": {
     "space": "PC",
     "page_id": "7766288",
-    "last_synced": "2025-12-01T05:28:08.816885+00:00Z"
+    "last_synced": "2025-12-01T23:38:44.798865+00:00Z"
   },
   "docs/1_platform_concepts/architecture.md": {
     "space": "PC",
     "page_id": "7176415",
-    "last_synced": "2025-12-01T05:28:09.552892+00:00Z"
+    "last_synced": "2025-12-01T23:38:45.569678+00:00Z"
   },
   "docs/1_platform_concepts/documentation_structure.md": {
     "space": "PC",
     "page_id": "7176437",
-    "last_synced": "2025-12-01T05:28:10.191837+00:00Z"
+    "last_synced": "2025-12-01T23:38:46.388413+00:00Z"
   },
   "docs/1_platform_concepts/layer_structure.md": {
     "space": "PC",
     "page_id": "7176457",
-    "last_synced": "2025-12-01T05:28:10.864370+00:00Z"
+    "last_synced": "2025-12-01T23:38:47.432230+00:00Z"
   },
   "docs/1_platform_concepts/orchestration_architecture.md": {
     "space": "PC",
     "page_id": "7897275",
-    "last_synced": "2025-12-01T05:28:11.683601+00:00Z"
+    "last_synced": "2025-12-01T23:38:48.325710+00:00Z"
   },
   "docs/1_platform_concepts/project_structure.md": {
     "space": "PC",
     "page_id": "7176477",
-    "last_synced": "2025-12-01T05:28:12.460306+00:00Z"
+    "last_synced": "2025-12-01T23:38:49.211676+00:00Z"
   },
   "docs/1_platform_concepts/resilient_project_workflow.md": {
     "space": "PC",
     "page_id": "1736707",
-    "last_synced": "2025-12-01T05:28:13.111572+00:00Z"
+    "last_synced": "2025-12-01T23:38:49.973525+00:00Z"
   },
   "docs/1_platform_concepts/style_guide.md": {
     "space": "PC",
     "page_id": "7766326",
-    "last_synced": "2025-12-01T05:28:13.936535+00:00Z"
+    "last_synced": "2025-12-01T23:38:51.502355+00:00Z"
   },
   "docs/0_project_vision_and_strategy/1_architectural_deep_dive.md": {
     "space": "PC",
     "page_id": "7897295",
-    "last_synced": "2025-12-01T05:28:14.755619+00:00Z"
+    "last_synced": "2025-12-01T23:38:52.801550+00:00Z"
   },
   "docs/0_project_vision_and_strategy/2_the_phoenix_plan.md": {
     "space": "PC",
     "page_id": "7012792",
-    "last_synced": "2025-12-01T05:28:15.580881+00:00Z"
+    "last_synced": "2025-12-01T23:38:54.066497+00:00Z"
   },
   "docs/0_project_vision_and_strategy/3_llm_context_transfer_protocol.md": {
     "space": "PC",
     "page_id": "7012812",
-    "last_synced": "2025-12-01T05:28:16.413999+00:00Z"
+    "last_synced": "2025-12-01T23:38:54.939059+00:00Z"
   },
   "docs/0_project_vision_and_strategy/outreach/2025-11-15_investor_pitch_script.md": {
     "space": "PC",
     "page_id": "7012832",
-    "last_synced": "2025-12-01T05:28:16.976614+00:00Z"
+    "last_synced": "2025-12-01T23:38:55.520887+00:00Z"
   },
   "docs/0_project_vision_and_strategy/outreach/diagrams/conversation_navigator.md": {
     "space": "PC",
     "page_id": "7176497",
-    "last_synced": "2025-12-01T05:28:17.622233+00:00Z"
+    "last_synced": "2025-12-01T23:38:56.203896+00:00Z"
   },
   "docs/0_project_vision_and_strategy/project_tracking/sprint_summaries/SPRINT4_SUMMARY.md": {
     "space": "PC",
     "page_id": "3997736",
-    "last_synced": "2025-12-01T05:28:18.234648+00:00Z"
+    "last_synced": "2025-12-01T23:38:56.974574+00:00Z"
   },
   "docs/0_project_vision_and_strategy/ssot_documentation_index.md": {
     "space": "PC",
     "page_id": "7176517",
-    "last_synced": "2025-12-01T05:28:18.850895+00:00Z"
+    "last_synced": "2025-12-01T23:38:57.659322+00:00Z"
   },
   "docs/2_architecture/analytical_design/abstractions/geospatial_abstractions.md": {
     "space": "PC",
     "page_id": "7012852",
-    "last_synced": "2025-12-01T05:28:19.516618+00:00Z"
+    "last_synced": "2025-12-01T23:38:58.555907+00:00Z"
   },
   "docs/2_architecture/analytical_design/postgis_fundamentals.md": {
     "space": "PC",
     "page_id": "7012872",
-    "last_synced": "2025-12-01T05:28:20.257775+00:00Z"
+    "last_synced": "2025-12-01T23:38:59.560053+00:00Z"
   },
   "docs/2_architecture/analytical_design/rice_framework.md": {
     "space": "PC",
     "page_id": "7012892",
-    "last_synced": "2025-12-01T05:28:20.934528+00:00Z"
+    "last_synced": "2025-12-01T23:39:00.321403+00:00Z"
   },
   "docs/2_architecture/data_governance/asset_catalog_guide.md": {
     "space": "PC",
     "page_id": "7897328",
-    "last_synced": "2025-12-01T05:28:21.718671+00:00Z"
+    "last_synced": "2025-12-01T23:39:01.046687+00:00Z"
   },
   "docs/2_architecture/data_governance/ontology_hub.md": {
     "space": "PC",
     "page_id": "7766348",
-    "last_synced": "2025-12-01T05:28:22.729878+00:00Z"
+    "last_synced": "2025-12-01T23:39:02.041886+00:00Z"
   },
   "docs/DOCKER_FIX.md": {
     "space": "PC",
     "page_id": "7897348",
-    "last_synced": "2025-12-01T05:28:23.440288+00:00Z"
+    "last_synced": "2025-12-01T23:39:02.772706+00:00Z"
   },
   "docs/LLM_ONBOARDING_GUIDE.md": {
     "space": "PC",
     "page_id": "7897368",
-    "last_synced": "2025-12-01T05:28:24.255431+00:00Z"
+    "last_synced": "2025-12-01T23:39:03.927268+00:00Z"
   },
   "docs/OPERATIONS_QUICK_REFERENCE.md": {
     "space": "PC",
     "page_id": "7766368",
-    "last_synced": "2025-12-01T05:28:25.200507+00:00Z"
+    "last_synced": "2025-12-01T23:39:04.815442+00:00Z"
   },
   "docs/README.md": {
     "space": "PC",
     "page_id": "7176545",
-    "last_synced": "2025-12-01T05:28:27.587434+00:00Z"
+    "last_synced": "2025-12-01T23:39:05.831532+00:00Z"
   },
   "docs/3_runbooks/confluence_comprehensive_sync_guide.md": {
     "space": "PC",
     "title": "\ud83d\udcda Confluence Comprehensive Documentation Sync Guide",
     "page_id": "7897602",
-    "last_synced": "2025-12-01T05:28:28.438647+00:00Z"
+    "last_synced": "2025-12-01T23:39:07.030789+00:00Z"
   }
 }
