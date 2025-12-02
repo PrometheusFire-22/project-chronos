@@ -301,34 +301,38 @@ sudo systemctl start unattended-upgrades
 
 ---
 
-## Security Audit Checklist
+### Security Audit Checklist
+
+> [!IMPORTANT]
+> A formal audit was conducted on 2025-12-02. See the full report: [Security Audit Report](file:///home/prometheus/coding/finance/project-chronos/docs/3_runbooks/security_audit_report.md)
 
 Use this checklist to verify security hardening is fully functional:
 
 ### Network Security
-- [ ] UFW firewall is active: `sudo ufw status`
-- [ ] Only ports 22, 80, 443, 5432 are open
-- [ ] Default incoming policy is deny
-- [ ] Can SSH from whitelisted IP
-- [ ] Cannot telnet to closed ports from external IP
+- [x] UFW firewall is active: `sudo ufw status`
+- [x] Only ports 22, 80, 443, 5432 are open
+- [x] Default incoming policy is deny
+- [x] Can SSH from whitelisted IP
+- [x] Cannot telnet to closed ports from external IP
+- [x] **Policy Documented:** [Access Control Policy](file:///home/prometheus/coding/finance/project-chronos/docs/2_architecture/security/access_control_policy.md)
 
 ### Intrusion Prevention
-- [ ] Fail2ban service is running: `sudo systemctl status fail2ban`
-- [ ] SSH jail is enabled: `sudo fail2ban-client status sshd`
-- [ ] Operator IP is whitelisted: `sudo fail2ban-client get sshd ignoreip`
-- [ ] Test ban: 3 failed SSH attempts from non-whitelisted IP triggers 1-hour ban
+- [x] Fail2ban service is running: `sudo systemctl status fail2ban`
+- [x] SSH jail is enabled: `sudo fail2ban-client status sshd`
+- [x] Operator IP is whitelisted: `sudo fail2ban-client get sshd ignoreip`
+- [x] Test ban: 3 failed SSH attempts from non-whitelisted IP triggers 1-hour ban
 
 ### SSH Hardening
-- [ ] Root login disabled: `grep PermitRootLogin /etc/ssh/sshd_config`
-- [ ] Password auth disabled: `grep PasswordAuthentication /etc/ssh/sshd_config`
-- [ ] Can SSH with key: `ssh -i ~/.ssh/aws-lightsail/chronos-prod-db ubuntu@16.52.210.100`
-- [ ] Cannot SSH with password (should fail)
-- [ ] Cannot SSH as root (should fail)
+- [x] Root login disabled: `grep PermitRootLogin /etc/ssh/sshd_config`
+- [x] Password auth disabled: `grep PasswordAuthentication /etc/ssh/sshd_config`
+- [x] Can SSH with key: `ssh -i ~/.ssh/aws-lightsail/chronos-prod-db ubuntu@16.52.210.100`
+- [x] Cannot SSH with password (should fail)
+- [x] Cannot SSH as root (should fail)
 
 ### Automatic Updates
-- [ ] Unattended-upgrades service running: `sudo systemctl status unattended-upgrades`
-- [ ] Security updates configured: `cat /etc/apt/apt.conf.d/50unattended-upgrades`
-- [ ] No pending security updates: `sudo apt list --upgradable`
+- [x] Unattended-upgrades service running: `sudo systemctl status unattended-upgrades`
+- [x] Security updates configured: `cat /etc/apt/apt.conf.d/50unattended-upgrades`
+- [x] No pending security updates: `sudo apt list --upgradable`
 
 ---
 
@@ -379,22 +383,159 @@ sudo systemctl restart fail2ban
 
 ---
 
-## Next Steps (Phase 2B)
+## Phase 2B: Let's Encrypt SSL Configuration
 
-**Ticket:** CHRONOS-239 - Let's Encrypt SSL Setup (Requires MFA)
+**Status:** ✅ Complete
+**Date Completed:** 2025-12-02
+**Jira Ticket:** CHRONOS-239
 
-**Blocked By:** MFA access to AWS Console or BlueHost (available 2025-12-02)
+### Let's Encrypt Certificates
 
-**Will Include:**
-- Let's Encrypt SSL certificates for automatonicai.com
-- PostgreSQL SSL/TLS encryption enabled
-- Certbot auto-renewal configured
-- Client applications updated to use SSL connections
+**Domains:** automatonicai.com, www.automatonicai.com
+**Expiry:** 2026-03-02 (90 days)
+**Renewal Method:** Automatic via certbot.timer + Route53 DNS-01 challenge
 
-**Prerequisites:**
-- ✅ UFW firewall allows ports 80/443 (already done)
-- ⏳ DNS access for Let's Encrypt verification (needs MFA)
-- ⏳ Domain configured (automatonicai.com)
+**Certificate Locations:**
+- Full chain: `/etc/letsencrypt/live/automatonicai.com/fullchain.pem`
+- Private key: `/etc/letsencrypt/live/automatonicai.com/privkey.pem`
+- Certificate: `/etc/letsencrypt/live/automatonicai.com/cert.pem`
+- Chain: `/etc/letsencrypt/live/automatonicai.com/chain.pem`
+
+**IAM Credentials for Auto-Renewal:**
+- AWS IAM User: `chronos-certbot`
+- Policy: `chronos-certbot-route53` (Route53 DNS modification only)
+- Stored in: KeePassXC → Production/AWS/chronos-certbot
+
+**Verification Commands:**
+```bash
+# Check certificate validity
+sudo certbot certificates
+
+# View certificate details
+openssl x509 -in /etc/letsencrypt/live/automatonicai.com/fullchain.pem -noout -dates -subject
+
+# Test auto-renewal (dry run)
+sudo certbot renew --dry-run
+
+# Manual renewal (if needed)
+sudo certbot renew --dns-route53
+```
+
+### PostgreSQL SSL Configuration
+
+**Status:** ✅ Enabled
+
+**Configuration:**
+```ini
+ssl = on
+ssl_cert_file = 'server.crt'  # Links to fullchain.pem
+ssl_key_file = 'server.key'   # Links to privkey.pem
+```
+
+**Certificate Files in Container:**
+- `/var/lib/postgresql/data/server.crt` → Copy of fullchain.pem
+- `/var/lib/postgresql/data/server.key` → Copy of privkey.pem
+- Ownership: `postgres:postgres` (UID 70)
+- Permissions: `644` (cert), `600` (key)
+
+**Verification Commands:**
+```bash
+# Check SSL is enabled
+docker exec chronos-db psql -U chronos -c "SHOW ssl;"
+
+# Check certificate files
+docker exec chronos-db psql -U chronos -c "SHOW ssl_cert_file;"
+docker exec chronos-db psql -U chronos -c "SHOW ssl_key_file;"
+
+# Test SSL connection (local)
+docker exec chronos-db psql "postgresql://chronos@localhost:5432/chronos?sslmode=require" -c "SELECT version();"
+```
+
+**Client Connection String:**
+All client applications should use SSL connections:
+```
+postgresql://chronos:PASSWORD@16.52.210.100:5432/chronos?sslmode=require
+```
+
+### Certificate Renewal Process
+
+**Automatic Renewal:**
+- Certbot timer runs twice daily
+- Uses Route53 DNS-01 challenge (no port 80/443 needed)
+- Automatically updates Let's Encrypt certificates
+- **Manual step required:** Copy renewed certificates to PostgreSQL container
+
+**Manual Certificate Update (after renewal):**
+```bash
+# SSH into Lightsail instance
+ssh -i ~/.ssh/aws-lightsail/chronos-prod-db ubuntu@16.52.210.100
+
+# Copy renewed certificates
+sudo cp /etc/letsencrypt/live/automatonicai.com/fullchain.pem /tmp/server.crt
+sudo cp /etc/letsencrypt/live/automatonicai.com/privkey.pem /tmp/server.key
+sudo chmod 644 /tmp/server.crt
+sudo chmod 600 /tmp/server.key
+
+# Update PostgreSQL container
+docker run --rm -v chronos-db_timescale-data:/data -v /tmp:/tmp alpine sh -c "
+  cp /tmp/server.crt /data/server.crt
+  cp /tmp/server.key /data/server.key
+  chmod 600 /data/server.key
+  chmod 644 /data/server.crt
+  chown 70:70 /data/server.key /data/server.crt
+"
+
+# Restart PostgreSQL
+docker restart chronos-db
+
+# Verify SSL still works
+docker exec chronos-db psql -U chronos -c "SHOW ssl;"
+
+# Clean up
+sudo rm /tmp/server.crt /tmp/server.key
+```
+
+### Troubleshooting
+
+**Issue: PostgreSQL won't start after enabling SSL**
+
+**Symptoms:** Container in restart loop, logs show "could not load server certificate file"
+
+**Solution:**
+```bash
+# Disable SSL temporarily
+docker run --rm -v chronos-db_timescale-data:/data alpine sh -c "sed -i \"s/ssl = 'on'/ssl = 'off'/g\" /data/postgresql.auto.conf"
+
+# Start container
+docker start chronos-db
+
+# Copy certificates (see manual update steps above)
+
+# Re-enable SSL
+docker run --rm -v chronos-db_timescale-data:/data alpine sh -c "sed -i \"s/ssl = 'off'/ssl = 'on'/g\" /data/postgresql.auto.conf"
+
+# Restart
+docker restart chronos-db
+```
+
+**Issue: Certificate renewal fails**
+
+**Symptoms:** Certbot renewal dry-run fails
+
+**Solutions:**
+```bash
+# Check AWS credentials are valid
+aws sts get-caller-identity
+
+# Check Route53 permissions
+aws route53 list-hosted-zones
+
+# Manually renew with debug output
+sudo certbot renew --dns-route53 --dry-run --debug
+
+# Check certbot logs
+sudo tail -100 /var/log/letsencrypt/letsencrypt.log
+```
 
 ---
 
@@ -417,9 +558,12 @@ sudo systemctl restart fail2ban
 | 2025-12-01 | SSH hardened (key-only, no root) | CHRONOS-238 |
 | 2025-12-01 | Automatic security updates enabled | CHRONOS-238 |
 | 2025-12-01 | Operator IP (65.93.136.182) whitelisted | CHRONOS-238 |
+| 2025-12-02 | Let's Encrypt SSL certificates obtained (Phase 2B) | CHRONOS-239 |
+| 2025-12-02 | PostgreSQL SSL/TLS encryption enabled | CHRONOS-239 |
+| 2025-12-02 | Certbot auto-renewal configured via Route53 DNS-01 | CHRONOS-239 |
 
 ---
 
-**🤖 Generated with Claude Code (Anthropic)**
-**Last Updated:** 2025-12-01
+**🤖 Generated with Claude Code (Anthropic) & Antigravity (Google Deepmind)**
+**Last Updated:** 2025-12-02
 **Status:** ✅ Production
