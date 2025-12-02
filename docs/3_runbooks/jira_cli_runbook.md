@@ -1,7 +1,7 @@
 # 🎯 Jira CLI Runbook
 
-**Version:** 1.0  
-**Last Updated:** 2025-11-20  
+**Version:** 1.1
+**Last Updated:** 2025-12-02
 **Owner:** Project Chronos Team
 
 ---
@@ -155,12 +155,60 @@ python src/scripts/jira_cli.py list
 ```bash
 python src/scripts/jira_cli.py list --status "To Do"
 python src/scripts/jira_cli.py list --status "In Progress"
+python src/scripts/jira_cli.py list --status "Done"
+```
+
+**Filter by sprint:** ⭐ NEW
+
+```bash
+# Using sprint number
+python src/scripts/jira_cli.py list --sprint 7
+
+# Or explicit sprint label
+python src/scripts/jira_cli.py list --sprint "sprint-7"
+
+# View Sprint 7 completed tickets
+python src/scripts/jira_cli.py list --sprint 7 --status "Done"
+
+# View Sprint 7 remaining work
+python src/scripts/jira_cli.py list --sprint 7 --status "To Do"
+```
+
+**Filter by label:** ⭐ NEW
+
+```bash
+# Single label
+python src/scripts/jira_cli.py list --label "infrastructure"
+
+# Multiple filters
+python src/scripts/jira_cli.py list --label "security" --status "To Do"
+```
+
+**Filter by resolution:** ⭐ NEW
+
+```bash
+# Find superseded tickets
+python src/scripts/jira_cli.py list --resolution "Superseded"
+
+# Find cancelled tickets
+python src/scripts/jira_cli.py list --resolution "Cancelled"
+```
+
+**Combine filters:**
+
+```bash
+# Sprint 7 infrastructure tickets that are done
+python src/scripts/jira_cli.py list \
+  --sprint 7 \
+  --label "infrastructure" \
+  --status "Done"
 ```
 
 **Limit results:**
 
 ```bash
 python src/scripts/jira_cli.py list --limit 10
+python src/scripts/jira_cli.py list --sprint 7 --limit 50
 ```
 
 ---
@@ -174,7 +222,40 @@ python src/scripts/jira_cli.py delete CHRONOS-999
 
 ---
 
-### 6. Get Next Ticket ID
+### 6. Bulk Close Tickets ⭐ NEW
+
+Close multiple tickets at once with a supersession reason:
+
+```bash
+# Basic bulk close
+python src/scripts/jira_cli.py bulk-close CHRONOS-202,CHRONOS-204,CHRONOS-205 \
+  --reason "Superseded by CHRONOS-213 (AWS Lightsail setup)"
+
+# Close with custom status
+python src/scripts/jira_cli.py bulk-close CHRONOS-150,CHRONOS-151 \
+  --reason "Cancelled due to scope change" \
+  --status "Done"
+```
+
+**Use cases:**
+- Closing duplicate tickets
+- Superseding old tickets with new consolidated ones
+- Batch cleanup of obsolete tickets
+
+**Output:**
+```
+✅ CHRONOS-202 closed
+✅ CHRONOS-204 closed
+✅ CHRONOS-205 closed
+
+Summary:
+  Success: 3
+  Failed: 0
+```
+
+---
+
+### 7. Get Next Ticket ID
 
 ```bash
 python src/scripts/jira_cli.py next-id
@@ -273,6 +354,51 @@ python src/scripts/jira_cli.py create \
 
 # Immediately mark as done
 python src/scripts/jira_cli.py update CHRONOS-XXX --status "Done"
+```
+
+---
+
+### Workflow 4: Sprint Cleanup ⭐ NEW
+
+```bash
+# 1. Review Sprint 7 tickets
+python src/scripts/jira_cli.py list --sprint 7
+
+# 2. Find duplicates
+python src/scripts/jira_cli.py list --sprint 7 --status "To Do"
+
+# 3. Check specific tickets
+python src/scripts/jira_cli.py read CHRONOS-202
+python src/scripts/jira_cli.py read CHRONOS-204
+
+# 4. Bulk close duplicates
+python src/scripts/jira_cli.py bulk-close CHRONOS-202,CHRONOS-204,CHRONOS-205 \
+  --reason "Superseded by CHRONOS-213 (AWS Lightsail setup)"
+
+# 5. Verify cleanup
+python src/scripts/jira_cli.py list --sprint 7 --status "Done"
+python src/scripts/jira_cli.py list --resolution "Superseded"
+```
+
+---
+
+### Workflow 5: Sprint Planning ⭐ NEW
+
+```bash
+# 1. List backlog tickets
+python src/scripts/jira_cli.py list --status "To Do" --limit 50
+
+# 2. Tag tickets for Sprint 8
+python src/scripts/jira_cli.py update CHRONOS-228 --labels "sprint-8,frontend"
+python src/scripts/jira_cli.py update CHRONOS-229 --labels "sprint-8,frontend"
+python src/scripts/jira_cli.py update CHRONOS-230 --labels "sprint-8,backend"
+
+# 3. Review Sprint 8 plan
+python src/scripts/jira_cli.py list --sprint 8
+
+# 4. Track progress during sprint
+python src/scripts/jira_cli.py list --sprint 8 --status "In Progress"
+python src/scripts/jira_cli.py list --sprint 8 --status "Done"
 ```
 
 ---
@@ -424,9 +550,20 @@ fi
 
 ## 🔄 Version History
 
-| Version | Date       | Changes                  |
-| ------- | ---------- | ------------------------ |
-| 1.0     | 2025-11-20 | Initial runbook creation |
+| Version | Date       | Changes                                                                 |
+| ------- | ---------- | ----------------------------------------------------------------------- |
+| 1.1     | 2025-12-02 | Added sprint/label/resolution filtering, bulk-close command, workflows |
+| 1.0     | 2025-11-20 | Initial runbook creation                                                |
+
+---
+
+## 📚 See Also
+
+- **Man Page:** `docs/man/jira_cli.md` - Quick reference
+- **ADR-003:** Pragmatic Agile Jira Workflow
+- **ADR-007:** Jira-First Workflow
+- **Confluence CLI:** `docs/3_runbooks/confluence_cli_runbook.md`
+- **Complete Workflow:** `docs/3_runbooks/complete_workflow_runbook.md`
 
 ---
 

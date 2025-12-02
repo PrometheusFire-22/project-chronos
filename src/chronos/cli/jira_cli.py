@@ -5,11 +5,29 @@
 Full CRUD operations for Jira tickets with rich formatting
 
 Usage:
+    # Create tickets
     ./jira-cli create --summary "New ticket" --description "Details"
+
+    # Read tickets
     ./jira-cli read CHRONOS-140
+
+    # Update tickets
     ./jira-cli update CHRONOS-140 --status "In Progress" --points 5
+    ./jira-cli update CHRONOS-140 --status "Done" --description "Superseded by CHRONOS-200"
+
+    # Delete tickets
     ./jira-cli delete CHRONOS-140
+
+    # List tickets with filters
     ./jira-cli list --status "To Do"
+    ./jira-cli list --sprint 7
+    ./jira-cli list --label "infrastructure"
+    ./jira-cli list --resolution "Superseded"
+
+    # Bulk operations
+    ./jira-cli bulk-close CHRONOS-140,CHRONOS-141,CHRONOS-142 --reason "Superseded by CHRONOS-200"
+
+    # Get next ticket ID
     ./jira-cli next-id
 """
 import os
@@ -167,6 +185,9 @@ def read(ticket_id):
         table.add_row("Created", fields["created"][:10])
         table.add_row("Updated", fields["updated"][:10])
 
+        if fields.get("resolution"):
+            table.add_row("Resolution", fields["resolution"]["name"])
+
         if fields.get("labels"):
             table.add_row("Labels", ", ".join(fields["labels"]))
 
@@ -306,8 +327,11 @@ def delete(ticket_id):
 
 @cli.command()
 @click.option("--status", help="Filter by status")
+@click.option("--sprint", help="Filter by sprint label (e.g., 'sprint-7')")
+@click.option("--label", help="Filter by any label")
+@click.option("--resolution", help="Filter by resolution")
 @click.option("--limit", default=20, help="Number of results")
-def list(status, limit):
+def list(status, sprint, label, resolution, limit):
     """📋 List tickets"""
 
     console.print(Panel.fit("[bold cyan]Listing Tickets[/bold cyan]", border_style="cyan"))
@@ -316,6 +340,14 @@ def list(status, limit):
     jql = f"project = {JIRA_PROJECT_KEY}"
     if status:
         jql += f" AND status = '{status}'"
+    if sprint:
+        # Support both "sprint-7" and "7" formats
+        sprint_label = sprint if sprint.startswith("sprint-") else f"sprint-{sprint}"
+        jql += f" AND labels = '{sprint_label}'"
+    if label:
+        jql += f" AND labels = '{label}'"
+    if resolution:
+        jql += f" AND resolution = '{resolution}'"
     jql += " ORDER BY created DESC"
 
     try:
@@ -358,6 +390,71 @@ def list(status, limit):
     except Exception as e:
         console.print(f"[bold red]❌ Error:[/bold red] {str(e)}")
         sys.exit(1)
+
+
+@cli.command()
+@click.argument("ticket_ids")
+@click.option(
+    "--reason", required=True, help="Reason for closing (e.g., 'Superseded by CHRONOS-XXX')"
+)
+@click.option("--status", default="Done", help="Status to set (default: Done)")
+def bulk_close(ticket_ids, reason, status):
+    """📦 Bulk close multiple tickets
+
+    Example:
+        jira bulk-close CHRONOS-140,CHRONOS-141,CHRONOS-142 --reason "Superseded by CHRONOS-200"
+    """
+
+    console.print(Panel.fit("[bold cyan]Bulk Closing Tickets[/bold cyan]", border_style="cyan"))
+
+    tickets = [tid.strip() for tid in ticket_ids.split(",")]
+    results = {"success": [], "failed": []}
+
+    for ticket_id in tickets:
+        try:
+            # Update description with reason
+            response = requests.put(
+                f"{JIRA_URL}/rest/api/3/issue/{ticket_id}",
+                auth=(JIRA_EMAIL, JIRA_API_TOKEN),
+                headers={"Content-Type": "application/json"},
+                json={"fields": {"description": format_description(reason)}},
+                timeout=30,
+            )
+            response.raise_for_status()
+
+            # Update status
+            trans_response = requests.get(
+                f"{JIRA_URL}/rest/api/3/issue/{ticket_id}/transitions",
+                auth=(JIRA_EMAIL, JIRA_API_TOKEN),
+                timeout=30,
+            )
+            trans_response.raise_for_status()
+
+            transitions = trans_response.json()["transitions"]
+            trans_id = next(
+                (t["id"] for t in transitions if t["name"].lower() == status.lower()), None
+            )
+
+            if trans_id:
+                requests.post(
+                    f"{JIRA_URL}/rest/api/3/issue/{ticket_id}/transitions",
+                    auth=(JIRA_EMAIL, JIRA_API_TOKEN),
+                    headers={"Content-Type": "application/json"},
+                    json={"transition": {"id": trans_id}},
+                    timeout=30,
+                )
+
+            results["success"].append(ticket_id)
+            console.print(f"[green]✅ {ticket_id} closed[/green]")
+
+        except Exception as e:
+            results["failed"].append({"ticket": ticket_id, "error": str(e)})
+            console.print(f"[red]❌ {ticket_id} failed: {str(e)}[/red]")
+
+    # Summary
+    console.print("\n[bold]Summary:[/bold]")
+    console.print(f"  Success: {len(results['success'])}")
+    console.print(f"  Failed: {len(results['failed'])}")
 
 
 @cli.command()
