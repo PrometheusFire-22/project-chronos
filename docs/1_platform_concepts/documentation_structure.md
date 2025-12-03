@@ -15,5 +15,5 @@ docs/
 ├── 4_guides/
 │   └── gis_workflow.md
 ├── 5_reference/
-├── 6_troubleshooting/
+├── 5_troubleshooting/
 └── _archive/
