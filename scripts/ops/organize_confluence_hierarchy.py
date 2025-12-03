@@ -63,7 +63,7 @@ HIERARCHY = {
             "2_architecture",
             "3_runbooks",
             "4_guides",
-            "6_troubleshooting",
+            "5_troubleshooting",
             "session_notes",
             "quick_ref",
         ],
@@ -115,10 +115,10 @@ HIERARCHY = {
         "description": "How-to guides and tutorials",
         "pattern": "docs/4_guides/",
     },
-    "6_troubleshooting": {
+    "5_troubleshooting": {
         "title": "📂 6. Troubleshooting",
         "description": "Problem resolution and post-mortems",
-        "pattern": "docs/6_troubleshooting/",
+        "pattern": "docs/5_troubleshooting/",
     },
     "session_notes": {
         "title": "📂 Session Notes (Chronological)",

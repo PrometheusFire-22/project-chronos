@@ -39,7 +39,7 @@ API references, CLI references, and database schema documentation.
 
 
 
-### [6_troubleshooting/](6_troubleshooting/)
+### [5_troubleshooting/](5_troubleshooting/)
 Post-mortems, troubleshooting guides, and incident reports.
 
 ### [templates/](templates/)
