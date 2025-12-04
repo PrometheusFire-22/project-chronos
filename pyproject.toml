@@ -50,6 +50,11 @@ dependencies = [
     "markdown2>=2.5.0",
     "jmespath>=1.0.0",
 
+    # Google Workspace integration
+    "google-api-python-client>=2.100.0",
+    "google-auth-httplib2>=0.1.1",
+    "google-auth-oauthlib>=1.1.0",
+
     # Geospatial
     "geopandas>=0.14.1",
     "geoalchemy2>=0.18.0",
@@ -294,3 +299,4 @@ jira = "chronos.cli.jira_cli:cli"
 confluence = "chronos.cli.confluence_cli:cli"
 jira-ingest = "chronos.cli.jira_ingest:main"
 jira-update = "chronos.cli.jira_update:main"
+google = "chronos.cli.google_cli:google"
