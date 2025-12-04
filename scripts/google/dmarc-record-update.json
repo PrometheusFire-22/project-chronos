@@ -1,0 +1,16 @@
+{
+  "Comment": "Add DMARC record for Google Workspace",
+  "Changes": [
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "_dmarc.automatonicai.com",
+        "Type": "TXT",
+        "TTL": 3600,
+        "ResourceRecords": [
+          {"Value": "\"v=DMARC1; p=quarantine; rua=mailto:geoff@automatonicai.com; pct=100; adkim=s; aspf=s\""}
+        ]
+      }
+    }
+  ]
+}
