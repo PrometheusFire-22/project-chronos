@@ -299,5 +299,23 @@
     "title": "\ud83d\udcda Confluence Comprehensive Documentation Sync Guide",
     "page_id": "7897602",
     "last_synced": "2025-12-02T15:54:47.889831+00:00Z"
+  },
+  "docs/3_runbooks/cloudwatch_monitoring.md": {
+    "page_id": "9601025",
+    "space": "PC",
+    "last_synced": "2025-12-04T04:30:00+00:00Z",
+    "title": "CloudWatch Monitoring"
+  },
+  "docs/3_runbooks/disaster_recovery_technical.md": {
+    "page_id": "9568258",
+    "space": "PC",
+    "last_synced": "2025-12-04T04:30:00+00:00Z",
+    "title": "Technical Disaster Recovery"
+  },
+  "docs/3_runbooks/disaster_recovery_operational.md": {
+    "page_id": "9666561",
+    "space": "PC",
+    "last_synced": "2025-12-04T04:30:00+00:00Z",
+    "title": "Operational Disaster Recovery (Bus Factor)"
   }
 }
