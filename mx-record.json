@@ -1,0 +1,18 @@
+{
+  "Comment": "Add Google Workspace MX Record",
+  "Changes": [
+    {
+      "Action": "CREATE",
+      "ResourceRecordSet": {
+        "Name": "automatonicai.com",
+        "Type": "MX",
+        "TTL": 300,
+        "ResourceRecords": [
+          {
+            "Value": "1 SMTP.GOOGLE.COM."
+          }
+        ]
+      }
+    }
+  ]
+}
