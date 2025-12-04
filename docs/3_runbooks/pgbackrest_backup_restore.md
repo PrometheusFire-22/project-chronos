@@ -269,26 +269,26 @@ aws s3 ls s3://project-chronos-backups/ --recursive --summarize --human-readable
 
 **Steps:**
 
-1. **Provision new server**
-   - Create new Lightsail instance
-   - Install Docker and Docker Compose
-   - Copy docker-compose.yml and Dockerfile
+1.  **Provision new server**
+    - Create new Lightsail instance
+    - Install Docker and Docker Compose
+    - Copy docker-compose.yml and Dockerfile
 
-2. **Install pgBackRest in new container**
-   ```bash
-   docker exec -u root chronos-db apk add --no-cache pgbackrest
-   ```
+2.  **Install pgBackRest in new container**
+    ```bash
+    docker exec -u root chronos-db apk add --no-cache pgbackrest
+    ```
 
-3. **Copy pgBackRest configuration**
-   - Transfer `/etc/pgbackrest/pgbackrest.conf` to new container
-   - Update `pg1-path` if needed
+3.  **Copy pgBackRest configuration**
+    - Transfer `/etc/pgbackrest/pgbackrest.conf` to new container
+    - Update `pg1-path` if needed
 
-4. **Restore database**
-   ```bash
-   docker exec -u postgres chronos-db pgbackrest --stanza=chronos --type=immediate --target-action=promote restore
-   ```
+4.  **Restore database**
+    ```bash
+    docker exec -u postgres chronos-db pgbackrest --stanza=chronos --type=immediate --target-action=promote --delta restore
+    ```
 
-5. **Start PostgreSQL and verify**
+5.  **Start PostgreSQL and verify**
 
 **Estimated Time:** 1-2 hours including server provisioning
 
