@@ -21,7 +21,9 @@
 	// ==================================================================
 	"containerEnv": {
 		"PYTHONPATH": "/workspace/src",
-		"TERM": "xterm-256color"
+		"TERM": "xterm-256color",
+		"GOOGLE_SERVICE_ACCOUNT_FILE": "/home/vscode/.config/chronos/google-service-account.json",
+		"GOOGLE_DELEGATED_USER": "geoff@automatonicai.com"
 	},
 	// ==================================================================
 	// Remote Environment Variables
@@ -135,6 +137,12 @@
 	// ==================================================================
 	// Container Features
 	// ==================================================================
+	"features": {
+		"ghcr.io/devcontainers/features/google-cloud-cli:1": {
+			"version": "latest",
+			"installGcloudCLI": true
+		}
+	},
 	// COMMENTED OUT: These cause Antigravity to freeze during container initialization
 	// Both tools are already available:
 	//   - GitHub CLI (gh): Included in base mcr.microsoft.com/devcontainers/python image
@@ -181,10 +189,11 @@
 			"onAutoForward": "ignore"
 		}
 	},
-	// Mount SSH keys and Docker socket
+	// Mount SSH keys, Docker socket, and Google credentials
 	"mounts": [
 		"source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,readonly,type=bind",
-		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+		"source=${localEnv:HOME}/.config/chronos,target=/home/vscode/.config/chronos,readonly,type=bind"
 	],
 	// Shutdown Action
 	"shutdownAction": "stopCompose"
