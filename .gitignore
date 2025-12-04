@@ -99,3 +99,4 @@ docs/.secrets-template.md
 .secrets_tmp/
 *.secrets.md
 *_SECRETS_*.md
+pgbackrest.conf
