@@ -1,0 +1,16 @@
+{
+  "Comment": "Add SPF record for Google Workspace",
+  "Changes": [
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "automatonicai.com",
+        "Type": "TXT",
+        "TTL": 3600,
+        "ResourceRecords": [
+          {"Value": "\"v=spf1 include:_spf.google.com ~all\""}
+        ]
+      }
+    }
+  ]
+}

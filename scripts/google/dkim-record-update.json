@@ -1,0 +1,16 @@
+{
+  "Comment": "Add DKIM record for Google Workspace (split into multiple strings)",
+  "Changes": [
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "google._domainkey.automatonicai.com",
+        "Type": "TXT",
+        "TTL": 3600,
+        "ResourceRecords": [
+          {"Value": "\"v=DKIM1; k=rsa; \" \"p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmQBtKv9t75eytbWXlk+X1zDN2UFOjzjNBjRZkrknW+9PdW1eyulKdpXZBaR3DSUdlS8Q/szOsJt8Ys8hv+T1hI4qk3fm0ypODKvF10fGQJ01BxA9t3cxHMcQvNqAlV1YftRBUr5gLBZwIibjDHVruwYTPivZSU8RX/7VRfIab5VyLcQeekz9B74iml5N5J+nRi3L7Y1Wreq+nieYKcM9PqAW2eFLP3Vzrdfe3b+Y3kcGn8LQ/Mf6j2N3Y4TaA3cwSraqdIZHe8YvWNQfSODqhA8rxZGKWsN4dQNTJzvAfG5GI2ovmAuTr+kt85Yqf74J323+d+DDz0OjyNWZ1nb7uQIDAQAB\""}
+        ]
+      }
+    }
+  ]
+}

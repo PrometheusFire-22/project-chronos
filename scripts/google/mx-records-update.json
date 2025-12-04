@@ -1,0 +1,20 @@
+{
+  "Comment": "Update MX records for Google Workspace - Correct Configuration",
+  "Changes": [
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "automatonicai.com",
+        "Type": "MX",
+        "TTL": 3600,
+        "ResourceRecords": [
+          {"Value": "1 aspmx.l.google.com"},
+          {"Value": "5 alt1.aspmx.l.google.com"},
+          {"Value": "5 alt2.aspmx.l.google.com"},
+          {"Value": "10 alt3.aspmx.l.google.com"},
+          {"Value": "10 alt4.aspmx.l.google.com"}
+        ]
+      }
+    }
+  ]
+}
