@@ -10,7 +10,7 @@ RUN apk update && apk add --no-cache \
     build-base git wget cmake postgresql16-dev \
     clang15 llvm15 openssl-dev ca-certificates \
     curl flex bison perl \
-    aws-cli \
+    aws-cli pgbackrest libbz2 \
     && aws --version
 
 # Install TimescaleDB
