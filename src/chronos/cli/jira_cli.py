@@ -98,7 +98,8 @@ def cli():
 @click.option("--labels", default="", help="Comma-separated labels")
 @click.option("--points", type=int, help="Story points")
 @click.option("--sprint", default="Sprint 3", help="Sprint name")
-def create(summary, description, issue_type, priority, labels, points, sprint):
+@click.option("--parent", help="Parent issue key (for subtasks)")
+def create(summary, description, issue_type, priority, labels, points, sprint, parent):
     """✨ Create new Jira ticket"""
 
     console.print(Panel.fit("[bold cyan]Creating New Ticket[/bold cyan]", border_style="cyan"))
@@ -117,6 +118,10 @@ def create(summary, description, issue_type, priority, labels, points, sprint):
     # Add labels
     if labels:
         payload["fields"]["labels"] = [label.strip() for label in labels.split(",")]
+
+    # Add parent (for subtasks)
+    if parent:
+        payload["fields"]["parent"] = {"key": parent}
 
     try:
         response = requests.post(
@@ -220,7 +225,8 @@ def read(ticket_id):
 @click.option("--points", type=int, help="Story points")
 @click.option("--labels", help="Comma-separated labels")
 @click.option("--resolution", help="Resolution (Done, Cancelled, Superseded)")
-def update(ticket_id, summary, description, status, priority, points, labels, resolution):
+@click.option("--epic", help="Epic key to link this issue to")
+def update(ticket_id, summary, description, status, priority, points, labels, resolution, epic):
     """✏️  Update existing ticket"""
 
     console.print(
@@ -252,6 +258,10 @@ def update(ticket_id, summary, description, status, priority, points, labels, re
         }
         resolution_name = resolution_map.get(resolution.lower(), resolution)
         updates["resolution"] = {"name": resolution_name}
+
+    # Link to epic (using customfield_10014 which is the standard epic link field)
+    if epic:
+        updates["customfield_10014"] = epic
 
     if not updates and not status:
         console.print("[yellow]⚠️  No updates specified[/yellow]")
