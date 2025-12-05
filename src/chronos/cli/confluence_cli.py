@@ -231,9 +231,10 @@ def read(title, space):
 @click.option("--new-title", help="New page title")
 @click.option("--body", help="New page body (markdown)")
 @click.option("--body-file", type=click.Path(exists=True), help="Path to markdown file")
+@click.option("--parent", help="Parent page title (for hierarchy)")
 @click.option("--labels", help="Comma-separated labels")
 @click.option("--banner", is_flag=True, help="Add Read-Only banner")
-def update(title, space, new_title, body, body_file, labels, banner):
+def update(title, space, new_title, body, body_file, parent, labels, banner):
     """✏️ Update existing page"""
 
     console.print(Panel.fit(f"[bold cyan]Updating Page: {title}[/bold cyan]", border_style="cyan"))
@@ -253,6 +254,17 @@ def update(title, space, new_title, body, body_file, labels, banner):
             with open(body_file) as f:
                 body = f.read()
 
+        # Get parent page ID if specified
+        parent_id = None
+        if parent:
+            parent_page = confluence.get_page_by_title(space=space, title=parent)
+            if parent_page:
+                parent_id = parent_page["id"]
+            else:
+                console.print(
+                    f"[bold yellow]⚠ Parent page '{parent}' not found, skipping parent update[/bold yellow]"
+                )
+
         updates = {}
 
         if new_title:
@@ -265,12 +277,12 @@ def update(title, space, new_title, body, body_file, labels, banner):
             updates["body"] = confluence_body
 
         # Update page
-        if updates:
+        if updates or parent_id is not None:
             confluence.update_page(
                 page_id=page_id,
                 title=updates.get("title", title),
                 body=updates.get("body", page["body"]["storage"]["value"]),
-                parent_id=None,
+                parent_id=parent_id,
                 type="page",
                 representation="storage",
                 minor_edit=False,
