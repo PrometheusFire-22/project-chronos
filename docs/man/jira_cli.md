@@ -33,9 +33,11 @@ Create a new Jira ticket.
 - `--labels TEXT` - Comma-separated labels
 - `--points INTEGER` - Story points
 - `--sprint TEXT` - Sprint name (default: Sprint 3)
+- `--parent TEXT` - Parent issue key (for creating subtasks)
 
-**Example:**
+**Examples:**
 ```bash
+# Create a story
 jira_cli create \
   --summary "feat(api): Add user authentication" \
   --description "Implement JWT-based auth" \
@@ -43,6 +45,12 @@ jira_cli create \
   --priority "High" \
   --labels "api,security" \
   --sprint "Sprint 8"
+
+# Create a subtask under a story
+jira_cli create \
+  --summary "Write unit tests for auth" \
+  --type "Task" \
+  --parent "CHRONOS-248"
 ```
 
 ### read
@@ -70,6 +78,7 @@ Update an existing ticket.
 - `--points INTEGER` - Story points
 - `--labels TEXT` - Comma-separated labels
 - `--resolution TEXT` - Resolution (Done, Cancelled, Superseded)
+- `--epic TEXT` - Epic key to link this issue to
 
 **Examples:**
 ```bash
@@ -78,6 +87,9 @@ jira_cli update CHRONOS-238 --status "In Progress"
 
 # Mark ticket as Done
 jira_cli update CHRONOS-238 --status "Done"
+
+# Link a story to an epic
+jira_cli update CHRONOS-248 --epic CHRONOS-255
 
 # Supersede a ticket
 jira_cli update CHRONOS-204 \
