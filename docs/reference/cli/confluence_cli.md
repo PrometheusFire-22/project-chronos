@@ -28,7 +28,7 @@ Create a new Confluence page.
 - `--title TEXT` (required) - Page title
 - `--body TEXT` (required) - Page content (markdown or HTML)
 - `--space TEXT` - Space key (default: PC)
-- `--parent-id TEXT` - Parent page ID for hierarchy
+- `--parent TEXT` - Parent page title (for hierarchy)
 - `--labels TEXT` - Comma-separated labels
 
 **Example:**
@@ -37,6 +37,7 @@ confluence create \
   --title "Sprint 8 Planning" \
   --body "## Sprint Goal\nImplement frontend architecture" \
   --space PC \
+  --parent "Sprints" \
   --labels "sprint-8,planning"
 ```
 
@@ -71,6 +72,7 @@ Update an existing Confluence page.
 **Options:**
 - `--title TEXT` - New title
 - `--body TEXT` - New content
+- `--parent TEXT` - New parent page title (moves the page)
 - `--labels TEXT` - New labels (replaces existing)
 
 **Example:**
