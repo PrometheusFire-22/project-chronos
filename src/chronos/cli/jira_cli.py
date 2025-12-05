@@ -259,9 +259,9 @@ def update(ticket_id, summary, description, status, priority, points, labels, re
         resolution_name = resolution_map.get(resolution.lower(), resolution)
         updates["resolution"] = {"name": resolution_name}
 
-    # Link to epic (using customfield_10014 which is the standard epic link field)
+    # Link to epic (using parent field)
     if epic:
-        updates["customfield_10014"] = epic
+        updates["parent"] = {"key": epic}
 
     if not updates and not status:
         console.print("[yellow]⚠️  No updates specified[/yellow]")
