@@ -1,5 +1,5 @@
 {
-  "docs/2_architecture/adrs/adr_011_documentation_ssot.md": {
+  "docs/architecture/adrs/adr_011_documentation_ssot.md": {
     "page_id": "6160386",
     "space": "PC",
     "last_synced": "2025-12-02T15:54:01.670663+00:00Z"
@@ -16,100 +16,64 @@
     "last_synced": "2025-12-02T15:54:04.653306+00:00Z",
     "title": "SSOT Automation & Features Expansion Walkthrough"
   },
-  "docs/session_notes/2025-11-27_AWS_CLI_SSO_Setup.md": {
-    "page_id": "7045123",
-    "space": "PC",
-    "last_synced": "2025-12-02T15:54:05.563844+00:00Z",
-    "title": "AWS CLI v2 + IAM Identity Center (SSO) Setup Guide"
-  },
-  "docs/session_notes/2025-11-27_CHRONOS-213_Lightsail_Setup_COMPLETE.md": {
-    "page_id": "7045146",
-    "space": "PC",
-    "last_synced": "2025-12-02T15:54:06.641269+00:00Z",
-    "title": "CHRONOS-213: AWS Lightsail PostgreSQL Setup - Complete"
-  },
-  "docs/session_notes/2025-11-27_SESSION_SUMMARY.md": {
-    "page_id": "7208971",
-    "space": "PC",
-    "last_synced": "2025-12-02T15:54:07.501384+00:00Z",
-    "title": "Session Summary: 2025-11-27"
-  },
-  "docs/session_notes/2025-11-27_Sprint7_Execution_Plan.md": {
-    "page_id": "7897116",
-    "space": "PC",
-    "last_synced": "2025-12-02T15:54:08.556920+00:00Z",
-    "title": "Sprint 7: AWS Infrastructure - Execution Plan"
-  },
-  "docs/session_notes/2025-11-30_AWS_Training_Belt_Progression.md": {
-    "page_id": "7766060",
-    "space": "PC",
-    "last_synced": "2025-12-02T15:54:10.029217+00:00Z",
-    "title": "AWS Training: Belt Progression to Infrastructure Mastery"
-  },
   "docs/4_guides/secrets_management_guide.md": {
     "page_id": "7897136",
     "space": "PC",
     "last_synced": "2025-12-02T15:54:11.406323+00:00Z",
     "title": "Project Chronos - Secrets Management Guide"
   },
-  "docs/3_runbooks/keepassxc_unified_workflow.md": {
-    "page_id": "7012471",
-    "space": "PC",
-    "last_synced": "2025-12-02T15:54:12.303102+00:00Z",
-    "title": "KeePassXC Unified Workflow: Personal + Project Secrets"
-  },
-  "docs/2_architecture/adrs/adr_012_frontend_stack_architecture.md": {
+  "docs/architecture/adrs/adr_012_frontend_stack_architecture.md": {
     "space": "PC",
     "title": "ADR-012: Frontend Stack Architecture",
     "page_id": "7012570",
     "last_synced": "2025-12-02T15:54:14.016259+00:00Z"
   },
-  "docs/2_architecture/adrs/README.md": {
+  "docs/architecture/adrs/README.md": {
     "space": "PC",
     "page_id": "7012604",
     "last_synced": "2025-12-02T15:54:14.796119+00:00Z"
   },
-  "docs/2_architecture/adrs/adr_002_project_management_stack.md": {
+  "docs/architecture/adrs/adr_002_project_management_stack.md": {
     "space": "PC",
     "page_id": "7766148",
     "last_synced": "2025-12-02T15:54:15.934074+00:00Z"
   },
-  "docs/2_architecture/adrs/adr_003_pragmatic_agile_jira_workflow.md": {
+  "docs/architecture/adrs/adr_003_pragmatic_agile_jira_workflow.md": {
     "space": "PC",
     "page_id": "7766168",
     "last_synced": "2025-12-02T15:54:16.723218+00:00Z"
   },
-  "docs/2_architecture/adrs/adr_004_git_workflow_and_branching_model.md": {
+  "docs/architecture/adrs/adr_004_git_workflow_and_branching_model.md": {
     "space": "PC",
     "page_id": "7766188",
     "last_synced": "2025-12-02T15:54:17.414383+00:00Z"
   },
-  "docs/2_architecture/adrs/adr_005_focus_enforcer_protocol.md": {
+  "docs/architecture/adrs/adr_005_focus_enforcer_protocol.md": {
     "space": "PC",
     "page_id": "7176335",
     "last_synced": "2025-12-02T15:54:18.095138+00:00Z"
   },
-  "docs/2_architecture/adrs/adr_006_crm_selection.md": {
+  "docs/architecture/adrs/adr_006_crm_selection.md": {
     "space": "PC",
     "page_id": "7012624",
     "last_synced": "2025-12-02T15:54:18.775850+00:00Z"
   },
-  "docs/2_architecture/adrs/adr_007_jira_first_workflow.md": {
+  "docs/architecture/adrs/adr_007_jira_first_workflow.md": {
     "space": "PC",
     "page_id": "7897215",
     "last_synced": "2025-12-02T15:54:19.405016+00:00Z"
   },
-  "docs/2_architecture/adrs/adr_008_backup_architecture.md": {
+  "docs/architecture/adrs/adr_008_backup_architecture.md": {
     "space": "PC",
     "page_id": "7012644",
     "last_synced": "2025-12-02T15:54:19.986628+00:00Z"
   },
-  "docs/2_architecture/adrs/adr_009_backup_strategy.md": {
+  "docs/architecture/adrs/adr_009_backup_strategy.md": {
     "space": "PC",
     "page_id": "7012674",
     "last_synced": "2025-12-02T15:54:20.696254+00:00Z"
   },
-  "docs/2_architecture/adrs/adr_013_geospatial_ingestion.md": {
+  "docs/architecture/adrs/adr_013_geospatial_ingestion.md": {
     "space": "PC",
     "page_id": "7012702",
     "last_synced": "2025-12-02T15:54:21.552505+00:00Z"
@@ -118,16 +82,6 @@
     "space": "PC",
     "page_id": "7012732",
     "last_synced": "2025-12-02T15:54:22.383413+00:00Z"
-  },
-  "docs/3_runbooks/confluence_cli_runbook.md": {
-    "space": "PC",
-    "page_id": "7012752",
-    "last_synced": "2025-12-02T15:54:23.295029+00:00Z"
-  },
-  "docs/3_runbooks/confluence_daily_sync_cron.md": {
-    "space": "PC",
-    "page_id": "7897235",
-    "last_synced": "2025-12-02T15:54:23.837598+00:00Z"
   },
   "docs/3_runbooks/jira_cli_runbook.md": {
     "space": "PC",
@@ -163,21 +117,6 @@
     "space": "PC",
     "page_id": "7766248",
     "last_synced": "2025-12-02T15:54:28.812055+00:00Z"
-  },
-  "docs/session_notes/2025-11-27_CHRONOS-213_HANDOFF.md": {
-    "space": "PC",
-    "page_id": "7176395",
-    "last_synced": "2025-12-01T23:38:42.851860+00:00Z"
-  },
-  "docs/session_notes/2025-11-27_Sprint7_Phase1_COMPLETE.md": {
-    "space": "PC",
-    "page_id": "7766268",
-    "last_synced": "2025-12-02T15:54:29.555271+00:00Z"
-  },
-  "docs/session_notes/2025-11-27_sprint6_completion_session.md": {
-    "space": "PC",
-    "page_id": "7766288",
-    "last_synced": "2025-12-02T15:54:30.253663+00:00Z"
   },
   "docs/1_platform_concepts/architecture.md": {
     "space": "PC",
@@ -274,17 +213,17 @@
     "page_id": "7766348",
     "last_synced": "2025-12-02T15:54:43.966806+00:00Z"
   },
-  "docs/DOCKER_FIX.md": {
+  "docs/reference/troubleshooting/DOCKER_FIX.md": {
     "space": "PC",
     "page_id": "7897348",
     "last_synced": "2025-12-02T15:54:44.684990+00:00Z"
   },
-  "docs/LLM_ONBOARDING_GUIDE.md": {
+  "docs/guides/onboarding/llm_onboarding.md": {
     "space": "PC",
     "page_id": "7897368",
     "last_synced": "2025-12-02T15:54:45.474562+00:00Z"
   },
-  "docs/OPERATIONS_QUICK_REFERENCE.md": {
+  "docs/guides/onboarding/quick_reference.md": {
     "space": "PC",
     "page_id": "7766368",
     "last_synced": "2025-12-02T15:54:46.221317+00:00Z"
@@ -294,28 +233,28 @@
     "page_id": "7176545",
     "last_synced": "2025-12-02T15:54:46.939224+00:00Z"
   },
-  "docs/3_runbooks/confluence_comprehensive_sync_guide.md": {
-    "space": "PC",
-    "title": "\ud83d\udcda Confluence Comprehensive Documentation Sync Guide",
-    "page_id": "7897602",
-    "last_synced": "2025-12-02T15:54:47.889831+00:00Z"
-  },
   "docs/3_runbooks/cloudwatch_monitoring.md": {
     "page_id": "9601025",
     "space": "PC",
     "last_synced": "2025-12-04T04:30:00+00:00Z",
     "title": "CloudWatch Monitoring"
   },
-  "docs/3_runbooks/disaster_recovery_technical.md": {
-    "page_id": "9568258",
+  "docs/operations/integrations/google_workspace_setup.md": {
+    "page_id": "10289154",
     "space": "PC",
-    "last_synced": "2025-12-04T04:30:00+00:00Z",
-    "title": "Technical Disaster Recovery"
+    "title": "Google Workspace Setup & Operations",
+    "last_synced": "2025-12-05T06:47:40.937467Z"
   },
-  "docs/3_runbooks/disaster_recovery_operational.md": {
-    "page_id": "9666561",
+  "docs/guides/integration/google_workspace_guide.md": {
+    "page_id": "10289186",
     "space": "PC",
-    "last_synced": "2025-12-04T04:30:00+00:00Z",
-    "title": "Operational Disaster Recovery (Bus Factor)"
+    "title": "Google Workspace Integration Guide",
+    "last_synced": "2025-12-05T06:48:00Z"
+  },
+  "docs/operations/security/keepassxc_workflow.md": {
+    "page_id": "10289214",
+    "space": "PC",
+    "title": "KeePassXC Workflow",
+    "last_synced": "2025-12-05T06:48:00Z"
   }
 }
