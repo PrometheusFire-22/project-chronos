@@ -17,128 +17,107 @@ Example:
 """
 
 import os
+import pickle
+from pathlib import Path
 
+from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import Resource, build
 from googleapiclient.errors import HttpError
 
-from google.oauth2 import service_account
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
 
 
 class GoogleWorkspaceAuth:
     """
-    Authentication wrapper for Google Workspace APIs
+    Authentication wrapper for Google Workspace APIs using OAuth 2.0 User Flow.
 
-    Manages service account credentials and domain-wide delegation.
+    Handles the 'Desktop App' flow where the user authorizes the app in the browser.
+    Manages token storage and auto-refreshing.
     """
 
-    def __init__(self, service_account_file: str | None = None, delegated_user: str | None = None):
+    DEFAULT_SCOPES = [
+        "https://www.googleapis.com/auth/userinfo.email",
+        "https://www.googleapis.com/auth/gmail.send",
+        "https://www.googleapis.com/auth/drive",
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/admin.directory.user.readonly",
+    ]
+
+    def __init__(
+        self, client_secret_file: str = "client_secret.json", token_file: str = "token.pickle"
+    ):
         """
-        Initialize authentication
+        Initialize authentication manager.
 
         Args:
-            service_account_file: Path to service account JSON key file
-                                 Defaults to GOOGLE_SERVICE_ACCOUNT_FILE env var
-            delegated_user: Email of user to impersonate
-                           Defaults to GOOGLE_DELEGATED_USER env var
-
-        Raises:
-            FileNotFoundError: If service account file doesn't exist
-            ValueError: If required environment variables not set
+            client_secret_file: Path to the downloaded OAuth client ID JSON.
+            token_file: Path where the user's access/refresh tokens will be saved.
         """
-        self.service_account_file = service_account_file or os.getenv("GOOGLE_SERVICE_ACCOUNT_FILE")
-        self.delegated_user = delegated_user or os.getenv("GOOGLE_DELEGATED_USER")
+        self.base_path = Path(os.getcwd())
+        self.client_secret_path = self.base_path / client_secret_file
+        self.token_path = self.base_path / token_file
+        self.creds: Credentials | None = None
 
-        if not self.service_account_file:
-            raise ValueError(
-                "Service account file not specified. Set GOOGLE_SERVICE_ACCOUNT_FILE "
-                "environment variable or pass service_account_file parameter."
-            )
+        # Relax scope validation because Google adds openid and other scopes automatically
+        os.environ["OAUTHLIB_RELAX_TOKEN_SCOPE"] = "1"
 
-        if not self.delegated_user:
-            raise ValueError(
-                "Delegated user not specified. Set GOOGLE_DELEGATED_USER "
-                "environment variable or pass delegated_user parameter."
-            )
-
-        if not os.path.exists(self.service_account_file):
-            raise FileNotFoundError(f"Service account file not found: {self.service_account_file}")
-
-    def get_credentials(self, scopes: list[str]) -> service_account.Credentials:
+    def get_credentials(self, scopes: list[str] = None) -> Credentials:
         """
-        Get service account credentials with specified scopes
+        Get valid user credentials.
 
-        Args:
-            scopes: List of OAuth 2.0 scopes
-
-        Returns:
-            Credentials object with domain-wide delegation
-
-        Raises:
-            Exception: If credential creation fails
+        If valid tokens exist in token.pickle, use them.
+        If expired, refresh them.
+        If non-existent or invalid, launch the browser flow.
         """
+        if scopes is None:
+            scopes = self.DEFAULT_SCOPES
+
+        # 1. Load existing token if available
+        if self.token_path.exists():
+            with open(self.token_path, "rb") as token:
+                self.creds = pickle.load(token)  # nosec
+
+        # 2. Check validity and refresh/login if needed
+        if not self.creds or not self.creds.valid:
+            if self.creds and self.creds.expired and self.creds.refresh_token:
+                print("🔄 Refreshing expired Google Access Token...")
+                try:
+                    self.creds.refresh(Request())
+                except Exception as e:
+                    print(f"⚠️ Refresh failed: {e}. Starting fresh login.")
+                    self.creds = None
+
+            if not self.creds:
+                print("🌐 Initiating Browser Authentication Flow...")
+                if not self.client_secret_path.exists():
+                    raise FileNotFoundError(
+                        f"Client Secret file not found at: {self.client_secret_path}\n"
+                        "Please download it from GCP Console -> APIs & Credentials -> OAuth 2.0 Client IDs"
+                    )
+
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    str(self.client_secret_path), scopes
+                )
+                self.creds = flow.run_local_server(port=0)
+
+            # 3. Save the credential for next run
+            print(f"✅ Credentials saved to {self.token_path.name}")
+            with open(self.token_path, "wb") as token:
+                pickle.dump(self.creds, token)
+
+        return self.creds
+
+    def get_service(self, api_name: str, api_version: str, scopes: list[str] = None) -> Resource:
+        """Build a ready-to-use Google API Service Resource."""
+        creds = self.get_credentials(scopes)
         try:
-            credentials = service_account.Credentials.from_service_account_file(
-                self.service_account_file, scopes=scopes
-            )
-
-            # Delegate to user if specified
-            if self.delegated_user:
-                credentials = credentials.with_subject(self.delegated_user)
-
-            return credentials
-
-        except Exception as e:
-            raise Exception(f"Failed to create credentials: {e}") from e
-
-    def get_service(self, api_name: str, api_version: str, scopes: list[str]) -> Resource:
-        """
-        Build Google API service object
-
-        Args:
-            api_name: Name of the API (e.g., 'gmail', 'drive')
-            api_version: API version (e.g., 'v1', 'v3')
-            scopes: List of OAuth 2.0 scopes required
-
-        Returns:
-            Google API service object
-
-        Raises:
-            HttpError: If API service creation fails
-        """
-        try:
-            credentials = self.get_credentials(scopes)
-            service = build(api_name, api_version, credentials=credentials)
+            service = build(api_name, api_version, credentials=creds)
             return service
-
         except HttpError as e:
             raise HttpError(
                 f"Failed to build {api_name} service: {e}", resp=e.resp, content=e.content
             ) from e
 
-    def test_connection(self) -> bool:
-        """
-        Test if authentication is working
-
-        Returns:
-            True if authentication successful, False otherwise
-        """
-        try:
-            # Try to build Admin SDK service (minimal permissions)
-            scopes = ["https://www.googleapis.com/auth/admin.directory.user.readonly"]
-            service = self.get_service("admin", "directory_v1", scopes)
-
-            # Try to list users (will fail if delegation not configured)
-            service.users().list(customer="my_customer", maxResults=1).execute()
-
-            return True
-
-        except Exception:
-            return False
-
-    def __repr__(self) -> str:
-        """String representation"""
-        return (
-            f"GoogleWorkspaceAuth("
-            f"service_account_file='{self.service_account_file}', "
-            f"delegated_user='{self.delegated_user}')"
-        )
+    def __repr__(self):
+        return f"<GoogleWorkspaceAuth client='{self.client_secret_path.name}' token='{self.token_path.name}'>"
