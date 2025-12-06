@@ -100,3 +100,5 @@ docs/.secrets-template.md
 *.secrets.md
 *_SECRETS_*.md
 pgbackrest.conf
+client_secret.json
+token.pickle

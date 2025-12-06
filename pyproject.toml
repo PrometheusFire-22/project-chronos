@@ -48,6 +48,11 @@ dependencies = [
     # Confluence & Atlassian integration
     "atlassian-python-api>=4.0.0",
     "markdown2>=2.5.0",
+
+    # Google Workspace Integration
+    "google-api-python-client>=2.110.0",
+    "google-auth-httplib2>=0.2.0",
+    "google-auth-oauthlib>=1.2.0",
     "jmespath>=1.0.0",
 
     # Google Workspace integration
