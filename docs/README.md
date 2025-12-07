@@ -2,51 +2,26 @@
 
 **Single Source of Truth for Project Chronos**
 
-This directory contains all project documentation following the structure defined in [ADR-014: Documentation SSOT Strategy](2_architecture/adrs/adr_014_documentation_ssot.md).
+---
+
+## 🚀 Quick Start
+
+**New to the project? Start here:**
+👉 **[Quick Start Guide](QUICK_START.md)**
 
 ---
 
 ## 📚 Documentation Structure
 
-### [0_project_vision_and_strategy/](0_project_vision_and_strategy/)
-Strategic vision, architectural deep dive, long-term planning, and project tracking documents.
+### [architecture/](architecture/)
+System architecture, data models, and concepts.
+- **[adrs/](architecture/adrs/)**: All architectural decisions
+- **[concepts/](architecture/concepts/)**: Core platform concepts & style guide
+- **[diagrams/](architecture/diagrams/)**: Architecture diagrams
 
-### [1_platform_concepts/](1_platform_concepts/)
-Core platform concepts, architecture overview, project structure, and style guide.
-
-### [2_architecture/](2_architecture/)
-System architecture, data models, and Architecture Decision Records (ADRs).
-- **[adrs/](2_architecture/adrs/)**: All architectural decisions
-- **[diagrams/](2_architecture/diagrams/)**: Architecture diagrams
-
-### [3_runbooks/](3_runbooks/)
+### [operations/](operations/)
 Operational runbooks for common tasks and procedures.
-- Jira CLI operations
-- Confluence CLI operations
-- Complete workflow runbook
-- Data ingestion procedures
-
-### [4_guides/](4_guides/)
-Step-by-step guides for developers and operators.
-- Developer onboarding
-- LLM onboarding
-- Git workflow
-- GIS workflow
-- Alembic migrations
-
-### [5_reference/](5_reference/)
-API references, CLI references, and database schema documentation.
-
-
-
-### [5_troubleshooting/](5_troubleshooting/)
-Post-mortems, troubleshooting guides, and incident reports.
-
-### [templates/](templates/)
-Templates for Jira tickets, Confluence pages, GitHub PRs, and Git commits.
-
-### [_archive/](_archive/)
-Archived documentation no longer in active use.
+- **[disaster_recovery/](operations/disaster_recovery/)**: DR plans
 
 ---
 
@@ -56,7 +31,7 @@ Archived documentation no longer in active use.
 **Publication**: Confluence (auto-synced or manual)  
 **Artifacts**: Temporary AI-generated drafts (reviewed and moved here)
 
-See [ADR-014](2_architecture/adrs/adr_014_documentation_ssot.md) for full details.
+See [ADR-014](architecture/adrs/adr_014_documentation_ssot.md) for full details.
 
 ---
 
@@ -70,12 +45,12 @@ See [ADR-014](2_architecture/adrs/adr_014_documentation_ssot.md) for full detail
 
 ## 🔗 Quick Links
 
-- [ADR Index](2_architecture/adrs/README.md)
-- [LLM Onboarding Guide](LLM_ONBOARDING_GUIDE.md)
-- [Complete Workflow Runbook](3_runbooks/complete_workflow_runbook.md)
-- [Style Guide](1_platform_concepts/style_guide.md)
+- [ADR Index](architecture/adrs/README.md)
+- [LLM Onboarding Guide](guides/onboarding/llm_onboarding.md)
+- [Confluence Sync](operations/development/confluence_sync.md)
+- [Style Guide](architecture/concepts/style_guide.md)
 
 ---
 
-**Last Updated**: 2025-11-25  
-**Maintained By**: Geoff Bevans + Claude Code
+**Last Updated**: 2025-12-06  
+**Maintained By**: Geoff Bevans + Antigravity
