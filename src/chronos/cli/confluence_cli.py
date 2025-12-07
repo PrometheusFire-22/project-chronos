@@ -25,7 +25,8 @@ from rich.panel import Panel
 from rich.table import Table
 
 # Load environment
-env_path = Path(__file__).parent.parent.parent / ".env"
+# Load environment
+env_path = Path(__file__).resolve().parents[3] / ".env"
 load_dotenv(env_path)
 
 # Confluence configuration
@@ -60,6 +61,55 @@ def markdown_to_confluence(markdown_text: str) -> str:
             "code-friendly",
         ],
     )
+
+    # ---------------------------------------------------------
+    # SMART LINKING: Convert relative .md links to Confluence Page Links
+    # ---------------------------------------------------------
+    # Regex to find <a href="... .md">
+    import json
+    import re
+
+    # Try to load mapping file (best effort)
+    mapping = {}
+    try:
+        mapping_path = Path(__file__).resolve().parents[3] / "docs" / ".confluence-mapping.json"
+        if mapping_path.exists():
+            with open(mapping_path) as f:
+                mapping = json.load(f)
+    except Exception:
+        pass
+
+    def replace_link(match):
+        href = match.group(1)
+        text = match.group(2)
+
+        # Only process relative markdown links
+        if href.startswith("http") or not href.endswith(".md"):
+            return match.group(0)
+
+        # Naive resolution: Just assume filename uniqueness for now or relative to docs/
+        # Ideally we know the "source" file to resolve relative paths, but we don't have it here easily.
+        # Fallback: Search mapping for a matching suffix
+
+        target_meta = None
+        for path, meta in mapping.items():
+            if path.endswith(href.split("/")[-1]):  # Strict filename match
+                target_meta = meta
+                break
+
+        if target_meta and "title" in target_meta:
+            # Confluence Storage Format for Page Link
+            return (
+                f'<ac:link><ri:page ri:content-title="{target_meta["title"]}" />'
+                f"<ac:plain-text-link-body><![CDATA[{text}]]></ac:plain-text-link-body></ac:link>"
+            )
+
+        return match.group(0)
+
+    # Replace <a href="foo.md">text</a>
+    # markdown2 produces <a href="foo.md">text</a>
+    html = re.sub(r'<a href="([^"]+\.md)">([^<]+)</a>', replace_link, html)
+    # ---------------------------------------------------------
 
     # Confluence storage format adjustments
     # Convert checkboxes
