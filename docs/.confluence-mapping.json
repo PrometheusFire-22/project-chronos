@@ -1,578 +1,398 @@
 {
   "docs/.secrets-template.md": {
+    "last_synced": "2025-12-06T05:12:38.046231+00:00Z",
     "page_id": "10289259",
     "space": "PC",
-    "title": ".Secrets Template",
-    "last_synced": "2025-12-05T10:39:59.749116Z"
+    "title": "Project Chronos - Secrets Reference Template"
   },
-  "docs/2_architecture/security/access_control_policy.md": {
-    "page_id": "10420246",
+  "docs/QUICK_START.md": {
+    "last_synced": "2025-12-06T05:12:39.252378+00:00Z",
+    "page_id": "11173889",
     "space": "PC",
-    "title": "Access Control Policy",
-    "last_synced": "2025-12-05T10:40:04.242569Z"
-  },
-  "docs/3_runbooks/cloudwatch_monitoring.md": {
-    "page_id": "9601025",
-    "space": "PC",
-    "title": "Cloudwatch Monitoring",
-    "last_synced": "2025-12-05T10:40:11.076835Z"
-  },
-  "docs/3_runbooks/complete_workflow_runbook.md": {
-    "page_id": "10420578",
-    "space": "PC",
-    "title": "Complete Workflow Runbook",
-    "last_synced": "2025-12-05T10:40:20.965359Z"
-  },
-  "docs/3_runbooks/jira_cli_runbook.md": {
-    "page_id": "10289776",
-    "space": "PC",
-    "title": "Jira Cli Runbook",
-    "last_synced": "2025-12-05T10:40:31.217122Z"
-  },
-  "docs/3_runbooks/pgbackrest_backup_restore.md": {
-    "page_id": "10354982",
-    "space": "PC",
-    "title": "Pgbackrest Backup Restore",
-    "last_synced": "2025-12-05T10:40:36.501173Z"
-  },
-  "docs/3_runbooks/security_audit_report.md": {
-    "page_id": "10289423",
-    "space": "PC",
-    "title": "Security Audit Report",
-    "last_synced": "2025-12-05T10:40:41.477777Z"
-  },
-  "docs/3_runbooks/security_hardening_phase2a.md": {
-    "page_id": "10420267",
-    "space": "PC",
-    "title": "Security Hardening Phase2A",
-    "last_synced": "2025-12-05T10:40:47.499992Z"
-  },
-  "docs/3_runbooks/valet_ingestion.md": {
-    "page_id": "10518812",
-    "space": "PC",
-    "title": "Valet Ingestion",
-    "last_synced": "2025-12-05T10:40:53.331650Z"
-  },
-  "docs/4_guides/alembic_migration_setup_guide.md": {
-    "page_id": "10420599",
-    "space": "PC",
-    "title": "Alembic Migration Setup Guide",
-    "last_synced": "2025-12-05T10:41:00.023369Z"
-  },
-  "docs/4_guides/gis_workflow.md": {
-    "page_id": "10289802",
-    "space": "PC",
-    "title": "Gis Workflow",
-    "last_synced": "2025-12-05T10:41:05.037705Z"
-  },
-  "docs/4_guides/git_workflow_guide.md": {
-    "page_id": "10289824",
-    "space": "PC",
-    "title": "Git Workflow Guide",
-    "last_synced": "2025-12-05T10:41:09.977810Z"
-  },
-  "docs/4_guides/jira_workflow_guide.md": {
-    "page_id": "10420291",
-    "space": "PC",
-    "title": "Jira Workflow Guide",
-    "last_synced": "2025-12-05T10:41:15.100804Z"
+    "title": "\ud83d\ude80 Project Chronos Quick Start"
   },
   "docs/README.md": {
+    "last_synced": "2025-12-05T10:48:29.536194Z",
     "page_id": "10289645",
     "space": "PC",
-    "title": "docs - Overview",
-    "last_synced": "2025-12-05T10:48:29.536194Z"
-  },
-  "docs/UPDATEME_README.md": {
-    "page_id": "10289278",
-    "space": "PC",
-    "title": "Updateme Readme",
-    "last_synced": "2025-12-05T10:55:12.684235Z"
-  },
-  "docs/0_project_vision_and_strategy/1_architectural_deep_dive.md": {
-    "page_id": "10518743",
-    "space": "PC",
-    "title": "1 Architectural Deep Dive",
-    "last_synced": "2025-12-05T10:56:47.003243Z"
-  },
-  "docs/0_project_vision_and_strategy/2_the_phoenix_plan.md": {
-    "page_id": "10354844",
-    "space": "PC",
-    "title": "2 The Phoenix Plan",
-    "last_synced": "2025-12-05T11:17:04.956222Z"
-  },
-  "docs/0_project_vision_and_strategy/3_llm_context_transfer_protocol.md": {
-    "page_id": "10289668",
-    "space": "PC",
-    "title": "3 Llm Context Transfer Protocol",
-    "last_synced": "2025-12-05T11:58:24.906432Z"
-  },
-  "docs/0_project_vision_and_strategy/ssot_documentation_index.md": {
-    "page_id": "10289688",
-    "space": "PC",
-    "title": "Ssot Documentation Index",
-    "last_synced": "2025-12-05T12:28:38.147036Z"
-  },
-  "docs/0_project_vision_and_strategy/outreach/2025-11-15_investor_pitch_script.md": {
-    "page_id": "10354863",
-    "space": "PC",
-    "title": "2025 11 15 Investor Pitch Script",
-    "last_synced": "2025-12-05T12:28:45.739338Z"
-  },
-  "docs/0_project_vision_and_strategy/outreach/diagrams/conversation_navigator.md": {
-    "page_id": "10420462",
-    "space": "PC",
-    "title": "Conversation Navigator",
-    "last_synced": "2025-12-05T12:28:53.840834Z"
-  },
-  "docs/0_project_vision_and_strategy/project_tracking/sprint_summaries/SPRINT4_SUMMARY.md": {
-    "page_id": "10420482",
-    "space": "PC",
-    "title": "Sprint4 Summary",
-    "last_synced": "2025-12-05T12:29:06.071876Z"
-  },
-  "docs/1_platform_concepts/architecture.md": {
-    "page_id": "10420504",
-    "space": "PC",
-    "title": "Architecture",
-    "last_synced": "2025-12-05T12:29:14.595105Z"
-  },
-  "docs/1_platform_concepts/documentation_structure.md": {
-    "page_id": "10420526",
-    "space": "PC",
-    "title": "Documentation Structure",
-    "last_synced": "2025-12-05T12:29:19.286468Z"
-  },
-  "docs/1_platform_concepts/layer_structure.md": {
-    "page_id": "10354883",
-    "space": "PC",
-    "title": "Layer Structure",
-    "last_synced": "2025-12-05T12:29:23.781172Z"
-  },
-  "docs/1_platform_concepts/orchestration_architecture.md": {
-    "page_id": "10289718",
-    "space": "PC",
-    "title": "Orchestration Architecture",
-    "last_synced": "2025-12-05T12:29:28.236033Z"
-  },
-  "docs/1_platform_concepts/project_structure.md": {
-    "page_id": "10289737",
-    "space": "PC",
-    "title": "Project Structure",
-    "last_synced": "2025-12-05T12:29:32.714728Z"
-  },
-  "docs/1_platform_concepts/resilient_project_workflow.md": {
-    "page_id": "10518766",
-    "space": "PC",
-    "title": "Resilient Project Workflow",
-    "last_synced": "2025-12-05T12:29:37.357319Z"
-  },
-  "docs/1_platform_concepts/style_guide.md": {
-    "page_id": "10420552",
-    "space": "PC",
-    "title": "Style Guide",
-    "last_synced": "2025-12-05T12:29:41.740602Z"
-  },
-  "docs/2_architecture/analytical_design/postgis_fundamentals.md": {
-    "page_id": "10354907",
-    "space": "PC",
-    "title": "Postgis Fundamentals",
-    "last_synced": "2025-12-05T12:29:53.685169Z"
-  },
-  "docs/2_architecture/analytical_design/rice_framework.md": {
-    "page_id": "10354927",
-    "space": "PC",
-    "title": "Rice Framework",
-    "last_synced": "2025-12-05T12:29:57.562710Z"
-  },
-  "docs/2_architecture/analytical_design/abstractions/geospatial_abstractions.md": {
-    "page_id": "10518791",
-    "space": "PC",
-    "title": "Geospatial Abstractions",
-    "last_synced": "2025-12-05T12:30:09.904893Z"
-  },
-  "docs/2_architecture/data_governance/asset_catalog_guide.md": {
-    "page_id": "10354947",
-    "space": "PC",
-    "title": "Asset Catalog Guide",
-    "last_synced": "2025-12-05T12:30:17.329953Z"
-  },
-  "docs/2_architecture/data_governance/ontology_hub.md": {
-    "page_id": "10289757",
-    "space": "PC",
-    "title": "Ontology Hub",
-    "last_synced": "2025-12-05T12:30:21.320795Z"
-  },
-  "docs/5_troubleshooting/2025-11-17_post_mortem_data_persistence_failure.md": {
-    "page_id": "10420625",
-    "space": "PC",
-    "title": "2025 11 17 Post Mortem Data Persistence Failure",
-    "last_synced": "2025-12-05T12:30:42.119454Z"
+    "title": "Project Chronos Documentation"
   },
   "docs/architecture/adrs/README.md": {
+    "last_synced": "2025-12-06T05:12:40.636432+00:00Z",
     "page_id": "10289854",
     "space": "PC",
-    "title": "adrs - Overview",
-    "last_synced": "2025-12-05T12:30:53.548716Z"
+    "title": "Architecture Decision Records (ADRs)"
   },
   "docs/architecture/adrs/adr_002_project_management_stack.md": {
+    "last_synced": "2025-12-06T05:12:41.640978+00:00Z",
     "page_id": "10518855",
     "space": "PC",
-    "title": "Adr 002 Project Management Stack",
-    "last_synced": "2025-12-05T12:30:57.260827Z"
+    "title": "ADR 002: Selecting the Project Management & Knowledge Stack"
   },
   "docs/architecture/adrs/adr_003_pragmatic_agile_jira_workflow.md": {
+    "last_synced": "2025-12-06T05:12:42.743623+00:00Z",
     "page_id": "10420649",
     "space": "PC",
-    "title": "Adr 003 Pragmatic Agile Jira Workflow",
-    "last_synced": "2025-12-05T12:31:04.233477Z"
+    "title": "ADR 003: The Pragmatic Scrum Workflow"
   },
   "docs/architecture/adrs/adr_004_git_workflow_and_branching_model.md": {
+    "last_synced": "2025-12-06T05:12:43.906732+00:00Z",
     "page_id": "10518875",
     "space": "PC",
-    "title": "Adr 004 Git Workflow And Branching Model",
-    "last_synced": "2025-12-05T12:31:13.912367Z"
+    "title": "ADR 004: Git Workflow and Branching Model"
   },
   "docs/architecture/adrs/adr_005_focus_enforcer_protocol.md": {
+    "last_synced": "2025-12-06T05:12:45.094330+00:00Z",
     "page_id": "10518895",
     "space": "PC",
-    "title": "Adr 005 Focus Enforcer Protocol",
-    "last_synced": "2025-12-05T12:31:21.555241Z"
+    "title": "\ud83e\uddd8 Project Chronos: The Focus Enforcer Protocol"
   },
   "docs/architecture/adrs/adr_006_crm_selection.md": {
+    "last_synced": "2025-12-06T05:12:46.210910+00:00Z",
     "page_id": "10355059",
     "space": "PC",
-    "title": "Adr 006 Crm Selection",
-    "last_synced": "2025-12-05T12:31:45.516767Z"
+    "title": "ADR 006: Selecting the Initial CRM Stack"
   },
   "docs/architecture/adrs/adr_007_jira_first_workflow.md": {
+    "last_synced": "2025-12-06T05:12:47.060519+00:00Z",
     "page_id": "10289876",
     "space": "PC",
-    "title": "Adr 007 Jira First Workflow",
-    "last_synced": "2025-12-05T12:31:52.285996Z"
+    "title": "ADR 007: Jira-First Workflow Order"
   },
   "docs/architecture/adrs/adr_008_backup_architecture.md": {
+    "last_synced": "2025-12-06T05:12:48.289214+00:00Z",
     "page_id": "10420682",
     "space": "PC",
-    "title": "Adr 008 Backup Architecture",
-    "last_synced": "2025-12-05T12:31:56.870965Z"
+    "title": "ADR 011: PostgreSQL 3-2-1 Backup Architecture"
   },
   "docs/architecture/adrs/adr_009_backup_strategy.md": {
+    "last_synced": "2025-12-06T05:12:49.493095+00:00Z",
     "page_id": "10518915",
     "space": "PC",
-    "title": "Adr 009 Backup Strategy",
-    "last_synced": "2025-12-05T12:32:01.062393Z"
+    "title": "ADR 012: Database Backup Strategy (REVISED)"
   },
   "docs/architecture/adrs/adr_011_documentation_ssot.md": {
+    "last_synced": "2025-12-06T05:12:50.362595+00:00Z",
     "page_id": "10518942",
     "space": "PC",
-    "title": "Adr 011 Documentation Ssot",
-    "last_synced": "2025-12-05T12:32:05.495936Z"
+    "title": "ADR 014: Documentation Single Source of Truth (SSOT) Strategy"
   },
   "docs/architecture/adrs/adr_012_frontend_stack_architecture.md": {
+    "last_synced": "2025-12-06T05:12:52.184108+00:00Z",
     "page_id": "10420716",
     "space": "PC",
-    "title": "Adr 012 Frontend Stack Architecture",
-    "last_synced": "2025-12-05T12:32:12.023347Z"
+    "title": "ADR-012: Frontend Stack Architecture"
   },
   "docs/architecture/adrs/adr_013_geospatial_ingestion.md": {
+    "last_synced": "2025-12-06T05:12:53.238270+00:00Z",
     "page_id": "10518969",
     "space": "PC",
-    "title": "Adr 013 Geospatial Ingestion",
-    "last_synced": "2025-12-05T12:32:16.164625Z"
-  },
-  "docs/guides/development/alembic_setup.md": {
-    "page_id": "10290022",
-    "space": "PC",
-    "title": "Alembic Setup",
-    "last_synced": "2025-12-05T12:32:34.373805Z"
-  },
-  "docs/guides/development/gis_workflow.md": {
-    "page_id": "10289802",
-    "space": "PC",
-    "title": "Gis Workflow",
-    "last_synced": "2025-12-05T12:32:36.135089Z"
-  },
-  "docs/guides/development/git_workflow.md": {
-    "page_id": "10420956",
-    "space": "PC",
-    "title": "Git Workflow",
-    "last_synced": "2025-12-05T12:32:40.325980Z"
-  },
-  "docs/guides/development/jira_workflow.md": {
-    "page_id": "10519218",
-    "space": "PC",
-    "title": "Jira Workflow",
-    "last_synced": "2025-12-05T12:32:42.419619Z"
-  },
-  "docs/guides/integration/google_workspace_guide.md": {
-    "page_id": "10420751",
-    "space": "PC",
-    "title": "Google Workspace Guide",
-    "last_synced": "2025-12-05T12:32:47.450042Z"
-  },
-  "docs/guides/onboarding/llm_onboarding.md": {
-    "page_id": "10420778",
-    "space": "PC",
-    "title": "Llm Onboarding",
-    "last_synced": "2025-12-05T12:32:54.846405Z"
-  },
-  "docs/guides/onboarding/quick_reference.md": {
-    "page_id": "10519002",
-    "space": "PC",
-    "title": "Quick Reference",
-    "last_synced": "2025-12-05T12:32:58.898916Z"
-  },
-  "docs/guides/organization/keepassxc_organization.md": {
-    "page_id": "10420331",
-    "space": "PC",
-    "title": "Keepassxc Organization",
-    "last_synced": "2025-12-05T12:33:14.854880Z"
-  },
-  "docs/guides/security/secrets_management.md": {
-    "page_id": "10355244",
-    "space": "PC",
-    "title": "Secrets Management",
-    "last_synced": "2025-12-05T12:33:22.184022Z"
-  },
-  "docs/operations/development/confluence_bulk_sync.md": {
-    "page_id": "10420409",
-    "space": "PC",
-    "title": "Confluence Bulk Sync",
-    "last_synced": "2025-12-05T12:34:46.434420Z"
-  },
-  "docs/operations/development/confluence_sync.md": {
-    "page_id": "10420352",
-    "space": "PC",
-    "title": "Confluence Sync",
-    "last_synced": "2025-12-05T12:34:51.591901Z"
-  },
-  "docs/operations/development/workflow_overview.md": {
-    "page_id": "10290082",
-    "space": "PC",
-    "title": "Workflow Overview",
-    "last_synced": "2025-12-05T12:34:56.028347Z"
-  },
-  "docs/operations/disaster_recovery/disaster_recovery.md": {
-    "page_id": "10420371",
-    "space": "PC",
-    "title": "Disaster Recovery",
-    "last_synced": "2025-12-05T13:29:19.223100Z"
-  },
-  "docs/operations/infrastructure/database_backups.md": {
-    "page_id": "10355286",
-    "space": "PC",
-    "title": "Database Backups",
-    "last_synced": "2025-12-05T12:35:10.077391Z"
-  },
-  "docs/operations/infrastructure/monitoring.md": {
-    "page_id": "10420979",
-    "space": "PC",
-    "title": "Monitoring",
-    "last_synced": "2025-12-05T12:35:12.180523Z"
-  },
-  "docs/operations/integrations/google_workspace_setup.md": {
-    "page_id": "10519021",
-    "space": "PC",
-    "title": "Google Workspace Setup",
-    "last_synced": "2025-12-05T12:35:18.560589Z"
-  },
-  "docs/operations/integrations/valet_ingestion.md": {
-    "page_id": "10518812",
-    "space": "PC",
-    "title": "Valet Ingestion",
-    "last_synced": "2025-12-05T12:35:24.576744Z"
-  },
-  "docs/operations/security/hardening_phase2a.md": {
-    "page_id": "10421002",
-    "space": "PC",
-    "title": "Hardening Phase2A",
-    "last_synced": "2025-12-05T12:35:38.294613Z"
-  },
-  "docs/operations/security/keepassxc_workflow.md": {
-    "page_id": "10289214",
-    "space": "PC",
-    "title": "Keepassxc Workflow",
-    "last_synced": "2025-12-05T12:35:40.327360Z"
-  },
-  "docs/reference/cli/confluence_cli.md": {
-    "page_id": "10289546",
-    "space": "PC",
-    "title": "Confluence Cli",
-    "last_synced": "2025-12-05T12:36:01.354193Z"
-  },
-  "docs/reference/cli/jira_cli.md": {
-    "page_id": "10289565",
-    "space": "PC",
-    "title": "Jira Cli",
-    "last_synced": "2025-12-05T12:36:07.259676Z"
-  },
-  "docs/reference/troubleshooting/DOCKER_FIX.md": {
-    "page_id": "10355090",
-    "space": "PC",
-    "title": "Docker Fix",
-    "last_synced": "2025-12-05T12:36:25.557870Z"
-  },
-  "docs/templates/confluence_page_template.md": {
-    "page_id": "10289585",
-    "space": "PC",
-    "title": "Confluence Page Template",
-    "last_synced": "2025-12-05T12:36:39.718581Z"
-  },
-  "docs/templates/git_commit_template.md": {
-    "page_id": "10289608",
-    "space": "PC",
-    "title": "Git Commit Template",
-    "last_synced": "2025-12-05T12:36:43.792112Z"
-  },
-  "docs/templates/github_pr_template.md": {
-    "page_id": "10354801",
-    "space": "PC",
-    "title": "Github Pr Template",
-    "last_synced": "2025-12-05T12:36:47.776327Z"
-  },
-  "docs/templates/jira_ticket_template.md": {
-    "page_id": "10518716",
-    "space": "PC",
-    "title": "Jira Ticket Template",
-    "last_synced": "2025-12-05T12:36:52.955860Z"
-  },
-  "docs/architecture/analytical_design/postgis_fundamentals.md": {
-    "page_id": "10354907",
-    "space": "PC",
-    "title": "Postgis Fundamentals",
-    "last_synced": "2025-12-05T13:26:34.411627Z"
-  },
-  "docs/architecture/analytical_design/rice_framework.md": {
-    "page_id": "10354927",
-    "space": "PC",
-    "title": "Rice Framework",
-    "last_synced": "2025-12-05T13:26:37.442279Z"
+    "title": "ADR 013: Geospatial Data Ingestion Strategy"
   },
   "docs/architecture/analytical_design/abstractions/geospatial_abstractions.md": {
+    "last_synced": "2025-12-06T05:12:54.129424+00:00Z",
     "page_id": "10518791",
     "space": "PC",
-    "title": "Geospatial Abstractions",
-    "last_synced": "2025-12-05T13:26:43.765726Z"
+    "title": "\ud83d\uddfa\ufe0f Design: Abstract Geospatial Views"
   },
-  "docs/architecture/data_governance/asset_catalog_guide.md": {
-    "page_id": "10354947",
+  "docs/architecture/analytical_design/postgis_fundamentals.md": {
+    "last_synced": "2025-12-06T05:12:55.004460+00:00Z",
+    "page_id": "10354907",
     "space": "PC",
-    "title": "Asset Catalog Guide",
-    "last_synced": "2025-12-05T13:26:53.394845Z"
+    "title": "\ud83d\uddfa\ufe0f PostGIS Fundamentals: A Project Chronos Cheat Sheet"
   },
-  "docs/architecture/data_governance/ontology_hub.md": {
-    "page_id": "10289757",
+  "docs/architecture/analytical_design/rice_framework.md": {
+    "last_synced": "2025-12-06T05:12:55.959004+00:00Z",
+    "page_id": "10354927",
     "space": "PC",
-    "title": "Ontology Hub",
-    "last_synced": "2025-12-05T13:26:57.802346Z"
+    "title": "\ud83d\ude80 RICE Framework for Insight Verticals"
   },
-  "docs/architecture/security/access_control_policy.md": {
-    "page_id": "10420246",
-    "space": "PC",
-    "title": "Access Control Policy",
-    "last_synced": "2025-12-05T13:27:07.607981Z"
-  },
-  "docs/platform_concepts/architecture.md": {
+  "docs/architecture/concepts/architecture.md": {
+    "last_synced": "2025-12-06T05:12:56.807989+00:00Z",
     "page_id": "10420504",
     "space": "PC",
-    "title": "Architecture",
-    "last_synced": "2025-12-05T13:29:44.032988Z"
+    "title": "\ud83c\udfdb\ufe0f Project Chronos: System Architecture"
   },
-  "docs/platform_concepts/documentation_structure.md": {
+  "docs/architecture/concepts/documentation_structure.md": {
+    "last_synced": "2025-12-06T05:12:57.508040+00:00Z",
     "page_id": "10420526",
     "space": "PC",
-    "title": "Documentation Structure",
-    "last_synced": "2025-12-05T13:29:47.111769Z"
+    "title": "Documentation Structure"
   },
-  "docs/platform_concepts/layer_structure.md": {
+  "docs/architecture/concepts/layer_structure.md": {
+    "last_synced": "2025-12-06T05:12:58.254632+00:00Z",
     "page_id": "10354883",
     "space": "PC",
-    "title": "Layer Structure",
-    "last_synced": "2025-12-05T13:29:49.400277Z"
+    "title": "Layer Structure"
   },
-  "docs/platform_concepts/orchestration_architecture.md": {
+  "docs/architecture/concepts/orchestration_architecture.md": {
+    "last_synced": "2025-12-06T05:12:59.267294+00:00Z",
     "page_id": "10289718",
     "space": "PC",
-    "title": "Orchestration Architecture",
-    "last_synced": "2025-12-05T13:29:52.389278Z"
+    "title": "Orchestration Architecture"
   },
-  "docs/platform_concepts/project_structure.md": {
+  "docs/architecture/concepts/project_structure.md": {
+    "last_synced": "2025-12-06T05:12:59.902682+00:00Z",
     "page_id": "10289737",
     "space": "PC",
-    "title": "Project Structure",
-    "last_synced": "2025-12-05T13:29:55.796469Z"
+    "title": "\ud83d\udcc2 Project Structure"
   },
-  "docs/platform_concepts/resilient_project_workflow.md": {
+  "docs/architecture/concepts/resilient_project_workflow.md": {
+    "last_synced": "2025-12-06T05:13:00.760448+00:00Z",
     "page_id": "10518766",
     "space": "PC",
-    "title": "Resilient Project Workflow",
-    "last_synced": "2025-12-05T13:29:58.745268Z"
+    "title": "\ud83d\uddfa\ufe0f The Resilient Project Workflow"
   },
-  "docs/platform_concepts/style_guide.md": {
+  "docs/architecture/concepts/style_guide.md": {
+    "last_synced": "2025-12-06T05:13:01.573023+00:00Z",
     "page_id": "10420552",
     "space": "PC",
-    "title": "Style Guide",
-    "last_synced": "2025-12-05T13:30:01.987657Z"
+    "title": "\ud83c\udfa8 Project Chronos: Documentation & Style Guide"
+  },
+  "docs/architecture/data_governance/asset_catalog_guide.md": {
+    "last_synced": "2025-12-06T05:13:02.440669+00:00Z",
+    "page_id": "10354947",
+    "space": "PC",
+    "title": "\ud83d\uddc2\ufe0f Asset Catalog Guide"
+  },
+  "docs/architecture/data_governance/ontology_hub.md": {
+    "last_synced": "2025-12-06T05:13:03.580284+00:00Z",
+    "page_id": "10289757",
+    "space": "PC",
+    "title": "\ud83c\udfdb\ufe0f Ontology Hub: The Language of Project Chronos"
+  },
+  "docs/architecture/security/access_control_policy.md": {
+    "last_synced": "2025-12-06T05:13:04.577848+00:00Z",
+    "page_id": "10420246",
+    "space": "PC",
+    "title": "Access Control Policy - Project Chronos"
+  },
+  "docs/guides/development/alembic_setup.md": {
+    "last_synced": "2025-12-05T12:32:34.373805Z",
+    "page_id": "10290022",
+    "space": "PC",
+    "title": "Alembic Migration Setup Guide"
+  },
+  "docs/guides/development/gis_workflow.md": {
+    "last_synced": "2025-12-06T05:13:06.692337+00:00Z",
+    "page_id": "10289802",
+    "space": "PC",
+    "title": "Project Chronos: GIS Data Processing Workflow"
+  },
+  "docs/guides/development/git_workflow.md": {
+    "last_synced": "2025-12-06T05:13:07.631725+00:00Z",
+    "page_id": "10420956",
+    "space": "PC",
+    "title": "\ud83d\udd00 Git Workflow Guide: From Feature to Production"
+  },
+  "docs/guides/development/jira_workflow.md": {
+    "last_synced": "2025-12-05T12:32:42.419619Z",
+    "page_id": "10519218",
+    "space": "PC",
+    "title": "Jira Workflow Guide"
+  },
+  "docs/guides/integration/google_cloud_setup.md": {
+    "last_synced": "2025-12-06T05:13:08.997406+00:00Z",
+    "page_id": "10944615",
+    "space": "PC",
+    "title": "Google Cloud Project Setup Guide"
+  },
+  "docs/guides/integration/google_workspace_guide.md": {
+    "last_synced": "2025-12-05T12:32:47.450042Z",
+    "page_id": "10420751",
+    "space": "PC",
+    "title": "Google Workspace Integration Guide"
+  },
+  "docs/guides/onboarding/llm_onboarding.md": {
+    "last_synced": "2025-12-06T05:13:10.826454+00:00Z",
+    "page_id": "10420778",
+    "space": "PC",
+    "title": "Project Chronos - LLM Onboarding Guide"
+  },
+  "docs/guides/onboarding/quick_reference.md": {
+    "last_synced": "2025-12-06T05:13:11.908465+00:00Z",
+    "page_id": "10519002",
+    "space": "PC",
+    "title": "\u26a1 Project Chronos: Quick Reference Card"
+  },
+  "docs/guides/organization/keepassxc_organization.md": {
+    "last_synced": "2025-12-06T05:13:12.648580+00:00Z",
+    "page_id": "10420331",
+    "space": "PC",
+    "title": "KeePassXC Organization Guide"
+  },
+  "docs/guides/security/secrets_management.md": {
+    "last_synced": "2025-12-05T12:33:22.184022Z",
+    "page_id": "10355244",
+    "space": "PC",
+    "title": "Project Chronos - Secrets Management Guide"
+  },
+  "docs/operations/development/confluence_bulk_sync.md": {
+    "last_synced": "2025-12-06T05:13:14.311901+00:00Z",
+    "page_id": "10420409",
+    "space": "PC",
+    "title": "Confluence Bulk Synchronization Guide"
+  },
+  "docs/operations/development/confluence_sync.md": {
+    "last_synced": "2025-12-06T05:13:15.174563+00:00Z",
+    "page_id": "10420352",
+    "space": "PC",
+    "title": "Confluence Sync & Operations Guide"
+  },
+  "docs/operations/development/workflow_overview.md": {
+    "last_synced": "2025-12-06T05:13:16.112173+00:00Z",
+    "page_id": "10290082",
+    "space": "PC",
+    "title": "\ud83d\udd04 Complete Workflow: Jira + Confluence + Git + GitHub"
+  },
+  "docs/operations/disaster_recovery/disaster_recovery.md": {
+    "last_synced": "2025-12-06T05:13:16.905509+00:00Z",
+    "page_id": "10420371",
+    "space": "PC",
+    "title": "Disaster Recovery Plan"
+  },
+  "docs/operations/infrastructure/database_backups.md": {
+    "last_synced": "2025-12-06T05:13:17.984822+00:00Z",
+    "page_id": "10355286",
+    "space": "PC",
+    "title": "pgBackRest Backup & Restore Runbook"
+  },
+  "docs/operations/infrastructure/monitoring.md": {
+    "last_synced": "2025-12-06T05:13:19.016051+00:00Z",
+    "page_id": "10420979",
+    "space": "PC",
+    "title": "CloudWatch Monitoring Runbook"
+  },
+  "docs/operations/integrations/google_workspace_setup.md": {
+    "last_synced": "2025-12-05T12:35:18.560589Z",
+    "page_id": "10519021",
+    "space": "PC",
+    "title": "Google Workspace Setup & Operations"
+  },
+  "docs/operations/integrations/valet_ingestion.md": {
+    "last_synced": "2025-12-06T05:13:20.365678+00:00Z",
+    "page_id": "10518812",
+    "space": "PC",
+    "title": "Valet Data Ingestion Runbook"
+  },
+  "docs/operations/project_management/scrumban_practices.md": {
+    "last_synced": "2025-12-06T05:13:21.100716+00:00Z",
+    "page_id": "11075652",
+    "space": "PC",
+    "title": "Scrumban Best Practices for Project Chronos"
+  },
+  "docs/operations/security/hardening_phase2a.md": {
+    "last_synced": "2025-12-06T05:13:22.294014+00:00Z",
+    "page_id": "10421002",
+    "space": "PC",
+    "title": "Security Hardening Phase 2A - Runbook"
+  },
+  "docs/operations/security/keepassxc_workflow.md": {
+    "last_synced": "2025-12-06T05:13:23.076663+00:00Z",
+    "page_id": "10289214",
+    "space": "PC",
+    "title": "KeePassXC Workflow"
+  },
+  "docs/reference/cli/confluence_cli.md": {
+    "last_synced": "2025-12-06T05:13:24.061680+00:00Z",
+    "page_id": "10289546",
+    "space": "PC",
+    "title": "confluence_cli(1) - Project Chronos Confluence CLI Tool"
+  },
+  "docs/reference/cli/jira_cli.md": {
+    "last_synced": "2025-12-06T05:13:25.060260+00:00Z",
+    "page_id": "10289565",
+    "space": "PC",
+    "title": "jira_cli(1) - Project Chronos Jira CLI Tool"
+  },
+  "docs/reference/troubleshooting/DOCKER_FIX.md": {
+    "last_synced": "2025-12-06T05:13:25.866372+00:00Z",
+    "page_id": "10355090",
+    "space": "PC",
+    "title": "Quick Fix for Antigravity Dev Container Docker Issues"
+  },
+  "docs/templates/confluence_page_template.md": {
+    "last_synced": "2025-12-06T05:13:27.081733+00:00Z",
+    "page_id": "10289585",
+    "space": "PC",
+    "title": "\ud83c\udfaf Confluence Page Template"
+  },
+  "docs/templates/git_commit_template.md": {
+    "last_synced": "2025-12-06T05:13:27.782909+00:00Z",
+    "page_id": "10289608",
+    "space": "PC",
+    "title": "Git Commit Message Template"
+  },
+  "docs/templates/github_pr_template.md": {
+    "last_synced": "2025-12-06T05:13:28.645190+00:00Z",
+    "page_id": "10354801",
+    "space": "PC",
+    "title": "\ud83d\udccb GitHub Pull Request Template"
+  },
+  "docs/templates/jira_ticket_template.md": {
+    "last_synced": "2025-12-06T05:13:29.627668+00:00Z",
+    "page_id": "10518716",
+    "space": "PC",
+    "title": "\ud83c\udfaf Jira Ticket Template"
   },
   "docs/troubleshooting/2025-11-17_post_mortem_data_persistence_failure.md": {
+    "last_synced": "2025-12-06T05:13:30.384056+00:00Z",
     "page_id": "10420625",
     "space": "PC",
-    "title": "2025 11 17 Post Mortem Data Persistence Failure",
-    "last_synced": "2025-12-05T13:30:48.043511Z"
+    "title": "2025-11-17 Post Mortem Data Persistence Failure"
   },
   "docs/vision_and_strategy/1_architectural_deep_dive.md": {
+    "last_synced": "2025-12-06T05:13:31.408749+00:00Z",
     "page_id": "10518743",
     "space": "PC",
-    "title": "1 Architectural Deep Dive",
-    "last_synced": "2025-12-05T13:30:58.589739Z"
+    "title": "\ud83c\udfdb\ufe0f Project Chronos: A Consolidated Architectural Deep Dive"
   },
   "docs/vision_and_strategy/2_the_phoenix_plan.md": {
+    "last_synced": "2025-12-06T05:13:32.642073+00:00Z",
     "page_id": "10354844",
     "space": "PC",
-    "title": "2 The Phoenix Plan",
-    "last_synced": "2025-12-05T13:31:02.186104Z"
+    "title": "2 The Phoenix Plan"
   },
   "docs/vision_and_strategy/3_llm_context_transfer_protocol.md": {
+    "last_synced": "2025-12-06T05:13:33.389220+00:00Z",
     "page_id": "10289668",
     "space": "PC",
-    "title": "3 Llm Context Transfer Protocol",
-    "last_synced": "2025-12-05T13:31:07.097482Z"
-  },
-  "docs/vision_and_strategy/ssot_documentation_index.md": {
-    "page_id": "10289688",
-    "space": "PC",
-    "title": "Ssot Documentation Index",
-    "last_synced": "2025-12-05T13:31:10.583595Z"
+    "title": "\ud83e\udde0 Project Chronos: LLM Context Transfer Protocol"
   },
   "docs/vision_and_strategy/outreach/2025-11-15_investor_pitch_script.md": {
+    "last_synced": "2025-12-06T05:13:34.070461+00:00Z",
     "page_id": "10354863",
     "space": "PC",
-    "title": "2025 11 15 Investor Pitch Script",
-    "last_synced": "2025-12-05T13:31:21.132367Z"
+    "title": "2025-11-15 Investor Pitch Script"
   },
   "docs/vision_and_strategy/outreach/diagrams/conversation_navigator.md": {
+    "last_synced": "2025-12-06T05:13:34.810397+00:00Z",
     "page_id": "10420462",
     "space": "PC",
-    "title": "Conversation Navigator",
-    "last_synced": "2025-12-05T13:31:26.617415Z"
+    "title": "Conversation Navigator"
   },
   "docs/vision_and_strategy/project_tracking/sprint_summaries/SPRINT4_SUMMARY.md": {
+    "last_synced": "2025-12-06T05:13:35.709469+00:00Z",
     "page_id": "10420482",
     "space": "PC",
-    "title": "Sprint4 Summary",
-    "last_synced": "2025-12-05T13:32:49.593839Z"
+    "title": "Sprint 4 Completion Summary"
   },
   "docs/vision_and_strategy/project_tracking/sprint_summaries/SPRINT6_SUMMARY.md": {
+    "last_synced": "2025-12-06T05:13:36.530084+00:00Z",
     "page_id": "10421188",
     "space": "PC",
-    "title": "Sprint6 Summary",
-    "last_synced": "2025-12-05T13:32:53.109962Z"
+    "title": "Sprint 6 Summary: Local DB Foundation"
   },
   "docs/vision_and_strategy/project_tracking/sprint_summaries/SPRINT7_SUMMARY.md": {
+    "last_synced": "2025-12-06T05:13:37.884057+00:00Z",
     "page_id": "10355510",
     "space": "PC",
-    "title": "Sprint7 Summary",
-    "last_synced": "2025-12-05T13:32:54.745985Z"
+    "title": "Sprint 7 Summary: AWS Infrastructure & Security"
+  },
+  "docs/vision_and_strategy/ssot_documentation_index.md": {
+    "last_synced": "2025-12-06T05:13:38.622016+00:00Z",
+    "page_id": "10289688",
+    "space": "PC",
+    "title": "SSOT Documentation Structure"
   }
 }
