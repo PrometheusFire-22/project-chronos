@@ -44,7 +44,8 @@ from rich.panel import Panel
 from rich.table import Table
 
 # Load environment
-env_path = Path(__file__).parent.parent / ".env"
+# Load environment
+env_path = Path(__file__).resolve().parents[3] / ".env"
 load_dotenv(env_path)
 
 # Jira configuration
