@@ -1,13 +1,16 @@
 # Jira Workflow Guide
 
-**Version:** 2.0.0  
-**Last Updated:** 2025-12-05
+**Version:** 3.0.0
+**Last Updated:** 2025-12-07
+**CLI Tool:** Atlassian CLI (ACLI) - Official
 
 ---
 
 ## Overview
 
-This guide provides workflow guidance for managing Jira tickets in Project Chronos, including epic/story/task hierarchy, sprint management, and automation scripts.
+This guide provides workflow guidance for managing Jira tickets in Project Chronos using the official Atlassian CLI (ACLI), including epic/story/task hierarchy, sprint management, and automation scripts.
+
+**Migration Note:** This guide has been updated for ACLI. See [ACLI Reference](../../reference/cli/atlassian_cli.md) for complete command documentation.
 
 ---
 
@@ -53,35 +56,39 @@ Epic (high-level initiative)
 ### Create an Epic
 
 ```bash
-jira create \
+acli jira workitem create \
+  --project CHRONOS \
+  --type Epic \
   --summary "Data Pipelines & Integration" \
   --description "Build data ingestion pipelines for EDGAR, Bank of England, and other financial data sources" \
-  --type "Epic" \
-  --labels "data-pipelines,integration,backlog"
+  --label "data-pipelines,integration,backlog"
 ```
 
 ### Create a Story (Linked to Epic)
 
 ```bash
 # Create the story
-jira create \
+acli jira workitem create \
+  --project CHRONOS \
+  --type Story \
   --summary "EDGAR API Integration" \
   --description "Implement EDGAR API data ingestion" \
-  --type "Story" \
-  --labels "edgar,data-source" \
-  --points 8
+  --label "edgar,data-source"
 
 # Link to epic (after creation)
-jira update CHRONOS-XXX --epic CHRONOS-265
+acli jira workitem edit --key CHRONOS-XXX --parent CHRONOS-265
+
+# Note: Story points must be set manually in Jira UI (ACLI limitation)
 ```
 
 ### Create a Task (Under Story)
 
 ```bash
-jira create \
+acli jira workitem create \
+  --project CHRONOS \
+  --type Task \
   --summary "Design EDGAR data schema" \
-  --type "Task" \
-  --labels "edgar,schema" \
+  --label "edgar,schema" \
   --parent CHRONOS-XXX
 ```
 
@@ -93,50 +100,47 @@ jira create \
 
 ```bash
 # Link existing story to epic
-jira update CHRONOS-248 --epic CHRONOS-255
+acli jira workitem edit --key CHRONOS-248 --parent CHRONOS-255
 
 # Bulk link multiple stories
 for ticket in CHRONOS-109 CHRONOS-50 CHRONOS-26; do
-  jira update $ticket --epic CHRONOS-265
+  acli jira workitem edit --key $ticket --parent CHRONOS-265
 done
 ```
 
 ### Verify Epic Links
 
 ```bash
-# Read epic to see linked stories
-jira read CHRONOS-265
+# View epic details
+acli jira workitem view --key CHRONOS-265
 
-# List all stories in an epic (use Jira UI)
+# List all stories in an epic (use Jira UI or JQL query)
 ```
 
 ---
 
 ## Sprint Management
 
-### Assign Tickets to Sprint
+### List Sprints
 
 ```bash
-# Use labels for sprint assignment
-jira update CHRONOS-248 --labels "google,api,sprint-8"
+# List all sprints for board ID 1
+acli jira board list-sprints --id 1
 
-# Or update multiple tickets
-jira bulk-close CHRONOS-175,CHRONOS-176 \
-  --reason "Superseded by CHRONOS-255" \
-  --status "Done"
+# List active sprints only
+acli jira board list-sprints --id 1 --state active
+
+# Use custom script
+./scripts/ops/jira_list_sprints.py
 ```
 
-### Create Retroactive Sprints
+### Assign Tickets to Sprint
 
-1. **In Jira UI:**
-   - Go to Project Settings → Sprints
-   - Create sprint with historical dates
-   - Assign tickets with `sprint-X` labels
+**Note:** Sprint assignment requires REST API (ACLI doesn't support customfield_10020).
 
-2. **Filter tickets by sprint:**
 ```bash
-jira list --sprint 7
-jira list --sprint sprint-8
+# Use labels for sprint tracking
+acli jira workitem edit --key CHRONOS-248 --label "google,api,sprint-8"
 ```
 
 ---
@@ -145,67 +149,47 @@ jira list --sprint sprint-8
 
 ### Supersede Old Tickets
 
+**Note:** ACLI doesn't have bulk-close. Loop through tickets individually.
+
 ```bash
-jira bulk-close CHRONOS-175,CHRONOS-176,CHRONOS-180 \
-  --reason "Superseded by CHRONOS-255 (Google Workspace Integration epic)" \
-  --status "Done"
+# Bulk update script approach
+for ticket in CHRONOS-175 CHRONOS-176 CHRONOS-180; do
+  acli jira workitem edit --key $ticket --label "superseded"
+  acli jira workitem transition --key $ticket --status "Done"
+done
 ```
 
 ### Close Duplicates
 
 ```bash
-jira bulk-close CHRONOS-220 \
-  --reason "Duplicate of CHRONOS-50 (Apache AGE schema design)" \
-  --status "Done"
+acli jira workitem edit --key CHRONOS-220 --label "duplicate"
+acli jira workitem transition --key CHRONOS-220 --status "Done"
+# Note: Resolution must be set manually or via REST API
 ```
 
 ---
 
 ## Automation Scripts
 
-### Retroactive Organization
+**Note:** Historical automation scripts have been archived to `scripts/_archive/historical/`.
 
-**Script:** `scripts/ops/organize_jira_retroactive.py`
+### Active Utility Script
 
-**Purpose:** Create epic/story/task hierarchy from forensic git analysis
+**Script:** `scripts/ops/jira_list_sprints.py`
 
-**Usage:**
-```bash
-# Set environment variables
-export JIRA_URL="https://automatonicai.atlassian.net"
-export JIRA_EMAIL="your-email@example.com"
-export JIRA_API_TOKEN="your-token"
-export JIRA_PROJECT_KEY="CHRONOS"
-
-# Run script
-python3 scripts/ops/organize_jira_retroactive.py
-```
-
-**What it does:**
-- Creates epics for major work streams
-- Creates stories under epics
-- Creates tasks under stories
-- Sets proper labels, points, and resolutions
-
----
-
-### Backlog Cleanup
-
-**Script:** `scripts/ops/cleanup_jira_backlog.py`
-
-**Purpose:** Supersede duplicates and organize backlog
+**Purpose:** List sprints for a board
 
 **Usage:**
 ```bash
-# Same environment variables as above
-python3 scripts/ops/cleanup_jira_backlog.py
-```
+# List all sprints for board 1
+python3 scripts/ops/jira_list_sprints.py
 
-**What it does:**
-- Closes superseded infrastructure tickets
-- Closes duplicate tickets
-- Creates missing epics
-- Links unorganized tickets to epics
+# List sprints for specific board
+python3 scripts/ops/jira_list_sprints.py 2
+
+# Filter by state
+python3 scripts/ops/jira_list_sprints.py 1 active
+```
 
 ---
 
@@ -219,21 +203,13 @@ python3 scripts/ops/cleanup_jira_backlog.py
 
 ### Setting Resolutions
 
+**Note:** ACLI doesn't support resolution field directly. Use Jira UI or REST API.
+
 ```bash
-# Mark as Done
-jira update CHRONOS-248 --status "Done" --resolution "Done"
+# Transition to Done (resolution set in Jira UI)
+acli jira workitem transition --key CHRONOS-248 --status "Done"
 
-# Mark as Superseded
-jira update CHRONOS-175 \
-  --status "Done" \
-  --resolution "Superseded" \
-  --description "Superseded by CHRONOS-255"
-
-# Mark as Cancelled
-jira update CHRONOS-999 \
-  --status "Done" \
-  --resolution "Cancelled" \
-  --description "No longer needed"
+# Note: For resolution field, use Jira UI or REST API
 ```
 
 ---
