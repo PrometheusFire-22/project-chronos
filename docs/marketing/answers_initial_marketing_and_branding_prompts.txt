@@ -1,0 +1,82 @@
+ANSWERS:
+
+See attached .pdf file from Google Docs with copying and pasting of the most compelling sites, in a combination of light and dark mode (though I want harmony across both, and mobile-firstness, even though most use will be browser, and hopefully thereafter desktop).
+
+ATTACH SAAS SAMPLES:
+
+  Question 2a: Complete this sentence:
+  "Unlike Salesforce/HubSpot which only shows lower dimensional relationship depth for understanding the extent and complexity of underlying holdings, investor relations, strength of weak connections, co-investment networks, board membership networks, board networks in relation to co-investment networks in relation to etc., Project
+  Chronos reveals the multi-hop strenth of weak connections by using its uniquely multi-modal-first but running on postgres [graph/vector/geospatial
+   tech] to glean unique data insights so that PE/VC/IB professionals can identify prospective investors, buyers, sellers, partners and more. Linkedin doesn't tell you who invested in Apollo Fund XII but didn't re-up with that manager for Apollo XIII. Pitchbook can tell you this but doesn't have the graph functionality to have a recommendation engine like Amazon's e-commerce or Netflix, where the recommendations are eerily good and targeted. It would also, ideally, find ways to leverage AI to answer questions but also act as a sales assistant for recommendations. Neither add such extensive geospatial and time-series features or vector".
+
+For 2b, let's start with this:   - A) "See the Hidden Connections in Your Deal Flow" (emphasizes graph). I'm a bit concerned about the lack of clarity for this and wonder if C would be better for it's clarity, with B being too vague.
+
+  Question 2c: Primary User Persona - Who are we writing for?
+
+  - Partner/Principal (40-55, relationship-focused, wants efficiency)
+
+That said, realistically, I want all of the above and I'd expect I would need to speak with the ultimate decision-makers, though there are many smaller shops where the above demographic is probably most accurate.
+
+SEE ATTACHED MY RESUME:
+
+  Question 3a: What's acceptable to show before you have real customers?
+
+  For B, play up my resume but also use C. I can get legit testimonials on background and make claims about what impressive people say faithfully.
+  - B) "Built by former [your background]" (your credibility)
+  - C) "Powered by PostgreSQL, Apache AGE, TimescaleDB" (technical
+  credibility)
+  - D) Placeholder testimonials with "Investor, Undisclosed PE Firm"
+  (generic but safe)
+
+  Question 3b: Do you have any early access users, beta testers, or advisors
+   we can reference (even anonymously)?
+
+No early access users yet, I'm still launching MVP and have yet to perform the grand reveal for my former network.
+
+ You said: "5 nodes, 5 edges forming an 'A', animated, responsive to mouse"
+
+  Question 4a: Logo complexity - This affects everything:
+
+Do this with absolutely no watermarks and use the color scheme discussed:
+
+  Simple Path (Recommended for MVP):
+  - Static SVG logo (5 nodes/edges forming A)
+  - Subtle CSS animation (pulse or fade)
+  - Fast, clean, professional
+  - Timeline: 1-2 days to create
+
+Yes to all of the logo questions below:
+
+  Question 4b: Logo format priorities:
+  1. Do you need it for the landing page hero immediately?
+  2. Do you need it for favicon (browser tab icon)?
+  3. Do you need it for email signatures / social media now?
+
+  If answer is "yes" to all, we should do Simple Path first.
+
+    Question 5a: What integrations should we show?
+
+  Real (already planned in ADRs):
+  - PostgreSQL, Apache AGE, TimescaleDB, PostGIS, pgvector
+  - AWS Lightsail / S3
+
+  Aspirational (roadmap):
+  - Salesforce, HubSpot, LinkedIn
+  - Bloomberg, PitchBook, Crunchbase
+  - Gmail, Outlook, Calendar
+
+  Question: Should we label these clearly as "Available Now" vs. "Coming
+  Soon"? Or mix them together with small "Beta" badges?
+
+I'm on the fence about the coming soon though I'd very much like to add this, as it's where people would get most excited, as they now expect seamless integration.
+
+I don't want to focus on pricing for a nonexistent product. I like the more generic promises of early access and forward timing and feature guidance.
+
+  Question 6b: Should we show pricing now (before product exists) or use:
+  - "Join Waitlist" CTA
+  - "Request Early Access"
+  - "Coming Q1 2026"
+
+  Question 7a: Source of graphics - Which approach?
+
+I don't want any cheap-feeling AI made content. Ideally, I'd work with you on either a JS (likely), Python or Linux/FOSS-based graphic generator. I don't want to fall down a rabbithole here but I'm confident you and I could work together a script that essentially creates a sexier graph that something cheap-looking, and this could also have further functionality. I'm inclined to Option B but would also like Option C but would
