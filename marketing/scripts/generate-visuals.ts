@@ -269,15 +269,15 @@ function generateHeroGraphic(mode: 'light' | 'dark' = 'light'): string {
   // Define node positions first (we'll draw edges before nodes for layering)
   const nodePositions: Array<{x: number, y: number, size: number, color: string}> = []
 
-  // Generate 10-12 nodes using Fibonacci spacing
-  const numNodes = 12
+  // Generate 8-9 nodes using Fibonacci spacing (reduced from 12 for breathing room)
+  const numNodes = 9
   for (let i = 0; i < numNodes; i++) {
-    // Use golden ratio spiral for positioning
+    // Use golden ratio spiral for positioning with more spread
     const angle = i * PHI * 2 * Math.PI
-    const radius = (i / numNodes) * Math.min(width, height) * 0.35
+    const radius = (i / numNodes) * Math.min(width, height) * 0.42 // Increased from 0.35 for more space
 
-    const x = width / 2 + radius * Math.cos(angle) + (rng() - 0.5) * 100
-    const y = height / 2 + radius * Math.sin(angle) + (rng() - 0.5) * 100
+    const x = width / 2 + radius * Math.cos(angle) + (rng() - 0.5) * 120 // Increased jitter
+    const y = height / 2 + radius * Math.sin(angle) + (rng() - 0.5) * 120
     const size = FIBONACCI[i % FIBONACCI.length] * 3 + 20
     const color = randomChoice(colors, rng)
 
