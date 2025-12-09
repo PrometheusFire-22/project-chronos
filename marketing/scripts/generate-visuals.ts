@@ -632,23 +632,23 @@ function generateTimeSeriesIllustration(mode: 'light' | 'dark' = 'light'): strin
   content += `<line x1="60" y1="${height / 2}" x2="${width - 60}" y2="${height / 2}" stroke="${gridColor}" stroke-width="1" opacity="0.2" stroke-dasharray="2,4" />\n`
 
   // 2. FLOWING TIME-SERIES WAVES
-  // Multiple overlapping sine-like waves that suggest temporal flow
+  // Reduced to 4 waves (from 7) for less density: 2 purple, 1 teal, 1 green
   content += '<g id="timeseries-waves">\n'
 
-  const numWaves = 7
+  const numWaves = 4
   const waveColors = [
-    COLORS.purple, COLORS.purple, COLORS.purple, // More purple
-    COLORS.teal, COLORS.teal,
-    COLORS.green, COLORS.green
+    COLORS.purple, COLORS.purple, // 2 purple
+    COLORS.teal,                   // 1 teal
+    COLORS.green                   // 1 green
   ]
 
   for (let i = 0; i < numWaves; i++) {
-    const baseY = 100 + (i * 70)
-    const amplitude = 30 + rng() * 40
+    const baseY = 120 + (i * 110) // Increased spacing from 70 to 110 for better separation
+    const amplitude = 35 + rng() * 40
     const frequency = 0.01 + rng() * 0.015
     const phase = rng() * Math.PI * 2
     const color = waveColors[i]
-    const strokeWidth = 2 + rng() * 2
+    const strokeWidth = 2.5 + rng() * 1.5
 
     // Generate smooth wave path
     let pathData = `M 60,${baseY}`
@@ -658,25 +658,25 @@ function generateTimeSeriesIllustration(mode: 'light' | 'dark' = 'light'): strin
       pathData += ` L ${x},${y}`
     }
 
-    content += `<path d="${pathData}" stroke="${color}" stroke-width="${strokeWidth}" fill="none" opacity="0.7" stroke-linecap="round" />\n`
+    content += `<path d="${pathData}" stroke="${color}" stroke-width="${strokeWidth}" fill="none" opacity="0.75" stroke-linecap="round" />\n`
   }
 
   content += '</g>\n'
 
-  // 3. DATA POINTS on waves (suggest discrete measurements)
+  // 3. DATA POINTS on waves (reduced, suggest discrete measurements)
   content += '<g id="timeseries-datapoints">\n'
 
-  // Select a few waves and add data point markers
-  const markerWaves = [1, 3, 5]
+  // Add data points to 2 of the 4 waves (reduced from 3 of 7)
+  const markerWaves = [0, 2] // First purple and teal
   for (const waveIdx of markerWaves) {
-    const baseY = 100 + (waveIdx * 70)
-    const amplitude = 30 + rng() * 40
+    const baseY = 120 + (waveIdx * 110)
+    const amplitude = 35 + rng() * 40
     const frequency = 0.01 + rng() * 0.015
     const phase = rng() * Math.PI * 2
     const color = waveColors[waveIdx]
 
-    // Add markers at regular intervals
-    for (let x = 100; x < width - 100; x += 80) {
+    // Reduced frequency: every 120px instead of 80px (fewer dots)
+    for (let x = 120; x < width - 100; x += 120) {
       const y = baseY + Math.sin(x * frequency + phase) * amplitude
       content += generateCircle(x, y, 4, color, 1, 0) + '\n'
     }
