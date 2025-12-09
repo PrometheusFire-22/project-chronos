@@ -16,8 +16,8 @@
   <!-- Bowl (circular part on LEFT side) - SOLID PURPLE -->
   <circle cx="70" cy="150" r="45" fill="#8B5CF6" />
 
-  <!-- Bowl interior (creates "a" counter-form - cutout) -->
-  <circle cx="70" cy="145" r="28" fill="#0F172A" />
+  <!-- Bowl interior (creates "a" counter-form - transparent) -->
+  <circle cx="70" cy="145" r="28" fill="none" />
 
   <!-- Stem (vertical line on RIGHT side) - SOLID TEAL -->
   <rect
