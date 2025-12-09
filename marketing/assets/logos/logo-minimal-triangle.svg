@@ -15,14 +15,14 @@
     x1="100" y1="40"
     x2="30" y2="200"
     stroke="#06B6D4"
-    stroke-width="3"
+    stroke-width="5"
     stroke-linecap="round"
   />
   <line
     x1="100" y1="40"
     x2="170" y2="200"
     stroke="#10B981"
-    stroke-width="3"
+    stroke-width="5"
     stroke-linecap="round"
   />
 
