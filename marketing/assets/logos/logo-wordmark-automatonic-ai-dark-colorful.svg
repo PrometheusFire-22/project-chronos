@@ -1,6 +1,6 @@
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 850 240"
+  viewBox="0 0 800 240"
   role="img"
   aria-labelledby="wordmark-dark-colorful-title"
 >
@@ -14,29 +14,26 @@
     </mask>
   </defs>
 
-  <!-- First "a" (logo style, NO dot) - scaled down 85%, moved up -->
-  <g id="first-a" transform="translate(0, -5) scale(0.85)">
+  <!-- First "a" (logo style, NO dot) - scaled 85%, vertically centered -->
+  <g transform="scale(0.85) translate(0, 12)">
     <circle cx="70" cy="150" r="45" fill="#8B5CF6" mask="url(#aMask)" />
     <rect x="110" y="105" width="16" height="90" fill="#06B6D4" rx="8" />
   </g>
 
   <!-- "utonomic " text - colorful with teal/green "o"s -->
   <text
-    x="130"
+    x="125"
     y="175"
     font-family="Poppins, sans-serif"
     font-size="110"
     font-weight="700"
+    letter-spacing="0"
   >
-    <tspan fill="#8B5CF6">ut</tspan>
-    <tspan fill="#06B6D4">o</tspan>
-    <tspan fill="#8B5CF6">n</tspan>
-    <tspan fill="#10B981">o</tspan>
-    <tspan fill="#8B5CF6">mic </tspan>
+    <tspan fill="#8B5CF6">ut</tspan><tspan fill="#06B6D4">o</tspan><tspan fill="#8B5CF6">n</tspan><tspan fill="#10B981">o</tspan><tspan fill="#8B5CF6">mic </tspan>
   </text>
 
-  <!-- Final "ai" (exact logo with dot) - scaled down 85%, moved up and right -->
-  <g transform="translate(680, -5) scale(0.85)">
+  <!-- Final "ai" (exact logo with dot) - scaled 85%, vertically centered, tight spacing -->
+  <g transform="translate(600, 0) scale(0.85) translate(0, 12)">
     <circle cx="70" cy="150" r="45" fill="#8B5CF6" mask="url(#aMask)" />
     <rect x="110" y="105" width="16" height="90" fill="#06B6D4" rx="8" />
     <circle cx="118" cy="70" r="14" fill="#10B981" />
