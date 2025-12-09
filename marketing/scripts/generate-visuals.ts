@@ -614,6 +614,118 @@ function generateGeospatialIllustration(mode: 'light' | 'dark' = 'light'): strin
 }
 
 // ============================================================================
+// TIME-SERIES DATABASE ILLUSTRATION
+// Flowing temporal lines with rhythmic patterns
+// Inspiration: Bridget Riley + Flow fields + Data visualization
+// ============================================================================
+
+function generateTimeSeriesIllustration(mode: 'light' | 'dark' = 'light'): string {
+  const width = 800
+  const height = 600
+  const seed = 300
+  const rng = seededRandom(seed)
+
+  let content = ''
+
+  // 1. TIME AXIS (subtle horizontal reference)
+  const gridColor = mode === 'light' ? COLORS.light.grid : COLORS.dark.grid
+  content += `<line x1="60" y1="${height / 2}" x2="${width - 60}" y2="${height / 2}" stroke="${gridColor}" stroke-width="1" opacity="0.2" stroke-dasharray="2,4" />\n`
+
+  // 2. FLOWING TIME-SERIES WAVES
+  // Multiple overlapping sine-like waves that suggest temporal flow
+  content += '<g id="timeseries-waves">\n'
+
+  const numWaves = 7
+  const waveColors = [
+    COLORS.purple, COLORS.purple, COLORS.purple, // More purple
+    COLORS.teal, COLORS.teal,
+    COLORS.green, COLORS.green
+  ]
+
+  for (let i = 0; i < numWaves; i++) {
+    const baseY = 100 + (i * 70)
+    const amplitude = 30 + rng() * 40
+    const frequency = 0.01 + rng() * 0.015
+    const phase = rng() * Math.PI * 2
+    const color = waveColors[i]
+    const strokeWidth = 2 + rng() * 2
+
+    // Generate smooth wave path
+    let pathData = `M 60,${baseY}`
+
+    for (let x = 60; x <= width - 60; x += 5) {
+      const y = baseY + Math.sin(x * frequency + phase) * amplitude
+      pathData += ` L ${x},${y}`
+    }
+
+    content += `<path d="${pathData}" stroke="${color}" stroke-width="${strokeWidth}" fill="none" opacity="0.7" stroke-linecap="round" />\n`
+  }
+
+  content += '</g>\n'
+
+  // 3. DATA POINTS on waves (suggest discrete measurements)
+  content += '<g id="timeseries-datapoints">\n'
+
+  // Select a few waves and add data point markers
+  const markerWaves = [1, 3, 5]
+  for (const waveIdx of markerWaves) {
+    const baseY = 100 + (waveIdx * 70)
+    const amplitude = 30 + rng() * 40
+    const frequency = 0.01 + rng() * 0.015
+    const phase = rng() * Math.PI * 2
+    const color = waveColors[waveIdx]
+
+    // Add markers at regular intervals
+    for (let x = 100; x < width - 100; x += 80) {
+      const y = baseY + Math.sin(x * frequency + phase) * amplitude
+      content += generateCircle(x, y, 4, color, 1, 0) + '\n'
+    }
+  }
+
+  content += '</g>\n'
+
+  // 4. VERTICAL TIME MARKERS (suggest time intervals)
+  content += '<g id="time-markers">\n'
+
+  for (let x = 150; x < width - 60; x += 150) {
+    content += `<line x1="${x}" y1="80" x2="${x}" y2="${height - 80}" stroke="${gridColor}" stroke-width="1" opacity="0.15" stroke-dasharray="3,6" />\n`
+
+    // Small accent at top
+    content += generateCircle(x, 70, 3, COLORS.teal, 0.4) + '\n'
+  }
+
+  content += '</g>\n'
+
+  // 5. TREND INDICATORS (arrows suggesting temporal direction)
+  content += '<g id="trend-indicators">\n'
+
+  // Upward trend arrow (right side, purple)
+  const arrowX = width - 120
+  const arrowY = 200
+  const arrowPath = `M ${arrowX},${arrowY + 40} L ${arrowX},${arrowY} L ${arrowX - 10},${arrowY + 12} M ${arrowX},${arrowY} L ${arrowX + 10},${arrowY + 12}`
+  content += `<path d="${arrowPath}" stroke="${COLORS.purple}" stroke-width="3" fill="none" opacity="0.6" stroke-linecap="round" stroke-linejoin="round" />\n`
+
+  // Downward trend arrow (right side, lower, teal)
+  const arrowX2 = width - 120
+  const arrowY2 = 450
+  const arrowPath2 = `M ${arrowX2},${arrowY2 - 40} L ${arrowX2},${arrowY2} L ${arrowX2 - 10},${arrowY2 - 12} M ${arrowX2},${arrowY2} L ${arrowX2 + 10},${arrowY2 - 12}`
+  content += `<path d="${arrowPath2}" stroke="${COLORS.teal}" stroke-width="3" fill="none" opacity="0.6" stroke-linecap="round" stroke-linejoin="round" />\n`
+
+  content += '</g>\n'
+
+  // 6. TEMPORAL GRADIENT OVERLAY (subtle, suggests flow direction)
+  content += '<defs>\n'
+  content += '  <linearGradient id="temporal-gradient" x1="0%" y1="0%" x2="100%" y2="0%">\n'
+  content += `    <stop offset="0%" style="stop-color:${COLORS.purple};stop-opacity:0.05" />\n`
+  content += `    <stop offset="100%" style="stop-color:${COLORS.teal};stop-opacity:0.05" />\n`
+  content += '  </linearGradient>\n'
+  content += '</defs>\n'
+  content += `<rect x="60" y="80" width="${width - 120}" height="${height - 160}" fill="url(#temporal-gradient)" />\n`
+
+  return createSVG(width, height, content, mode)
+}
+
+// ============================================================================
 // FILE OPERATIONS
 // ============================================================================
 
@@ -677,6 +789,13 @@ async function main() {
   await writeSVG(path.join(outputDir, 'geospatial-database-light.svg'), geospatialLight)
   await writeSVG(path.join(outputDir, 'geospatial-database-dark.svg'), geospatialDark)
 
+  // Generate time-series database illustration (light & dark modes)
+  const timeSeriesLight = generateTimeSeriesIllustration('light')
+  const timeSeriesDark = generateTimeSeriesIllustration('dark')
+
+  await writeSVG(path.join(outputDir, 'timeseries-database-light.svg'), timeSeriesLight)
+  await writeSVG(path.join(outputDir, 'timeseries-database-dark.svg'), timeSeriesDark)
+
   console.log('')
   console.log('✅ Asset generation complete!')
   console.log(`   Output: ${outputDir}`)
@@ -700,6 +819,7 @@ export {
   generateHeroGraphic,
   generateGraphDatabaseIllustration,
   generateGeospatialIllustration,
+  generateTimeSeriesIllustration,
   generateGrid,
   generateCircle,
   generateTriangle,
