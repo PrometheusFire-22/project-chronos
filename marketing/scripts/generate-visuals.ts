@@ -396,8 +396,9 @@ async function main() {
   console.log('   3. Add Framer Motion animations')
 }
 
-// Run if called directly
-if (require.main === module) {
+// Run if called directly (ES module compatible)
+const isMainModule = import.meta.url === `file://${process.argv[1]}`
+if (isMainModule) {
   main().catch((error) => {
     console.error('❌ Error generating visual assets:', error)
     process.exit(1)
