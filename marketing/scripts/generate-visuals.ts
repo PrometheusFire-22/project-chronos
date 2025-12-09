@@ -470,6 +470,150 @@ function generateGraphDatabaseIllustration(mode: 'light' | 'dark' = 'light'): st
 }
 
 // ============================================================================
+// GEOSPATIAL DATABASE ILLUSTRATION
+// Circle-packed world map (abstract geometric continents)
+// Inspiration: Oliver Byrne's Euclid + Circle packing algorithms
+// ============================================================================
+
+function generateGeospatialIllustration(mode: 'light' | 'dark' = 'light'): string {
+  const width = 800
+  const height = 600
+  const seed = 200
+  const rng = seededRandom(seed)
+
+  let content = ''
+
+  // 1. NO GRID for geospatial (cleaner map aesthetic)
+
+  // 2. DEFINE CONTINENTS using circle clusters
+  // We'll create abstract land masses using circles of uniform size
+  const circleRadius = 18
+
+  // Helper function to create a continent cluster
+  function createContinent(
+    centerX: number,
+    centerY: number,
+    rows: number,
+    cols: number,
+    color: string,
+    randomness: number = 0.3
+  ): string {
+    let circles = ''
+    const spacing = circleRadius * 2 * 0.9 // Slight overlap for organic look
+
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        // Hexagonal packing for tighter arrangement
+        const offsetX = row % 2 === 0 ? 0 : spacing / 2
+        const x = centerX + col * spacing + offsetX + (rng() - 0.5) * spacing * randomness
+        const y = centerY + row * spacing * 0.866 + (rng() - 0.5) * spacing * randomness // 0.866 = sqrt(3)/2
+
+        circles += generateCircle(x, y, circleRadius, color, 0.85, 0) + '\n'
+      }
+    }
+    return circles
+  }
+
+  content += '<g id="geospatial-map">\n'
+
+  // 3. DRAW "CONTINENTS" (purple for land)
+  // North America-ish (left side, upper)
+  content += createContinent(180, 180, 5, 6, COLORS.purple, 0.4)
+
+  // South America-ish (left side, lower)
+  content += createContinent(200, 380, 4, 3, COLORS.purple, 0.3)
+
+  // Europe-ish (center-right, upper)
+  content += createContinent(440, 160, 3, 5, COLORS.purple, 0.35)
+
+  // Africa-ish (center-right, middle)
+  content += createContinent(460, 320, 6, 4, COLORS.purple, 0.3)
+
+  // Asia-ish (right side, large)
+  content += createContinent(580, 200, 5, 7, COLORS.purple, 0.4)
+
+  // Australia-ish (right side, lower, small)
+  content += createContinent(640, 450, 2, 3, COLORS.purple, 0.25)
+
+  content += '</g>\n'
+
+  // 4. DATA POINTS / MARKERS (teal and green pins)
+  content += '<g id="geospatial-markers">\n'
+
+  // Major hubs (teal - larger)
+  const majorHubs = [
+    { x: 200, y: 200 }, // North America
+    { x: 460, y: 180 }, // Europe
+    { x: 480, y: 340 }, // Africa
+    { x: 600, y: 240 }, // Asia
+    { x: 220, y: 400 }, // South America
+  ]
+
+  for (const hub of majorHubs) {
+    // Pin style: small dot + outer ring
+    content += generateCircle(hub.x, hub.y, 8, COLORS.teal, 1, 0) + '\n'
+    content += generateCircle(hub.x, hub.y, 16, COLORS.teal, 0.3, 2) + '\n'
+  }
+
+  // Minor markers (green - smaller, scattered)
+  const minorMarkers = [
+    { x: 160, y: 240 },
+    { x: 240, y: 160 },
+    { x: 430, y: 200 },
+    { x: 500, y: 300 },
+    { x: 620, y: 200 },
+    { x: 660, y: 280 },
+    { x: 640, y: 460 },
+    { x: 180, y: 420 },
+  ]
+
+  for (const marker of minorMarkers) {
+    content += generateCircle(marker.x, marker.y, 5, COLORS.green, 1, 0) + '\n'
+  }
+
+  content += '</g>\n'
+
+  // 5. CONNECTION LINES (suggest geospatial relationships)
+  content += '<g id="geospatial-connections">\n'
+
+  // Connect some major hubs with curved paths (suggest global connections)
+  const connections = [
+    [majorHubs[0], majorHubs[1]], // NA to Europe
+    [majorHubs[1], majorHubs[3]], // Europe to Asia
+    [majorHubs[0], majorHubs[4]], // NA to SA
+    [majorHubs[1], majorHubs[2]], // Europe to Africa
+  ]
+
+  for (const [hub1, hub2] of connections) {
+    content += generateLine(
+      hub1.x, hub1.y, hub2.x, hub2.y,
+      COLORS.teal, 1.5, 0.25
+    ) + '\n'
+  }
+
+  content += '</g>\n'
+
+  // 6. COORDINATE GRID (subtle, suggests lat/long)
+  content += '<g id="coordinate-grid">\n'
+  const gridColor = mode === 'light' ? COLORS.light.grid : COLORS.dark.grid
+  const gridOpacity = mode === 'light' ? '0.15' : '0.25'
+
+  // Vertical meridians (every ~100px)
+  for (let x = 100; x < width; x += 150) {
+    content += `<line x1="${x}" y1="50" x2="${x}" y2="${height - 50}" stroke="${gridColor}" stroke-width="1" opacity="${gridOpacity}" stroke-dasharray="4,4" />\n`
+  }
+
+  // Horizontal parallels
+  for (let y = 100; y < height; y += 150) {
+    content += `<line x1="50" y1="${y}" x2="${width - 50}" y2="${y}" stroke="${gridColor}" stroke-width="1" opacity="${gridOpacity}" stroke-dasharray="4,4" />\n`
+  }
+
+  content += '</g>\n'
+
+  return createSVG(width, height, content, mode)
+}
+
+// ============================================================================
 // FILE OPERATIONS
 // ============================================================================
 
@@ -526,6 +670,13 @@ async function main() {
   await writeSVG(path.join(outputDir, 'graph-database-light.svg'), graphLight)
   await writeSVG(path.join(outputDir, 'graph-database-dark.svg'), graphDark)
 
+  // Generate geospatial database illustration (light & dark modes)
+  const geospatialLight = generateGeospatialIllustration('light')
+  const geospatialDark = generateGeospatialIllustration('dark')
+
+  await writeSVG(path.join(outputDir, 'geospatial-database-light.svg'), geospatialLight)
+  await writeSVG(path.join(outputDir, 'geospatial-database-dark.svg'), geospatialDark)
+
   console.log('')
   console.log('✅ Asset generation complete!')
   console.log(`   Output: ${outputDir}`)
@@ -548,6 +699,7 @@ if (isMainModule) {
 export {
   generateHeroGraphic,
   generateGraphDatabaseIllustration,
+  generateGeospatialIllustration,
   generateGrid,
   generateCircle,
   generateTriangle,
