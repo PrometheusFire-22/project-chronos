@@ -20,18 +20,18 @@
     <rect x="110" y="105" width="16" height="90" fill="#06B6D4" rx="8" />
   </g>
 
-  <!-- "utonomic " text - light for dark backgrounds -->
+  <!-- "utonomic " text - purple for brand consistency -->
   <text
     x="145"
     y="175"
     font-family="Poppins, sans-serif"
     font-size="110"
-    font-weight="400"
-    fill="#F8FAFC"
+    font-weight="700"
+    fill="#8B5CF6"
   >utonomic </text>
 
-  <!-- Final "ai" (exact logo with dot) -->
-  <g transform="translate(720, 0)">
+  <!-- Final "ai" (exact logo with dot) - closer spacing -->
+  <g transform="translate(640, 0)">
     <circle cx="70" cy="150" r="45" fill="#8B5CF6" mask="url(#aMask)" />
     <rect x="110" y="105" width="16" height="90" fill="#06B6D4" rx="8" />
     <circle cx="118" cy="70" r="14" fill="#10B981" />
