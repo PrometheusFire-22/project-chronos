@@ -340,6 +340,136 @@ function generateHeroGraphic(mode: 'light' | 'dark' = 'light'): string {
 }
 
 // ============================================================================
+// GRAPH DATABASE ILLUSTRATION
+// Force-directed network with prominent nodes and edges
+// Inspiration: Sol LeWitt + Kandinsky + Network graph theory
+// ============================================================================
+
+function generateGraphDatabaseIllustration(mode: 'light' | 'dark' = 'light'): string {
+  const width = 800
+  const height = 600
+  const seed = 100 // Different seed for different composition
+  const rng = seededRandom(seed)
+
+  // Color palette (purple dominant for graph nodes)
+  const colors = [
+    COLORS.purple, COLORS.purple, COLORS.purple, // 60% purple
+    COLORS.teal, COLORS.teal,                     // 30% teal
+    COLORS.green                                   // 10% green
+  ]
+
+  let content = ''
+
+  // 1. SUBTLE GRID BACKGROUND
+  content += generateGrid(width, height, mode) + '\n'
+
+  // 2. DEFINE NODE POSITIONS (hierarchical structure)
+  // Create a 3-layer network: central hub, inner ring, outer ring
+  const nodePositions: Array<{x: number, y: number, size: number, color: string, layer: number}> = []
+
+  // Central hub (1 large node)
+  const centerX = width / 2
+  const centerY = height / 2
+  nodePositions.push({
+    x: centerX,
+    y: centerY,
+    size: 60,
+    color: COLORS.purple,
+    layer: 0
+  })
+
+  // Inner ring (5 nodes)
+  const innerRadius = 140
+  for (let i = 0; i < 5; i++) {
+    const angle = (i / 5) * 2 * Math.PI - Math.PI / 2
+    nodePositions.push({
+      x: centerX + innerRadius * Math.cos(angle),
+      y: centerY + innerRadius * Math.sin(angle),
+      size: 40,
+      color: randomChoice(colors, rng),
+      layer: 1
+    })
+  }
+
+  // Outer ring (8 nodes)
+  const outerRadius = 240
+  for (let i = 0; i < 8; i++) {
+    const angle = (i / 8) * 2 * Math.PI - Math.PI / 2 + (Math.PI / 16) // Slight offset
+    nodePositions.push({
+      x: centerX + outerRadius * Math.cos(angle) + (rng() - 0.5) * 30,
+      y: centerY + outerRadius * Math.sin(angle) + (rng() - 0.5) * 30,
+      size: 25 + rng() * 15,
+      color: randomChoice(colors, rng),
+      layer: 2
+    })
+  }
+
+  // 3. DRAW EDGES (connections between layers and within layers)
+  content += '<g id="graph-edges">\n'
+
+  // Connect center to all inner ring nodes
+  for (let i = 1; i <= 5; i++) {
+    content += generateLine(
+      nodePositions[0].x, nodePositions[0].y,
+      nodePositions[i].x, nodePositions[i].y,
+      nodePositions[i].color, 3, 0.6
+    ) + '\n'
+  }
+
+  // Connect inner ring nodes to outer ring nodes (selective connections)
+  for (let i = 1; i <= 5; i++) {
+    const innerNode = nodePositions[i]
+    // Each inner node connects to 2-3 outer nodes
+    const numConnections = 2 + Math.floor(rng() * 2)
+    for (let j = 0; j < numConnections; j++) {
+      const outerNodeIdx = 6 + Math.floor(rng() * 8)
+      const outerNode = nodePositions[outerNodeIdx]
+      content += generateLine(
+        innerNode.x, innerNode.y,
+        outerNode.x, outerNode.y,
+        outerNode.color, 2, 0.4
+      ) + '\n'
+    }
+  }
+
+  // Some connections within outer ring (creates mesh)
+  for (let i = 6; i < nodePositions.length - 1; i++) {
+    if (rng() > 0.6) {
+      const node1 = nodePositions[i]
+      const node2 = nodePositions[i + 1]
+      content += generateLine(
+        node1.x, node1.y, node2.x, node2.y,
+        node1.color, 1.5, 0.3
+      ) + '\n'
+    }
+  }
+
+  content += '</g>\n'
+
+  // 4. DRAW NODES (on top of edges for proper layering)
+  content += '<g id="graph-nodes">\n'
+
+  for (const node of nodePositions) {
+    // All nodes are circles for graph clarity
+    const strokeWidth = node.layer === 0 ? 5 : 3 // Thicker stroke for central node
+    content += generateCircle(node.x, node.y, node.size, node.color, 0.95, strokeWidth) + '\n'
+  }
+
+  content += '</g>\n'
+
+  // 5. ACCENT DOTS (suggest more data beyond visible graph)
+  content += '<g id="accent-dots">\n'
+  for (let i = 0; i < 4; i++) {
+    const x = rng() * width
+    const y = rng() * height
+    content += generateCircle(x, y, 6, randomChoice(colors, rng), 0.3) + '\n'
+  }
+  content += '</g>\n'
+
+  return createSVG(width, height, content, mode)
+}
+
+// ============================================================================
 // FILE OPERATIONS
 // ============================================================================
 
@@ -387,6 +517,16 @@ async function main() {
   await writeSVG(path.join(outputDir, 'hero-dark.svg'), heroDark)
 
   console.log('')
+  console.log('🔄 Generating database paradigm illustrations...')
+
+  // Generate graph database illustration (light & dark modes)
+  const graphLight = generateGraphDatabaseIllustration('light')
+  const graphDark = generateGraphDatabaseIllustration('dark')
+
+  await writeSVG(path.join(outputDir, 'graph-database-light.svg'), graphLight)
+  await writeSVG(path.join(outputDir, 'graph-database-dark.svg'), graphDark)
+
+  console.log('')
   console.log('✅ Asset generation complete!')
   console.log(`   Output: ${outputDir}`)
   console.log('')
@@ -407,6 +547,7 @@ if (isMainModule) {
 
 export {
   generateHeroGraphic,
+  generateGraphDatabaseIllustration,
   generateGrid,
   generateCircle,
   generateTriangle,
