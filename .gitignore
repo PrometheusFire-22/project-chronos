@@ -102,3 +102,42 @@ docs/.secrets-template.md
 pgbackrest.conf
 client_secret.json
 token.pickle
+
+# ============================================================================
+# Node.js / TypeScript / Frontend (added 2025-12-08 for marketing site)
+# ============================================================================
+
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+yarn.lock
+pnpm-lock.yaml
+
+# TypeScript
+*.tsbuildinfo
+*.js.map
+
+# Build outputs (track favicons, ignore other build artifacts)
+# dist/ (already ignored above)
+# build/ (already ignored above)
+.cache/
+.parcel-cache/
+.next/
+.nuxt/
+
+# Testing & Coverage
+coverage/
+.nyc_output/
+*.lcov
+
+# Environment (already covered above, but adding .env.production explicitly)
+.env.production
+
+# NOTE: We DO track these (not ignored):
+# - marketing/assets/favicons/*.png (generated but essential)
+# - marketing/assets/logos/*.svg (source assets)
+# - package.json, package-lock.json (dependency management)
+# - tsconfig.json (TypeScript config)
+# - All .ts/.tsx source files

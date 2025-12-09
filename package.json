@@ -1,0 +1,34 @@
+{
+  "name": "project-chronos",
+  "version": "0.1.0",
+  "description": "Multi-modal relationship intelligence platform for private markets",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "scripts": {
+    "generate:assets": "tsx marketing/scripts/generate-assets.ts",
+    "help": "echo 'Available scripts:' && echo '  npm run generate:assets - Generate favicons and marketing assets'"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "sharp": "^0.33.1",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "keywords": [
+    "relationship-intelligence",
+    "graph-database",
+    "private-markets",
+    "PE",
+    "VC",
+    "investment-banking"
+  ],
+  "author": "Geoff Bevans <geoff@automatonicai.com>",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@resvg/resvg-js": "^2.6.2"
+  }
+}
