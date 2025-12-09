@@ -444,16 +444,22 @@ function generateGeospatialIllustration(mode: 'light' | 'dark' = 'light'): strin
   // 1. NO GRID for geospatial (cleaner map aesthetic)
 
   // 2. DEFINE CONTINENTS using circle clusters
-  // We'll create abstract land masses using circles of uniform size
-  const circleRadius = 18
+  // Much smaller circles (way smaller from 18 to 6) to make shapes discernible
+  const circleRadius = 6
 
-  // Helper function to create a continent cluster
+  // Color palette for continents - mix of all three, purple still prominent
+  const continentColors = [
+    COLORS.purple, COLORS.purple, // Purple still prominent (40%)
+    COLORS.teal, COLORS.teal,     // Teal (40%)
+    COLORS.green                   // Green (20%)
+  ]
+
+  // Helper function to create a continent cluster with mixed colors
   function createContinent(
     centerX: number,
     centerY: number,
     rows: number,
     cols: number,
-    color: string,
     randomness: number = 0.3
   ): string {
     let circles = ''
@@ -466,7 +472,9 @@ function generateGeospatialIllustration(mode: 'light' | 'dark' = 'light'): strin
         const x = centerX + col * spacing + offsetX + (rng() - 0.5) * spacing * randomness
         const y = centerY + row * spacing * 0.866 + (rng() - 0.5) * spacing * randomness // 0.866 = sqrt(3)/2
 
-        circles += generateCircle(x, y, circleRadius, color, 0.85, 0) + '\n'
+        // Random color from palette (interspersed)
+        const color = randomChoice(continentColors, rng)
+        circles += generateCircle(x, y, circleRadius, color, 0.8, 0) + '\n'
       }
     }
     return circles
@@ -474,24 +482,25 @@ function generateGeospatialIllustration(mode: 'light' | 'dark' = 'light'): strin
 
   content += '<g id="geospatial-map">\n'
 
-  // 3. DRAW "CONTINENTS" (purple for land)
+  // 3. DRAW "CONTINENTS" (mixed colors, more granular)
+  // Scaled up rows/cols to compensate for smaller circles (roughly 3x)
   // North America-ish (left side, upper)
-  content += createContinent(180, 180, 5, 6, COLORS.purple, 0.4)
+  content += createContinent(180, 180, 15, 18, 0.4)
 
   // South America-ish (left side, lower)
-  content += createContinent(200, 380, 4, 3, COLORS.purple, 0.3)
+  content += createContinent(200, 380, 12, 9, 0.3)
 
   // Europe-ish (center-right, upper)
-  content += createContinent(440, 160, 3, 5, COLORS.purple, 0.35)
+  content += createContinent(440, 160, 9, 15, 0.35)
 
   // Africa-ish (center-right, middle)
-  content += createContinent(460, 320, 6, 4, COLORS.purple, 0.3)
+  content += createContinent(460, 320, 18, 12, 0.3)
 
   // Asia-ish (right side, large)
-  content += createContinent(580, 200, 5, 7, COLORS.purple, 0.4)
+  content += createContinent(580, 200, 15, 21, 0.4)
 
   // Australia-ish (right side, lower, small)
-  content += createContinent(640, 450, 2, 3, COLORS.purple, 0.25)
+  content += createContinent(640, 450, 6, 9, 0.25)
 
   content += '</g>\n'
 
