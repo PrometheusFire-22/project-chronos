@@ -269,15 +269,15 @@ function generateHeroGraphic(mode: 'light' | 'dark' = 'light'): string {
   // Define node positions first (we'll draw edges before nodes for layering)
   const nodePositions: Array<{x: number, y: number, size: number, color: string}> = []
 
-  // Generate 8-9 nodes using Fibonacci spacing (reduced from 12 for breathing room)
-  const numNodes = 9
+  // Generate 10 nodes (sweet spot between 9 and 12)
+  const numNodes = 10
   for (let i = 0; i < numNodes; i++) {
-    // Use golden ratio spiral for positioning with more spread
+    // Use golden ratio spiral for positioning - middle ground spread
     const angle = i * PHI * 2 * Math.PI
-    const radius = (i / numNodes) * Math.min(width, height) * 0.42 // Increased from 0.35 for more space
+    const radius = (i / numNodes) * Math.min(width, height) * 0.38 // Middle: between 0.35 and 0.42
 
-    const x = width / 2 + radius * Math.cos(angle) + (rng() - 0.5) * 120 // Increased jitter
-    const y = height / 2 + radius * Math.sin(angle) + (rng() - 0.5) * 120
+    const x = width / 2 + radius * Math.cos(angle) + (rng() - 0.5) * 110 // Middle jitter
+    const y = height / 2 + radius * Math.sin(angle) + (rng() - 0.5) * 110
     const size = FIBONACCI[i % FIBONACCI.length] * 3 + 20
     const color = randomChoice(colors, rng)
 
@@ -326,13 +326,13 @@ function generateHeroGraphic(mode: 'light' | 'dark' = 'light'): string {
 
   content += '</g>\n'
 
-  // 5. ACCENT ELEMENTS (smaller decorative shapes)
+  // 5. ACCENT ELEMENTS (larger non-node circles for variety)
   content += '<g id="accent-shapes">\n'
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 6; i++) {
     const x = rng() * width
     const y = rng() * height
-    const size = 10 + rng() * 20
-    content += generateCircle(x, y, size, randomChoice(colors, rng), 0.4) + '\n'
+    const size = 20 + rng() * 35 // Increased from 10+rng()*20 for more presence
+    content += generateCircle(x, y, size, randomChoice(colors, rng), 0.35) + '\n'
   }
   content += '</g>\n'
 
@@ -363,7 +363,30 @@ function generateGraphDatabaseIllustration(mode: 'light' | 'dark' = 'light'): st
   // 1. SUBTLE GRID BACKGROUND
   content += generateGrid(width, height, mode) + '\n'
 
-  // 2. DEFINE NODE POSITIONS (randomized, decentralized)
+  // 2. BACKGROUND SHAPES (muted squares and triangles for depth)
+  content += '<g id="background-shapes">\n'
+
+  // Add a couple muted squares
+  for (let i = 0; i < 2; i++) {
+    const x = 100 + rng() * (width - 300)
+    const y = 100 + rng() * (height - 300)
+    const size = 60 + rng() * 80
+    const color = randomChoice([COLORS.purple, COLORS.teal, COLORS.green], rng)
+    content += generateRectangle(x, y, size, size, color, rng() * 30 - 15, 0.08) + '\n'
+  }
+
+  // Add a couple muted triangles
+  for (let i = 0; i < 2; i++) {
+    const x = 100 + rng() * (width - 200)
+    const y = 100 + rng() * (height - 200)
+    const size = 70 + rng() * 60
+    const color = randomChoice([COLORS.purple, COLORS.teal, COLORS.green], rng)
+    content += generateTriangle(x, y, size, color, rng() * 360, 0.08) + '\n'
+  }
+
+  content += '</g>\n'
+
+  // 3. DEFINE NODE POSITIONS (randomized, decentralized)
   // No central hub - distributed randomly across canvas
   const nodePositions: Array<{x: number, y: number, size: number, color: string}> = []
 
@@ -375,29 +398,29 @@ function generateGraphDatabaseIllustration(mode: 'light' | 'dark' = 'light'): st
     const x = margin + rng() * (width - margin * 2)
     const y = margin + rng() * (height - margin * 2)
 
-    // Randomized sizes (20-45px range, no huge central node)
-    const size = 20 + rng() * 25
+    // Randomized sizes (25-50px range - bigger nodes)
+    const size = 25 + rng() * 25
 
     const color = randomChoice(colors, rng)
 
     nodePositions.push({ x, y, size, color })
   }
 
-  // 3. DRAW EDGES (connections between nearby nodes, force-directed style)
+  // 4. DRAW EDGES (more connections, bigger/thicker for connectivity)
   content += '<g id="graph-edges">\n'
 
-  // Connect nodes based on proximity (distance-based connections)
+  // Connect nodes based on proximity - more edges, no stranded nodes
   for (let i = 0; i < nodePositions.length; i++) {
     for (let j = i + 1; j < nodePositions.length; j++) {
       const node1 = nodePositions[i]
       const node2 = nodePositions[j]
       const distance = Math.sqrt((node1.x - node2.x) ** 2 + (node1.y - node2.y) ** 2)
 
-      // Connect if nodes are reasonably close (threshold: 200px)
-      if (distance < 200 && rng() > 0.4) {
+      // Increased threshold and reduced randomness for more connections
+      if (distance < 250 && rng() > 0.25) {
         content += generateLine(
           node1.x, node1.y, node2.x, node2.y,
-          node1.color, 2, 0.4
+          node1.color, 3, 0.5 // Thicker (was 2) and more visible (was 0.4)
         ) + '\n'
       }
     }
@@ -405,12 +428,12 @@ function generateGraphDatabaseIllustration(mode: 'light' | 'dark' = 'light'): st
 
   content += '</g>\n'
 
-  // 4. DRAW NODES (on top of edges for proper layering)
+  // 5. DRAW NODES (on top of edges for proper layering)
   content += '<g id="graph-nodes">\n'
 
   for (const node of nodePositions) {
-    // All nodes are circles for graph clarity, uniform stroke
-    content += generateCircle(node.x, node.y, node.size, node.color, 0.9, 3) + '\n'
+    // All nodes are circles for graph clarity, thicker stroke
+    content += generateCircle(node.x, node.y, node.size, node.color, 0.9, 4) + '\n' // Thicker stroke
   }
 
   content += '</g>\n'
@@ -482,38 +505,79 @@ function generateGeospatialIllustration(mode: 'light' | 'dark' = 'light'): strin
 
   content += '<g id="geospatial-map">\n'
 
-  // 3. DRAW "CONTINENTS" (mixed colors, more granular)
-  // Scaled up rows/cols to compensate for smaller circles (roughly 3x)
-  // North America-ish (left side, upper)
-  content += createContinent(180, 180, 15, 18, 0.4)
+  // 3. DRAW "CONTINENTS" - More geographically accurate, better centered
+  // Shift everything right/down for better centering
 
-  // South America-ish (left side, lower)
-  content += createContinent(200, 380, 12, 9, 0.3)
+  // NORTH AMERICA (left side, upper-middle)
+  content += createContinent(140, 160, 18, 20, 0.4)
 
-  // Europe-ish (center-right, upper)
-  content += createContinent(440, 160, 9, 15, 0.35)
+  // SOUTH AMERICA (left-center, lower) - More triangular
+  content += createContinent(180, 360, 16, 10, 0.25) // Narrower at top
+  content += createContinent(185, 410, 12, 8, 0.25)  // Widens middle
+  content += createContinent(190, 450, 8, 6, 0.2)    // Narrows at tip
 
-  // Africa-ish (center-right, middle)
-  content += createContinent(460, 320, 18, 12, 0.3)
+  // EUROPE (center-upper)
+  content += createContinent(380, 140, 10, 16, 0.35)
 
-  // Asia-ish (right side, large)
-  content += createContinent(580, 200, 15, 21, 0.4)
+  // British Isles (more definition)
+  content += createContinent(350, 115, 4, 3, 0.2)
 
-  // Australia-ish (right side, lower, small)
-  content += createContinent(640, 450, 6, 9, 0.25)
+  // Italy (peninsula pointing down)
+  content += createContinent(410, 170, 8, 3, 0.2)
+
+  // Greece/Balkans
+  content += createContinent(430, 185, 5, 4, 0.2)
+
+  // AFRICA (center-middle) - Nonagon top + triangle bottom
+  content += createContinent(400, 260, 12, 14, 0.3)  // Northern bulge
+  content += createContinent(410, 310, 14, 12, 0.3)  // Widest part
+  content += createContinent(415, 360, 12, 10, 0.25) // Narrowing
+  content += createContinent(420, 400, 9, 7, 0.2)    // Southern tip
+
+  // Madagascar
+  content += createContinent(470, 390, 6, 3, 0.2)
+
+  // ARABIA (smaller rectangle SE-facing)
+  content += createContinent(455, 240, 7, 5, 0.25)
+
+  // ASIA (right side, large and complex)
+  // Russia/Siberia (northern bulk)
+  content += createContinent(520, 120, 12, 28, 0.4)
+
+  // India subcontinent (triangular)
+  content += createContinent(540, 260, 10, 8, 0.25)  // Top
+  content += createContinent(543, 295, 8, 6, 0.2)    // Narrowing tip
+
+  // Southeast Asia
+  content += createContinent(570, 300, 6, 8, 0.3)    // Vietnam/Thai/Malaysia
+  content += createContinent(595, 330, 8, 10, 0.35)  // Indonesia
+
+  // East Asia
+  content += createContinent(600, 180, 14, 12, 0.35) // China
+  content += createContinent(640, 195, 8, 4, 0.25)   // Korea
+  content += createContinent(660, 200, 10, 5, 0.3)   // Japan
+  content += createContinent(665, 260, 4, 2, 0.15)   // Taiwan
+
+  // AUSTRALIA (right-lower, more room)
+  content += createContinent(620, 420, 10, 14, 0.3)
+
+  // New Zealand
+  content += createContinent(690, 470, 8, 3, 0.25)
 
   content += '</g>\n'
 
-  // 4. DATA POINTS / MARKERS (teal and green pins)
+  // 4. DATA POINTS / MARKERS (teal and green pins) - Updated positions
   content += '<g id="geospatial-markers">\n'
 
-  // Major hubs (teal - larger)
+  // Major hubs (teal - larger) - repositioned for new map
   const majorHubs = [
-    { x: 200, y: 200 }, // North America
-    { x: 460, y: 180 }, // Europe
-    { x: 480, y: 340 }, // Africa
-    { x: 600, y: 240 }, // Asia
-    { x: 220, y: 400 }, // South America
+    { x: 160, y: 200 }, // North America
+    { x: 400, y: 160 }, // Europe
+    { x: 425, y: 320 }, // Africa
+    { x: 620, y: 200 }, // Asia (China)
+    { x: 200, y: 420 }, // South America
+    { x: 550, y: 280 }, // India
+    { x: 665, y: 210 }, // Japan
   ]
 
   for (const hub of majorHubs) {
@@ -522,16 +586,17 @@ function generateGeospatialIllustration(mode: 'light' | 'dark' = 'light'): strin
     content += generateCircle(hub.x, hub.y, 16, COLORS.teal, 0.3, 2) + '\n'
   }
 
-  // Minor markers (green - smaller, scattered)
+  // Minor markers (green - smaller, scattered) - updated
   const minorMarkers = [
-    { x: 160, y: 240 },
-    { x: 240, y: 160 },
-    { x: 430, y: 200 },
-    { x: 500, y: 300 },
-    { x: 620, y: 200 },
-    { x: 660, y: 280 },
-    { x: 640, y: 460 },
-    { x: 180, y: 420 },
+    { x: 140, y: 250 },  // Mexico
+    { x: 350, y: 120 },  // UK
+    { x: 410, y: 175 },  // Italy
+    { x: 460, y: 245 },  // Arabia
+    { x: 580, y: 310 },  // Southeast Asia
+    { x: 640, y: 200 },  // Korea
+    { x: 665, y: 265 },  // Taiwan
+    { x: 650, y: 440 },  // Australia
+    { x: 690, y: 475 },  // New Zealand
   ]
 
   for (const marker of minorMarkers) {
@@ -554,7 +619,7 @@ function generateGeospatialIllustration(mode: 'light' | 'dark' = 'light'): strin
   for (const [hub1, hub2] of connections) {
     content += generateLine(
       hub1.x, hub1.y, hub2.x, hub2.y,
-      COLORS.teal, 1.5, 0.25
+      COLORS.teal, 3, 0.4 // Thicker (was 1.5) and more visible (was 0.25)
     ) + '\n'
   }
 
