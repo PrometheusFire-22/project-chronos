@@ -1,0 +1,38 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 200 220"
+  role="img"
+  aria-labelledby="logo-minimal-title"
+>
+  <title id="logo-minimal-title">Automatonic AI - Minimal Triangle Logo</title>
+
+  <!-- CONCEPT 1: MINIMAL TRIANGLE "A" -->
+  <!-- 3 nodes forming simplest possible "A" shape -->
+  <!-- Ultra-minimal, geometric, bold colors -->
+
+  <!-- EDGES (draw first so they appear behind nodes) -->
+  <line
+    x1="100" y1="40"
+    x2="30" y2="200"
+    stroke="#06B6D4"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+  <line
+    x1="100" y1="40"
+    x2="170" y2="200"
+    stroke="#10B981"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <!-- NODES -->
+  <!-- Peak node: LARGE purple (dominant) -->
+  <circle cx="100" cy="40" r="18" fill="#8B5CF6" />
+
+  <!-- Bottom-left node: MEDIUM teal -->
+  <circle cx="30" cy="200" r="14" fill="#06B6D4" />
+
+  <!-- Bottom-right node: SMALL green (accent) -->
+  <circle cx="170" cy="200" r="10" fill="#10B981" />
+</svg>

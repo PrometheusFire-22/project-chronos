@@ -1,193 +1,35 @@
-<!--
-  ═══════════════════════════════════════════════════════════════════════
-  AUTOMATONIC AI - LOGO VARIANT 3: "ai" WORDMARK
-  ═══════════════════════════════════════════════════════════════════════
-
-  CONCEPT:
-  Lowercase "a" (inspired by Poppins font) with the vertical stem extended
-  upward and a dot placed above it to create an implicit "i", forming "ai"
-  as a single unified letterform.
-
-  DESIGN STRATEGY:
-  ─────────────────────────────────────────────────────────────────────
-  - Single lowercase "a" = symmetrical across horizontal axis (as you noted)
-  - Right-side stem = vertical element of "i"
-  - Dot above stem = tittle of "i" (also serves as network node)
-  - Creates clever concatenation: one glyph reads as two letters
-
-  WHY THIS WORKS:
-  ─────────────────────────────────────────────────────────────────────
-  1. Minimal (one shape, two meanings)
-  2. Memorable (double-reading creates cognitive hook)
-  3. Scalable (works at tiny sizes - favicon-friendly)
-  4. Modern (geometric, sans-serif)
-  5. Thematic (dot = node = relationship intelligence)
-
-  SVG PATH PRIMER (for HTML/CSS developers):
-  ─────────────────────────────────────────────────────────────────────
-  <path> is the most powerful SVG shape - can draw ANY shape using commands:
-
-  M = Move to (pick up pen, move to x,y)
-  L = Line to (draw straight line to x,y)
-  C = Cubic Bézier curve (smooth curves using control points)
-  Q = Quadratic Bézier curve (simpler curves)
-  A = Arc (circular/elliptical arcs)
-  Z = Close path (draw line back to start)
-
-  Example: M 10,10 L 50,10 L 30,50 Z
-    - Move to (10,10)
-    - Draw line to (50,10)
-    - Draw line to (30,50)
-    - Close path (back to start)
-    - Result: Triangle!
-
-  LETTER "a" CONSTRUCTION:
-  ─────────────────────────────────────────────────────────────────────
-  Poppins lowercase "a" has:
-  - Round bowl (circular counter)
-  - Vertical stem on right
-  - Symmetrical across horizontal axis
-  - Geometric (circles, not organic curves)
-
-  We're simplifying to pure geometric shapes:
-  - Bowl = circle (SVG <circle>)
-  - Stem = rectangle (SVG <rect>)
-  - Dot = smaller circle (node-style)
-
-  COLOR TREATMENT:
-  ─────────────────────────────────────────────────────────────────────
-  - Bowl: gradient fill (purple → teal)
-  - Stem: solid color (purple)
-  - Dot: gradient (matches node aesthetic)
-
-  FILE INFO:
-  ─────────────────────────────────────────────────────────────────────
-  Version: 1.0
-  Date: 2025-12-08
-  Epic: CHRONOS-280
-  Story: CHRONOS-282
-  ═══════════════════════════════════════════════════════════════════════
--->
 <svg
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 180 240"
-  aria-labelledby="logoTitle"
   role="img"
+  aria-labelledby="logo-ai-title"
 >
-  <title id="logoTitle">Automatonic AI Wordmark</title>
+  <title id="logo-ai-title">Automatonic AI - ai Wordmark</title>
 
-  <defs>
-    <!-- Gradient for bowl and dot -->
-    <linearGradient id="bowlGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />   <!-- Purple -->
-      <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" /> <!-- Teal -->
-    </linearGradient>
+  <!-- "ai" WORDMARK (CORRECTED) -->
+  <!-- Lowercase "a" with stem forming implicit "i" -->
+  <!-- "a" reflected correctly: bowl on LEFT, stem on RIGHT -->
+  <!-- Single dot above stem only -->
+  <!-- Solid colors (no gradients) -->
 
-    <!-- Radial gradient for dot (creates depth) -->
-    <radialGradient id="dotGradient" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />   <!-- Green center -->
-      <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" /> <!-- Teal edge -->
-    </radialGradient>
-  </defs>
+  <!-- "a" SHAPE -->
+  <!-- Bowl (circular part on LEFT side) - SOLID PURPLE -->
+  <circle cx="70" cy="150" r="45" fill="#8B5CF6" />
 
-  <!--
-    ═══════════════════════════════════════════════════════════════════
-    LETTER "a" CONSTRUCTION
-    ═══════════════════════════════════════════════════════════════════
-  -->
+  <!-- Bowl interior (creates "a" counter-form - cutout) -->
+  <circle cx="70" cy="145" r="28" fill="#0F172A" />
 
-  <!--
-    BOWL (circular counter of "a")
-    ───────────────────────────────────────────────────────────────────
-    Using <path> to create "C" shape (open circle on right side for stem)
-
-    Path breakdown:
-    - M: Move to starting point
-    - A: Arc command (rx ry rotation large-arc-flag sweep-flag x y)
-      * rx,ry: horizontal/vertical radius
-      * rotation: 0 (no rotation)
-      * large-arc-flag: 1 (take longer arc)
-      * sweep-flag: 0 (counterclockwise)
-      * x,y: end point
-  -->
-  <path
-    d="M 130,140
-       A 50,50 0 1,0 130,90
-       L 130,90"
-    fill="none"
-    stroke="url(#bowlGradient)"
-    stroke-width="16"
-    stroke-linecap="round"
-  />
-
-  <!--
-    INNER COUNTER (white space inside "a")
-    ───────────────────────────────────────────────────────────────────
-    Creates the "hole" in the bowl
-  -->
-  <circle
-    cx="90"
-    cy="115"
-    r="28"
-    fill="#0F172A"
-    opacity="0.95"
-  />
-
-  <!--
-    STEM (vertical stroke on right - extends upward to form "i")
-    ───────────────────────────────────────────────────────────────────
-    <rect> attributes:
-    - x,y: Top-left corner position
-    - width: Horizontal size
-    - height: Vertical size
-    - rx: Corner radius (rounded corners)
-    - fill: Color
-
-    Note: Extends from bowl (y=90) upward to y=40
-    This creates visual connection to dot (the "i" tittle)
-  -->
+  <!-- Stem (vertical line on RIGHT side) - SOLID TEAL -->
   <rect
-    x="122"
-    y="40"
+    x="110"
+    y="105"
     width="16"
-    height="100"
+    height="90"
+    fill="#06B6D4"
     rx="8"
-    fill="#8B5CF6"
   />
 
-  <!--
-    DOT (tittle of "i" / network node)
-    ───────────────────────────────────────────────────────────────────
-    Positioned above stem, creates "i" reading
-
-    Design notes:
-    - Larger than typical "i" dot (emphasizes node metaphor)
-    - Radial gradient (adds dimensionality)
-    - White stroke (matches node aesthetic from graph variants)
-  -->
-  <circle
-    cx="130"
-    cy="20"
-    r="12"
-    fill="url(#dotGradient)"
-    stroke="#FFFFFF"
-    stroke-width="2"
-  />
-
-  <!--
-    OPTIONAL: Subtle connecting element (visual bridge stem → dot)
-    ───────────────────────────────────────────────────────────────────
-    Thin line connecting stem to dot, reinforcing "relationship" theme
-    (Can be removed if too busy)
-  -->
-  <line
-    x1="130"
-    y1="40"
-    x2="130"
-    y2="32"
-    stroke="#8B5CF6"
-    stroke-width="2"
-    opacity="0.3"
-    stroke-linecap="round"
-  />
+  <!-- "i" DOT - SOLID GREEN -->
+  <!-- Single dot above stem only (not above bowl) -->
+  <circle cx="118" cy="70" r="14" fill="#10B981" />
 </svg>
