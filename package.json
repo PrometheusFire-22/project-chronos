@@ -10,7 +10,8 @@
   },
   "scripts": {
     "generate:assets": "tsx marketing/scripts/generate-assets.ts",
-    "help": "echo 'Available scripts:' && echo '  npm run generate:assets - Generate favicons and marketing assets'"
+    "generate:visuals": "tsx marketing/scripts/generate-visuals.ts",
+    "help": "echo 'Available scripts:' && echo '  npm run generate:assets - Generate favicons' && echo '  npm run generate:visuals - Generate hero & feature illustrations'"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
