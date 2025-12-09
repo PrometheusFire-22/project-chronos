@@ -893,6 +893,188 @@ function generateVectorIllustration(mode: 'light' | 'dark' = 'light'): string {
 }
 
 // ============================================================================
+// RELATIONAL DATABASE ILLUSTRATION
+// Mondrian-style table schema with structured grid
+// Inspiration: Piet Mondrian + Max Bill + Database schema diagrams
+// ============================================================================
+
+function generateRelationalIllustration(mode: 'light' | 'dark' = 'light'): string {
+  const width = 800
+  const height = 600
+  const seed = 500
+  const rng = seededRandom(seed)
+
+  let content = ''
+
+  // 1. TABLE STRUCTURES (rectangular blocks representing tables)
+  content += '<g id="table-blocks">\n'
+
+  // Define 3 main tables with header + rows
+  const tables = [
+    // Table 1 (Users table) - left side
+    {
+      x: 80,
+      y: 120,
+      cols: 3,
+      rows: 5,
+      cellWidth: 70,
+      cellHeight: 35,
+      headerColor: COLORS.purple,
+      rowColors: [COLORS.purple, COLORS.purple, COLORS.purple, COLORS.purple],
+      name: 'Users',
+    },
+    // Table 2 (Orders table) - center
+    {
+      x: 320,
+      y: 200,
+      cols: 4,
+      rows: 4,
+      cellWidth: 60,
+      cellHeight: 35,
+      headerColor: COLORS.teal,
+      rowColors: [COLORS.teal, COLORS.teal, COLORS.teal],
+      name: 'Orders',
+    },
+    // Table 3 (Products table) - right side
+    {
+      x: 540,
+      y: 140,
+      cols: 3,
+      rows: 6,
+      cellWidth: 65,
+      cellHeight: 35,
+      headerColor: COLORS.green,
+      rowColors: [COLORS.green, COLORS.green, COLORS.green, COLORS.green, COLORS.green],
+      name: 'Products',
+    },
+  ]
+
+  for (const table of tables) {
+    // Header row (darker)
+    for (let col = 0; col < table.cols; col++) {
+      const x = table.x + col * table.cellWidth
+      const y = table.y
+      content += generateRectangle(
+        x, y,
+        table.cellWidth - 2, // Gap between cells
+        table.cellHeight,
+        table.headerColor,
+        0,
+        0.8
+      ) + '\n'
+      // Border
+      content += `<rect x="${x}" y="${y}" width="${table.cellWidth - 2}" height="${table.cellHeight}" fill="none" stroke="${table.headerColor}" stroke-width="2" />\n`
+    }
+
+    // Data rows (lighter)
+    for (let row = 0; row < table.rows; row++) {
+      for (let col = 0; col < table.cols; col++) {
+        const x = table.x + col * table.cellWidth
+        const y = table.y + (row + 1) * table.cellHeight
+        const rowColor = table.rowColors[row % table.rowColors.length]
+        content += generateRectangle(
+          x, y,
+          table.cellWidth - 2,
+          table.cellHeight,
+          rowColor,
+          0,
+          0.15
+        ) + '\n'
+        // Border
+        content += `<rect x="${x}" y="${y}" width="${table.cellWidth - 2}" height="${table.cellHeight}" fill="none" stroke="${rowColor}" stroke-width="1" opacity="0.6" />\n`
+      }
+    }
+  }
+
+  content += '</g>\n'
+
+  // 2. RELATIONSHIP LINES (foreign keys connecting tables)
+  content += '<g id="relationship-lines">\n'
+
+  // Users -> Orders (1-to-many)
+  const users_x = tables[0].x + (tables[0].cols * tables[0].cellWidth) / 2
+  const users_y = tables[0].y + (tables[0].rows + 1) * tables[0].cellHeight
+  const orders_x = tables[1].x
+  const orders_y = tables[1].y + tables[1].cellHeight * 2
+
+  content += generateLine(users_x, users_y, orders_x, orders_y, COLORS.purple, 3, 0.6) + '\n'
+
+  // Orders -> Products (many-to-many concept)
+  const orders_x2 = tables[1].x + tables[1].cols * tables[1].cellWidth
+  const orders_y2 = tables[1].y + tables[1].cellHeight * 2
+  const products_x = tables[2].x
+  const products_y = tables[2].y + tables[2].cellHeight * 3
+
+  content += generateLine(orders_x2, orders_y2, products_x, products_y, COLORS.teal, 3, 0.6) + '\n'
+
+  // Add relationship indicators (circles at connection points)
+  const connectionPoints = [
+    { x: users_x, y: users_y, color: COLORS.purple },
+    { x: orders_x, y: orders_y, color: COLORS.purple },
+    { x: orders_x2, y: orders_y2, color: COLORS.teal },
+    { x: products_x, y: products_y, color: COLORS.green },
+  ]
+
+  for (const point of connectionPoints) {
+    content += generateCircle(point.x, point.y, 6, point.color, 1, 2) + '\n'
+  }
+
+  content += '</g>\n'
+
+  // 3. MONDRIAN ACCENT BLOCKS (decorative, suggests structured data)
+  content += '<g id="mondrian-accents">\n'
+
+  const accentBlocks = [
+    { x: 60, y: 450, w: 100, h: 80, color: COLORS.purple, opacity: 0.3 },
+    { x: 680, y: 80, w: 80, h: 60, color: COLORS.teal, opacity: 0.3 },
+    { x: 620, y: 480, w: 120, h: 70, color: COLORS.green, opacity: 0.25 },
+  ]
+
+  for (const block of accentBlocks) {
+    content += generateRectangle(block.x, block.y, block.w, block.h, block.color, 0, block.opacity) + '\n'
+    content += `<rect x="${block.x}" y="${block.y}" width="${block.w}" height="${block.h}" fill="none" stroke="${block.color}" stroke-width="3" />\n`
+  }
+
+  content += '</g>\n'
+
+  // 4. GRID OVERLAY (subtle Mondrian grid)
+  const gridColor = mode === 'light' ? COLORS.light.grid : COLORS.dark.grid
+  content += '<g id="mondrian-grid">\n'
+
+  // Vertical lines (fewer than full grid)
+  const verticalLines = [200, 400, 600]
+  for (const x of verticalLines) {
+    content += `<line x1="${x}" y1="50" x2="${x}" y2="${height - 50}" stroke="${gridColor}" stroke-width="2" opacity="0.2" />\n`
+  }
+
+  // Horizontal lines
+  const horizontalLines = [150, 300, 450]
+  for (const y of horizontalLines) {
+    content += `<line x1="50" y1="${y}" x2="${width - 50}" y2="${y}" stroke="${gridColor}" stroke-width="2" opacity="0.2" />\n`
+  }
+
+  content += '</g>\n'
+
+  // 5. KEY INDICATORS (suggest primary/foreign keys)
+  content += '<g id="key-indicators">\n'
+
+  // Small squares suggesting key columns
+  const keyMarkers = [
+    { x: tables[0].x + 10, y: tables[0].y + 10, color: COLORS.purple }, // Users PK
+    { x: tables[1].x + 10, y: tables[1].y + 10, color: COLORS.teal },   // Orders PK
+    { x: tables[2].x + 10, y: tables[2].y + 10, color: COLORS.green },  // Products PK
+  ]
+
+  for (const marker of keyMarkers) {
+    content += generateRectangle(marker.x, marker.y, 12, 12, marker.color, 45, 1) + '\n'
+  }
+
+  content += '</g>\n'
+
+  return createSVG(width, height, content, mode)
+}
+
+// ============================================================================
 // FILE OPERATIONS
 // ============================================================================
 
@@ -970,6 +1152,13 @@ async function main() {
   await writeSVG(path.join(outputDir, 'vector-database-light.svg'), vectorLight)
   await writeSVG(path.join(outputDir, 'vector-database-dark.svg'), vectorDark)
 
+  // Generate relational database illustration (light & dark modes)
+  const relationalLight = generateRelationalIllustration('light')
+  const relationalDark = generateRelationalIllustration('dark')
+
+  await writeSVG(path.join(outputDir, 'relational-database-light.svg'), relationalLight)
+  await writeSVG(path.join(outputDir, 'relational-database-dark.svg'), relationalDark)
+
   console.log('')
   console.log('✅ Asset generation complete!')
   console.log(`   Output: ${outputDir}`)
@@ -995,6 +1184,7 @@ export {
   generateGeospatialIllustration,
   generateTimeSeriesIllustration,
   generateVectorIllustration,
+  generateRelationalIllustration,
   generateGrid,
   generateCircle,
   generateTriangle,
