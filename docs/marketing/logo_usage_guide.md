@@ -23,104 +23,105 @@
 
 ## Overview
 
-The Automatonic AI brand identity includes three primary logo variants, each optimized for different use cases. All logos are built on the concept of **relationship networks** (graph theory) and use our brand gradient color palette.
+The Automatonic AI brand identity centers on the **"ai" wordmark** (`logo-ai-wordmark.svg`) as the official primary logo. This logo uses an innovative transparent cutout design that works seamlessly on both light and dark backgrounds.
 
 ### Design Philosophy
 
-- **Graph-based**: Nodes and edges representing relationship intelligence
-- **Mathematical**: Geometric precision, not organic curves
-- **Modern**: Clean, minimal, scalable
-- **Dual-meaning**: "ai" wordmark reads as both "a" and "i"
+- **Minimalist**: Simple "ai" letterform with maximum impact
+- **Universal**: Transparent cutout adapts to any background color
+- **Clever**: Dual-meaning wordmark reads as both "a" and "i"
+- **Scalable**: Perfect clarity from 16px favicons to billboard size
+- **Modern**: Geometric precision, bold brand colors, mathematical elegance
+
+### Official Logo: logo-ai-wordmark.svg ⭐
+
+**This is THE logo.** Use it for all branding needs unless you have a specific reason to use an alternative variant.
 
 ---
 
 ## Logo Variants
 
-### Variant 1: Symmetrical Graph "A"
-
-**File**: `marketing/assets/logos/logo-graph-symmetrical.svg`
-
-**Description**: Perfect symmetry across vertical axis. 5 nodes, 5 edges forming letter "A".
-
-**Best For**:
-- Corporate/formal contexts
-- Investor presentations
-- Professional documents
-- Large display sizes (header, hero sections)
-
-**Characteristics**:
-- Balanced, stable aesthetic
-- Maximum recognizability
-- Works well at 64px+ sizes
-
-**Preview**:
-```
-    ●     ← Peak node
-   / \
-  ●   ●   ← Crossbar nodes
- / \ / \
-●       ● ← Base nodes
-```
-
----
-
-### Variant 2: Asymmetrical Graph "A"
-
-**File**: `marketing/assets/logos/logo-graph-asymmetrical.svg`
-
-**Description**: Off-center positioning creates dynamic tension while maintaining "A" shape.
-
-**Best For**:
-- Tech-forward branding
-- Marketing materials
-- Social media graphics
-- Conveying innovation/disruption
-
-**Characteristics**:
-- Modern, dynamic feel
-- Suggests real-world networks (not perfectly balanced)
-- Best at 64px+ sizes
-
-**Preview**:
-```
-     ●    ← Peak (shifted right)
-    /  \
-   ●    ●  ← Offset crossbar
-  / \  / \
- ●      ● ← Asymmetric base
-```
-
----
-
-### Variant 3: "ai" Wordmark
+### PRIMARY LOGO: "ai" Wordmark ⭐
 
 **File**: `marketing/assets/logos/logo-ai-wordmark.svg`
 
-**Description**: Lowercase "a" with extended stem and dot forming implicit "i".
+**Description**: Lowercase "a" with extended stem and dot forming implicit "i". Transparent cutout adapts to both light and dark backgrounds automatically.
+
+**Status**: **OFFICIAL PRIMARY LOGO** (as of 2025-12-08)
 
 **Best For**:
-- **Favicons** (scales best at tiny sizes)
+- **All contexts** (universal use)
+- Favicons (scales perfectly to 16x16px)
 - App icons
 - Social media profile pictures
-- Minimal branding contexts
+- Website headers
+- Marketing materials
+- Presentations
 
-**Characteristics**:
+**Technical Features**:
+- **Transparent cutout**: Bowl center uses SVG mask - works on ANY background color
+- **No separate light/dark versions needed**
 - Most scalable (clear at 16x16px)
 - Clever concatenation ("a" + "i" = "ai")
-- Symmetrical horizontally
-- Dot = node metaphor
+- Solid brand colors: Purple bowl (#8B5CF6), Teal stem (#06B6D4), Green dot (#10B981)
 
 **Preview**:
 ```
-  ●     ← Dot (tittle of "i")
+  ●     ← Dot (tittle of "i") - GREEN
   |
- ⟨a⟩    ← Bowl + stem
+ ⟨a⟩    ← Bowl (PURPLE) + stem (TEAL)
+         Center is TRANSPARENT (shows background)
 ```
 
-**Why This Works for Favicons**:
-- Simple shape (fewer details to lose at small sizes)
-- High contrast (clear at 16x16px browser tab size)
-- Memorable (dual-reading creates cognitive hook)
+**Why This Is THE Logo**:
+- Simple, memorable, scalable
+- Works on light AND dark backgrounds (no variants needed)
+- Dual-reading creates cognitive hook
+- Minimal file size, maximum impact
+
+---
+
+### FULL WORDMARK: "automatonic ai"
+
+**Files**:
+- `marketing/assets/logos/logo-wordmark-automatonic-ai-light.svg` (for light backgrounds)
+- `marketing/assets/logos/logo-wordmark-automatonic-ai-dark.svg` (for dark backgrounds)
+
+**Description**: Full company name with integrated logo elements. First "a" uses logo style (no dot), final "ai" is the exact logo.
+
+**Best For**:
+- Website headers
+- Email signatures
+- Documents and presentations
+- Marketing collateral
+- Professional contexts where full name is needed
+
+**Structure**:
+- **"a"** (logo style, no dot) + **"utonomic "** (Poppins text) + **"ai"** (full logo with dot)
+
+---
+
+### ALTERNATIVE VARIANTS (For Special Use)
+
+### Alt 1: Minimal Triangle "A"
+
+**File**: `marketing/assets/logos/logo-minimal-triangle.svg`
+
+**Description**: 3 nodes forming simplest "A" shape. Different node sizes, geometric edges.
+
+**Best For**: Ultra-minimal contexts, pattern backgrounds
+
+---
+
+### Alt 2: Kandinsky "A"
+
+**File**: `marketing/assets/logos/logo-kandinsky.svg`
+
+**Description**: 5 nodes with dramatic size variation, abstract expressionist energy, asymmetric placement.
+
+**Best For**: Creative/marketing contexts, A/B testing alternative to primary logo
+
+**Note**: User likes this variant for potential future use/testing
 
 ---
 

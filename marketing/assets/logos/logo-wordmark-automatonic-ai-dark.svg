@@ -1,0 +1,39 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 900 240"
+  role="img"
+  aria-labelledby="wordmark-dark-title"
+>
+  <title id="wordmark-dark-title">Automatonic AI - Full Wordmark (Dark Mode)</title>
+
+  <defs>
+    <!-- Mask for "a" cutouts -->
+    <mask id="aMask">
+      <circle cx="70" cy="150" r="45" fill="white"/>
+      <circle cx="70" cy="145" r="28" fill="black"/>
+    </mask>
+  </defs>
+
+  <!-- First "a" (logo style, NO dot) -->
+  <g id="first-a">
+    <circle cx="70" cy="150" r="45" fill="#8B5CF6" mask="url(#aMask)" />
+    <rect x="110" y="105" width="16" height="90" fill="#06B6D4" rx="8" />
+  </g>
+
+  <!-- "utonomic " text - light for dark backgrounds -->
+  <text
+    x="145"
+    y="175"
+    font-family="Poppins, sans-serif"
+    font-size="110"
+    font-weight="400"
+    fill="#F8FAFC"
+  >utonomic </text>
+
+  <!-- Final "ai" (exact logo with dot) -->
+  <g transform="translate(720, 0)">
+    <circle cx="70" cy="150" r="45" fill="#8B5CF6" mask="url(#aMask)" />
+    <rect x="110" y="105" width="16" height="90" fill="#06B6D4" rx="8" />
+    <circle cx="118" cy="70" r="14" fill="#10B981" />
+  </g>
+</svg>
