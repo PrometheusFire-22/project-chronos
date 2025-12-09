@@ -14,15 +14,15 @@
     </mask>
   </defs>
 
-  <!-- First "a" (logo style, NO dot) - scaled 85%, vertically centered -->
-  <g transform="scale(0.85) translate(0, 12)">
+  <!-- First "a" (logo style, NO dot) - scaled 85%, slight right shift, vertically centered -->
+  <g transform="translate(8, 0) scale(0.85) translate(0, 12)">
     <circle cx="70" cy="150" r="45" fill="#8B5CF6" mask="url(#aMask)" />
     <rect x="110" y="105" width="16" height="90" fill="#06B6D4" rx="8" />
   </g>
 
   <!-- "utonomic " text - purple for brand consistency -->
   <text
-    x="125"
+    x="130"
     y="175"
     font-family="Poppins, sans-serif"
     font-size="110"
@@ -31,8 +31,8 @@
     letter-spacing="0"
   >utonomic </text>
 
-  <!-- Final "ai" (exact logo with dot) - scaled 85%, vertically centered, tight spacing -->
-  <g transform="translate(600, 0) scale(0.85) translate(0, 12)">
+  <!-- Final "ai" (exact logo with dot) - scaled 85%, moved right to clear "c", lowered to align -->
+  <g transform="translate(630, 15) scale(0.85) translate(0, 12)">
     <circle cx="70" cy="150" r="45" fill="#8B5CF6" mask="url(#aMask)" />
     <rect x="110" y="105" width="16" height="90" fill="#06B6D4" rx="8" />
     <circle cx="118" cy="70" r="14" fill="#10B981" />
