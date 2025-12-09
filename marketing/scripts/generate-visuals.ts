@@ -269,15 +269,15 @@ function generateHeroGraphic(mode: 'light' | 'dark' = 'light'): string {
   // Define node positions first (we'll draw edges before nodes for layering)
   const nodePositions: Array<{x: number, y: number, size: number, color: string}> = []
 
-  // Generate 10-12 nodes using Fibonacci spacing
-  const numNodes = 12
+  // Generate 8-9 nodes using Fibonacci spacing (reduced from 12 for breathing room)
+  const numNodes = 9
   for (let i = 0; i < numNodes; i++) {
-    // Use golden ratio spiral for positioning
+    // Use golden ratio spiral for positioning with more spread
     const angle = i * PHI * 2 * Math.PI
-    const radius = (i / numNodes) * Math.min(width, height) * 0.35
+    const radius = (i / numNodes) * Math.min(width, height) * 0.42 // Increased from 0.35 for more space
 
-    const x = width / 2 + radius * Math.cos(angle) + (rng() - 0.5) * 100
-    const y = height / 2 + radius * Math.sin(angle) + (rng() - 0.5) * 100
+    const x = width / 2 + radius * Math.cos(angle) + (rng() - 0.5) * 120 // Increased jitter
+    const y = height / 2 + radius * Math.sin(angle) + (rng() - 0.5) * 120
     const size = FIBONACCI[i % FIBONACCI.length] * 3 + 20
     const color = randomChoice(colors, rng)
 
@@ -351,11 +351,11 @@ function generateGraphDatabaseIllustration(mode: 'light' | 'dark' = 'light'): st
   const seed = 100 // Different seed for different composition
   const rng = seededRandom(seed)
 
-  // Color palette (purple dominant for graph nodes)
+  // Color palette with more teal and green (but purple still dominant)
   const colors = [
-    COLORS.purple, COLORS.purple, COLORS.purple, // 60% purple
-    COLORS.teal, COLORS.teal,                     // 30% teal
-    COLORS.green                                   // 10% green
+    COLORS.purple, COLORS.purple, COLORS.purple, COLORS.purple, // 40% purple
+    COLORS.teal, COLORS.teal, COLORS.teal,                       // 30% teal (increased)
+    COLORS.green, COLORS.green, COLORS.green                     // 30% green (increased)
   ]
 
   let content = ''
@@ -363,84 +363,43 @@ function generateGraphDatabaseIllustration(mode: 'light' | 'dark' = 'light'): st
   // 1. SUBTLE GRID BACKGROUND
   content += generateGrid(width, height, mode) + '\n'
 
-  // 2. DEFINE NODE POSITIONS (hierarchical structure)
-  // Create a 3-layer network: central hub, inner ring, outer ring
-  const nodePositions: Array<{x: number, y: number, size: number, color: string, layer: number}> = []
+  // 2. DEFINE NODE POSITIONS (randomized, decentralized)
+  // No central hub - distributed randomly across canvas
+  const nodePositions: Array<{x: number, y: number, size: number, color: string}> = []
 
-  // Central hub (1 large node)
-  const centerX = width / 2
-  const centerY = height / 2
-  nodePositions.push({
-    x: centerX,
-    y: centerY,
-    size: 60,
-    color: COLORS.purple,
-    layer: 0
-  })
+  const numNodes = 14 // Slightly more nodes, spread out
+  const margin = 80
 
-  // Inner ring (5 nodes)
-  const innerRadius = 140
-  for (let i = 0; i < 5; i++) {
-    const angle = (i / 5) * 2 * Math.PI - Math.PI / 2
-    nodePositions.push({
-      x: centerX + innerRadius * Math.cos(angle),
-      y: centerY + innerRadius * Math.sin(angle),
-      size: 40,
-      color: randomChoice(colors, rng),
-      layer: 1
-    })
+  for (let i = 0; i < numNodes; i++) {
+    // Fully randomized positions (avoid center clustering)
+    const x = margin + rng() * (width - margin * 2)
+    const y = margin + rng() * (height - margin * 2)
+
+    // Randomized sizes (20-45px range, no huge central node)
+    const size = 20 + rng() * 25
+
+    const color = randomChoice(colors, rng)
+
+    nodePositions.push({ x, y, size, color })
   }
 
-  // Outer ring (8 nodes)
-  const outerRadius = 240
-  for (let i = 0; i < 8; i++) {
-    const angle = (i / 8) * 2 * Math.PI - Math.PI / 2 + (Math.PI / 16) // Slight offset
-    nodePositions.push({
-      x: centerX + outerRadius * Math.cos(angle) + (rng() - 0.5) * 30,
-      y: centerY + outerRadius * Math.sin(angle) + (rng() - 0.5) * 30,
-      size: 25 + rng() * 15,
-      color: randomChoice(colors, rng),
-      layer: 2
-    })
-  }
-
-  // 3. DRAW EDGES (connections between layers and within layers)
+  // 3. DRAW EDGES (connections between nearby nodes, force-directed style)
   content += '<g id="graph-edges">\n'
 
-  // Connect center to all inner ring nodes
-  for (let i = 1; i <= 5; i++) {
-    content += generateLine(
-      nodePositions[0].x, nodePositions[0].y,
-      nodePositions[i].x, nodePositions[i].y,
-      nodePositions[i].color, 3, 0.6
-    ) + '\n'
-  }
-
-  // Connect inner ring nodes to outer ring nodes (selective connections)
-  for (let i = 1; i <= 5; i++) {
-    const innerNode = nodePositions[i]
-    // Each inner node connects to 2-3 outer nodes
-    const numConnections = 2 + Math.floor(rng() * 2)
-    for (let j = 0; j < numConnections; j++) {
-      const outerNodeIdx = 6 + Math.floor(rng() * 8)
-      const outerNode = nodePositions[outerNodeIdx]
-      content += generateLine(
-        innerNode.x, innerNode.y,
-        outerNode.x, outerNode.y,
-        outerNode.color, 2, 0.4
-      ) + '\n'
-    }
-  }
-
-  // Some connections within outer ring (creates mesh)
-  for (let i = 6; i < nodePositions.length - 1; i++) {
-    if (rng() > 0.6) {
+  // Connect nodes based on proximity (distance-based connections)
+  for (let i = 0; i < nodePositions.length; i++) {
+    for (let j = i + 1; j < nodePositions.length; j++) {
       const node1 = nodePositions[i]
-      const node2 = nodePositions[i + 1]
-      content += generateLine(
-        node1.x, node1.y, node2.x, node2.y,
-        node1.color, 1.5, 0.3
-      ) + '\n'
+      const node2 = nodePositions[j]
+      const distance = Math.sqrt((node1.x - node2.x) ** 2 + (node1.y - node2.y) ** 2)
+
+      // Connect if nodes are reasonably close (threshold: 200px)
+      if (distance < 200 && rng() > 0.4) {
+        content += generateLine(
+          node1.x, node1.y, node2.x, node2.y,
+          node1.color, 2, 0.4
+        ) + '\n'
+      }
     }
   }
 
@@ -450,9 +409,8 @@ function generateGraphDatabaseIllustration(mode: 'light' | 'dark' = 'light'): st
   content += '<g id="graph-nodes">\n'
 
   for (const node of nodePositions) {
-    // All nodes are circles for graph clarity
-    const strokeWidth = node.layer === 0 ? 5 : 3 // Thicker stroke for central node
-    content += generateCircle(node.x, node.y, node.size, node.color, 0.95, strokeWidth) + '\n'
+    // All nodes are circles for graph clarity, uniform stroke
+    content += generateCircle(node.x, node.y, node.size, node.color, 0.9, 3) + '\n'
   }
 
   content += '</g>\n'
@@ -486,16 +444,22 @@ function generateGeospatialIllustration(mode: 'light' | 'dark' = 'light'): strin
   // 1. NO GRID for geospatial (cleaner map aesthetic)
 
   // 2. DEFINE CONTINENTS using circle clusters
-  // We'll create abstract land masses using circles of uniform size
-  const circleRadius = 18
+  // Much smaller circles (way smaller from 18 to 6) to make shapes discernible
+  const circleRadius = 6
 
-  // Helper function to create a continent cluster
+  // Color palette for continents - mix of all three, purple still prominent
+  const continentColors = [
+    COLORS.purple, COLORS.purple, // Purple still prominent (40%)
+    COLORS.teal, COLORS.teal,     // Teal (40%)
+    COLORS.green                   // Green (20%)
+  ]
+
+  // Helper function to create a continent cluster with mixed colors
   function createContinent(
     centerX: number,
     centerY: number,
     rows: number,
     cols: number,
-    color: string,
     randomness: number = 0.3
   ): string {
     let circles = ''
@@ -508,7 +472,9 @@ function generateGeospatialIllustration(mode: 'light' | 'dark' = 'light'): strin
         const x = centerX + col * spacing + offsetX + (rng() - 0.5) * spacing * randomness
         const y = centerY + row * spacing * 0.866 + (rng() - 0.5) * spacing * randomness // 0.866 = sqrt(3)/2
 
-        circles += generateCircle(x, y, circleRadius, color, 0.85, 0) + '\n'
+        // Random color from palette (interspersed)
+        const color = randomChoice(continentColors, rng)
+        circles += generateCircle(x, y, circleRadius, color, 0.8, 0) + '\n'
       }
     }
     return circles
@@ -516,24 +482,25 @@ function generateGeospatialIllustration(mode: 'light' | 'dark' = 'light'): strin
 
   content += '<g id="geospatial-map">\n'
 
-  // 3. DRAW "CONTINENTS" (purple for land)
+  // 3. DRAW "CONTINENTS" (mixed colors, more granular)
+  // Scaled up rows/cols to compensate for smaller circles (roughly 3x)
   // North America-ish (left side, upper)
-  content += createContinent(180, 180, 5, 6, COLORS.purple, 0.4)
+  content += createContinent(180, 180, 15, 18, 0.4)
 
   // South America-ish (left side, lower)
-  content += createContinent(200, 380, 4, 3, COLORS.purple, 0.3)
+  content += createContinent(200, 380, 12, 9, 0.3)
 
   // Europe-ish (center-right, upper)
-  content += createContinent(440, 160, 3, 5, COLORS.purple, 0.35)
+  content += createContinent(440, 160, 9, 15, 0.35)
 
   // Africa-ish (center-right, middle)
-  content += createContinent(460, 320, 6, 4, COLORS.purple, 0.3)
+  content += createContinent(460, 320, 18, 12, 0.3)
 
   // Asia-ish (right side, large)
-  content += createContinent(580, 200, 5, 7, COLORS.purple, 0.4)
+  content += createContinent(580, 200, 15, 21, 0.4)
 
   // Australia-ish (right side, lower, small)
-  content += createContinent(640, 450, 2, 3, COLORS.purple, 0.25)
+  content += createContinent(640, 450, 6, 9, 0.25)
 
   content += '</g>\n'
 
@@ -632,23 +599,23 @@ function generateTimeSeriesIllustration(mode: 'light' | 'dark' = 'light'): strin
   content += `<line x1="60" y1="${height / 2}" x2="${width - 60}" y2="${height / 2}" stroke="${gridColor}" stroke-width="1" opacity="0.2" stroke-dasharray="2,4" />\n`
 
   // 2. FLOWING TIME-SERIES WAVES
-  // Multiple overlapping sine-like waves that suggest temporal flow
+  // Reduced to 4 waves (from 7) for less density: 2 purple, 1 teal, 1 green
   content += '<g id="timeseries-waves">\n'
 
-  const numWaves = 7
+  const numWaves = 4
   const waveColors = [
-    COLORS.purple, COLORS.purple, COLORS.purple, // More purple
-    COLORS.teal, COLORS.teal,
-    COLORS.green, COLORS.green
+    COLORS.purple, COLORS.purple, // 2 purple
+    COLORS.teal,                   // 1 teal
+    COLORS.green                   // 1 green
   ]
 
   for (let i = 0; i < numWaves; i++) {
-    const baseY = 100 + (i * 70)
-    const amplitude = 30 + rng() * 40
+    const baseY = 120 + (i * 110) // Increased spacing from 70 to 110 for better separation
+    const amplitude = 35 + rng() * 40
     const frequency = 0.01 + rng() * 0.015
     const phase = rng() * Math.PI * 2
     const color = waveColors[i]
-    const strokeWidth = 2 + rng() * 2
+    const strokeWidth = 2.5 + rng() * 1.5
 
     // Generate smooth wave path
     let pathData = `M 60,${baseY}`
@@ -658,25 +625,25 @@ function generateTimeSeriesIllustration(mode: 'light' | 'dark' = 'light'): strin
       pathData += ` L ${x},${y}`
     }
 
-    content += `<path d="${pathData}" stroke="${color}" stroke-width="${strokeWidth}" fill="none" opacity="0.7" stroke-linecap="round" />\n`
+    content += `<path d="${pathData}" stroke="${color}" stroke-width="${strokeWidth}" fill="none" opacity="0.75" stroke-linecap="round" />\n`
   }
 
   content += '</g>\n'
 
-  // 3. DATA POINTS on waves (suggest discrete measurements)
+  // 3. DATA POINTS on waves (reduced, suggest discrete measurements)
   content += '<g id="timeseries-datapoints">\n'
 
-  // Select a few waves and add data point markers
-  const markerWaves = [1, 3, 5]
+  // Add data points to 2 of the 4 waves (reduced from 3 of 7)
+  const markerWaves = [0, 2] // First purple and teal
   for (const waveIdx of markerWaves) {
-    const baseY = 100 + (waveIdx * 70)
-    const amplitude = 30 + rng() * 40
+    const baseY = 120 + (waveIdx * 110)
+    const amplitude = 35 + rng() * 40
     const frequency = 0.01 + rng() * 0.015
     const phase = rng() * Math.PI * 2
     const color = waveColors[waveIdx]
 
-    // Add markers at regular intervals
-    for (let x = 100; x < width - 100; x += 80) {
+    // Reduced frequency: every 120px instead of 80px (fewer dots)
+    for (let x = 120; x < width - 100; x += 120) {
       const y = baseY + Math.sin(x * frequency + phase) * amplitude
       content += generateCircle(x, y, 4, color, 1, 0) + '\n'
     }
