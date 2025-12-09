@@ -2,9 +2,9 @@
   xmlns="http://www.w3.org/2000/svg"
   viewBox="0 0 850 240"
   role="img"
-  aria-labelledby="wordmark-light-title"
+  aria-labelledby="wordmark-dark-colorful-title"
 >
-  <title id="wordmark-light-title">Automatonic AI - Full Wordmark (Light Mode)</title>
+  <title id="wordmark-dark-colorful-title">Automatonic AI - Full Wordmark (Dark Mode - Colorful)</title>
 
   <defs>
     <!-- Mask for "a" cutouts -->
@@ -20,15 +20,20 @@
     <rect x="110" y="105" width="16" height="90" fill="#06B6D4" rx="8" />
   </g>
 
-  <!-- "utonomic " text - purple for brand consistency -->
+  <!-- "utonomic " text - colorful with teal/green "o"s -->
   <text
     x="130"
     y="175"
     font-family="Poppins, sans-serif"
     font-size="110"
     font-weight="700"
-    fill="#8B5CF6"
-  >utonomic </text>
+  >
+    <tspan fill="#8B5CF6">ut</tspan>
+    <tspan fill="#06B6D4">o</tspan>
+    <tspan fill="#8B5CF6">n</tspan>
+    <tspan fill="#10B981">o</tspan>
+    <tspan fill="#8B5CF6">mic </tspan>
+  </text>
 
   <!-- Final "ai" (exact logo with dot) - scaled down 85%, moved up and right -->
   <g transform="translate(680, -5) scale(0.85)">
