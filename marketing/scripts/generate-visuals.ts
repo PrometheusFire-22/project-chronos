@@ -726,6 +726,173 @@ function generateTimeSeriesIllustration(mode: 'light' | 'dark' = 'light'): strin
 }
 
 // ============================================================================
+// VECTOR DATABASE ILLUSTRATION
+// Cubist multi-perspective composition (4th dimension concept)
+// Inspiration: Picasso/Braque Analytical Cubism + Lissitzky spatial depth
+// ============================================================================
+
+function generateVectorIllustration(mode: 'light' | 'dark' = 'light'): string {
+  const width = 800
+  const height = 600
+  const seed = 400
+  const rng = seededRandom(seed)
+
+  let content = ''
+
+  // 1. BACKGROUND DEPTH PLANES (Lissitzky style)
+  content += '<g id="depth-planes">\n'
+
+  // Multiple overlapping translucent rectangles at various angles
+  const planes = [
+    { x: 100, y: 80, w: 300, h: 200, angle: 15, color: COLORS.purple, opacity: 0.08 },
+    { x: 400, y: 150, w: 280, h: 250, angle: -12, color: COLORS.teal, opacity: 0.08 },
+    { x: 200, y: 300, w: 350, h: 180, angle: 8, color: COLORS.green, opacity: 0.06 },
+    { x: 450, y: 50, w: 200, h: 300, angle: -20, color: COLORS.purple, opacity: 0.06 },
+  ]
+
+  for (const plane of planes) {
+    content += generateRectangle(plane.x, plane.y, plane.w, plane.h, plane.color, plane.angle, plane.opacity) + '\n'
+  }
+
+  content += '</g>\n'
+
+  // 2. FRAGMENTED GEOMETRIC OBJECTS (Cubist decomposition)
+  // Show same object from multiple viewpoints simultaneously
+  content += '<g id="cubist-fragments">\n'
+
+  const centerX = width / 2
+  const centerY = height / 2
+
+  // Central "object" - a cube shown from multiple perspectives
+  // Front face
+  const cubeSize = 120
+  const faces = [
+    // Face 1 (frontal)
+    {
+      points: [
+        [centerX - cubeSize / 2, centerY - cubeSize / 2],
+        [centerX + cubeSize / 2, centerY - cubeSize / 2],
+        [centerX + cubeSize / 2, centerY + cubeSize / 2],
+        [centerX - cubeSize / 2, centerY + cubeSize / 2],
+      ],
+      color: COLORS.purple,
+      opacity: 0.7,
+    },
+    // Face 2 (top perspective, shifted)
+    {
+      points: [
+        [centerX - cubeSize / 2 + 20, centerY - cubeSize / 2 - 40],
+        [centerX + cubeSize / 2 + 40, centerY - cubeSize / 2 - 30],
+        [centerX + cubeSize / 2 + 20, centerY - 20],
+        [centerX - cubeSize / 2, centerY - 30],
+      ],
+      color: COLORS.teal,
+      opacity: 0.6,
+    },
+    // Face 3 (side perspective)
+    {
+      points: [
+        [centerX + cubeSize / 2, centerY - cubeSize / 2],
+        [centerX + cubeSize / 2 + 60, centerY - cubeSize / 2 + 20],
+        [centerX + cubeSize / 2 + 60, centerY + cubeSize / 2 + 20],
+        [centerX + cubeSize / 2, centerY + cubeSize / 2],
+      ],
+      color: COLORS.green,
+      opacity: 0.65,
+    },
+  ]
+
+  for (const face of faces) {
+    const pathData = face.points.map((point, i) => `${i === 0 ? 'M' : 'L'} ${point[0]},${point[1]}`).join(' ') + ' Z'
+    content += `<path d="${pathData}" fill="${face.color}" opacity="${face.opacity}" stroke="${face.color}" stroke-width="2" />\n`
+  }
+
+  content += '</g>\n'
+
+  // 3. FRAGMENTED CIRCLES (multiple perspectives of sphere)
+  content += '<g id="sphere-fragments">\n'
+
+  const sphereFragments = [
+    { x: 200, y: 180, r: 50, color: COLORS.purple, opacity: 0.5, strokeDash: '5,5' },
+    { x: 210, y: 170, r: 45, color: COLORS.teal, opacity: 0.6, strokeDash: 'none' },
+    { x: 600, y: 400, r: 60, color: COLORS.green, opacity: 0.4, strokeDash: '8,4' },
+    { x: 590, y: 390, r: 55, color: COLORS.purple, opacity: 0.55, strokeDash: 'none' },
+  ]
+
+  for (const frag of sphereFragments) {
+    const dashAttr = frag.strokeDash !== 'none' ? `stroke-dasharray="${frag.strokeDash}"` : ''
+    content += `<circle cx="${frag.x}" cy="${frag.y}" r="${frag.r}" fill="none" stroke="${frag.color}" stroke-width="2" opacity="${frag.opacity}" ${dashAttr} />\n`
+    // Fill some
+    if (rng() > 0.5) {
+      content += generateCircle(frag.x, frag.y, frag.r, frag.color, frag.opacity * 0.3, 0) + '\n'
+    }
+  }
+
+  content += '</g>\n'
+
+  // 4. ANGULAR LINES (suggest vector directions / dimensions)
+  content += '<g id="vector-lines">\n'
+
+  const vectorLines = [
+    { x1: 150, y1: 100, x2: 280, y2: 80, color: COLORS.purple },
+    { x1: 500, y1: 120, x2: 630, y2: 200, color: COLORS.teal },
+    { x1: 300, y1: 450, x2: 200, y2: 350, color: COLORS.green },
+    { x1: 550, y1: 480, x2: 680, y2: 420, color: COLORS.purple },
+    { x1: centerX, y1: centerY, x2: centerX + 80, y2: centerY - 100, color: COLORS.teal },
+  ]
+
+  for (const line of vectorLines) {
+    content += generateLine(line.x1, line.y1, line.x2, line.y2, line.color, 2, 0.4) + '\n'
+    // Arrowhead at endpoint
+    const angle = Math.atan2(line.y2 - line.y1, line.x2 - line.x1)
+    const arrowSize = 10
+    const arrowAngle = Math.PI / 6
+    const arrow1X = line.x2 - arrowSize * Math.cos(angle - arrowAngle)
+    const arrow1Y = line.y2 - arrowSize * Math.sin(angle - arrowAngle)
+    const arrow2X = line.x2 - arrowSize * Math.cos(angle + arrowAngle)
+    const arrow2Y = line.y2 - arrowSize * Math.sin(angle + arrowAngle)
+
+    content += generateLine(line.x2, line.y2, arrow1X, arrow1Y, line.color, 2, 0.4) + '\n'
+    content += generateLine(line.x2, line.y2, arrow2X, arrow2Y, line.color, 2, 0.4) + '\n'
+  }
+
+  content += '</g>\n'
+
+  // 5. DIMENSION LABELS (suggest high-dimensional space)
+  // Small triangular markers suggesting dimensional axes
+  content += '<g id="dimension-markers">\n'
+
+  const markers = [
+    { x: 120, y: 500, color: COLORS.purple },
+    { x: 680, y: 100, color: COLORS.teal },
+    { x: 700, y: 550, color: COLORS.green },
+  ]
+
+  for (const marker of markers) {
+    content += generateTriangle(marker.x, marker.y, 20, marker.color, rng() * 360, 0.6) + '\n'
+  }
+
+  content += '</g>\n'
+
+  // 6. OVERLAPPING TRANSPARENT SQUARES (suggest vector embeddings)
+  content += '<g id="embedding-layers">\n'
+
+  for (let i = 0; i < 5; i++) {
+    const x = rng() * (width - 100) + 50
+    const y = rng() * (height - 100) + 50
+    const size = 40 + rng() * 40
+    const color = randomChoice([COLORS.purple, COLORS.teal, COLORS.green], rng)
+    const rotation = rng() * 60 - 30
+
+    content += generateRectangle(x, y, size, size, color, rotation, 0.15) + '\n'
+  }
+
+  content += '</g>\n'
+
+  return createSVG(width, height, content, mode)
+}
+
+// ============================================================================
 // FILE OPERATIONS
 // ============================================================================
 
@@ -796,6 +963,13 @@ async function main() {
   await writeSVG(path.join(outputDir, 'timeseries-database-light.svg'), timeSeriesLight)
   await writeSVG(path.join(outputDir, 'timeseries-database-dark.svg'), timeSeriesDark)
 
+  // Generate vector database illustration (light & dark modes)
+  const vectorLight = generateVectorIllustration('light')
+  const vectorDark = generateVectorIllustration('dark')
+
+  await writeSVG(path.join(outputDir, 'vector-database-light.svg'), vectorLight)
+  await writeSVG(path.join(outputDir, 'vector-database-dark.svg'), vectorDark)
+
   console.log('')
   console.log('✅ Asset generation complete!')
   console.log(`   Output: ${outputDir}`)
@@ -820,6 +994,7 @@ export {
   generateGraphDatabaseIllustration,
   generateGeospatialIllustration,
   generateTimeSeriesIllustration,
+  generateVectorIllustration,
   generateGrid,
   generateCircle,
   generateTriangle,
