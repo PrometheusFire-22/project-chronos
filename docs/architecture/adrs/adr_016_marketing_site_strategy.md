@@ -37,7 +37,7 @@ We will build a **static marketing site (SSG)** using Next.js 14+ with these cha
 4. **Contact/Waitlist**: Early access signup form
 
 **Pages** (Post-MVP - Sprint 11+):
-5. **Blog**: Technical content marketing (MDX-powered)
+5. **Blog**: Technical content marketing (Payload CMS-powered)
 6. **Pricing**: Full pricing page (deferred until product exists)
 7. **Resources**: Case studies, whitepapers, documentation
 
@@ -99,10 +99,10 @@ We will build a **static marketing site (SSG)** using Next.js 14+ with these cha
 - Sends welcome email via Resend
 - Stores leads in database (future: HubSpot integration)
 
-**Analytics**: Plausible Analytics (deferred decision on GA4)
-- Privacy-first, cookieless
-- Track: pageviews, waitlist signups, feature page engagement
-- Minimal bundle size impact
+**Analytics**: Decision deferred to post-MVP
+- No analytics implemented for MVP launch
+- Will evaluate options (GA4, Plausible, PostHog, etc.) after initial launch
+- Focus on shipping first, measuring later
 
 ### Visualization Strategy
 
@@ -138,7 +138,7 @@ We will build a **static marketing site (SSG)** using Next.js 14+ with these cha
   - Draft features page copy (graph, vector, geospatial, time-series)
   - Draft about page copy
 - **Estimate**: 16 hours
-- **Deliverable**: Complete content in Markdown files
+- **Deliverable**: Complete content ready for implementation (initially hardcoded, migrate to Payload CMS post-MVP)
 
 **Story 2**: Logo & Visual Assets (CHRONOS-282)
 - **Tasks**:
@@ -236,7 +236,6 @@ We will build a **static marketing site (SSG)** using Next.js 14+ with these cha
   - Set up environment variables in Vercel
   - Deploy to production
   - Test all forms and links
-  - Add Plausible Analytics script
 - **Estimate**: 2 hours
 - **Deliverable**: Live marketing site at automatonicai.com
 
@@ -244,14 +243,15 @@ We will build a **static marketing site (SSG)** using Next.js 14+ with these cha
 
 ### Sprint 11: Enhancements & Blog (1 week, 40 hours) - POST-MVP
 
-**Story 12**: Blog System Setup (CHRONOS-292)
+**Story 12**: Blog System Setup with Payload CMS (CHRONOS-292)
 - **Tasks**:
-  - Configure MDX support
-  - Create blog post template
-  - Build blog index page
-  - Add syntax highlighting (Shiki)
+  - Install and configure Payload CMS
+  - Create blog post collection schema
+  - Build blog index and detail pages
+  - Add syntax highlighting for code blocks
+  - Configure rich text editor
   - Create RSS feed
-- **Estimate**: 8 hours
+- **Estimate**: 12 hours
 
 **Story 13**: Initial Blog Content (CHRONOS-293)
 - **Tasks**:
@@ -269,13 +269,14 @@ We will build a **static marketing site (SSG)** using Next.js 14+ with these cha
   - Add loading states
 - **Estimate**: 16 hours
 
-**Story 15**: Analytics & Tracking (CHRONOS-295)
-- **Tasks**:
+**Story 15**: Analytics & Tracking (CHRONOS-295) - DEFERRED
+- **Status**: Not implementing for MVP - decision deferred to post-launch
+- **Rationale**: Focus on shipping and collecting emails first, measure later
+- **Future Tasks** (when needed):
+  - Evaluate analytics options (GA4, Plausible, PostHog, etc.)
   - Set up conversion goals (waitlist signup)
   - Add pageview tracking
   - Create dashboard for monitoring
-  - Document analytics strategy
-- **Estimate**: 4 hours
 
 ---
 
@@ -315,7 +316,7 @@ We will build a **static marketing site (SSG)** using Next.js 14+ with these cha
 - [ ] Mobile-responsive (tested on iOS and Android)
 - [ ] All links working (no 404s)
 - [ ] Meta tags and OG image set
-- [ ] Analytics tracking active
+- [~] Analytics tracking (deferred to post-MVP)
 
 ### Post-MVP Goals (Sprint 11+)
 
@@ -338,7 +339,7 @@ We will build a **static marketing site (SSG)** using Next.js 14+ with these cha
 - ❌ Live chat widget (no one to respond yet)
 - ❌ Multi-language support (English only for now)
 - ❌ Complex animations (static SVG logos, not WebGL)
-- ❌ CMS integration (content in Git as Markdown)
+- ✅ CMS integration (Payload CMS for blog and future content)
 
 **Why**: Focus on shipping, not perfecting. Iterate based on user feedback.
 
@@ -353,7 +354,7 @@ We will build a **static marketing site (SSG)** using Next.js 14+ with these cha
 - Tailwind CSS makes styling fast and consistent
 
 **Process**:
-1. Write copy first (Markdown)
+1. Write copy first (hardcoded for MVP, Payload CMS post-launch for blog)
 2. Build in browser with Tailwind
 3. Refine visually using dev tools
 4. Extract reusable components
@@ -458,7 +459,7 @@ fix(marketing): resolve mobile nav overflow issue
 │       └── WaitlistForm.tsx
 ├── lib/
 │   ├── email.ts                 # Resend integration
-│   └── analytics.ts             # Plausible helpers
+│   └── payload.ts               # Payload CMS client
 ├── public/
 │   ├── brand/
 │   │   ├── logo-primary.svg
