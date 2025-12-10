@@ -13,9 +13,8 @@
 With Next.js, TypeScript, Tailwind CSS, and shadcn/ui selected as our core frontend stack (ADR-012), we need to choose supporting tools for:
 
 1. **Animations** - Smooth,professional interactions and micro-animations
-2. **Content Management** - Blog posts and marketing content in Markdown
-3. **Analytics** - Privacy-friendly user behavior tracking
-4. **Email** - Transactional emails and lead nurturing
+2. **Content Management** - Blog posts and marketing content with CMS
+3. **Email** - Transactional emails and lead nurturing
 
 These decisions must align with our principles:
 - **Developer Experience**: Modern,well-documented tools
@@ -84,174 +83,124 @@ return <animated.div style={springs}>Content</animated.div>
 
 ---
 
-### Content Format: **MDX (Markdown + JSX)**
+### Content Management: **Payload CMS**
 
-**Chosen**: MDX
-**Alternatives Considered**: Pure Markdown, Rich Text Editor (Payload CMS), Notion API
+**Chosen**: Payload CMS
+**Alternatives Considered**: MDX, Pure Markdown, Notion API
 
-| Criterion | MDX | Pure Markdown | Rich Text (Payload) | Notion API |
-|-----------|-----|---------------|---------------------|------------|
-| **React Components** | Yes (native) | No | Limited | No |
-| **TypeScript Support** | Excellent | N/A | Fair | Poor |
-| **Version Control** | Git-friendly | Git-friendly | Database-stored | API-dependent |
-| **Developer Experience** | Excellent | Good | Fair (WYSIWYG) | Poor (rate limits) |
-| **Flexibility** | Very high | Low | Medium | Low |
-| **Performance** | Excellent (SSG) | Excellent | Good | Fair (API calls) |
-| **SEO** | Excellent | Excellent | Good | Good |
-| **Cost** | Free | Free | Free (self-hosted) | $10/user/month |
+| Criterion | Payload CMS | MDX | Pure Markdown | Notion API |
+|-----------|-------------|-----|---------------|------------|
+| **Content Editing** | WYSIWYG + Rich Text | Code editor | Code editor | WYSIWYG |
+| **TypeScript Support** | Excellent | Excellent | N/A | Poor |
+| **Version Control** | Database + API | Git-friendly | Git-friendly | API-dependent |
+| **Developer Experience** | Excellent | Excellent | Good | Poor (rate limits) |
+| **Non-Technical Editing** | Yes (WYSIWYG) | No (code) | No (code) | Yes |
+| **Rapid Iteration** | Excellent | Good | Good | Fair |
+| **Performance** | Excellent (SSG via API) | Excellent (SSG) | Excellent | Fair (API calls) |
+| **SEO** | Excellent | Excellent | Excellent | Good |
+| **Cost** | Free (self-hosted) | Free | Free | $10/user/month |
+| **PostgreSQL Integration** | Native | N/A | N/A | N/A |
 
 **Decision Rationale**:
 
-MDX allows us to **embed React components directly in Markdown**, enabling rich,interactive blog content without leaving the Markdown format:
-
-```mdx
----
-title: "Why Graph Databases Matter for Relationship Intelligence"
-date: 2025-12-15
-author: "Geoff Bevans"
----
-
-# Why Graph Databases Matter
-
-Traditional relational databases store relationships as foreign keys...
-
-<InteractiveGraphDemo
-  nodes={["Person A", "Person B", "Company C"]}
-  edges={[{from: "Person A", to: "Person B", label: "knows"}]}
-/>
-
-As you can see in the interactive demo above, graph databases...
-
-<CallToAction
-  text="Try our beta"
-  href="/signup"
-/>
-```
+Payload CMS allows us to **rapidly iterate on blog content and marketing pages** while maintaining type safety and excellent developer experience. Since we already have PostgreSQL infrastructure, integration is seamless.
 
 **Key Advantages**:
-1. **Component Embedding**: Use custom React components (charts, demos, CTAs) in blog posts
-2. **Type Safety**: TypeScript validates component props in Markdown
-3. **Git-Friendly**: Store content as `.mdx` files, track changes with Git
-4. **Fast Compilation**: Next.js compiles MDX to static HTML at build time
-5. **SEO-Optimized**: Static HTML with proper meta tags and structured data
+1. **Rapid Content Iteration**: WYSIWYG editor enables quick blog post creation for thought leadership and SEO
+2. **PostgreSQL Native**: Points directly to existing database - just adds a new table
+3. **Type Safety**: Auto-generates TypeScript types from collections
+4. **Admin UI**: Built-in `/admin` interface for content management
+5. **API-First**: RESTful and GraphQL APIs for fetching content in Next.js
+6. **Vercel Compatible**: Next.js API routes work seamlessly on Vercel
+7. **Flexible**: Can still embed React components via custom fields
 
-**vs. Pure Markdown**:
-- Markdown requires HTML strings for complex content (messy)
-- No type checking for embedded content
-- Limited interactivity
+**Why Payload CMS vs. MDX**:
+- **Need**: Building FastAPI views and dynamic rendering alongside marketing site
+- **Goal**: Quickly iterate on blog content for thought leadership, reputation building, and SEO
+- **Context**: Already have PostgreSQL setup in AWS - simple integration
+- **Timeline**: Only 2-4 days more than hardcoded approach
+- **Best Practice**: Establish best-in-class CMS early rather than migrate later
 
-**vs. Rich Text Editor (Payload CMS)**:
-- WYSIWYG editors generate bloated HTML
-- Harder to version control (stored in database)
-- Less flexibility for custom components
+**Why NOT MDX**:
+- Requires code editor for every content change
+- Slower iteration cycle (edit file → commit → deploy)
+- Non-technical stakeholders can't contribute
+- No built-in media management
 
-**vs. Notion API**:
+**Why NOT Notion API**:
 - Rate limits (3 requests/second)
 - API dependency (slower, potential downtime)
 - Poor TypeScript support
 - Monthly cost per user
 
 **Use Cases in Project Chronos**:
-- Blog posts with embedded demos
-- Case studies with interactive visualizations
-- Documentation with code snippets and examples
-- Landing pages with custom components
+- Blog posts for thought leadership and SEO
+- Case studies and customer stories
+- Product updates and announcements
+- Future: landing page variants, A/B testing content
 
 **Implementation**:
 ```bash
-npm install @next/mdx @mdx-js/loader
+npm install payload @payloadcms/db-postgres
 ```
 
 ```typescript
-// next.config.js
-const withMDX = require('@next/mdx')({
-  extension: /\.mdx?$/,
-})
+// payload.config.ts
+import { buildConfig } from 'payload/config'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 
-module.exports = withMDX({
-  pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
+export default buildConfig({
+  collections: [
+    {
+      slug: 'posts',
+      fields: [
+        { name: 'title', type: 'text', required: true },
+        { name: 'slug', type: 'text', required: true },
+        { name: 'content', type: 'richText', required: true },
+        { name: 'publishedAt', type: 'date' },
+      ],
+    },
+  ],
+  db: postgresAdapter({
+    pool: {
+      connectionString: process.env.DATABASE_URL,
+    },
+  }),
 })
 ```
 
 ---
 
-### Analytics Platform: **Plausible Analytics**
+### Analytics Platform: **Decision Deferred to Post-MVP**
 
-**Chosen**: Plausible Analytics
-**Alternative Considered**: PostHog
+**Status**: NOT IMPLEMENTED FOR MVP
+**Decision Date**: 2025-12-10
 
-| Criterion | Plausible | PostHog |
-|-----------|-----------|---------|
-| **Primary Focus** | Web analytics | Product analytics (all-in-one) |
-| **Privacy** | No PII, cookieless | GDPR-compliant, cookieless option |
-| **Ease of Use** | Extremely simple | Complex (many features) |
-| **Setup Time** | <5 minutes | ~30 minutes |
-| **Dashboard** | Single, clean page | Multiple dashboards |
-| **Page Load Impact** | <1KB script | ~45KB script |
-| **Features** | Pageviews, goals, referrers | Session replay, feature flags, experiments, surveys |
-| **Self-Hosting** | Yes (optional) | Yes (recommended) |
-| **Pricing (1M pageviews)** | €69/month (~$71) | Free (1M events), then $0.00005/event |
-| **TypeScript SDK** | No (simple script tag) | Yes |
-| **Learning Curve** | Minimal | Moderate |
-| **Use Case Fit** | Marketing site analytics | Product analytics for SaaS app |
+**Rationale**:
 
-**Decision Rationale**:
+No analytics will be implemented for the MVP launch. This decision reflects:
 
-**For Phase 1 (Marketing Site)**: **Plausible Analytics** ✅
+1. **Focus on Shipping**: Priority is launching and collecting emails, not measuring traffic
+2. **Cost Control**: Avoid adding to cost structure before product-market fit
+3. **Premature Optimization**: Don't need analytics before we have meaningful traffic
+4. **Post-Launch Evaluation**: Will assess options after initial launch based on actual needs
 
-Plausible is the clear choice for our marketing site because:
+**Future Options to Evaluate** (post-MVP):
 
-1. **Simplicity**: Single dashboard shows all essential metrics (visitors, pageviews, bounce rate, referrers, countries)
-2. **Privacy-First**: Collects zero PII, no cookies, GDPR/CCPA compliant by default
-3. **Performance**: <1KB script loads asynchronously, zero impact on Core Web Vitals
-4. **Cost-Effective**: $9/month for ≤10K pageviews (perfect for early-stage marketing site)
-5. **Fast Setup**: Add one script tag, immediately see data
+| Option | Use Case | Pros | Cons |
+|--------|----------|------|------|
+| **Google Analytics 4** | Marketing site | Free, comprehensive, industry standard | Privacy concerns, complex setup |
+| **Plausible Analytics** | Marketing site | Privacy-first, simple, lightweight (<1KB) | Paid ($9+/month), limited features |
+| **PostHog** | Product analytics | Comprehensive, self-hostable, feature flags | Complex, 45KB bundle, overkill for marketing |
+| **Simple Analytics** | Marketing site | Privacy-first, cookieless | Paid, limited features |
 
-**Why NOT PostHog for Marketing Site**:
-- Overkill for simple pageview tracking
-- 45KB bundle size hurts performance
-- Complex dashboard intimidating for marketing metrics
-- Features like session replay, feature flags irrelevant for static marketing pages
+**When to Revisit**:
+- Post-MVP launch (after collecting initial signups)
+- When we need to understand traffic sources
+- When we want to track conversion goals (waitlist signups)
+- When we have budget for analytics tooling
 
-**For Phase 2 (Client Portal)**: **PostHog** ✅
-
-Once we launch the authenticated client portal, we'll ADD PostHog for:
-
-1. **Product Analytics**: Track user journeys, feature usage, conversion funnels
-2. **Session Replay**: Watch user sessions to identify UX issues
-3. **Feature Flags**: A/B test new features with gradual rollouts
-4. **Heatmaps**: Understand click patterns on dashboards
-5. **Self-Hosting**: Full data control on our Lightsail instance
-
-**Hybrid Approach**:
-```
-Marketing Site (chronos.ai)          → Plausible Analytics
-Client Portal (chronos.ai/portal/*)  → PostHog (self-hosted)
-```
-
-**Implementation (Phase 1 - Plausible)**:
-```html
-<!-- Add to <head> in Next.js layout -->
-<script defer data-domain="chronos.ai" src="https://plausible.io/js/script.js"></script>
-```
-
-**Implementation (Phase 2 - PostHog)**:
-```typescript
-// app/portal/layout.tsx
-import posthog from 'posthog-js'
-
-if (typeof window !== 'undefined') {
-  posthog.init('YOUR_PROJECT_API_KEY', {
-    api_host: 'https://posthog.chronos.ai', // Self-hosted
-    autocapture: true,
-  })
-}
-```
-
-**Sources**:
-- [PostHog vs Plausible comparison](https://posthog.com/blog/posthog-vs-plausible)
-- [Plausible Analytics pricing](https://plausible.io/pricing)
-- [PostHog pricing calculator](https://posthog.com/pricing)
+**Implementation**: None for MVP
 
 ---
 
@@ -391,9 +340,8 @@ export async function sendWelcomeEmail(email: string, name: string) {
 | Category | Tool | Key Reason |
 |----------|------|------------|
 | **Animations** | Framer Motion | Declarative API, excellent React integration, TypeScript support |
-| **Content** | MDX | Embed React components in Markdown, Git-friendly, type-safe |
-| **Analytics (Marketing)** | Plausible | Privacy-first, simple, lightweight, perfect for marketing site |
-| **Analytics (Product)** | PostHog | Comprehensive product analytics, self-hostable, feature flags |
+| **Content Management** | Payload CMS | Rapid iteration, PostgreSQL native, WYSIWYG + type safety |
+| **Analytics** | TBD (deferred) | Decision deferred to post-MVP - focus on shipping first |
 | **Email** | Resend | React Email support, modern DX, TypeScript-first |
 
 ---
@@ -404,56 +352,53 @@ export async function sendWelcomeEmail(email: string, name: string) {
 
 **Week 1**:
 - Install Framer Motion, create animation component library
-- Set up MDX with Next.js, create first blog post template
-- Add Plausible Analytics script tag
+- Install and configure Payload CMS with PostgreSQL
 - Set up Resend account, create welcome email template
 
 **Week 2**:
 - Implement hero section animations with Framer Motion
-- Write 2-3 blog posts in MDX with interactive components
-- Verify Plausible tracking (test pageviews, goals)
+- Create blog post collection schema in Payload CMS
+- Build blog index and detail pages
 - Test contact form → Resend email flow
 
 **Week 3**:
 - Polish animations (hover effects, page transitions)
-- Publish 5+ blog posts via MDX
-- Set up Plausible goals (newsletter signup, contact form)
+- Write initial blog posts via Payload CMS admin
+- Configure rich text editor and syntax highlighting
 - Implement lead nurture email sequence with Resend
 
-### Sprint 12+ (Client Portal - PostHog Only)
+### Future (Post-MVP)
 
-**Add PostHog** when client portal goes live:
-- Self-host PostHog on Lightsail (Docker container)
-- Configure session replay, feature flags
-- Track user journeys and conversion funnels
-- Keep Plausible for marketing site analytics
+**Analytics Decision** (when ready):
+- Evaluate options: GA4, Plausible, PostHog, Simple Analytics
+- Consider privacy requirements, cost, and feature needs
+- Implement chosen solution based on actual traffic patterns
 
 ---
 
 ## Cost Projections
 
-### Phase 1 (Marketing Site)
+### MVP (Marketing Site)
 
 | Service | Tier | Monthly Cost |
 |---------|------|--------------|
-| **Plausible Analytics** | 10K pageviews | $9 |
-| **Resend** | 50K emails | $20 |
+| **Resend** | Free tier initially (100/day) | $0 |
+| **Payload CMS** | Self-hosted on PostgreSQL | $0 |
 | **Framer Motion** | Free | $0 |
-| **MDX** | Free | $0 |
-| **Total** | | **$29/month** |
+| **Analytics** | None (deferred) | $0 |
+| **Total** | | **$0/month** |
 
-### Phase 2 (Client Portal Added)
+**Note**: Once email volume exceeds free tier (3,000/month), Resend costs $20/month.
+
+### Future (Post-MVP)
 
 | Service | Tier | Monthly Cost |
 |---------|------|--------------|
-| **Plausible Analytics** | 10K pageviews | $9 |
-| **PostHog** | Self-hosted | $0 (on Lightsail) |
 | **Resend** | 50K emails | $20 |
+| **Payload CMS** | Self-hosted on PostgreSQL | $0 |
 | **Framer Motion** | Free | $0 |
-| **MDX** | Free | $0 |
-| **Total** | | **$29/month** |
-
-**Note**: PostHog self-hosted on existing Lightsail instance adds zero marginal cost.
+| **Analytics** | TBD (GA4 free, or Plausible $9+) | $0-$9+ |
+| **Total** | | **$20-$29+/month** |
 
 ---
 
@@ -463,9 +408,8 @@ export async function sendWelcomeEmail(email: string, name: string) {
 |------|------------|--------|------------|
 | **Resend deliverability issues** | Low | Medium | Monitor bounce rates; can switch to SendGrid if needed |
 | **Framer Motion bundle size** | Low | Low | Lazy-load animations; use CSS for simple transitions |
-| **MDX complexity** | Low | Low | Fallback to pure Markdown; keep components simple |
-| **Plausible data loss** | Very Low | Low | Export data monthly; analytics not mission-critical |
-| **PostHog resource usage** | Medium | Medium | Monitor Lightsail CPU/RAM; can upgrade instance if needed |
+| **Payload CMS learning curve** | Low | Low | Excellent documentation; simple PostgreSQL integration |
+| **No analytics visibility** | Medium | Low | Acceptable for MVP; add post-launch when needed |
 
 ---
 
@@ -474,23 +418,18 @@ export async function sendWelcomeEmail(email: string, name: string) {
 | Date | Decision | Rationale |
 |------|----------|-----------|
 | 2025-12-07 | Choose Framer Motion over React Spring | Better declarative API, excellent docs |
-| 2025-12-07 | Choose MDX over Pure Markdown | React component embedding, type safety |
-| 2025-12-07 | Choose Plausible for marketing analytics | Privacy-first, simple, lightweight |
-| 2025-12-07 | Choose PostHog for product analytics | Comprehensive features, self-hostable |
 | 2025-12-07 | Choose Resend over SendGrid | React Email support, modern DX |
-| 2025-12-07 | Hybrid analytics (Plausible + PostHog) | Right tool for each use case |
+| 2025-12-10 | Choose Payload CMS over MDX | Rapid iteration, PostgreSQL native, best-in-class CMS early |
+| 2025-12-10 | Defer analytics decision to post-MVP | Focus on shipping first, measure later |
 
 ---
 
 ## References
 
 - [Framer Motion Documentation](https://www.framer.com/motion/)
-- [MDX Documentation](https://mdxjs.com/)
-- [Plausible Analytics](https://plausible.io/)
-- [PostHog Documentation](https://posthog.com/docs)
+- [Payload CMS Documentation](https://payloadcms.com/docs)
 - [Resend Documentation](https://resend.com/docs)
 - [React Email Documentation](https://react.email/)
-- PostHog vs Plausible comparison: https://posthog.com/blog/posthog-vs-plausible
 - Resend vs SendGrid comparison: https://forwardemail.net/en/blog/resend-vs-sendgrid-email-service-comparison
 
 ---
@@ -500,13 +439,13 @@ export async function sendWelcomeEmail(email: string, name: string) {
 These supporting tools complement our core frontend stack (Next.js, TypeScript, Tailwind, shadcn/ui) by providing:
 
 1. **Polished UX** - Framer Motion animations
-2. **Flexible Content** - MDX for interactive blog posts
-3. **Privacy-Friendly Analytics** - Plausible (marketing) + PostHog (product)
-4. **Modern Email Experience** - Resend with React Email
+2. **Rapid Content Management** - Payload CMS for blog and marketing pages
+3. **Modern Email Experience** - Resend with React Email
+4. **Analytics** - Deferred to post-MVP (focus on shipping first)
 
 All tools prioritize **developer experience**, **type safety**, and **cost-effectiveness**, aligning with our solo founder constraints and technical philosophy.
 
-Total added cost: **$29/month** for comprehensive marketing site capabilities.
+Total MVP cost: **$0/month** (Resend free tier + self-hosted Payload CMS).
 
 **Approved by:** Geoff Bevans
 **Implementation Start:** Sprint 10
