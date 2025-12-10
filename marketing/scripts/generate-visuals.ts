@@ -261,6 +261,20 @@ function generateHeroGraphic(mode: 'light' | 'dark' = 'light'): string {
     width * 0.3, height * 0.45,
     COLORS.purple, -10, 0.08
   ) + '\n'
+
+  // Top-left background triangle (SE-facing, downward)
+  content += generateTriangle(
+    width * 0.12, height * 0.15,
+    180, COLORS.purple, 135, 0.08
+  ) + '\n'
+
+  // Bottom-right foreground rectangle (off-center)
+  content += generateRectangle(
+    width * 0.72, height * 0.7,
+    width * 0.18, height * 0.22,
+    COLORS.purple, 8, 0.12
+  ) + '\n'
+
   content += '</g>\n'
 
   // 3. CONNECTING EDGES (graph relationships)
@@ -351,11 +365,11 @@ function generateGraphDatabaseIllustration(mode: 'light' | 'dark' = 'light'): st
   const seed = 100 // Different seed for different composition
   const rng = seededRandom(seed)
 
-  // Color palette with more teal and green (but purple still dominant)
+  // Color palette: 50% purple, 30% teal, 20% green
   const colors = [
-    COLORS.purple, COLORS.purple, COLORS.purple, COLORS.purple, // 40% purple
-    COLORS.teal, COLORS.teal, COLORS.teal,                       // 30% teal (increased)
-    COLORS.green, COLORS.green, COLORS.green                     // 30% green (increased)
+    COLORS.purple, COLORS.purple, COLORS.purple, COLORS.purple, COLORS.purple, // 50% purple
+    COLORS.teal, COLORS.teal, COLORS.teal,                                      // 30% teal
+    COLORS.green, COLORS.green                                                  // 20% green
   ]
 
   let content = ''
@@ -391,15 +405,15 @@ function generateGraphDatabaseIllustration(mode: 'light' | 'dark' = 'light'): st
   const nodePositions: Array<{x: number, y: number, size: number, color: string}> = []
 
   const numNodes = 14 // Slightly more nodes, spread out
-  const margin = 80
+  const margin = 60 // Reduced margin for more spread
 
   for (let i = 0; i < numNodes; i++) {
-    // Fully randomized positions (avoid center clustering)
+    // Fully randomized positions with better spread (less center clustering)
     const x = margin + rng() * (width - margin * 2)
     const y = margin + rng() * (height - margin * 2)
 
-    // Randomized sizes (25-50px range - bigger nodes)
-    const size = 25 + rng() * 25
+    // More variation in node sizes (20-55px range)
+    const size = 20 + rng() * 35
 
     const color = randomChoice(colors, rng)
 
@@ -505,79 +519,112 @@ function generateGeospatialIllustration(mode: 'light' | 'dark' = 'light'): strin
 
   content += '<g id="geospatial-map">\n'
 
-  // 3. DRAW "CONTINENTS" - More geographically accurate, better centered
-  // Shift everything right/down for better centering
+  // 3. DRAW "CONTINENTS" - Winkel tripel projection (Amsterdam center)
+  // Left-shifted for more Asia space, ocean whitespace breathing room
 
-  // NORTH AMERICA (left side, upper-middle)
-  content += createContinent(140, 160, 18, 20, 0.4)
+  // ===== AMERICAS (far left) =====
+  // NORTH AMERICA (far left, upper)
+  content += createContinent(80, 140, 20, 18, 0.4)
 
-  // SOUTH AMERICA (left-center, lower) - More triangular
-  content += createContinent(180, 360, 16, 10, 0.25) // Narrower at top
-  content += createContinent(185, 410, 12, 8, 0.25)  // Widens middle
-  content += createContinent(190, 450, 8, 6, 0.2)    // Narrows at tip
+  // MEXICO/CENTRAL AMERICA (downward triangle, slight angle)
+  content += createContinent(90, 230, 5, 4, 0.2)   // Top wider
+  content += createContinent(93, 250, 4, 3, 0.15)  // Narrowing
+  content += createContinent(96, 265, 3, 2, 0.1)   // Tip
 
-  // EUROPE (center-upper)
-  content += createContinent(380, 140, 10, 16, 0.35)
+  // SOUTH AMERICA (triangular, far left-lower) - ATLANTIC OCEAN GAP after this
+  content += createContinent(105, 320, 14, 9, 0.25)  // Top wider
+  content += createContinent(110, 370, 12, 7, 0.25)  // Middle
+  content += createContinent(115, 410, 10, 5, 0.2)   // Narrowing
+  content += createContinent(118, 445, 7, 3, 0.15)   // Southern tip
 
-  // British Isles (more definition)
-  content += createContinent(350, 115, 4, 3, 0.2)
+  // ===== EUROPE (left-center) ===== ~60px gap for Atlantic
+  // SCANDINAVIA (triangle, above British Isles)
+  content += createContinent(240, 90, 6, 5, 0.25)
 
-  // Italy (peninsula pointing down)
-  content += createContinent(410, 170, 8, 3, 0.2)
+  // BRITISH ISLES (small cluster)
+  content += createContinent(230, 125, 5, 4, 0.2)
 
-  // Greece/Balkans
-  content += createContinent(430, 185, 5, 4, 0.2)
+  // EUROPE mainland
+  content += createContinent(260, 140, 12, 18, 0.35)
 
-  // AFRICA (center-middle) - Nonagon top + triangle bottom
-  content += createContinent(400, 260, 12, 14, 0.3)  // Northern bulge
-  content += createContinent(410, 310, 14, 12, 0.3)  // Widest part
-  content += createContinent(415, 360, 12, 10, 0.25) // Narrowing
-  content += createContinent(420, 400, 9, 7, 0.2)    // Southern tip
+  // ITALY (peninsula pointing down) - MEDITERRANEAN GAP below
+  content += createContinent(285, 180, 10, 3, 0.2)
 
-  // Madagascar
-  content += createContinent(470, 390, 6, 3, 0.2)
+  // GREECE/BALKANS (eastern edge)
+  content += createContinent(305, 185, 6, 5, 0.25)
 
-  // ARABIA (smaller rectangle SE-facing)
-  content += createContinent(455, 240, 7, 5, 0.25)
+  // ===== AFRICA (center, BIGGER per Winkel tripel) =====
+  // WEST AFRICA (nonagon left side jutting out)
+  content += createContinent(260, 250, 14, 12, 0.3)  // Jutting bulge
 
-  // ASIA (right side, large and complex)
-  // Russia/Siberia (northern bulk)
-  content += createContinent(520, 120, 12, 28, 0.4)
+  // NORTHERN AFRICA (widest part)
+  content += createContinent(275, 280, 16, 16, 0.35)
 
-  // India subcontinent (triangular)
-  content += createContinent(540, 260, 10, 8, 0.25)  // Top
-  content += createContinent(543, 295, 8, 6, 0.2)    // Narrowing tip
+  // CENTRAL AFRICA (still wide)
+  content += createContinent(285, 330, 18, 14, 0.35)
 
-  // Southeast Asia
-  content += createContinent(570, 300, 6, 8, 0.3)    // Vietnam/Thai/Malaysia
-  content += createContinent(595, 330, 8, 10, 0.35)  // Indonesia
+  // SOUTHERN AFRICA (narrowing triangle)
+  content += createContinent(295, 380, 14, 11, 0.3)
+  content += createContinent(300, 420, 10, 8, 0.25)
+  content += createContinent(305, 455, 6, 5, 0.2)    // Southern tip
 
-  // East Asia
-  content += createContinent(600, 180, 14, 12, 0.35) // China
-  content += createContinent(640, 195, 8, 4, 0.25)   // Korea
-  content += createContinent(660, 200, 10, 5, 0.3)   // Japan
-  content += createContinent(665, 260, 4, 2, 0.15)   // Taiwan
+  // MADAGASCAR (to the right)
+  content += createContinent(355, 400, 8, 3, 0.2)
 
-  // AUSTRALIA (right-lower, more room)
-  content += createContinent(620, 420, 10, 14, 0.3)
+  // ===== MIDDLE EAST =====
+  // ARABIA (small rectangle, SE-facing)
+  content += createContinent(330, 240, 8, 6, 0.25)
 
-  // New Zealand
-  content += createContinent(690, 470, 8, 3, 0.25)
+  // ===== ASIA (right side, BIGGER) ===== BLACK SEA gap above, MEDITERRANEAN gap left
+  // RUSSIA/SIBERIA (massive northern bulk)
+  content += createContinent(380, 100, 18, 35, 0.45)
+
+  // INDIA SUBCONTINENT (elongated, pointing down) - INDIAN OCEAN GAP below
+  content += createContinent(410, 260, 14, 9, 0.3)   // Top (wider)
+  content += createContinent(413, 300, 12, 7, 0.25)  // Middle
+  content += createContinent(416, 335, 9, 5, 0.2)    // Tip pointing down
+
+  // SOUTHEAST ASIA (below India with gap)
+  content += createContinent(440, 300, 7, 9, 0.3)    // Vietnam/Thailand/Malaysia
+  content += createContinent(455, 340, 10, 12, 0.35) // Indonesia archipelago
+
+  // EAST ASIA (right side, prominent)
+  // CHINA (BIGGER - major)
+  content += createContinent(480, 180, 20, 18, 0.4)
+
+  // KOREA (thin vertical rectangle/triangle)
+  content += createContinent(535, 195, 8, 3, 0.2)
+
+  // JAPAN (curved vertical string of circles)
+  content += createContinent(550, 180, 4, 2, 0.15)   // Hokkaido
+  content += createContinent(552, 195, 6, 2, 0.15)   // Honshu (north)
+  content += createContinent(553, 215, 5, 2, 0.15)   // Honshu (central)
+  content += createContinent(552, 230, 4, 2, 0.15)   // Kyushu/Shikoku
+
+  // TAIWAN (tiny spec - exists but doesn't dominate)
+  content += createContinent(530, 250, 3, 2, 0.1)
+
+  // ===== OCEANIA (far right-bottom) ===== PACIFIC sacrificed
+  // AUSTRALIA (more room)
+  content += createContinent(540, 420, 14, 18, 0.35)
+
+  // NEW ZEALAND (far right-bottom)
+  content += createContinent(610, 470, 10, 3, 0.25)
 
   content += '</g>\n'
 
-  // 4. DATA POINTS / MARKERS (teal and green pins) - Updated positions
+  // 4. DATA POINTS / MARKERS (teal and green pins) - Winkel tripel positions
   content += '<g id="geospatial-markers">\n'
 
-  // Major hubs (teal - larger) - repositioned for new map
+  // Major hubs (teal - larger)
   const majorHubs = [
-    { x: 160, y: 200 }, // North America
-    { x: 400, y: 160 }, // Europe
-    { x: 425, y: 320 }, // Africa
-    { x: 620, y: 200 }, // Asia (China)
-    { x: 200, y: 420 }, // South America
-    { x: 550, y: 280 }, // India
-    { x: 665, y: 210 }, // Japan
+    { x: 105, y: 180 },  // North America
+    { x: 275, y: 155 },  // Europe (Amsterdam area)
+    { x: 290, y: 340 },  // Africa (center)
+    { x: 500, y: 210 },  // China
+    { x: 120, y: 380 },  // South America
+    { x: 425, y: 290 },  // India
+    { x: 555, y: 210 },  // Japan
   ]
 
   for (const hub of majorHubs) {
@@ -586,17 +633,19 @@ function generateGeospatialIllustration(mode: 'light' | 'dark' = 'light'): strin
     content += generateCircle(hub.x, hub.y, 16, COLORS.teal, 0.3, 2) + '\n'
   }
 
-  // Minor markers (green - smaller, scattered) - updated
+  // Minor markers (green - smaller, scattered)
   const minorMarkers = [
-    { x: 140, y: 250 },  // Mexico
-    { x: 350, y: 120 },  // UK
-    { x: 410, y: 175 },  // Italy
-    { x: 460, y: 245 },  // Arabia
-    { x: 580, y: 310 },  // Southeast Asia
-    { x: 640, y: 200 },  // Korea
-    { x: 665, y: 265 },  // Taiwan
-    { x: 650, y: 440 },  // Australia
-    { x: 690, y: 475 },  // New Zealand
+    { x: 95, y: 245 },   // Mexico/Central America
+    { x: 240, y: 130 },  // British Isles
+    { x: 245, y: 95 },   // Scandinavia
+    { x: 288, y: 190 },  // Italy
+    { x: 335, y: 245 },  // Arabia
+    { x: 450, y: 320 },  // Southeast Asia
+    { x: 540, y: 200 },  // Korea
+    { x: 532, y: 252 },  // Taiwan
+    { x: 365, y: 405 },  // Madagascar
+    { x: 570, y: 450 },  // Australia
+    { x: 615, y: 475 },  // New Zealand
   ]
 
   for (const marker of minorMarkers) {
