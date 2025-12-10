@@ -97,7 +97,7 @@
     width="672"
     height="432"
     fill="#06B6D4"
-    opacity="0.1"
+    opacity="0.15"
     transform="rotate(15 1488 324)"
   />
 <rect
@@ -106,17 +106,17 @@
     width="576"
     height="486"
     fill="#8B5CF6"
-    opacity="0.08"
+    opacity="0.12"
     transform="rotate(-10 384 783)"
   />
-<path d="M 561.04838,413.51932 460.85443,47.055456 187.11952,315.32562 Z" fill="#8B5CF6" opacity="0.08" />
+<path d="M 561.04838,413.51932 460.85443,47.055456 187.11952,315.32562 Z" fill="#8B5CF6" opacity="0.12" />
 <rect
     x="1367.4677"
     y="447.48175"
     width="588.69165"
     height="404.72552"
     fill="#8B5CF6"
-    opacity="0.12"
+    opacity="0.15"
     transform="rotate(8)"
   />
 </g>
