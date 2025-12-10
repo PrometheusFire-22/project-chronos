@@ -90,10 +90,10 @@
     "last_synced": "2025-12-08T23:55:16.599222+00:00Z"
   },
   "docs/architecture/adrs/adr_016_marketing_site_strategy.md": {
+    "page_id": "13107213",
     "space": "PC",
-    "title": "ADR-016: Marketing Site Strategy (SSG)",
-    "page_id": "12517502",
-    "last_synced": "2025-12-08T23:55:17.503333+00:00Z"
+    "title": "Adr 016 Marketing Site Strategy",
+    "last_synced": "2025-12-10T16:39:17.254869+00:00Z"
   },
   "docs/architecture/analytical_design/abstractions/geospatial_abstractions.md": {
     "page_id": "11075950",
@@ -117,7 +117,7 @@
     "page_id": "11075889",
     "space": "PC",
     "title": "Architecture",
-    "last_synced": "2025-12-08T23:55:20.948960+00:00Z"
+    "last_synced": "2025-12-10T16:39:41.003103+00:00Z"
   },
   "docs/architecture/concepts/documentation_structure.md": {
     "last_synced": "2025-12-08T23:55:21.601698+00:00Z",
@@ -174,34 +174,34 @@
     "last_synced": "2025-12-08T23:55:27.882923+00:00Z"
   },
   "docs/marketing/brand_guidelines.md": {
+    "page_id": "13041771",
     "space": "PC",
-    "title": "Brand Guidelines - Automatonic AI",
-    "page_id": "12484767",
-    "last_synced": "2025-12-08T23:55:28.775401+00:00Z"
+    "title": "Brand Guidelines",
+    "last_synced": "2025-12-10T16:41:05.539078+00:00Z"
   },
   "docs/marketing/copy/about.md": {
+    "page_id": "13107326",
     "space": "PC",
-    "title": "About Page Copy - Automatonic AI",
-    "page_id": "12419303",
-    "last_synced": "2025-12-08T23:55:29.453914+00:00Z"
+    "title": "About",
+    "last_synced": "2025-12-10T16:41:16.552637+00:00Z"
   },
   "docs/marketing/copy/features.md": {
+    "page_id": "13107345",
     "space": "PC",
-    "title": "Features Page Copy - Automatonic AI",
-    "page_id": "12452037",
-    "last_synced": "2025-12-08T23:55:30.344566+00:00Z"
+    "title": "Features",
+    "last_synced": "2025-12-10T16:41:19.439230+00:00Z"
   },
   "docs/marketing/copy/homepage.md": {
+    "page_id": "13074559",
     "space": "PC",
-    "title": "Homepage Copy - Automatonic AI",
-    "page_id": "12419323",
-    "last_synced": "2025-12-08T23:55:31.208770+00:00Z"
+    "title": "Homepage",
+    "last_synced": "2025-12-10T16:41:23.513670+00:00Z"
   },
   "docs/marketing/sitemap.md": {
+    "page_id": "13041797",
     "space": "PC",
-    "title": "Automatonic AI Marketing Site - Sitemap & Information Architecture",
-    "page_id": "12452057",
-    "last_synced": "2025-12-08T23:55:32.149999+00:00Z"
+    "title": "Sitemap",
+    "last_synced": "2025-12-10T16:41:10.063232+00:00Z"
   },
   "docs/guides/development/alembic_setup.md": {
     "last_synced": "2025-12-05T12:32:34.373805Z",
@@ -285,7 +285,7 @@
     "page_id": "11076121",
     "space": "PC",
     "title": "Disaster Recovery",
-    "last_synced": "2025-12-08T23:55:44.146070+00:00Z"
+    "last_synced": "2025-12-10T16:43:17.542229+00:00Z"
   },
   "docs/operations/infrastructure/database_backups.md": {
     "page_id": "11076141",
@@ -454,5 +454,47 @@
     "space": "PC",
     "title": "Atlassian Cli",
     "last_synced": "2025-12-08T23:56:19.476551+00:00Z"
+  },
+  "docs/architecture/adrs/adr_016_frontend_design_system_integration.md": {
+    "page_id": "12910630",
+    "space": "PC",
+    "title": "Adr 016 Frontend Design System Integration",
+    "last_synced": "2025-12-10T16:39:14.579054+00:00Z"
+  },
+  "docs/guides/development/frontend_component_development.md": {
+    "page_id": "13107270",
+    "space": "PC",
+    "title": "Frontend Component Development",
+    "last_synced": "2025-12-10T16:40:24.946173+00:00Z"
+  },
+  "docs/guides/development/typescript_frontend_primer.md": {
+    "page_id": "13074506",
+    "space": "PC",
+    "title": "Typescript Frontend Primer",
+    "last_synced": "2025-12-10T16:40:32.838496+00:00Z"
+  },
+  "docs/marketing/ARTISTIC_INSPIRATION.md": {
+    "page_id": "12910691",
+    "space": "PC",
+    "title": "Artistic Inspiration",
+    "last_synced": "2025-12-10T16:40:59.354150+00:00Z"
+  },
+  "docs/marketing/READINESS_ASSESSMENT.md": {
+    "page_id": "13074535",
+    "space": "PC",
+    "title": "Readiness Assessment",
+    "last_synced": "2025-12-10T16:41:01.106712+00:00Z"
+  },
+  "docs/marketing/TECH_STACK_RECOMMENDATIONS.md": {
+    "page_id": "13140078",
+    "space": "PC",
+    "title": "Tech Stack Recommendations",
+    "last_synced": "2025-12-10T16:41:03.026628+00:00Z"
+  },
+  "docs/marketing/logo_usage_guide.md": {
+    "page_id": "12976200",
+    "space": "PC",
+    "title": "Logo Usage Guide",
+    "last_synced": "2025-12-10T16:41:07.542407+00:00Z"
   }
 }
