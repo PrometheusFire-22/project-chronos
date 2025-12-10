@@ -1,0 +1,13 @@
+# pnpm Workspace Configuration for Project Chronos
+# Defines which directories are part of the monorepo workspace
+
+packages:
+  # All deployable applications
+  - 'apps/*'
+
+  # All shared packages (components, configs, types)
+  - 'packages/*'
+
+  # Marketing asset generation scripts
+  # TODO: Migrate to tools/scripts after validating new setup
+  - 'marketing/scripts'
