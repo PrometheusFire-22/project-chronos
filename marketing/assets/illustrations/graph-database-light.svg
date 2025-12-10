@@ -315,20 +315,20 @@
   />
 </g>
 <g id="graph-nodes">
-<circle cx="272.9576474622771" cy="76.07818930041152" r="46.590727880658434" fill="#8B5CF6" opacity="0.9" stroke="#FFFFFF" stroke-width="4" />
-<circle cx="610.940500685871" cy="512.679012345679" r="48.359332133058984" fill="#8B5CF6" opacity="0.9" stroke="#FFFFFF" stroke-width="4" />
-<circle cx="408.84104938271605" cy="366.56378600823047" r="38.31723679698217" fill="#10B981" opacity="0.9" stroke="#FFFFFF" stroke-width="4" />
-<circle cx="338.26423182441704" cy="200.6954732510288" r="36.77308384773663" fill="#06B6D4" opacity="0.9" stroke="#FFFFFF" stroke-width="4" />
-<circle cx="214.51868998628257" cy="400.2592592592593" r="35.51699674211248" fill="#8B5CF6" opacity="0.9" stroke="#FFFFFF" stroke-width="4" />
-<circle cx="734.3945473251028" cy="319.3292181069959" r="28.931691529492454" fill="#06B6D4" opacity="0.9" stroke="#FFFFFF" stroke-width="4" />
-<circle cx="227.27451989026065" cy="147.53497942386832" r="33.4369212962963" fill="#10B981" opacity="0.9" stroke="#FFFFFF" stroke-width="4" />
-<circle cx="699.5783607681756" cy="216.7283950617284" r="25.267253943758575" fill="#10B981" opacity="0.9" stroke="#FFFFFF" stroke-width="4" />
-<circle cx="732.5406378600823" cy="147.65020576131687" r="41.583183299039774" fill="#8B5CF6" opacity="0.9" stroke="#FFFFFF" stroke-width="4" />
-<circle cx="393.32184499314127" cy="236.59670781893004" r="24.915573559670783" fill="#8B5CF6" opacity="0.9" stroke="#FFFFFF" stroke-width="4" />
-<circle cx="479.45284636488344" cy="282.0864197530864" r="40.94343707133059" fill="#06B6D4" opacity="0.9" stroke="#FFFFFF" stroke-width="4" />
-<circle cx="176.61265432098764" cy="171.5267489711934" r="29.605045438957475" fill="#06B6D4" opacity="0.9" stroke="#FFFFFF" stroke-width="4" />
-<circle cx="609.7395404663923" cy="307.88065843621405" r="34.54237397119341" fill="#8B5CF6" opacity="0.9" stroke="#FFFFFF" stroke-width="4" />
-<circle cx="687.4754801097394" cy="436.3333333333333" r="35.87887945816187" fill="#10B981" opacity="0.9" stroke="#FFFFFF" stroke-width="4" />
+<circle cx="272.9576474622771" cy="76.07818930041152" r="46.590727880658434" fill="#8B5CF6" opacity="0.9" stroke="#0F172A" stroke-width="4" />
+<circle cx="610.940500685871" cy="512.679012345679" r="48.359332133058984" fill="#8B5CF6" opacity="0.9" stroke="#0F172A" stroke-width="4" />
+<circle cx="408.84104938271605" cy="366.56378600823047" r="38.31723679698217" fill="#10B981" opacity="0.9" stroke="#0F172A" stroke-width="4" />
+<circle cx="338.26423182441704" cy="200.6954732510288" r="36.77308384773663" fill="#06B6D4" opacity="0.9" stroke="#0F172A" stroke-width="4" />
+<circle cx="214.51868998628257" cy="400.2592592592593" r="35.51699674211248" fill="#8B5CF6" opacity="0.9" stroke="#0F172A" stroke-width="4" />
+<circle cx="734.3945473251028" cy="319.3292181069959" r="28.931691529492454" fill="#06B6D4" opacity="0.9" stroke="#0F172A" stroke-width="4" />
+<circle cx="227.27451989026065" cy="147.53497942386832" r="33.4369212962963" fill="#10B981" opacity="0.9" stroke="#0F172A" stroke-width="4" />
+<circle cx="699.5783607681756" cy="216.7283950617284" r="25.267253943758575" fill="#10B981" opacity="0.9" stroke="#0F172A" stroke-width="4" />
+<circle cx="732.5406378600823" cy="147.65020576131687" r="41.583183299039774" fill="#8B5CF6" opacity="0.9" stroke="#0F172A" stroke-width="4" />
+<circle cx="393.32184499314127" cy="236.59670781893004" r="24.915573559670783" fill="#8B5CF6" opacity="0.9" stroke="#0F172A" stroke-width="4" />
+<circle cx="479.45284636488344" cy="282.0864197530864" r="40.94343707133059" fill="#06B6D4" opacity="0.9" stroke="#0F172A" stroke-width="4" />
+<circle cx="176.61265432098764" cy="171.5267489711934" r="29.605045438957475" fill="#06B6D4" opacity="0.9" stroke="#0F172A" stroke-width="4" />
+<circle cx="609.7395404663923" cy="307.88065843621405" r="34.54237397119341" fill="#8B5CF6" opacity="0.9" stroke="#0F172A" stroke-width="4" />
+<circle cx="687.4754801097394" cy="436.3333333333333" r="35.87887945816187" fill="#10B981" opacity="0.9" stroke="#0F172A" stroke-width="4" />
 </g>
 <g id="accent-dots">
 <circle cx="69.20781893004116" cy="503.2355967078189" r="6" fill="#8B5CF6" opacity="0.3"  />

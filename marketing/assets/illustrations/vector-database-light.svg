@@ -18,7 +18,7 @@
     width="300"
     height="200"
     fill="#8B5CF6"
-    opacity="0.08"
+    opacity="0.12"
     transform="rotate(15 250 180)"
   />
 <rect
@@ -27,7 +27,7 @@
     width="280"
     height="250"
     fill="#06B6D4"
-    opacity="0.08"
+    opacity="0.12"
     transform="rotate(-12 540 275)"
   />
 <rect
@@ -36,7 +36,7 @@
     width="350"
     height="180"
     fill="#10B981"
-    opacity="0.06"
+    opacity="0.10"
     transform="rotate(8 375 390)"
   />
 <rect
@@ -45,7 +45,7 @@
     width="200"
     height="300"
     fill="#8B5CF6"
-    opacity="0.06"
+    opacity="0.10"
     transform="rotate(-20 550 200)"
   />
 </g>
