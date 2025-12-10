@@ -1,17 +1,17 @@
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 800 600"
-  width="800"
-  height="600"
+  viewBox="0 0 1200 900"
+  width="1200"
+  height="900"
   role="img"
   aria-label="Automatonic AI Geometric Illustration"
 >
   <title>Automatonic AI - Abstract Geometric Composition</title>
 
   <!-- Background -->
-  <rect width="800" height="600" fill="#0F172A" />
+  <rect width="1200" height="900" fill="#0F172A" />
 
-  <g id="geospatial-map">
+  <g id="geospatial-map" transform="scale(0.75) translate(200, 150)">
 <circle cx="78.64105555555555" cy="141.69062962962963" r="6" fill="#06B6D4" opacity="0.8"  />
 <circle cx="91.8531111111111" cy="138.13935185185184" r="6" fill="#06B6D4" opacity="0.8"  />
 <circle cx="100.25516666666667" cy="139.01807407407406" r="6" fill="#06B6D4" opacity="0.8"  />
