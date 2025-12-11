@@ -130,7 +130,8 @@
 				// Cloud & DevOps
 				"amazonwebservices.aws-toolkit-vscode",
 				// Type Checking
-				"ms-python.mypy-type-checker"
+				"ms-python.mypy-type-checker",
+				"nrwl.nx-console"
 			]
 		}
 	},
