@@ -180,6 +180,10 @@
 			"onAutoForward": "silent"
 		},
 		"3000": {
+			"label": "Next.js",
+			"onAutoForward": "notify"
+		},
+		"3001": {
 			"label": "Metabase",
 			"onAutoForward": "notify"
 		},

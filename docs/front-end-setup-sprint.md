@@ -133,7 +133,7 @@ RUN node --version && pnpm --version
 {
   "forwardPorts": [5432, 3000, 3001, 5050, 8025],
   "portsAttributes": {
-    "3001": {
+    "3000": {
       "label": "Next.js",
       "onAutoForward": "notify"
     }
@@ -513,8 +513,8 @@ next-env.d.ts
    ```
 
 2. **Verify all services**:
-   - ✅ http://localhost:3001 (Next.js)
-   - ✅ http://localhost:3000 (Metabase)
+   - ✅ http://localhost:3000 (Next.js)
+   - ✅ http://localhost:3001 (Metabase)
    - ✅ http://localhost:5050 (pgAdmin)
    - ✅ PostgreSQL on 5432
 

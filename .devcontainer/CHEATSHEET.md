@@ -27,7 +27,8 @@ db-connect
 ## 🌐 Web Interfaces
 
 ```bash
-Metabase:  http://localhost:3000
+Next.js:   http://localhost:3000
+Metabase:  http://localhost:3001
 pgAdmin:   http://localhost:5050
 MailHog:   http://localhost:8025
 ```

@@ -179,7 +179,8 @@ All services are accessible from both container and host:
 | Service | Container URL | Host URL | Credentials |
 |---------|--------------|----------|-------------|
 | **PostgreSQL** | `timescaledb:5432` | `localhost:5432` | User: `prometheus`<br>Pass: `<REDACTED_PASSWORD>`<br>DB: `chronos_db` |
-| **Metabase** | `http://metabase:3000` | `http://localhost:3000` | Set up on first visit |
+| **Next.js** | `http://localhost:3000` | `http://localhost:3000` | Web application (dev) |
+| **Metabase** | `http://metabase:3000` | `http://localhost:3001` | Set up on first visit |
 | **pgAdmin** | `http://pgadmin:80` | `http://localhost:5050` | Check `.env` file |
 | **MailHog Web** | `http://mailhog:8025` | `http://localhost:8025` | No auth |
 | **MailHog SMTP** | `mailhog:1025` | `localhost:1025` | For app email testing |
@@ -271,7 +272,7 @@ dcrestart timescaledb
 │  │  ┌─────────────────────────────┐ │ │
 │  │  │ chronos-metabase            │ │ │
 │  │  │ - BI Dashboard              │ │ │
-│  │  │ - Port 3000                 │ │ │
+│  │  │ - Port 3001                 │ │ │
 │  │  └─────────────────────────────┘ │ │
 │  │                                   │ │
 │  │  ┌─────────────────────────────┐ │ │

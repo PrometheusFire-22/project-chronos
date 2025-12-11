@@ -40,7 +40,7 @@ The Dev Container system manages all containers automatically. Manual Docker com
    You should see:
    - ✅ `chronos-app` (your dev environment - you're inside this one!)
    - ✅ `chronos-db` (TimescaleDB on port 5432)
-   - ✅ `chronos-metabase` (BI tool on port 3000)
+   - ✅ `chronos-metabase` (BI tool on port 3001)
    - ✅ `chronos-pgadmin` (DB admin on port 5050)
    - ✅ `chronos-mailhog` (email testing on ports 1025/8025)
 
@@ -151,7 +151,8 @@ All services are automatically started and ports are forwarded:
 | Service | URL | Purpose |
 |---------|-----|---------|
 | PostgreSQL | `localhost:5432` | Database (connect from host or container) |
-| Metabase | `http://localhost:3000` | Business intelligence dashboard |
+| Next.js | `http://localhost:3000` | Web application (dev server) |
+| Metabase | `http://localhost:3001` | Business intelligence dashboard |
 | pgAdmin | `http://localhost:5050` | Database administration |
 | MailHog SMTP | `localhost:1025` | Fake SMTP server for testing |
 | MailHog UI | `http://localhost:8025` | View test emails |

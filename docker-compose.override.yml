@@ -16,7 +16,7 @@ services:
     image: metabase/metabase:latest
     container_name: chronos-metabase
     ports:
-      - "3000:3000"
+      - "3001:3000"
     networks:
       - chronos-network
     depends_on:
