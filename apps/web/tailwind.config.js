@@ -9,27 +9,15 @@
 // If you are **not** using `--turbo` you can uncomment both lines 1 & 19.
 // A discussion of the issue can be found: https://github.com/nrwl/nx/issues/26510
 
+import baseConfig from '@chronos/config/tailwind/base.js';
+
 /** @type {import('tailwindcss').Config} */
 export default {
+  ...baseConfig,
   content: [
     './{src,pages,components,app}/**/*.{ts,tsx,js,jsx,html}',
     '!./{src,pages,components,app}/**/*.{stories,spec}.{ts,tsx,js,jsx,html}',
+    '../../packages/ui/**/*.{ts,tsx}',
     //     ...createGlobPatternsForDependencies(__dirname)
   ],
-  theme: {
-    extend: {
-      colors: {
-        'primary-purple': '#8B5CF6',
-        'light-purple': '#C4B5FD',
-        'dark-purple': '#6D28D9',
-        'accent-teal': '#06B6D4',
-        'success-green': '#10B981',
-        'ocean-blue': '#0EA5E9',
-        'neutral-dark': '#0F172A',
-        'neutral-medium': '#475569',
-        'neutral-light': '#F8FAFC',
-      },
-    },
-  },
-  plugins: [],
 };

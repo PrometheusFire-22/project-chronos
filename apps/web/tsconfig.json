@@ -1,6 +1,10 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "@chronos/config/typescript/nextjs.json",
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "jsx": "preserve",
 
     "strict": true,
