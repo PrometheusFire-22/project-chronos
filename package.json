@@ -5,17 +5,23 @@
   "type": "module",
   "private": true,
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "node": ">=20.0.0",
+    "pnpm": ">=8.15.0"
   },
+  "packageManager": "pnpm@8.15.0",
   "scripts": {
+    "dev": "nx run-many --target=dev",
+    "build": "nx run-many --target=build",
+    "lint": "nx run-many --target=lint",
+    "test": "nx run-many --target=test",
     "generate:assets": "tsx marketing/scripts/generate-assets.ts",
     "generate:visuals": "tsx marketing/scripts/generate-visuals.ts",
-    "help": "echo 'Available scripts:' && echo '  npm run generate:assets - Generate favicons' && echo '  npm run generate:visuals - Generate hero & feature illustrations'"
+    "help": "pnpm -h"
   },
   "devDependencies": {
-    "@types/node": "^20.10.0",
-    "sharp": "^0.33.1",
+    "@types/node": "^25.0.0",
+    "nx": "22.2.0",
+    "sharp": "^0.34.5",
     "tsx": "^4.7.0",
     "typescript": "^5.3.3"
   },

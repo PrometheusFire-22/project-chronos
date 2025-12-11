@@ -59,7 +59,8 @@
       "Bash(SKIP=check-added-large-files git commit:*)",
       "Bash(npm install)",
       "Bash(npm run generate:assets:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(wc:*)"
     ],
     "deny": [],
     "ask": []

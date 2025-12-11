@@ -58,6 +58,7 @@ RUN apt-get update && \
 
 # ==============================================================================
 # User Configuration
+
 # ==============================================================================
 
 # The devcontainer base image already creates 'vscode' user
@@ -100,6 +101,15 @@ RUN pip install --user --upgrade pip setuptools wheel && \
     && pip cache purge \
     # Remove pyproject.toml as it will be mounted from host
     && rm pyproject.toml
+
+# ==============================================================================
+# Node.js Environment (as vscode user)
+# ==============================================================================
+# This runs as the 'vscode' user, so fnm and node versions are installed for the correct user.
+RUN curl -fsSL https://fnm.vercel.app/install | bash && \
+    # The fnm install script modifies .bashrc, so we source it to use fnm in the next command.
+    # We use bash -i -c to simulate an interactive shell, which properly sources .bashrc
+    /bin/bash -i -c "fnm install 20 && npm install -g pnpm@8.15.0"
 
 # ==============================================================================
 # Container Startup
