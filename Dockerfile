@@ -109,7 +109,7 @@ RUN pip install --user --upgrade pip setuptools wheel && \
 RUN curl -fsSL https://fnm.vercel.app/install | bash && \
     # The fnm install script modifies .bashrc, so we source it to use fnm in the next command.
     # We use bash -i -c to simulate an interactive shell, which properly sources .bashrc
-    /bin/bash -i -c "fnm install 20 && npm install -g pnpm@8.15.0"
+    /bin/bash -i -c "fnm install 20 && npm install -g pnpm@8.15.0 && pnpm install -g gitmoji-cli"
 
 # ==============================================================================
 # Container Startup
