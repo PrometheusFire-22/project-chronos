@@ -138,10 +138,11 @@
 	// Container Features
 	// ==================================================================
 	"features": {
-		"ghcr.io/devcontainers/features/google-cloud-cli:1": {
-			"version": "latest",
-			"installGcloudCLI": true
-		}
+		// TEMPORARILY DISABLED: Bypassing ghcr.io auth issue during build.
+		// "ghcr.io/devcontainers/features/google-cloud-cli:1": {
+		// 	"version": "latest",
+		// 	"installGcloudCLI": true
+		// }
 	},
 	// COMMENTED OUT: These cause Antigravity to freeze during container initialization
 	// Both tools are already available:
@@ -156,7 +157,7 @@
 	// ==================================================================
 	// Run AFTER container is created (first time only)
 	// Dependencies are pre-installed in Dockerfile, so this is fast (~10 seconds)
-	"postCreateCommand": "pip install -e . --no-deps && pre-commit install && echo '\n✅ Dev container ready! Run: cat .devcontainer/DOCKER_REFERENCE.md for Docker help'",
+	"postCreateCommand": "eval \"$(fnm env)\" && pip install -e . --no-deps && pre-commit install && pnpm install && echo '\n✅ Dev container ready! Run: cat .devcontainer/DOCKER_REFERENCE.md for Docker help'",
 	// Run EVERY time container starts
 	"postStartCommand": "echo '✅ Project Chronos dev container ready!'",
 	// ==================================================================
@@ -167,6 +168,7 @@
 	"forwardPorts": [
 		5432,
 		3000,
+		3001,
 		5050,
 		8025
 	],

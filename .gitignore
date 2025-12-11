@@ -141,3 +141,8 @@ coverage/
 # - package.json, package-lock.json (dependency management)
 # - tsconfig.json (TypeScript config)
 # - All .ts/.tsx source files
+
+
+
+.nx/cache
+.nx/workspace-data.claude/
