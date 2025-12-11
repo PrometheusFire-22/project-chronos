@@ -97,6 +97,9 @@
      * ───────────────────────────────────────────────────────────────
      * "node" = Node.js built-in types (fs, path, process, etc.)
      */
+    "paths": {
+      "@chronos/ui": ["./packages/ui/index.tsx"]
+    },
     "types": ["node"]
   },
 
