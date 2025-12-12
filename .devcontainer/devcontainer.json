@@ -173,7 +173,6 @@
 		5050,
 		8025
 	],
-	// Port attributes
 	"portsAttributes": {
 		"5432": {
 			"label": "PostgreSQL",
