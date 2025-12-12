@@ -4,16 +4,25 @@
   "private": true,
   "main": "./index.tsx",
   "types": "./index.tsx",
+  "exports": {
+    ".": "./index.tsx",
+    "./components/*": "./components/*.tsx",
+    "./lib/*": "./lib/*.ts"
+  },
   "license": "MIT",
   "scripts": {},
   "dependencies": {
     "@radix-ui/react-label": "2.1.8",
+    "@radix-ui/react-slot": "^1.2.4",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "tailwind-merge": "3.4.0"
   },
   "devDependencies": {
-    "@radix-ui/react-slot": "^1.2.4",
     "lucide-react": "^0.560.0"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   }
 }
