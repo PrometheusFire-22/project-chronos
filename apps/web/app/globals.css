@@ -1,3 +1,8 @@
+/* ========================================
+   FONT IMPORTS (must be first)
+   ======================================== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -94,11 +99,6 @@
     --grid-opacity: 0.6;
   }
 }
-
-/* ========================================
-   FONT IMPORTS
-   ======================================== */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 /* ========================================
    BASE STYLES

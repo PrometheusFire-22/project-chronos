@@ -10,10 +10,11 @@
   },
   "packageManager": "pnpm@8.15.0",
   "scripts": {
-    "dev": "nx run-many --target=dev",
-    "build": "nx run-many --target=build",
-    "lint": "nx run-many --target=lint",
-    "test": "nx run-many --target=test",
+    "dev": "pnpm exec nx run-many --target=dev",
+    "build": "pnpm exec nx run-many --target=build",
+    "lint": "pnpm exec nx run-many --target=lint",
+    "test": "pnpm exec nx run-many --target=test",
+    "nx": "pnpm exec nx",
     "generate:assets": "tsx marketing/scripts/generate-assets.ts",
     "generate:visuals": "tsx marketing/scripts/generate-visuals.ts",
     "help": "pnpm -h"
