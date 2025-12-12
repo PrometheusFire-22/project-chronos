@@ -2,7 +2,9 @@
 
 **Purpose:** Developer guide for integrating Google Workspace APIs into Project Chronos applications.
 
-**Last Updated:** 2025-12-05
+**Last Updated:** 2025-12-12
+
+> **📍 Navigation:** This is the **developer API guide**. For initial setup and operations, see [Google Workspace Setup](../../operations/integrations/google_workspace_setup.md). For OAuth setup (legacy), see [Google Cloud Setup](google_cloud_setup.md).
 
 ---
 
