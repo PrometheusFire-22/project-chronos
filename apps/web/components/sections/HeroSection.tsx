@@ -68,7 +68,7 @@ export function HeroSection() {
               <Button size="lg" className="bg-white text-slate-950 hover:bg-slate-200 font-semibold h-12 px-8 text-base">
                 Start Free Trial <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-              <Button variant="outline" size="lg" className="border-slate-800 text-slate-300 hover:text-white hover:bg-slate-800 h-12 px-8 text-base">
+              <Button variant="outline" size="lg" className="border-slate-800 text-white hover:bg-slate-800 h-12 px-8 text-base">
                 View Interactive Demo
               </Button>
             </motion.div>
