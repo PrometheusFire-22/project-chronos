@@ -1,130 +1,130 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { ArrowRight, ChevronRight, Activity, Network, Database, Globe } from 'lucide-react'
 import { Button } from '@chronos/ui/components/button'
-import { HeroIllustration } from '@/components/illustrations/HeroIllustration'
-import { fadeInUp, staggerContainer } from '@/utils/animations'
 
-/**
- * Hero Section Component
- *
- * Primary landing section featuring:
- * - Animated headline and subheadline
- * - Theme-aware hero illustration
- * - Primary and secondary CTAs
- * - Responsive layout (mobile-first)
- *
- * Design System:
- * - Uses CSS variables for theming
- * - Framer Motion for entrance animations
- * - Staggered animation timing for visual hierarchy
- *
- * @example
- * <HeroSection />
- */
+const fadeIn = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+}
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2
+    }
+  }
+}
+
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-background">
-      <div className="container mx-auto px-4 py-20 lg:py-32">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Content Column */}
-          <motion.div
+    <section className="relative overflow-hidden bg-slate-950 pt-16 pb-32 md:pt-24 lg:pt-32">
+        {/* Background Gradients */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-sky-500/20 blur-[120px] rounded-full mix-blend-screen opacity-30 pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-violet-500/20 blur-[120px] rounded-full mix-blend-screen opacity-20 pointer-events-none" />
+
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+          
+          {/* Left Column: Copy */}
+          <motion.div 
             variants={staggerContainer}
             initial="hidden"
             animate="visible"
-            className="space-y-8"
+            className="flex flex-col gap-6"
           >
+            {/* Pill */}
+            <motion.div variants={fadeIn} className="flex items-start">
+               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 text-xs font-medium">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </span>
+                  v1.0 Public Beta Live
+               </div>
+            </motion.div>
+
             {/* Headline */}
-            <motion.h1
-              variants={fadeInUp}
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight"
-            >
-              See the{' '}
-              <span className="text-primary">Hidden Connections</span>{' '}
-              in Your Deal Flow
-            </motion.h1>
-
-            {/* Subheadline */}
-            <motion.p
-              variants={fadeInUp}
-              className="text-lg sm:text-xl text-muted-foreground max-w-2xl"
-            >
-              Graph-powered relationship intelligence for private markets.
-              Discover multi-hop connections, track deal flow patterns, and
-              uncover opportunities hidden in your network.
-            </motion.p>
-
-            {/* Feature Pills */}
-            <motion.div
-              variants={fadeInUp}
-              className="flex flex-wrap gap-3"
-            >
-              {[
-                'Graph Database',
-                'Vector Search',
-                'Geospatial Analysis',
-                'Time-Series Tracking'
-              ].map((feature) => (
-                <span
-                  key={feature}
-                  className="inline-flex items-center px-4 py-2 rounded-full bg-muted text-sm font-medium text-muted-foreground"
-                >
-                  {feature}
+            <motion.div variants={fadeIn}>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-4 leading-[1.1]">
+                Uncover Hidden <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-sky-400 to-emerald-400">
+                  Market Connections
                 </span>
-              ))}
+              </h1>
+              <p className="text-lg sm:text-xl text-slate-400 max-w-xl leading-relaxed">
+                The first multi-modal relationship intelligence platform for private markets. 
+                Combine graph, vector, and time-series data to see what others miss.
+              </p>
             </motion.div>
 
             {/* CTAs */}
-            <motion.div
-              variants={fadeInUp}
-              className="flex flex-col sm:flex-row gap-4"
-            >
-              <Button size="lg" className="group">
-                Request Early Access
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 mt-2">
+              <Button size="lg" className="bg-white text-slate-950 hover:bg-slate-200 font-semibold h-12 px-8 text-base">
+                Start Free Trial <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-              <Button size="lg" variant="outline">
-                Watch Demo
+              <Button variant="outline" size="lg" className="border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 h-12 px-8 text-base">
+                View Interactive Demo
               </Button>
             </motion.div>
 
-            {/* Social Proof */}
-            <motion.div
-              variants={fadeInUp}
-              className="pt-8 border-t border-border"
-            >
-              <p className="text-sm text-muted-foreground mb-4">
-                Trusted by leading PE/VC firms
-              </p>
-              {/* Placeholder for logos - can add later */}
-              <div className="flex gap-8 opacity-50">
-                {[1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    className="h-8 w-24 bg-muted rounded animate-pulse"
-                  />
-                ))}
-              </div>
+            {/* Tags */}
+            <motion.div variants={fadeIn} className="mt-8 pt-8 border-t border-slate-800/50 flex flex-wrap gap-4 text-sm text-slate-500">
+                <span className="flex items-center gap-1.5"><Network size={16} className="text-violet-400"/> Graph Analysis</span>
+                <span className="flex items-center gap-1.5"><Database size={16} className="text-sky-400"/> Vector Search</span>
+                <span className="flex items-center gap-1.5"><Globe size={16} className="text-emerald-400"/> Geospatial Ops</span>
             </motion.div>
+
           </motion.div>
 
-          {/* Illustration Column */}
-          <motion.div
+          {/* Right Column: Visual */}
+          <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative"
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="relative lg:h-[600px] w-full flex items-center justify-center p-8 lg:p-0"
           >
-            <HeroIllustration />
-          </motion.div>
-        </div>
-      </div>
+             {/* Glowing Card Effect */}
+             <div className="absolute inset-0 bg-gradient-to-tr from-violet-500/10 to-sky-500/10 rounded-3xl border border-white/5 backdrop-blur-sm -z-10" />
+             
+             {/* The Graph Illustration */}
+             <Image 
+                src="/illustrations/hero-graph.svg" 
+                alt="Graph Network Visualization" 
+                width={600} 
+                height={500} 
+                className="w-full h-auto drop-shadow-2xl"
+                priority
+             />
 
-      {/* Background Gradient (subtle) */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-secondary/5 rounded-full blur-3xl" />
+             {/* Floating Elements (Decorative) */}
+             <motion.div 
+               animate={{ y: [0, -20, 0] }}
+               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+               className="absolute top-1/4 right-0 p-4 bg-slate-900/90 backdrop-blur border border-slate-700 rounded-xl shadow-xl max-w-[200px]"
+             >
+                <div className="flex items-center gap-3 mb-2">
+                    <div className="w-8 h-8 rounded-full bg-violet-500/20 flex items-center justify-center text-violet-400">
+                       <Activity size={16} />
+                    </div>
+                    <div>
+                        <div className="text-xs text-slate-400">Signal Strength</div>
+                        <div className="text-sm font-bold text-white">98.4% Match</div>
+                    </div>
+                </div>
+                <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-violet-500 to-sky-500 w-[98%]" />
+                </div>
+             </motion.div>
+
+          </motion.div>
+
+        </div>
       </div>
     </section>
   )

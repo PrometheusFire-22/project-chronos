@@ -87,31 +87,19 @@
 
 ## 🔮 Future Decisions (Deferred)
 
-1.  **CMS as App Admin:** To be decided in Sprint 11.
+1.  **Mobile Tech Stack:** React Native vs Capacitor. To be decided pre-Phase 5.
 ---
 
 ## 🧠 Strategic Architecture Deep Dive
 
-### 1. The CMS Boundary Decision (Sprint 11)
+### 1. The CMS Boundary Decision (Sprint 11) -> **DECIDED**
 
-**Context:** The application is a "Bloomberg/Pitchbook" style tool—high data density, complex graphs, vector search, and B2B financial workflows.
+**Decision:** **Strict Separation.**
+*   **Payload CMS:** Strictly for Marketing Content (Blogs, Case Studies).
+*   **Custom Admin:** Complex App Data will be managed via a custom "Ops Dashboard" built on the FastAPI backend in Phase 5.
+*   **Rationale:** Payload lacks the technical capability to manage complex graph/vector data effectively.
 
-**Recommendation: The "Separation of Concerns" Model**
-
-We should define the boundary strictly to maximize **modularity** and **extensibility**:
-
-*   **Payload CMS (The "Marketing Voice"):**
-    *   **Role:** Strictly for *unstructured* or *semi-structured* content that drives growth.
-    *   **Owns:** Blog posts, Case Studies, Whitepapers, Team Bios, Testimonials, FAQ, Help Center, Marketing Landing Pages.
-    *   **Why?** These change frequently, need SEO optimization, and are edited by non-technical staff. Payload is perfect here.
-
-*   **FastAPI Backend (The "Product Brain"):**
-    *   **Role:** Strictly for *structured, relational, and graph* data that drives the product.
-    *   **Owns:** User Portfolios, Equity Data, Time-series financial metrics, Knowledge Graph nodes, Vector embeddings.
-    *   **Why?** "Pitchbook-style" data is too complex for a standard CMS. You need custom business logic, strict validation, and high-performance queries (AGE/pgvector) that a CMS admin UI cannot easily handle.
-    *   **Admin Strategy:** Do **not** try to shoehorn your complex financial data management into the Payload Admin UI. Instead, build a bespoke "Operations Dashboard" in Phase 5 using your own API components. This gives you the UX control needed for complex operations.
-
-**Verdict:** **Hybrid Approach.** Use Payload for the "Public Face" and your custom stack for the "Private Brain." Don't mix them. This keeps your product highly modular.
+### 2. Mobile Strategy (Phase 5+)
 
 ### 2. Mobile Strategy (Phase 5+)
 

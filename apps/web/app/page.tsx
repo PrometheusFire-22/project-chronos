@@ -1,22 +1,15 @@
 import { HeroSection } from '@/components/sections/HeroSection'
 
-/**
- * Homepage
- *
- * Marketing landing page featuring:
- * - Hero section with value proposition
- * - (Future) Features section
- * - (Future) Benefits section
- * - (Future) CTA section
- *
- * This page uses server components where possible,
- * with client components for interactive elements.
- */
-export default function HomePage() {
+export default function Home() {
   return (
-    <main className="min-h-screen">
+    <div className="flex flex-col min-h-screen">
       <HeroSection />
-      {/* Additional sections will be added here */}
-    </main>
+      {/* 
+        Sprint 10 TODO:
+        - Feature Section
+        - About Section
+        - Content Preview
+      */}
+    </div>
   )
 }
