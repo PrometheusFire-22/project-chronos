@@ -119,7 +119,9 @@ pnpm-lock.yaml
 *.tsbuildinfo
 *.js.map
 
-# Build outputs (track favicons, ignore other build artifacts)
+# Build outputs and generated files
+lib/
+!packages/*/lib/ # Exclude specific lib directories, e.g., packages/ui/lib/
 # dist/ (already ignored above)
 # build/ (already ignored above)
 .cache/
