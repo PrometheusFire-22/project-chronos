@@ -35,7 +35,12 @@ export function Footer() {
           {/* Brand Column */}
           <div className="col-span-2 lg:col-span-1 flex flex-col gap-4">
             <Link href="/" className="flex items-center gap-2 font-bold text-xl text-white">
-              <img src="/logos/final/logo-wordmark-full.svg" alt="Automatonic AI" className="h-8 w-auto invert" />
+              {/* Footer is always dark theme, so we force the 'dark mode' logo style (white text) */}
+              <img 
+                src="/logos/final/logo-wordmark-full.svg" 
+                alt="Automatonic AI" 
+                className="h-10 w-auto brightness-0 invert" 
+              />
             </Link>
             <p className="text-slate-400 text-sm leading-relaxed">
               Advanced financial analytics for the modern era. Graph-based intelligence for data-driven decisions.
