@@ -153,3 +153,4 @@ coverage/
 .next
 out
 .nx/
+.pnpm-store/
