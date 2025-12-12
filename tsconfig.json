@@ -98,7 +98,13 @@
      * "node" = Node.js built-in types (fs, path, process, etc.)
      */
     "paths": {
-      "@chronos/ui": ["./packages/ui/index.tsx"]
+      "@chronos/ui": ["./packages/ui/index.tsx"],
+      "@chronos/ui/*": ["./packages/ui/*"],
+      "@chronos/types": ["./packages/types/index.ts"],
+      "@chronos/types/*": ["./packages/types/*"],
+      "@chronos/utils": ["./packages/utils/index.ts"],
+      "@chronos/utils/*": ["./packages/utils/*"],
+      "@chronos/config/*": ["./packages/config/*"]
     },
     "types": ["node"]
   },
