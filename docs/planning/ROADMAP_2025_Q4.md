@@ -88,4 +88,41 @@
 ## 🔮 Future Decisions (Deferred)
 
 1.  **CMS as App Admin:** To be decided in Sprint 11.
-2.  **Mobile Tech Stack:** React Native vs Capacitor. To be decided pre-Phase 5.
+---
+
+## 🧠 Strategic Architecture Deep Dive
+
+### 1. The CMS Boundary Decision (Sprint 11)
+
+**Context:** The application is a "Bloomberg/Pitchbook" style tool—high data density, complex graphs, vector search, and B2B financial workflows.
+
+**Recommendation: The "Separation of Concerns" Model**
+
+We should define the boundary strictly to maximize **modularity** and **extensibility**:
+
+*   **Payload CMS (The "Marketing Voice"):**
+    *   **Role:** Strictly for *unstructured* or *semi-structured* content that drives growth.
+    *   **Owns:** Blog posts, Case Studies, Whitepapers, Team Bios, Testimonials, FAQ, Help Center, Marketing Landing Pages.
+    *   **Why?** These change frequently, need SEO optimization, and are edited by non-technical staff. Payload is perfect here.
+
+*   **FastAPI Backend (The "Product Brain"):**
+    *   **Role:** Strictly for *structured, relational, and graph* data that drives the product.
+    *   **Owns:** User Portfolios, Equity Data, Time-series financial metrics, Knowledge Graph nodes, Vector embeddings.
+    *   **Why?** "Pitchbook-style" data is too complex for a standard CMS. You need custom business logic, strict validation, and high-performance queries (AGE/pgvector) that a CMS admin UI cannot easily handle.
+    *   **Admin Strategy:** Do **not** try to shoehorn your complex financial data management into the Payload Admin UI. Instead, build a bespoke "Operations Dashboard" in Phase 5 using your own API components. This gives you the UX control needed for complex operations.
+
+**Verdict:** **Hybrid Approach.** Use Payload for the "Public Face" and your custom stack for the "Private Brain." Don't mix them. This keeps your product highly modular.
+
+### 2. Mobile Strategy (Phase 5+)
+
+**Context:** "Bloomberg Terminals don't run on Android." The primary use case is desktop/office deep work. Mobile is for "checking in" or light updates.
+
+**Recommendation: Responsive Web First (PWA)**
+
+*   **Strategy:** Build the Phase 5 "Dynamic Web App" as a high-quality **Progressive Web App (PWA)** or simply a responsive site.
+*   **Why?**
+    *   **Utility:** It covers 95% of B2B mobile use cases (checking a dashboard, reading a report) without the overhead of app stores.
+    *   **Extensibility:** By building Phase 4 (API Contracts) correctly, our backend becomes "Headless." It doesn't care if the request comes from the Web App, an iPad App, or a CLI.
+    *   **Future-Proofing:** If you later decide to build a dedicated iPad app for analysts (common in finance), you simply build a new frontend consuming the *exact same* API you built in Phase 4.
+
+**Verdict:** Don't worry about React Native / Capacitor yet. Focus Phase 5 on a **responsive desktop-first web app**. The modular API architecture (Phase 4) creates the "Extensibility" you desire for mobile later.
