@@ -7,7 +7,7 @@ export const metadata = {
   title: 'Project Chronos',
   description: 'Multi-modal relationship intelligence for private markets',
   icons: {
-    icon: '/favicons/favicon-32x32.png',
+    icon: '/favicons/android-chrome-192x192.png',
     apple: '/favicons/apple-touch-icon.png',
   },
 }
