@@ -30,15 +30,19 @@ export function Header() {
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         isScrolled
-          ? 'bg-background/80 backdrop-blur-md border-b border-border/40 shadow-sm'
+          ? 'bg-background/70 backdrop-blur-xl border-b border-white/10 shadow-sm supports-[backdrop-filter]:bg-background/60'
           : 'bg-transparent border-b border-transparent'
       }`}
     >
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+      <div className="container mx-auto px-4 h-20 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tighter">
-          {/* Symlinked from marketing/assets/logos/final */}
-          <img src="/logos/final/logo-wordmark-full.svg" alt="Automatonic AI" className="h-8 w-auto dark:invert" />
+          {/* Using full wordmark, h-10 for better visibility. Dark mode handling via CSS filters if needed or rely on robust SVG key. */}
+          <img 
+            src="/logos/final/logo-wordmark-full.svg" 
+            alt="Automatonic AI" 
+            className="h-10 w-auto dark:brightness-0 dark:invert" 
+          />
         </Link>
 
         {/* Desktop Nav */}
