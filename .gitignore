@@ -120,8 +120,8 @@ pnpm-lock.yaml
 *.js.map
 
 # Build outputs and generated files
-lib/
-!packages/*/lib/ # Exclude specific lib directories, e.g., packages/ui/lib/
+# lib/ (Commented out: Blocks packages/ui/lib source code)
+# !packages/*/lib/ 
 # dist/ (already ignored above)
 # build/ (already ignored above)
 .cache/
