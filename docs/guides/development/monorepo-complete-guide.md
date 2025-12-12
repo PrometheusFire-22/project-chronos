@@ -493,6 +493,213 @@ pnpm list -r --depth 0                # List all packages
 
 ---
 
+## Lessons Learned (Real-World Fixes)
+
+> **Context:** These are actual issues encountered during Sprint 10 (Marketing Site Development) and their solutions. Learn from our mistakes!
+
+### Issue 1: CSS `@import` Must Come First
+
+**Error:**
+```
+./app/globals.css
+Syntax error: @import rules must precede all other rules
+```
+
+**Problem:** Font imports were placed after CSS variable declarations
+
+**Solution:** Move ALL `@import` statements to the very top of CSS files
+
+```css
+/* ✅ CORRECT ORDER */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* CSS variables here */
+  }
+}
+```
+
+**Lesson:** CSS `@import` rules MUST be the first thing in the file, before `@tailwind` directives.
+
+---
+
+### Issue 2: Missing App-Level `package.json`
+
+**Error:**
+```
+Cannot find module '@chronos/ui/components/button'
+```
+
+**Problem:** `apps/web/package.json` didn't exist, so dependencies weren't resolved
+
+**Solution:** Create `apps/web/package.json` with:
+1. Next.js dependencies
+2. Workspace reference to `@chronos/ui`
+
+```json
+{
+  "name": "@chronos/web",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "next": "^15.1.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@chronos/ui": "workspace:*"
+  }
+}
+```
+
+**Lesson:** In an Nx monorepo with pnpm workspaces, EACH app needs its own `package.json` with dependencies, even if they're shared packages.
+
+---
+
+### Issue 3: Package Exports Configuration
+
+**Error:**
+```
+Module not found: Can't resolve '@chronos/ui/components/button'
+```
+
+**Problem:** `packages/ui/package.json` didn't define subpath exports
+
+**Solution:** Add `exports` field to support deep imports:
+
+```json
+{
+  "exports": {
+    ".": "./index.tsx",
+    "./components/*": "./components/*",
+    "./lib/*": "./lib/*"
+  }
+}
+```
+
+**Lesson:** To use imports like `@chronos/ui/components/button`, the package MUST define `exports` with wildcard patterns.
+
+---
+
+### Issue 4: TypeScript Path Aliases in Apps
+
+**Error:**
+```
+Cannot find module '@/components/ThemeToggle'
+```
+
+**Problem:** `apps/web/tsconfig.json` didn't have `baseUrl` and `paths` configured
+
+**Solution:** Add path mapping for `@/*` imports:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
+  }
+}
+```
+
+**Lesson:** Each app needs its OWN path aliases configured in its `tsconfig.json`, even if the root has them.
+
+---
+
+### Issue 5: Type-Only Imports
+
+**Error:**
+```
+'ThemeProviderProps' is a type and must be imported using a type-only import
+```
+
+**Problem:** Importing a type with regular `import` instead of `import type`
+
+**Solution:** Use `import type` for TypeScript types:
+
+```typescript
+// ❌ WRONG
+import { ThemeProviderProps } from 'next-themes'
+
+// ✅ CORRECT
+import type { ThemeProviderProps } from 'next-themes'
+```
+
+**Lesson:** Always use `import type` for TypeScript types to avoid bundling issues and satisfy strict type checking.
+
+---
+
+### Issue 6: Node.js Module Type Warnings
+
+**Warning:**
+```
+(node:12345) Warning: To load an ES module, set "type": "module" in package.json
+```
+
+**Problem:** Node.js couldn't determine if files were ES modules or CommonJS
+
+**Solution:** Add `"type": "module"` to `apps/web/package.json`:
+
+```json
+{
+  "type": "module"
+}
+```
+
+**Lesson:** Next.js 15+ uses ES modules by default. Explicitly set `"type": "module"` to avoid warnings.
+
+---
+
+### Issue 7: Peer Dependencies vs Dependencies
+
+**Error:**
+```
+Cannot find module '@radix-ui/react-slot'
+```
+
+**Problem:** `@radix-ui/react-slot` was in `peerDependencies` instead of `dependencies`
+
+**Solution:** Move it to `dependencies` in `packages/ui/package.json`:
+
+```json
+{
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.1.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.6.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  }
+}
+```
+
+**Lesson:** 
+- `dependencies` = packages your code imports directly
+- `peerDependencies` = packages the consuming app must provide (React, React DOM)
+
+---
+
+### Quick Troubleshooting Checklist
+
+When you encounter build errors:
+
+1. ✅ **CSS imports first?** Check `@import` is at the top
+2. ✅ **App has package.json?** Verify `apps/web/package.json` exists
+3. ✅ **Package exports defined?** Check `packages/*/package.json` has `exports`
+4. ✅ **Path aliases configured?** Verify `tsconfig.json` has `baseUrl` and `paths`
+5. ✅ **Type imports correct?** Use `import type` for TypeScript types
+6. ✅ **Module type set?** Add `"type": "module"` to package.json
+7. ✅ **Dependencies in right place?** Check `dependencies` vs `peerDependencies`
+
+---
+
 ## Next Steps
 
 1. **Read ADR-017** - Understand why we chose Nx
@@ -507,7 +714,9 @@ pnpm list -r --depth 0                # List all packages
 - **Nx Documentation:** https://nx.dev/
 - **TypeScript Paths:** https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping
 - **Monorepo Patterns:** https://nx.dev/concepts/more-concepts/monorepo-nx-enterprise
+- **Troubleshooting Guide:** [COMMON_ISSUES.md](../reference/troubleshooting/COMMON_ISSUES.md)
 
 ---
 
 **Remember:** This structure might seem complex now, but it will save you tons of time as your project grows. You're setting up for long-term success! 🚀
+
