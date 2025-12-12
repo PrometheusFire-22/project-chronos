@@ -115,14 +115,19 @@ We should define the boundary strictly to maximize **modularity** and **extensib
 
 ### 2. Mobile Strategy (Phase 5+)
 
-**Context:** "Bloomberg Terminals don't run on Android." The primary use case is desktop/office deep work. Mobile is for "checking in" or light updates.
+**Context:** The Core Product (Deep Analysis/Graph/Vector) is a "Workstation" experience (Bloomberg Terminal) designed for deep work on Desktop. It will **never** be fully replicated on mobile.
 
-**Recommendation: Responsive Web First (PWA)**
+**However:** Specific features *must* exist on mobile to support the workflow (e.g., Alerts, Portfolio Summaries, News Feeds).
 
-*   **Strategy:** Build the Phase 5 "Dynamic Web App" as a high-quality **Progressive Web App (PWA)** or simply a responsive site.
-*   **Why?**
-    *   **Utility:** It covers 95% of B2B mobile use cases (checking a dashboard, reading a report) without the overhead of app stores.
-    *   **Extensibility:** By building Phase 4 (API Contracts) correctly, our backend becomes "Headless." It doesn't care if the request comes from the Web App, an iPad App, or a CLI.
-    *   **Future-Proofing:** If you later decide to build a dedicated iPad app for analysts (common in finance), you simply build a new frontend consuming the *exact same* API you built in Phase 4.
+**Recommendation: The "Companion" Architecture**
 
-**Verdict:** Don't worry about React Native / Capacitor yet. Focus Phase 5 on a **responsive desktop-first web app**. The modular API architecture (Phase 4) creates the "Extensibility" you desire for mobile later.
+*   **Philosophy:** Mobile is a **Companion**, not a clone.
+    *   **Desktop:** Full-featured, data-dense, complex visualization.
+    *   **Mobile:** Curated, light-weight, high-signal UI.
+*   **Execution (API-First):**
+    *   Phase 4 (API Contracts) is critical here. It allows us to build a "Headless" backend.
+    *   **Desktop UI** consumes the full "Heavy" API (Graph traversal, complex analytics).
+    *   **Mobile UI** (initially Responsive Web/PWA) consumes only the "Light" API (Notifications, Read-only Dashboards).
+*   **Tech:** Start with **Responsive Web (PWA)** for the specific Mobile views. Because the logic is decoupled via API, spinning up a dedicated Native App (React Native) later for just the "Companion Features" is low-risk and high-velocity.
+
+**Verdict:** **API-First is the enabler.** Build the backend to support *clients*, not just *a website*. This allows the Desktop and Mobile experiences to diverge appropriately based on their distinct use cases.
