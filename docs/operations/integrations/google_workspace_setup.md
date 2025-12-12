@@ -2,9 +2,11 @@
 
 **Purpose:** Complete operational runbook for Google Workspace integration setup, configuration, and daily operations.
 
-**Last Updated:** 2025-12-05  
+**Last Updated:** 2025-12-12  
 **Owner:** PrometheusFire-22  
 **Related Tickets:** CHRONOS-175, CHRONOS-179, CHRONOS-248
+
+> **📍 Navigation:** This is the **operational setup runbook**. For API usage examples, see [Google Workspace Integration Guide](../../guides/integration/google_workspace_guide.md). For OAuth setup (legacy), see [Google Cloud Setup](../../guides/integration/google_cloud_setup.md).
 
 ---
 

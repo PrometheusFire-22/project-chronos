@@ -2,7 +2,9 @@
 
 **Purpose:** Comprehensive guide to the GitHub-to-Confluence documentation sync system, CLI usage, and operational workflows.
 
-**Last Updated:** 2025-12-05
+**Last Updated:** 2025-12-12
+
+> **📍 Navigation:** For CLI command reference, see [Confluence CLI Manual](../../reference/cli/confluence_cli.md).
 
 ---
 
@@ -12,10 +14,10 @@ This system maps **Project Chronos documentation** from local GitHub markdown fi
 
 **Key Features:**
 - **Auto-Sync:** `scripts/ops/sync_docs.py` pushes changes from GitHub to Confluence.
+- **Bulk Sync:** `scripts/ops/bulk_sync_confluence.py` handles recursive sync and hierarchy.
 - **Smart Linking:** Automatically converts relative markdown links (`[Guide](../guide.md)`) to Confluence Smart Links.
 - **Secret Protection:** Files with sensitive credentials are strictly excluded.
 - **Read-Only:** Confluence pages are marked "read-only" to prevent divergence.
-- **Coverage:** Maps Project Vision, Architecture, Runbooks, and Guides.
 
 ### Architecture
 
@@ -25,40 +27,47 @@ GitHub Markdown Source  →  docs/.confluence-mapping.json  →  Confluence API 
 ```
 
 **Components:**
-- **Script:** `scripts/ops/sync_docs.py`
+- **Scripts:** `scripts/ops/sync_docs.py`, `scripts/ops/bulk_sync_confluence.py`
 - **Mapping:** `docs/.confluence-mapping.json`
 - **Space:** `PC` (Project Chronos)
 
 ---
 
+## 🚀 Automated Bulk Sync (Recommended)
+
+We have a Python script that handles the bulk synchronization of the `docs/` directory. This script:
+1.  Creates necessary parent pages (Architecture, Operations, Guides, Reference).
+2.  Syncs all markdown files.
+3.  Maintains the `.confluence-mapping.json` file.
+
+**Usage:**
+
+```bash
+# Activate virtual environment
+source .venv/bin/activate
+
+# Run the bulk sync script
+python3 scripts/ops/bulk_sync_confluence.py
+```
+
+**What to Expect:**
+- The script will output the status of each file (Created, Updated, Skipped, Error).
+- It will verify the existence of the "📚 Documentation" root page or create it.
+- It will recursively process the `docs/` directory.
+
+---
+
 ## 🛠️ CLI Operations (Manual)
 
-The `confluence` CLI tool allows ad-hoc management of pages.
+For ad-hoc management, use the `confluence` CLI. See [Confluence CLI Manual](../../reference/cli/confluence_cli.md) for full command reference.
 
-**Location:** `src/chronos/cli/confluence_cli.py`
-
-### 1. Create Page
+**Common Commands:**
 
 ```bash
-confluence create \
-  --title "Sprint 4 Summary" \
-  --space PC \
-  --body-file SPRINT4_SUMMARY.md \
-  --labels "sprint-summary,documentation" \
-  --jira-ticket "CHRONOS-147"
-```
+# Update a page
+confluence update "Page Title" --space PC --body-file updated_content.md
 
-### 2. Update Page
-
-```bash
-confluence update "Page Title" \
-  --space PC \
-  --body-file updated_content.md
-```
-
-### 3. Read Page
-
-```bash
+# Read a page
 confluence read "Page Title" --space PC
 ```
 
@@ -90,16 +99,7 @@ confluence read "Page Title" --space PC
 
 ### 2. Adding New Files to Sync
 
-1.  **Add to Mapping:** Edit `docs/.confluence-mapping.json`:
-    ```json
-    {
-      "docs/runbooks/new_guide.md": {
-        "space": "PC",
-        "title": "New Guide Title"
-      }
-    }
-    ```
-    **OR** run schema rebuilder:
+1.  **Add to Mapping:** Edit `docs/.confluence-mapping.json` OR run schema rebuilder:
     ```bash
     python3 scripts/ops/rebuild_mapping.py
     ```
@@ -116,19 +116,19 @@ confluence read "Page Title" --space PC
 2.  **Sanitize:** Create a public version with placeholders if needed:
     - **Bad:** `db_password: "super_secret"`
     - **Good:** `db_password: "[PASSWORD_FROM_KEEPASSXC]"`
-3.  **Audit:** The sync script does NOT auto-scan for secrets; manual vigilance is required before adding to mapping.
+3.  **Audit:** The sync script does NOT auto-scan for secrets; manual vigilance is required.
 
 ---
 
 ## 🚨 Troubleshooting
 
-### "Page Not Found"
-- **Cause:** First run for a new file.
-- **Fix:** Allow the script to create it.
+### "Page Not Found" or "Parent page not found"
+- **Cause:** First run for a new file or missing hierarchy.
+- **Fix:** Verify parent page exists in Confluence. Check for typos in parent title (case-sensitive).
 
-### "Failed to Update Page"
+### "Failed to Update Page" / Authentication Errors
 - **Cause:** Expired credentials or network issue.
-- **Fix:** Check `.env` vars `CONFLUENCE_API_TOKEN` and `CONFLUENCE_EMAIL`.
+- **Fix:** Check `.env` vars `CONFLUENCE_API_TOKEN` and `CONFLUENCE_EMAIL`. Note that Atlassian tokens can be revoked.
 
 ### "Manual Edits Lost"
 - **Cause:** You edited Confluence directly.
@@ -138,8 +138,8 @@ confluence read "Page Title" --space PC
 
 ## 📚 Related Documentation
 
-- [Confluence CLI Source](file:///home/prometheus/coding/finance/project-chronos/src/chronos/cli/confluence_cli.py)
+- [Confluence CLI Manual](../../reference/cli/confluence_cli.md)
 - [Sync Script](file:///home/prometheus/coding/finance/project-chronos/scripts/ops/sync_docs.py)
 
-**Version:** 2.0.0
-**Consolidated from:** confluence_comprehensive_sync_guide.md, confluence_cli_runbook.md
+**Version:** 2.1.0
+**Consolidated from:** confluence_comprehensive_sync_guide.md, confluence_cli_runbook.md, confluence_bulk_sync.md

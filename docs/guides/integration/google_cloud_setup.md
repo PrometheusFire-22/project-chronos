@@ -1,6 +1,8 @@
 # Google Cloud Project Setup Guide
 
-This guide details how to configure your new GCP Project **"Chronos Connect"** to authorize our Python application.
+> **⚠️ DEPRECATED:** This guide describes OAuth setup for personal Gmail accounts. We now use **Service Accounts** with domain-wide delegation. See [Google Workspace Setup](../../operations/integrations/google_workspace_setup.md) for current setup instructions.
+
+This guide details how to configure your new GCP Project **"Chronos Connect"** to authorize our Python application (LEGACY METHOD).
 
 ## 1. OAuth Consent Screen
 Since you are using a personal Gmail account (`axiologycapital@gmail.com`) to allow access to your Workspace account (`geoff@automatonicai.com`), we will use **External** user type with **Testing** status.
