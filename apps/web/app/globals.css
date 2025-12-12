@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ========================================
+       LIGHT MODE VARIABLES
+       ======================================== */
+
+    /* Base colors */
+    --background: 0 0% 100%; /* #FFFFFF */
+    --foreground: 222.2 84% 4.9%; /* #0F172A - slate-900 */
+
+    /* Semantic colors (shadcn/ui standard) */
+    --primary: 262 83% 58%; /* #8B5CF6 - Purple */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 188 94% 43%; /* #06B6D4 - Teal */
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 160 84% 39%; /* #10B981 - Green */
+    --accent-foreground: 210 40% 98%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    /* UI elements */
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 262 83% 58%; /* Purple focus ring */
+
+    /* Card backgrounds */
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    /* Destructive */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Border radius */
+    --radius: 0.5rem;
+
+    /* Custom: Grid pattern for illustrations */
+    --grid-color: 214 32% 81%;
+    --grid-opacity: 0.5;
+  }
+
+  .dark {
+    /* ========================================
+       DARK MODE VARIABLES
+       ======================================== */
+
+    /* Base colors */
+    --background: 222.2 84% 4.9%; /* #0F172A - slate-900 */
+    --foreground: 210 40% 98%; /* #F8FAFC - slate-50 */
+
+    /* Semantic colors */
+    --primary: 262 83% 58%; /* Purple stays vibrant */
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 188 94% 43%; /* Teal stays vibrant */
+    --secondary-foreground: 210 40% 98%;
+
+    --accent: 160 84% 39%; /* Green stays vibrant */
+    --accent-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    /* UI elements */
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 262 83% 58%;
+
+    /* Card backgrounds */
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    /* Popover */
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Destructive */
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Custom: Grid pattern (more visible in dark mode) */
+    --grid-color: 215 25% 27%;
+    --grid-opacity: 0.6;
+  }
+}
+
+/* ========================================
+   FONT IMPORTS
+   ======================================== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
