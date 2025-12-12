@@ -1,0 +1,14 @@
+{
+  "name": "@chronos/utils",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared utility functions for Project Chronos",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./formatting": "./formatting/index.ts",
+    "./validation": "./validation/index.ts",
+    "./constants": "./constants/index.ts"
+  }
+}
