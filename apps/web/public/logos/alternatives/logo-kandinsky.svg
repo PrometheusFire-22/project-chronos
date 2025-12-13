@@ -1,0 +1,57 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 200 240"
+  role="img"
+  aria-labelledby="logo-kandinsky-title"
+>
+  <title id="logo-kandinsky-title">Automatonic AI - Kandinsky Abstract Logo</title>
+
+  <!-- CONCEPT 4: KANDINSKY "A" -->
+  <!-- 5 nodes with DRAMATIC size variation -->
+  <!-- Straight edges, compositional energy, asymmetric placement -->
+  <!-- Inspired by Kandinsky's "Circles in a Circle" -->
+
+  <!-- EDGES (straight, geometric) -->
+  <!-- Left diagonal -->
+  <line
+    x1="45" y1="210"
+    x2="95" y2="50"
+    stroke="#8B5CF6"
+    stroke-width="5"
+    stroke-linecap="round"
+  />
+
+  <!-- Right diagonal -->
+  <line
+    x1="155" y1="215"
+    x2="95" y2="50"
+    stroke="#06B6D4"
+    stroke-width="5"
+    stroke-linecap="round"
+  />
+
+  <!-- Crossbar -->
+  <line
+    x1="65" y1="145"
+    x2="130" y2="155"
+    stroke="#10B981"
+    stroke-width="5"
+    stroke-linecap="round"
+  />
+
+  <!-- NODES (DRAMATIC size variation like Kandinsky) -->
+  <!-- Peak: MEDIUM purple (●) - reduced from r=22 -->
+  <circle cx="95" cy="50" r="16" fill="#8B5CF6" />
+
+  <!-- Crossbar left: MEDIUM teal (●) -->
+  <circle cx="65" cy="145" r="14" fill="#06B6D4" />
+
+  <!-- Crossbar right: MEDIUM green (●) - increased from r=9 -->
+  <circle cx="130" cy="155" r="14" fill="#10B981" />
+
+  <!-- Base left: LARGE ocean blue (◉) -->
+  <circle cx="45" cy="210" r="18" fill="#0EA5E9" />
+
+  <!-- Base right: MEDIUM-SMALL purple (●) -->
+  <circle cx="155" cy="215" r="11" fill="#8B5CF6" />
+</svg>
