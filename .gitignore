@@ -121,7 +121,7 @@ pnpm-lock.yaml
 
 # Build outputs and generated files
 # lib/ (Commented out: Blocks packages/ui/lib source code)
-# !packages/*/lib/ 
+# !packages/*/lib/
 # dist/ (already ignored above)
 # build/ (already ignored above)
 .cache/
@@ -155,3 +155,4 @@ out
 .nx/
 .pnpm-store/
 docs/security/
+.vercel
