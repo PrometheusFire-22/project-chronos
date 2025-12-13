@@ -1,0 +1,240 @@
+<!--
+  ═══════════════════════════════════════════════════════════════════════
+  AUTOMATONIC AI - LOGO VARIANT 1: SYMMETRICAL GRAPH "A"
+  ═══════════════════════════════════════════════════════════════════════
+
+  CONCEPT:
+  A graph-based letterform "A" using 5 nodes (vertices) and 5 edges (connections).
+  This variant is perfectly symmetrical across a vertical axis.
+
+  STRUCTURE:
+  - 5 circular nodes representing entities (people, companies, etc.)
+  - 5 edges (lines) connecting nodes to form the letter "A"
+  - Gradient colors from brand palette (purple → teal → green)
+
+  SVG BASICS (for HTML/CSS developers):
+  ─────────────────────────────────────────────────────────────────────
+  SVG = Scalable Vector Graphics (like HTML, but for graphics)
+  - Uses coordinates (x, y) instead of pixels
+  - Shapes: <circle>, <line>, <rect>, <path>, etc.
+  - Attributes: cx/cy (center x/y), r (radius), stroke (line color)
+  - ViewBox: defines coordinate system (like a "canvas")
+  - Gradients: <linearGradient> defines color transitions
+
+  COORDINATE SYSTEM:
+  ─────────────────────────────────────────────────────────────────────
+  ViewBox: "0 0 200 240"
+    - Origin (0,0) is top-left corner
+    - X increases rightward (0 → 200)
+    - Y increases downward (0 → 240)
+    - Think of it like a 200×240 grid
+
+  COLOR STRATEGY:
+  ─────────────────────────────────────────────────────────────────────
+  Uses brand gradient (from brand_guidelines.md):
+    - Purple (#8B5CF6) → Teal (#06B6D4) → Green (#10B981)
+  Applied to:
+    - Nodes: gradient fill
+    - Edges: gradient stroke
+    - Creates visual "flow" suggesting relationship connections
+
+  USAGE:
+  ─────────────────────────────────────────────────────────────────────
+  1. Inline in HTML: Copy <svg>...</svg> directly into your HTML
+  2. As <img>: <img src="logo-graph-symmetrical.svg" alt="Automatonic AI" />
+  3. CSS background: background-image: url('logo-graph-symmetrical.svg');
+  4. React component: Convert to React component (see logo-components/)
+
+  DIMENSIONS:
+  ─────────────────────────────────────────────────────────────────────
+  - Base viewBox: 200×240 (width × height ratio)
+  - Renders sharp at ANY size (vector, not raster)
+  - Recommended display sizes: 48px, 64px, 128px, 256px
+
+  FILE INFO:
+  ─────────────────────────────────────────────────────────────────────
+  Version: 1.0
+  Date: 2025-12-08
+  Epic: CHRONOS-280
+  Story: CHRONOS-282
+  Designer: Claude Code (based on brand guidelines)
+  ═══════════════════════════════════════════════════════════════════════
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 200 240"
+  aria-labelledby="logoTitle"
+  role="img"
+>
+  <!--
+    ACCESSIBILITY:
+    - aria-labelledby: References <title> for screen readers
+    - role="img": Tells assistive tech this is an image, not interactive SVG
+  -->
+  <title id="logoTitle">Automatonic AI Logo</title>
+
+  <!--
+    ═══════════════════════════════════════════════════════════════════
+    GRADIENTS DEFINITION
+    ═══════════════════════════════════════════════════════════════════
+
+    Linear gradients = smooth color transitions along a line
+    - id: Unique identifier (referenced by url(#gradientId))
+    - x1/y1 → x2/y2: Direction of gradient (0%,0% → 100%,100% = diagonal)
+    - <stop>: Color stops along gradient (offset = position 0-100%)
+
+    WHY DEFINE GRADIENTS IN <defs>?
+    - <defs> = "definitions" section (like CSS variables)
+    - Reusable across multiple elements (DRY principle)
+    - Not rendered until referenced by url(#id)
+  -->
+  <defs>
+    <!-- Gradient for nodes (circles) -->
+    <linearGradient id="nodeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />   <!-- Purple -->
+      <stop offset="50%" style="stop-color:#06B6D4;stop-opacity:1" />  <!-- Teal -->
+      <stop offset="100%" style="stop-color:#10B981;stop-opacity:1" /> <!-- Green -->
+    </linearGradient>
+
+    <!-- Gradient for edges (lines) -->
+    <linearGradient id="edgeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:0.6" />
+    </linearGradient>
+  </defs>
+
+  <!--
+    ═══════════════════════════════════════════════════════════════════
+    EDGES (CONNECTIONS) - Draw first so nodes appear on top
+    ═══════════════════════════════════════════════════════════════════
+
+    <line> attributes:
+    - x1/y1: Starting point coordinates
+    - x2/y2: Ending point coordinates
+    - stroke: Line color (using gradient url)
+    - stroke-width: Line thickness (in viewBox units, not pixels!)
+    - stroke-linecap: End style (round = circular ends)
+
+    FORMING THE "A" SHAPE:
+    - 2 diagonal lines for left/right legs of "A"
+    - 1 horizontal crossbar in middle
+    - 2 top edges creating peak
+  -->
+  <g id="edges" opacity="0.8">
+    <!-- Left leg: bottom-left to top-center -->
+    <line
+      x1="40" y1="220"
+      x2="100" y2="40"
+      stroke="url(#edgeGradient)"
+      stroke-width="3"
+      stroke-linecap="round"
+    />
+
+    <!-- Right leg: bottom-right to top-center -->
+    <line
+      x1="160" y1="220"
+      x2="100" y2="40"
+      stroke="url(#edgeGradient)"
+      stroke-width="3"
+      stroke-linecap="round"
+    />
+
+    <!-- Crossbar: left-middle to right-middle -->
+    <line
+      x1="60" y1="150"
+      x2="140" y2="150"
+      stroke="url(#edgeGradient)"
+      stroke-width="3"
+      stroke-linecap="round"
+    />
+
+    <!-- Top-left edge: peak to left-upper -->
+    <line
+      x1="100" y1="40"
+      x2="60" y2="150"
+      stroke="url(#edgeGradient)"
+      stroke-width="3"
+      stroke-linecap="round"
+    />
+
+    <!-- Top-right edge: peak to right-upper -->
+    <line
+      x1="100" y1="40"
+      x2="140" y2="150"
+      stroke="url(#edgeGradient)"
+      stroke-width="3"
+      stroke-linecap="round"
+    />
+  </g>
+
+  <!--
+    ═══════════════════════════════════════════════════════════════════
+    NODES (VERTICES) - Draw last to appear on top of edges
+    ═══════════════════════════════════════════════════════════════════
+
+    <circle> attributes:
+    - cx/cy: Center x/y coordinates
+    - r: Radius (in viewBox units)
+    - fill: Interior color (using gradient url)
+    - stroke: Outline color
+    - stroke-width: Outline thickness
+
+    NODE POSITIONS (5 nodes forming "A"):
+    1. Top center (peak of A)
+    2. Left middle (crossbar intersection left)
+    3. Right middle (crossbar intersection right)
+    4. Bottom left (base of left leg)
+    5. Bottom right (base of right leg)
+  -->
+  <g id="nodes">
+    <!-- Node 1: Top center (peak) -->
+    <circle
+      cx="100"
+      cy="40"
+      r="12"
+      fill="url(#nodeGradient)"
+      stroke="#FFFFFF"
+      stroke-width="2"
+    />
+
+    <!-- Node 2: Left middle (crossbar left) -->
+    <circle
+      cx="60"
+      cy="150"
+      r="12"
+      fill="url(#nodeGradient)"
+      stroke="#FFFFFF"
+      stroke-width="2"
+    />
+
+    <!-- Node 3: Right middle (crossbar right) -->
+    <circle
+      cx="140"
+      cy="150"
+      r="12"
+      fill="url(#nodeGradient)"
+      stroke="#FFFFFF"
+      stroke-width="2"
+    />
+
+    <!-- Node 4: Bottom left (base left) -->
+    <circle
+      cx="40"
+      cy="220"
+      r="12"
+      fill="url(#nodeGradient)"
+      stroke="#FFFFFF"
+      stroke-width="2"
+    />
+
+    <!-- Node 5: Bottom right (base right) -->
+    <circle
+      cx="160"
+      cy="220"
+      r="12"
+      fill="url(#nodeGradient)"
+      stroke="#FFFFFF"
+      stroke-width="2"
+    />
+  </g>
+</svg>

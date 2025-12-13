@@ -1,0 +1,32 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 180 240"
+  role="img"
+  aria-labelledby="logo-ai-light-title"
+>
+  <title id="logo-ai-light-title">Automatonic AI - ai Wordmark (Light Mode)</title>
+
+  <!-- "ai" WORDMARK - LIGHT MODE VERSION -->
+  <!-- For use on LIGHT backgrounds (white, light gray, etc.) -->
+  <!-- Bowl counter uses DARK color for contrast -->
+
+  <!-- "a" SHAPE -->
+  <!-- Bowl (circular part on LEFT side) - SOLID PURPLE -->
+  <circle cx="70" cy="150" r="45" fill="#8B5CF6" />
+
+  <!-- Bowl interior - DARK for light backgrounds -->
+  <circle cx="70" cy="145" r="28" fill="#0F172A" />
+
+  <!-- Stem (vertical line on RIGHT side) - SOLID TEAL -->
+  <rect
+    x="110"
+    y="105"
+    width="16"
+    height="90"
+    fill="#06B6D4"
+    rx="8"
+  />
+
+  <!-- "i" DOT - SOLID GREEN -->
+  <circle cx="118" cy="70" r="14" fill="#10B981" />
+</svg>

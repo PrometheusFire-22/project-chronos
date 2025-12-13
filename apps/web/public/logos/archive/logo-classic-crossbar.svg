@@ -1,0 +1,59 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 200 240"
+  role="img"
+  aria-labelledby="logo-classic-title"
+>
+  <title id="logo-classic-title">Automatonic AI - Classic Crossbar Logo</title>
+
+  <!-- CONCEPT 2: CLASSIC "A" WITH BOLD CROSSBAR -->
+  <!-- 5 nodes with obvious horizontal crossbar -->
+  <!-- Traditional "A" shape, varied node sizes -->
+
+  <!-- EDGES (draw first) -->
+  <!-- Left diagonal -->
+  <line
+    x1="40" y1="220"
+    x2="100" y2="40"
+    stroke="#8B5CF6"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <!-- Right diagonal -->
+  <line
+    x1="160" y1="220"
+    x2="100" y2="40"
+    stroke="#8B5CF6"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <!-- CROSSBAR - THICK AND BOLD -->
+  <line
+    x1="60" y1="150"
+    x2="140" y2="150"
+    stroke="#0EA5E9"
+    stroke-width="6"
+    stroke-linecap="round"
+  />
+
+  <!-- NODES (varying sizes) -->
+  <!-- Peak: LARGE purple -->
+  <circle cx="100" cy="40" r="16" fill="#8B5CF6" />
+
+  <!-- Crossbar left: MEDIUM teal -->
+  <circle cx="60" cy="150" r="12" fill="#06B6D4" />
+
+  <!-- Crossbar center: LARGE ocean blue (emphasize crossbar) -->
+  <circle cx="100" cy="150" r="14" fill="#0EA5E9" />
+
+  <!-- Crossbar right: MEDIUM green -->
+  <circle cx="140" cy="150" r="12" fill="#10B981" />
+
+  <!-- Base left: SMALL purple -->
+  <circle cx="40" cy="220" r="10" fill="#8B5CF6" />
+
+  <!-- Base right: SMALL teal -->
+  <circle cx="160" cy="220" r="10" fill="#06B6D4" />
+</svg>

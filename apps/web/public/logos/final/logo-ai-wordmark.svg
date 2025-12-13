@@ -1,0 +1,40 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 180 240"
+  role="img"
+  aria-labelledby="logo-ai-title"
+>
+  <title id="logo-ai-title">Automatonic AI - ai Wordmark</title>
+
+  <!-- "ai" WORDMARK (CORRECTED) -->
+  <!-- Lowercase "a" with stem forming implicit "i" -->
+  <!-- "a" reflected correctly: bowl on LEFT, stem on RIGHT -->
+  <!-- Single dot above stem only -->
+  <!-- Transparent cutout adapts to background -->
+
+  <defs>
+    <!-- Mask to cut out the inner circle -->
+    <mask id="bowlMask">
+      <circle cx="70" cy="150" r="45" fill="white"/>
+      <circle cx="70" cy="145" r="28" fill="black"/>
+    </mask>
+  </defs>
+
+  <!-- "a" SHAPE -->
+  <!-- Bowl with cutout center - adapts to light/dark backgrounds -->
+  <circle cx="70" cy="150" r="45" fill="#8B5CF6" mask="url(#bowlMask)" />
+
+  <!-- Stem (vertical line on RIGHT side) - SOLID TEAL -->
+  <rect
+    x="110"
+    y="105"
+    width="16"
+    height="90"
+    fill="#06B6D4"
+    rx="8"
+  />
+
+  <!-- "i" DOT - SOLID GREEN -->
+  <!-- Single dot above stem only (not above bowl) -->
+  <circle cx="118" cy="70" r="14" fill="#10B981" />
+</svg>
