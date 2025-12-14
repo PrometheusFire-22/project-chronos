@@ -156,3 +156,4 @@ out
 .pnpm-store/
 docs/security/
 .vercel
+.env*.local
