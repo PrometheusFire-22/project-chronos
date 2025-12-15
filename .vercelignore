@@ -2,6 +2,14 @@ node_modules
 .nx
 .git
 docs
+gis_data
+media_assets
+backups
+logs
+tests
+htmlcov
+src
+static
 *.log
 .next
 .turbo
