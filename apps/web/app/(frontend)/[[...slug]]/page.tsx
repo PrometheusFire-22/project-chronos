@@ -11,52 +11,54 @@ type PageProps = {
 };
 
 // Generate static params for all pages at build time
-export async function generateStaticParams() {
-  const payload = await getPayload({ config });
+// TODO: Re-enable after initial deployment and migrations run
+// export async function generateStaticParams() {
+//   const payload = await getPayload({ config });
 
-  const pages = await payload.find({
-    collection: 'pages',
-    limit: 100,
-    depth: 0,
-  });
+//   const pages = await payload.find({
+//     collection: 'pages',
+//     limit: 100,
+//     depth: 0,
+//   });
 
-  return pages.docs.map((page) => ({
-    slug: page.slug === 'home' ? [] : page.slug.split('/'),
-  }));
-}
+//   return pages.docs.map((page) => ({
+//     slug: page.slug === 'home' ? [] : page.slug.split('/'),
+//   }));
+// }
 
 // Generate metadata for SEO
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const resolvedParams = await params;
-  const slug = resolvedParams.slug?.join('/') || 'home';
+// TODO: Re-enable after initial deployment and migrations run
+// export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+//   const resolvedParams = await params;
+//   const slug = resolvedParams.slug?.join('/') || 'home';
 
-  const payload = await getPayload({ config });
+//   const payload = await getPayload({ config });
 
-  const result = await payload.find({
-    collection: 'pages',
-    where: {
-      or: [
-        { slug: { equals: slug } },
-        { isHome: { equals: slug === 'home' } },
-      ],
-    },
-    limit: 1,
-    depth: 0,
-  });
+//   const result = await payload.find({
+//     collection: 'pages',
+//     where: {
+//       or: [
+//         { slug: { equals: slug } },
+//         { isHome: { equals: slug === 'home' } },
+//       ],
+//     },
+//     limit: 1,
+//     depth: 0,
+//   });
 
-  const page = result.docs[0];
+//   const page = result.docs[0];
 
-  if (!page) {
-    return {
-      title: 'Page Not Found',
-    };
-  }
+//   if (!page) {
+//     return {
+//       title: 'Page Not Found',
+//     };
+//   }
 
-  return {
-    title: page.title,
-    description: page.description || undefined,
-  };
-}
+//   return {
+//     title: page.title,
+//     description: page.description || undefined,
+//   };
+// }
 
 export default async function Page({ params }: PageProps) {
   const resolvedParams = await params;
