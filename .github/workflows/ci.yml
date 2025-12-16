@@ -61,7 +61,7 @@ jobs:
           echo "DATABASE_PORT=5432" >> .env
           echo "DATABASE_NAME=chronos_db" >> .env
           echo "DATABASE_USER=prometheus" >> .env
-          echo "DATABASE_PASSWORD=Zarathustra22!" >> .env
+          echo "DATABASE_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
           echo "PYTHONPATH=/workspace/src" >> .env
           echo "FRED_API_KEY=${{ secrets.FRED_API_KEY }}" >> .env
         env:

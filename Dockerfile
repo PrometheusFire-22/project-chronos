@@ -105,11 +105,16 @@ RUN pip install --user --upgrade pip setuptools wheel && \
 # ==============================================================================
 # Node.js Environment (as vscode user)
 # ==============================================================================
+# Set PNPM_HOME to define where pnpm global packages will be installed.
+ENV PNPM_HOME="/home/vscode/.local/share/pnpm"
+# Add the pnpm global bin directory to the PATH.
+ENV PATH="$PNPM_HOME:$PATH"
+
 # This runs as the 'vscode' user, so fnm and node versions are installed for the correct user.
 RUN curl -fsSL https://fnm.vercel.app/install | bash && \
     # The fnm install script modifies .bashrc, so we source it to use fnm in the next command.
     # We use bash -i -c to simulate an interactive shell, which properly sources .bashrc
-    /bin/bash -i -c "fnm install 20 && npm install -g pnpm@8.15.0 && pnpm install -g gitmoji-cli"
+    /bin/bash -i -c "fnm install 20 && npm install -g pnpm && pnpm install -g gitmoji-cli"
 
 # ==============================================================================
 # Container Startup

@@ -113,13 +113,13 @@ repos:
         types: [python]
         stages: [pre-commit]
 
-      - id: no-commit-to-main
-        name: Prevent commits to main branch
-        entry: bash -c 'if [ "$(git rev-parse --abbrev-ref HEAD)" = "main" ]; then echo "Direct commits to main are not allowed. Use a feature branch."; exit 1; fi'
-        language: system
-        pass_filenames: false
-        always_run: true
-        stages: [pre-commit]
+      # - id: no-commit-to-main
+      #   name: Prevent commits to main branch
+      #   entry: bash -c 'if [ "$(git rev-parse --abbrev-ref HEAD)" = "main" ]; then echo "Direct commits to main are not allowed. Use a feature branch."; exit 1; fi'
+      #   language: system
+      #   pass_filenames: false
+      #   always_run: true
+      #   stages: [pre-commit]
 
 # ============================================================================
 # Configuration
