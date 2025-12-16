@@ -13,7 +13,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default buildConfig({
-  serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
+  // TEMPORARILY DISABLED: Known bug in Payload 3.68.x breaks admin UI when serverURL is set
+  // See: https://github.com/payloadcms/payload/issues/14900
+  // serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
   admin: {
     user: Users.slug,
   },
