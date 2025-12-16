@@ -10,15 +10,27 @@ export default async function FrontendLayout({
   const payload = await getPayload({ config });
 
   // Fetch global data for header and footer
-  const header = await payload.findGlobal({
-    slug: 'header',
-    depth: 1,
-  });
+  // Handle case where globals don't exist yet (before migrations run)
+  let header = null;
+  let footer = null;
 
-  const footer = await payload.findGlobal({
-    slug: 'footer',
-    depth: 1,
-  });
+  try {
+    header = await payload.findGlobal({
+      slug: 'header',
+      depth: 1,
+    });
+  } catch (error) {
+    console.warn('Header global not found - migrations may not have run yet');
+  }
+
+  try {
+    footer = await payload.findGlobal({
+      slug: 'footer',
+      depth: 1,
+    });
+  } catch (error) {
+    console.warn('Footer global not found - migrations may not have run yet');
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
