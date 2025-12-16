@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import { Users } from './collections/Users';
 import { Media } from './collections/Media';
 import { Pages } from './collections/Pages';
+import { Header, Footer } from './globals';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,6 +19,7 @@ export default buildConfig({
   },
   editor: lexicalEditor({}),
   collections: [Users, Media, Pages],
+  globals: [Header, Footer],
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),
