@@ -66,14 +66,12 @@ export default async function Page({ params }: PageProps) {
 
   const payload = await getPayload({ config });
 
-  // Fetch page by slug or isHome flag
+  // Fetch page by slug
+  // TODO: Add isHome query back after migrations run
   const result = await payload.find({
     collection: 'pages',
     where: {
-      or: [
-        { slug: { equals: slug } },
-        { isHome: { equals: slug === 'home' } },
-      ],
+      slug: { equals: slug },
     },
     limit: 1,
     depth: 2, // Fetch related media and relationships
