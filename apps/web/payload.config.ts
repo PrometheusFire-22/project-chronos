@@ -4,6 +4,7 @@ import { s3Storage } from '@payloadcms/storage-s3';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import sharp from 'sharp';
 import { Users } from './collections/Users';
 import { Media } from './collections/Media';
 import { Pages } from './collections/Pages';
@@ -26,6 +27,7 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),
   },
+  sharp,
   db: postgresAdapter({
     pool: {
       connectionString: process.env.POSTGRES_URL,
