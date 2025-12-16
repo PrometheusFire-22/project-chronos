@@ -4,6 +4,7 @@ import { s3Storage } from '@payloadcms/storage-s3';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import sharp from 'sharp';
 import { Users } from './collections/Users';
 import { Media } from './collections/Media';
 import { Pages } from './collections/Pages';
@@ -13,9 +14,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default buildConfig({
-  // TEMPORARILY DISABLED: Known bug in Payload 3.68.x breaks admin UI when serverURL is set
+  // Re-enabled in 3.68.5 - bug was fixed in 3.68.4
   // See: https://github.com/payloadcms/payload/issues/14900
-  // serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
+  serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
   admin: {
     user: Users.slug,
   },
@@ -26,10 +27,12 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),
   },
+  sharp,
   db: postgresAdapter({
     pool: {
       connectionString: process.env.POSTGRES_URL,
     },
+    push: false, // Disable auto-push to prevent schema conflicts with existing tables
   }),
   plugins: [
     s3Storage({
