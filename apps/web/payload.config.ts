@@ -30,6 +30,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.POSTGRES_URL,
     },
+    push: false, // Disable auto-push to prevent schema conflicts with existing tables
   }),
   plugins: [
     s3Storage({
