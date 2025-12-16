@@ -51,6 +51,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@resvg/resvg-js": "^2.6.2",
+    "bcrypt": "^6.0.0",
     "framer-motion": "^12.23.26",
     "lucide-react": "^0.560.0",
     "next": "~16.0.9",
