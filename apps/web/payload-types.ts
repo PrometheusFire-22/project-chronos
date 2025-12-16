@@ -89,8 +89,14 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    header: Header;
+    footer: Footer;
+  };
+  globalsSelect: {
+    header: HeaderSelect<false> | HeaderSelect<true>;
+    footer: FooterSelect<false> | FooterSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -194,12 +200,33 @@ export interface Media {
 export interface Page {
   id: number;
   title: string;
+  /**
+   * URL path for this page (e.g., "about" for /about)
+   */
   slug: string;
+  /**
+   * SEO description for this page
+   */
+  description?: string | null;
+  /**
+   * Mark this page as the site homepage
+   */
+  isHome?: boolean | null;
+  /**
+   * Build your page layout using reusable blocks
+   */
   layout?:
     | (
         | {
-            type?: ('default' | 'centered' | 'split') | null;
-            heading?: string | null;
+            type: 'default' | 'centered' | 'split';
+            heading: string;
+            /**
+             * Optional subheading text
+             */
+            subheading?: string | null;
+            /**
+             * Main hero description text
+             */
             text?: {
               root: {
                 type: string;
@@ -215,13 +242,25 @@ export interface Page {
               };
               [k: string]: unknown;
             } | null;
+            /**
+             * Optional background image for the hero section
+             */
             backgroundImage?: (number | null) | Media;
+            cta?: {
+              show?: boolean | null;
+              label?: string | null;
+              link?: string | null;
+              style?: ('primary' | 'secondary' | 'outline') | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'hero';
           }
         | {
-            content?: {
+            /**
+             * Main content for this section
+             */
+            content: {
               root: {
                 type: string;
                 children: {
@@ -235,10 +274,46 @@ export interface Page {
                 version: number;
               };
               [k: string]: unknown;
-            } | null;
+            };
+            layout?: ('full' | 'centered' | 'narrow') | null;
+            backgroundColor?: ('none' | 'gray' | 'primary' | 'accent') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'content';
+          }
+        | {
+            /**
+             * Image or video to display
+             */
+            media: number | Media;
+            /**
+             * Optional caption for the media
+             */
+            caption?: string | null;
+            size?: ('small' | 'medium' | 'large' | 'full') | null;
+            position?: ('left' | 'center' | 'right') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'mediaBlock';
+          }
+        | {
+            heading: string;
+            /**
+             * Brief description text
+             */
+            text?: string | null;
+            buttons?:
+              | {
+                  label: string;
+                  link: string;
+                  style?: ('primary' | 'secondary' | 'outline') | null;
+                  id?: string | null;
+                }[]
+              | null;
+            backgroundColor?: ('none' | 'primary' | 'accent' | 'dark') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cta';
           }
       )[]
     | null;
@@ -404,6 +479,8 @@ export interface MediaSelect<T extends boolean = true> {
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  description?: T;
+  isHome?: T;
   layout?:
     | T
     | {
@@ -412,8 +489,17 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               type?: T;
               heading?: T;
+              subheading?: T;
               text?: T;
               backgroundImage?: T;
+              cta?:
+                | T
+                | {
+                    show?: T;
+                    label?: T;
+                    link?: T;
+                    style?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -421,6 +507,35 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               content?: T;
+              layout?: T;
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        mediaBlock?:
+          | T
+          | {
+              media?: T;
+              caption?: T;
+              size?: T;
+              position?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cta?:
+          | T
+          | {
+              heading?: T;
+              text?: T;
+              buttons?:
+                | T
+                | {
+                    label?: T;
+                    link?: T;
+                    style?: T;
+                    id?: T;
+                  };
+              backgroundColor?: T;
               id?: T;
               blockName?: T;
             };
@@ -467,6 +582,146 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header".
+ */
+export interface Header {
+  id: number;
+  navItems?:
+    | {
+        label: string;
+        /**
+         * Link to an internal page
+         */
+        link?: (number | null) | Page;
+        /**
+         * Or provide an external URL (starts with http)
+         */
+        externalLink?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  ctaButton?: {
+    show?: boolean | null;
+    label?: string | null;
+    link?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: number;
+  columns?:
+    | {
+        heading: string;
+        links?:
+          | {
+              label: string;
+              /**
+               * Link to an internal page
+               */
+              link?: (number | null) | Page;
+              /**
+               * Or provide an external URL
+               */
+              externalLink?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  socialLinks?:
+    | {
+        platform: 'twitter' | 'linkedin' | 'github' | 'youtube' | 'facebook' | 'instagram';
+        /**
+         * Full URL to your profile
+         */
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  copyright?: string | null;
+  /**
+   * Links to Privacy Policy, Terms of Service, etc.
+   */
+  legalLinks?:
+    | {
+        label: string;
+        link?: (number | null) | Page;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header_select".
+ */
+export interface HeaderSelect<T extends boolean = true> {
+  navItems?:
+    | T
+    | {
+        label?: T;
+        link?: T;
+        externalLink?: T;
+        id?: T;
+      };
+  ctaButton?:
+    | T
+    | {
+        show?: T;
+        label?: T;
+        link?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  columns?:
+    | T
+    | {
+        heading?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              link?: T;
+              externalLink?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  copyright?: T;
+  legalLinks?:
+    | T
+    | {
+        label?: T;
+        link?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
