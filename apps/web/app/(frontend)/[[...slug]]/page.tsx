@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     where: {
       or: [
         { slug: { equals: slug } },
-        { isHome: { equals: slug === 'home' } },
+        { isHome: { equals: slug === 'home' } } as any,
       ],
     },
     limit: 1,
@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: page.title,
-    description: page.description || undefined,
+    description: (page as any).description || undefined,
   };
 }
 
@@ -70,7 +70,7 @@ export default async function Page({ params }: PageProps) {
     where: {
       or: [
         { slug: { equals: slug } },
-        { isHome: { equals: slug === 'home' } },
+        { isHome: { equals: slug === 'home' } } as any,
       ],
     },
     limit: 1,
