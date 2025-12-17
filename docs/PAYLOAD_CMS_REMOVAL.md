@@ -152,8 +152,10 @@ Deleted entirely:
 
 ## Current State
 
-### Clean Next.js 15 + React 19 Baseline
+### Clean Next.js 16 + React 19.2.3 Baseline
 - No CMS dependencies
+- Upgraded to Next.js 16.0.10 with Turbopack support
+- Upgraded to React 19.2.3 (latest)
 - Static homepage implemented
 - Header/Footer components preserved
 - Dark mode support intact
