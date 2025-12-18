@@ -4,6 +4,11 @@ import { composePlugins, withNx } from '@nx/next';
 const nextConfig = {
   nx: {},
   transpilePackages: ['@chronos/ui'],
+  experimental: {
+    turbopack: {
+      root: '../../',
+    },
+  },
 };
 
 // Check if we're running in Cloudflare context
