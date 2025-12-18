@@ -503,7 +503,7 @@ import { Button } from '@/components/ui/button'
 **Installation:**
 
 ```bash
-npm install framer-motion
+pnpm add framer-motion
 ```
 
 **Animation Primitives Library:**
@@ -1005,4 +1005,3 @@ This CSS variables-first approach provides a **scalable, maintainable, and perfo
 - [Brand Guidelines](../../marketing/brand_guidelines.md)
 - [ADR-012: Frontend Stack Architecture](adr_012_frontend_stack_architecture.md)
 - [Marketing Site Readiness Assessment](../../marketing/READINESS_ASSESSMENT.md)
-

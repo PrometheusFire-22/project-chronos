@@ -1,0 +1,27 @@
+{
+  "name": "worker",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/worker/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/worker",
+        "main": "apps/worker/src/index.ts",
+        "tsConfig": "apps/worker/tsconfig.app.json",
+        "assets": ["apps/worker/*.md"],
+        "skipTypeCheck": true
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "wrangler dev dist/apps/worker/src/index.js --config=apps/worker/wrangler.jsonc",
+        "cwd": "."
+      }
+    }
+  }
+}
