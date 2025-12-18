@@ -79,6 +79,24 @@ Created **16 Jira tickets** for Cloudflare migration:
 - **Action:** Comprehensive local dev documentation
 - **Deliverables:** Updated CONTRIBUTING.md, docs/LOCAL_DEVELOPMENT.md
 
+**CHRONOS-341: Jira Cleanup: Deduplicate and Organize Existing Tickets** ✅
+- https://automatonicai.atlassian.net/browse/CHRONOS-341
+- Type: Task
+- Priority: Medium
+- Story Points: 3
+- **Status:** ✅ **COMPLETE** (2025-12-17)
+- **Action:** Review and resolve outdated/duplicate Jira tickets.
+- **Deliverables:** Cleaner Jira backlog.
+
+**CHRONOS-342: Confluence Documentation Sync and Structure Improvement** ✅
+- https://automatonicai.atlassian.net/browse/CHRONOS-342
+- Type: Task
+- Priority: Medium
+- Story Points: 5
+- **Status:** ✅ **COMPLETE** (2025-12-17)
+- **Action:** Map local docs to Confluence and improve structure.
+- **Deliverables:** Updated Confluence with current project documentation.
+
 **Sprint 1 Total:** 18 story points (~1 week)
 
 ---
