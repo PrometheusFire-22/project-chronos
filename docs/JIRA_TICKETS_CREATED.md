@@ -62,11 +62,12 @@ Created **16 Jira tickets** for Cloudflare migration:
 - **Action:** Remove ^ and ~ from package.json, enable Dependabot
 - **Deliverables:** Exact versions, .github/dependabot.yml
 
-**CHRONOS-329: Create Unified Development Scripts**
+**CHRONOS-329: Create Unified Development Scripts** ✅
 - https://automatonicai.atlassian.net/browse/CHRONOS-329
 - Type: Task
 - Priority: High
 - Story Points: 3
+- **Status:** ✅ **COMPLETE** (2025-12-17)
 - **Action:** Single pnpm run dev command for entire stack
 - **Deliverables:** scripts/dev.sh, updated docs
 
