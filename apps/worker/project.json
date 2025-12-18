@@ -5,9 +5,22 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nx/workspace:run-commands",
+      "executor": "@nx/js:swc",
+      "outputs": ["{options.outputPath}"],
       "options": {
-        "command": "echo 'Building worker...'"
+        "outputPath": "dist/apps/worker",
+        "main": "apps/worker/src/index.ts",
+        "tsConfig": "apps/worker/tsconfig.app.json",
+        "assets": ["apps/worker/*.md"],
+        "skipTypeCheck": true
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "wrangler dev dist/apps/worker/src/index.js --config=apps/worker/wrangler.jsonc",
+        "cwd": "."
       }
     }
   }
