@@ -1,10 +1,5 @@
 {
-  "docs/.secrets-template.md": {
-    "page_id": "10944887",
-    "space": "PC",
-    "title": ".Secrets Template",
-    "last_synced": "2025-12-08T23:55:03.068994+00:00Z"
-  },
+
   "docs/QUICK_START.md": {
     "page_id": "10944908",
     "space": "PC",
@@ -117,7 +112,7 @@
     "page_id": "11075889",
     "space": "PC",
     "title": "Architecture",
-    "last_synced": "2025-12-10T16:39:41.003103+00:00Z"
+    "last_synced": "2025-12-18T06:44:08.937981+00:00Z"
   },
   "docs/architecture/concepts/documentation_structure.md": {
     "last_synced": "2025-12-08T23:55:21.601698+00:00Z",
@@ -285,7 +280,7 @@
     "page_id": "11076121",
     "space": "PC",
     "title": "Disaster Recovery",
-    "last_synced": "2025-12-10T16:43:17.542229+00:00Z"
+    "last_synced": "2025-12-18T06:46:06.003093+00:00Z"
   },
   "docs/operations/infrastructure/database_backups.md": {
     "page_id": "11076141",
@@ -502,5 +497,215 @@
     "space": "PC",
     "title": "2025 12 10 Marketing Site Integration Session",
     "last_synced": "2025-12-10T16:45:05.743218+00:00Z"
+  },
+  "docs/CLEANUP_COMPLETE.md": {
+    "page_id": "15761409",
+    "space": "PC",
+    "title": "Cleanup Complete",
+    "last_synced": "2025-12-18T06:42:51.491945+00:00Z"
+  },
+  "docs/CLOUDFLARE_MIGRATION_PLAN.md": {
+    "page_id": "15859716",
+    "space": "PC",
+    "title": "Cloudflare Migration Plan",
+    "last_synced": "2025-12-18T06:42:54.348391+00:00Z"
+  },
+  "docs/CONTRIBUTING.md": {
+    "page_id": "15925249",
+    "space": "PC",
+    "title": "Contributing",
+    "last_synced": "2025-12-18T06:42:56.193791+00:00Z"
+  },
+  "docs/CURRENT_STATE.md": {
+    "page_id": "15925274",
+    "space": "PC",
+    "title": "Current State",
+    "last_synced": "2025-12-18T06:42:58.144039+00:00Z"
+  },
+  "docs/DATABASE_SETUP_VERIFICATION.md": {
+    "page_id": "15958020",
+    "space": "PC",
+    "title": "Database Setup Verification",
+    "last_synced": "2025-12-18T06:43:00.304558+00:00Z"
+  },
+  "docs/DEPLOYMENT.md": {
+    "page_id": "15925297",
+    "space": "PC",
+    "title": "Deployment",
+    "last_synced": "2025-12-18T06:43:02.146058+00:00Z"
+  },
+  "docs/DEVOPS_HARDENING_PLAN.md": {
+    "page_id": "15859762",
+    "space": "PC",
+    "title": "Devops Hardening Plan",
+    "last_synced": "2025-12-18T06:43:04.185312+00:00Z"
+  },
+  "docs/DOCUMENTATION_INDEX.md": {
+    "page_id": "15859788",
+    "space": "PC",
+    "title": "Documentation Index",
+    "last_synced": "2025-12-18T06:43:06.126439+00:00Z"
+  },
+  "docs/DOCUMENTATION_REFACTOR_DECISION.md": {
+    "page_id": "15761436",
+    "space": "PC",
+    "title": "Documentation Refactor Decision",
+    "last_synced": "2025-12-18T06:43:08.084792+00:00Z"
+  },
+  "docs/GIT_WORKFLOW.md": {
+    "page_id": "10945171",
+    "space": "PC",
+    "title": "Git Workflow",
+    "last_synced": "2025-12-18T06:43:09.555206+00:00Z"
+  },
+  "docs/JIRA_TICKETS_CREATED.md": {
+    "page_id": "15958060",
+    "space": "PC",
+    "title": "Jira Tickets Created",
+    "last_synced": "2025-12-18T06:43:13.800630+00:00Z"
+  },
+  "docs/PAYLOAD_CMS_CONTENT_PLAN.md": {
+    "page_id": "15859851",
+    "space": "PC",
+    "title": "Payload Cms Content Plan",
+    "last_synced": "2025-12-18T06:43:15.853866+00:00Z"
+  },
+  "docs/PAYLOAD_CMS_REMOVAL.md": {
+    "page_id": "15859871",
+    "space": "PC",
+    "title": "Payload Cms Removal",
+    "last_synced": "2025-12-18T06:43:17.692223+00:00Z"
+  },
+  "docs/PROJECT_OVERVIEW.md": {
+    "page_id": "15859894",
+    "space": "PC",
+    "title": "Project Overview",
+    "last_synced": "2025-12-18T06:43:19.548119+00:00Z"
+  },
+  "docs/SECRETS_REFERENCE.md": {
+    "page_id": "15859930",
+    "space": "PC",
+    "title": "Secrets Reference",
+    "last_synced": "2025-12-18T06:43:24.247416+00:00Z"
+  },
+  "docs/architecture/adrs/adr_017_nx_monorepo_tooling.md": {
+    "page_id": "15761474",
+    "space": "PC",
+    "title": "Adr 017 Nx Monorepo Tooling",
+    "last_synced": "2025-12-18T06:43:53.434801+00:00Z"
+  },
+  "docs/archive/payload-cms-attempt/ADR-002_hybrid_infrastructure_payload.md": {
+    "page_id": "15958181",
+    "space": "PC",
+    "title": "Adr 002 Hybrid Infrastructure Payload",
+    "last_synced": "2025-12-18T06:44:35.521018+00:00Z"
+  },
+  "docs/archive/payload-cms-attempt/PAYLOAD_CMS_AUDIT_REPORT.md": {
+    "page_id": "15761525",
+    "space": "PC",
+    "title": "Payload Cms Audit Report",
+    "last_synced": "2025-12-18T06:44:37.568811+00:00Z"
+  },
+  "docs/archive/payload-cms-attempt/PAYLOAD_CMS_FIX_QUICK_START.md": {
+    "page_id": "15925348",
+    "space": "PC",
+    "title": "Payload Cms Fix Quick Start",
+    "last_synced": "2025-12-18T06:44:39.319377+00:00Z"
+  },
+  "docs/archive/payload-cms-attempt/PAYLOAD_STABILIZATION_PLAN.md": {
+    "page_id": "15761551",
+    "space": "PC",
+    "title": "Payload Stabilization Plan",
+    "last_synced": "2025-12-18T06:44:40.945701+00:00Z"
+  },
+  "docs/archive/payload-cms-attempt/payload_integration.md": {
+    "page_id": "15761571",
+    "space": "PC",
+    "title": "Payload Integration",
+    "last_synced": "2025-12-18T06:44:42.693518+00:00Z"
+  },
+  "docs/decisions/ADR-003_hybrid_multicloud_cloudflare_migration.md": {
+    "page_id": "15925377",
+    "space": "PC",
+    "title": "Adr 003 Hybrid Multicloud Cloudflare Migration",
+    "last_synced": "2025-12-18T06:44:46.703099+00:00Z"
+  },
+  "docs/guides/development/FRONTEND_DEVELOPMENT.md": {
+    "page_id": "15761612",
+    "space": "PC",
+    "title": "Frontend Development",
+    "last_synced": "2025-12-18T06:44:54.267695+00:00Z"
+  },
+  "docs/guides/development/monorepo-complete-guide.md": {
+    "page_id": "15860008",
+    "space": "PC",
+    "title": "Monorepo Complete Guide",
+    "last_synced": "2025-12-18T06:45:04.304173+00:00Z"
+  },
+  "docs/guides/development/monorepo-quick-start.md": {
+    "page_id": "15860031",
+    "space": "PC",
+    "title": "Monorepo Quick Start",
+    "last_synced": "2025-12-18T06:45:06.033104+00:00Z"
+  },
+  "docs/guides/development/nx-monorepo-guide.md": {
+    "page_id": "15958225",
+    "space": "PC",
+    "title": "Nx Monorepo Guide",
+    "last_synced": "2025-12-18T06:45:07.884538+00:00Z"
+  },
+  "docs/guides/onboarding/developer-onboarding.md": {
+    "page_id": "15925436",
+    "space": "PC",
+    "title": "Developer Onboarding",
+    "last_synced": "2025-12-18T06:45:19.973483+00:00Z"
+  },
+  "docs/guides/security/SECRETS_AND_CREDENTIALS.md": {
+    "page_id": "15860063",
+    "space": "PC",
+    "title": "Secrets And Credentials",
+    "last_synced": "2025-12-18T06:45:27.668354+00:00Z"
+  },
+  "docs/marketing/MARKETING_SITE_SPECS.md": {
+    "page_id": "15860086",
+    "space": "PC",
+    "title": "Marketing Site Specs",
+    "last_synced": "2025-12-18T06:45:33.989610+00:00Z"
+  },
+  "docs/operations/environment-variables.md": {
+    "page_id": "15958269",
+    "space": "PC",
+    "title": "Environment Variables",
+    "last_synced": "2025-12-18T06:45:52.843041+00:00Z"
+  },
+  "docs/planning/ROADMAP_2025_Q4.md": {
+    "page_id": "15925501",
+    "space": "PC",
+    "title": "Roadmap 2025 Q4",
+    "last_synced": "2025-12-18T06:46:37.062479+00:00Z"
+  },
+  "docs/planning/implementation_plan_phase2.md": {
+    "page_id": "15860142",
+    "space": "PC",
+    "title": "Implementation Plan Phase2",
+    "last_synced": "2025-12-18T06:46:38.607687+00:00Z"
+  },
+  "docs/reference/components/hero-section.md": {
+    "page_id": "15860165",
+    "space": "PC",
+    "title": "Hero Section",
+    "last_synced": "2025-12-18T06:46:52.329587+00:00Z"
+  },
+  "docs/reference/troubleshooting/2025-11-17_post_mortem_data_persistence_failure.md": {
+    "page_id": "10945319",
+    "space": "PC",
+    "title": "2025 11 17 Post Mortem Data Persistence Failure",
+    "last_synced": "2025-12-18T06:46:59.063307+00:00Z"
+  },
+  "docs/reference/troubleshooting/COMMON_ISSUES.md": {
+    "page_id": "15761777",
+    "space": "PC",
+    "title": "Common Issues",
+    "last_synced": "2025-12-18T06:47:02.167455+00:00Z"
   }
 }
