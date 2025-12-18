@@ -288,7 +288,7 @@ project-chronos/
 
 ```bash
 # Install TypeScript compiler
-npm install -D typescript
+pnpm add -D typescript
 
 # Compile .ts → .js
 npx tsc generate-assets.ts
@@ -306,7 +306,7 @@ generate-assets.ts  →  [TypeScript Compiler]  →  generate-assets.js  →  [N
 
 ```bash
 # Install tsx (TypeScript executor)
-npm install -D tsx
+pnpm add -D tsx
 
 # Run .ts file directly (no separate compile step)
 npx tsx generate-assets.ts
@@ -431,7 +431,7 @@ $size: 128px;
 
 **Fix**:
 ```bash
-npm install sharp
+pnpm add sharp
 ```
 
 ---

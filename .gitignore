@@ -41,6 +41,11 @@ ENV/
 .env
 .env.local
 .env.*.local
+.env.vercel
+.env.production.vercel
+
+# Audit reports that may contain credentials
+PAYLOAD_CMS_AUDIT_REPORT.md
 
 # IDEs
 .vscode/

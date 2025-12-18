@@ -41,20 +41,20 @@ This guide provides step-by-step instructions for developing components in the A
 ```bash
 # Required versions
 node >= 18.0.0
-npm >= 9.0.0
+pnpm >= 9.0.0
 ```
 
 ### Initial Setup
 
 ```bash
 # 1. Install dependencies
-npm install
+pnpm install
 
 # 2. Set up environment variables
 cp .env.example .env.local
 
 # 3. Run development server
-npm run dev
+pnpm run dev
 
 # 4. Open browser
 open http://localhost:3000
@@ -675,7 +675,7 @@ export const Default: Story = {
 
 ```bash
 # Run axe-core accessibility tests
-npm run test:a11y
+pnpm run test:a11y
 
 # Manual testing checklist:
 # ✅ Tab through all interactive elements
