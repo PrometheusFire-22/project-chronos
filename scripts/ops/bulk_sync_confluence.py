@@ -32,6 +32,21 @@ BLUE = "\033[94m"
 RED = "\033[91m"
 RESET = "\033[0m"
 
+# Hierarchy mapping for top-level directories
+HIERARCHY_MAP = {
+    "10-DEVELOPMENT": "📂 10-DEVELOPMENT",
+    "10-DEVELOPMENT/01-ARCHITECTURE": "🏛️ 01-ARCHITECTURE",
+    "10-DEVELOPMENT/02-INFRASTRUCTURE": "🏗️ 02-INFRASTRUCTURE",
+    "10-DEVELOPMENT/03-CODEBASE": "💻 03-CODEBASE",
+    "10-DEVELOPMENT/04-DEVOPS": "⚙️ 04-DEVOPS",
+    "20-PRODUCT": "🚀 20-PRODUCT",
+    "20-PRODUCT/01-STRATEGY": "🎯 01-STRATEGY",
+    "20-PRODUCT/03-ROADMAP": "🗓️ 03-ROADMAP",
+    "30-OPERATIONS": "💼 30-OPERATIONS",
+    "30-OPERATIONS/03-PEOPLE": "👥 03-PEOPLE",
+    "_archive": "🗄️ _archive",
+}
+
 
 def check_environment():
     """Verify required environment variables are set"""
@@ -293,17 +308,24 @@ def sync_directory(directory, parent_title="📚 Documentation"):
     """Recursively sync a directory to Confluence"""
     stats = {"created": 0, "updated": 0, "skipped": 0, "errors": 0}
 
-    # Create parent for this directory if needed
-    dir_title = directory.name.replace("_", " ").replace("-", " ").title()
+    # Determine the Confluence parent title based on the directory structure
+    dir_rel_path = str(directory.relative_to(DOCS_DIR))
+
+    if dir_rel_path == ".":
+        dir_title = "📚 Documentation"
+    else:
+        # Check if we have a specific mapping with an emoji
+        dir_title = HIERARCHY_MAP.get(dir_rel_path)
+        if not dir_title:
+            dir_title = directory.name.replace("_", " ").replace("-", " ").title()
 
     # Skip certain directories
-    skip_dirs = {"_archive", ".git", "__pycache__", "node_modules"}
+    skip_dirs = {".git", "__pycache__", "node_modules"}
     if directory.name in skip_dirs:
         return stats
 
     # Get or create parent page for this directory
     if directory != DOCS_DIR:
-        # USE NEW LOGIC HERE
         current_parent = ensure_index_page(dir_title, parent_title)
         if not current_parent:
             print(f"{RED}  ⚠ Failed to ensure parent '{dir_title}'. skipping contents.{RESET}")
