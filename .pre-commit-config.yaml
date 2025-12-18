@@ -105,6 +105,13 @@ repos:
   # ============================================================================
   - repo: local
     hooks:
+      - id: pnpm-audit
+        name: PNPM Security Audit
+        entry: pnpm audit --audit-level=moderate
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
       - id: pytest-quick
         name: Run fast unit tests
         entry: bash -c 'source .venv/bin/activate 2>/dev/null && pytest tests/unit/ -x --tb=short --maxfail=3 -q || true'
