@@ -10,7 +10,7 @@
     "pnpm": ">=9.1.0"
   },
   "scripts": {
-    "dev": "pnpm exec nx run-many --target=dev",
+    "dev": "./scripts/dev.sh",
     "build": "pnpm exec nx run-many --target=build",
     "lint": "pnpm exec nx run-many --target=lint",
     "test": "pnpm exec nx run-many --target=test",
