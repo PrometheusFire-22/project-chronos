@@ -1,0 +1,17 @@
+name = "chronos-web"
+compatibility_date = "2024-11-01"
+# Required for Next.js on Pages
+compatibility_flags = [ "nodejs_compat" ]
+pages_build_output_dir = ".vercel/output/static"
+
+[vars]
+# Add public environment variables here
+NEXT_PUBLIC_SITE_URL = "https://automatonicai.com"
+
+[[hyperdrive]]
+binding = "DB"
+id = "cbdc3f3e22f3454580f0d1ab56c9a1ea"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "chronos-media"

@@ -1,15 +1,16 @@
-//@ts-check
 import { composePlugins, withNx } from '@nx/next';
 
-/**
- * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
- **/
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Use this to set Nx-specific options
-  // See: https://nx.dev/recipes/next/next-config-setup
   nx: {},
   transpilePackages: ['@chronos/ui'],
 };
+
+// Check if we're running in Cloudflare context
+if (process.env.NODE_ENV === 'development') {
+  const { setupDevPlatform } = await import('@cloudflare/next-on-pages/next-dev');
+  await setupDevPlatform();
+}
 
 const plugins = [
   // Add more Next.js plugins to this list if needed.
