@@ -96,7 +96,7 @@ Before starting any upgrade:
 
 ```bash
 # Check Payload's supported Next.js version
-npm view @payloadcms/next peerDependencies
+pnpm view @payloadcms/next peerDependencies
 
 # Expected output (when ready):
 # { next: '^16.0.0' }
@@ -317,7 +317,7 @@ vercel --prod=false
 
 ```bash
 # Install k6 or similar
-npm install -g k6
+pnpm add -g k6
 
 # Run load test
 k6 run load-test.js

@@ -247,7 +247,7 @@ In S3 bucket settings → Permissions → CORS:
 
 ```bash
 # Install Vercel CLI
-npm i -g vercel
+pnpm add -g vercel
 
 # Login
 vercel login

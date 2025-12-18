@@ -273,7 +273,7 @@ project-chronos/
 
 ```bash
 # Ensure Node.js dependencies are installed
-npm install
+pnpm install
 ```
 
 ### Generate All Favicons
@@ -305,11 +305,11 @@ npm run generate:assets
 
 **Error**: `Input file contains unsupported image format`
 - **Cause**: SVG rendering library not installed
-- **Fix**: `npm install @resvg/resvg-js`
+- **Fix**: `pnpm add @resvg/resvg-js`
 
 **Error**: `Cannot find module 'sharp'`
 - **Cause**: Missing dependencies
-- **Fix**: `npm install`
+- **Fix**: `pnpm install`
 
 **Error**: `Logo not found at ...`
 - **Cause**: SVG file missing or renamed

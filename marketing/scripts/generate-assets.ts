@@ -14,7 +14,7 @@
  *
  * WHY TYPESCRIPT INSTEAD OF MANUAL EXPORT:
  * ─────────────────────────────────────────────────────────────────────
- * - Repeatable: `npm run generate:assets` regenerates everything
+ * - Repeatable: `pnpm run generate:assets` regenerates everything
  * - Version controlled: Script tracks HOW assets are built
  * - Scalable: Easy to add new sizes/formats later
  * - Consistent: Same quality/settings every time
@@ -23,13 +23,13 @@
  * ─────────────────────────────────────────────────────────────────────
  * ```bash
  * # Install dependencies (one-time)
- * npm install sharp @types/node
+ * pnpm add sharp @types/node
  *
  * # Run script
  * npx tsx marketing/scripts/generate-assets.ts
  *
  * # Or add to package.json scripts:
- * npm run generate:assets
+ * pnpm run generate:assets
  * ```
  *
  * DEPENDENCIES:
@@ -86,7 +86,7 @@ import sharp from 'sharp';
 // Docs: https://github.com/yisibl/resvg-js
 import { Resvg } from '@resvg/resvg-js';
 
-// Node.js built-in modules (no npm install needed)
+// Node.js built-in modules (no pnpm install needed)
 import { promises as fs } from 'fs';  // File system (async version)
 import path from 'path';               // Path manipulation (cross-platform)
 import { fileURLToPath } from 'url';   // Convert import.meta.url to file path
@@ -447,11 +447,11 @@ main().catch((error) => {
 //   }
 //
 // THEN RUN:
-//   npm run generate:assets
+//   pnpm run generate:assets
 //
 // CUSTOMIZATION IDEAS (for later):
 // 1. Accept logo variant as command-line argument:
-//    npm run generate:assets -- --logo=symmetrical
+//    pnpm run generate:assets -- --logo=symmetrical
 //
 // 2. Generate multiple variants:
 //    For each logo in /logos/, generate full favicon set

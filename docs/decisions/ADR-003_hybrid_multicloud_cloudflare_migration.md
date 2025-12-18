@@ -322,7 +322,7 @@ Client → Cloudflare Worker → AWS Lambda (Python)
 4. **Dev Scripts:** Single command to start entire stack locally
 
 **Success Criteria:**
-- ✅ `npm run dev` starts everything (Next.js, local DB, mock Worker)
+- ✅ `pnpm run dev` starts everything (Next.js, local DB, mock Worker)
 - ✅ Zero cloud dependencies for development
 - ✅ CI tests pass
 
