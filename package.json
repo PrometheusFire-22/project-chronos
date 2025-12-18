@@ -1,6 +1,6 @@
 {
   "name": "project-chronos",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "packageManager": "pnpm@9.1.0",
   "description": "Multi-modal relationship intelligence platform for private markets",
   "type": "module",

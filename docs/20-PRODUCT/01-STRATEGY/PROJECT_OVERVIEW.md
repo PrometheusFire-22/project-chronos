@@ -11,13 +11,13 @@
 
 **New to the project?** Start here:
 1. Read this overview
-2. See [Documentation Index](DOCUMENTATION_INDEX.md) for navigation
-3. Follow [Developer Onboarding](guides/onboarding/developer-onboarding.md)
+2. See [Documentation Index](../../10-DEVELOPMENT/03-CODEBASE/DOCUMENTATION_INDEX.md) for navigation
+3. Follow [Developer Onboarding](../../30-OPERATIONS/03-PEOPLE/developer-onboarding.md)
 
 **Looking for something specific?**
-- **Frontend Development**: [Frontend Development Guide](guides/development/FRONTEND_DEVELOPMENT.md)
-- **Secrets/Credentials**: [Secrets and Credentials](guides/security/SECRETS_AND_CREDENTIALS.md)
-- **Monorepo Setup**: [Monorepo Complete Guide](guides/development/monorepo-complete-guide.md)
+- **Frontend Development**: [Frontend Development Guide](../../10-DEVELOPMENT/03-CODEBASE/FRONTEND_DEVELOPMENT.md)
+- **Secrets/Credentials**: [Secrets and Credentials](../../10-DEVELOPMENT/02-INFRASTRUCTURE/SECRETS_AND_CREDENTIALS.md)
+- **Monorepo Setup**: [Monorepo Complete Guide](../../10-DEVELOPMENT/03-CODEBASE/monorepo-complete-guide.md)
 - **Troubleshooting**: [Common Issues](reference/troubleshooting/COMMON_ISSUES.md)
 
 ---

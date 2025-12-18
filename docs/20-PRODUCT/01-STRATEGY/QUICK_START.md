@@ -17,4 +17,3 @@ This guide covers:
 - [Project Overview](PROJECT_OVERVIEW.md)
 - [Frontend Development](guides/development/FRONTEND_DEVELOPMENT.md)
 - [Monorepo Guide](guides/development/monorepo-complete-guide.md)
-

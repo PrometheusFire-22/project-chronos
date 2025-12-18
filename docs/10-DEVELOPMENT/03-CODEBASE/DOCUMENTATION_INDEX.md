@@ -9,9 +9,9 @@
 ## Start Here
 
 **New to the project?**
-1. [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) - High-level architecture and tech stack
-2. [Developer Onboarding](guides/onboarding/developer-onboarding.md) - Getting started guide
-3. [Quick Reference](guides/onboarding/quick_reference.md) - Common commands and workflows
+1. [PROJECT_OVERVIEW.md](../../20-PRODUCT/01-STRATEGY/PROJECT_OVERVIEW.md) - High-level architecture and tech stack
+2. [Developer Onboarding](../../30-OPERATIONS/03-PEOPLE/developer-onboarding.md) - Getting started guide
+3. [Quick Reference](../../30-OPERATIONS/03-PEOPLE/quick_reference.md) - Common commands and workflows
 
 ---
 

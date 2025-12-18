@@ -8,76 +8,43 @@
 
 **New to the project?**
 
-1. **[Project Overview](PROJECT_OVERVIEW.md)** - High-level architecture, tech stack, current phase
-2. **[Documentation Index](DOCUMENTATION_INDEX.md)** - Find what you need with "I want to..." guide
-3. **[Frontend Development Guide](guides/development/FRONTEND_DEVELOPMENT.md)** - Start building with Next.js/React
+1. **[Project Overview](20-PRODUCT/01-STRATEGY/PROJECT_OVERVIEW.md)** - High-level architecture, tech stack, current phase
+2. **[Documentation Index](10-DEVELOPMENT/03-CODEBASE/DOCUMENTATION_INDEX.md)** - Find what you need with "I want to..." guide
+3. **[Frontend Development Guide](10-DEVELOPMENT/03-CODEBASE/FRONTEND_DEVELOPMENT.md)** - Start building with Next.js/React
 
 **Developers:**
-- [Monorepo Complete Guide](guides/development/monorepo-complete-guide.md) - Understand the structure
-- [Component Development Workflow](workflows/COMPONENT_DEVELOPMENT.md) - Build UI components
-- [Common Issues](reference/troubleshooting/COMMON_ISSUES.md) - Troubleshooting
+- [Monorepo Complete Guide](10-DEVELOPMENT/03-CODEBASE/monorepo-complete-guide.md) - Understand the structure
+- [Git Workflow](10-DEVELOPMENT/03-CODEBASE/git_workflow.md) - Version control process
+- [Common Issues](10-DEVELOPMENT/04-DEVOPS/troubleshooting/COMMON_ISSUES.md) - Troubleshooting
 
 ---
 
 ## 📚 Documentation Structure
 
-### Core Documentation
-- **[PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md)** - Architecture, stack, deployment status
-- **[DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)** - Navigation hub
+### [10-DEVELOPMENT/](10-DEVELOPMENT/)
+Engineering core: Architecture, Infrastructure, Codebase, and DevOps.
+- **[01-ARCHITECTURE/](10-DEVELOPMENT/01-ARCHITECTURE/)**: ADRs, system diagrams, and concepts.
+- **[02-INFRASTRUCTURE/](10-DEVELOPMENT/02-INFRASTRUCTURE/)**: Cloudflare/AWS configs and secrets management.
+- **[03-CODEBASE/](10-DEVELOPMENT/03-CODEBASE/)**: Mono-repo rules, Nx, and CLI tools.
+- **[04-DEVOPS/](10-DEVELOPMENT/04-DEVOPS/)**: CI/CD, deployment runbooks, and troubleshooting.
 
-### [architecture/](architecture/)
-System architecture, data models, and concepts.
-- **[adrs/](architecture/adrs/)**: Architectural Decision Records (ADR-001 to ADR-017)
-- **[concepts/](architecture/concepts/)**: Core platform concepts & style guide
-- **[diagrams/](architecture/diagrams/)**: Architecture diagrams
+### [20-PRODUCT/](20-PRODUCT/)
+Strategy core: Vision, Users, Roadmap, and Marketing.
+- **[01-STRATEGY/](20-PRODUCT/01-STRATEGY/)**: Project overview, vision, and marketing assets.
+- **[03-ROADMAP/](20-PRODUCT/03-ROADMAP/)**: Sprint summaries and backlog.
 
-### [guides/](guides/)
-How-to guides for development, security, and operations.
-- **[development/](guides/development/)**: Frontend, monorepo, Nx guides
-- **[security/](guides/security/)**: Secrets management (🔐 sensitive)
-- **[onboarding/](guides/onboarding/)**: LLM and developer onboarding
-
-### [workflows/](workflows/)
-Step-by-step workflows for common tasks.
-- Component development, feature development, deployment
-
-### [reference/](reference/)
-Quick reference and troubleshooting.
-- **[troubleshooting/](reference/troubleshooting/)**: Common issues and solutions
-
-### [operations/](operations/)
-Operational runbooks for common tasks and procedures.
-- **[disaster_recovery/](operations/disaster_recovery/)**: DR plans
+### [30-OPERATIONS/](30-OPERATIONS/)
+Business core: Finance, Legal, and People.
+- **[03-PEOPLE/](30-OPERATIONS/03-PEOPLE/)**: Onboarding and communication.
 
 ---
 
 ## 🔄 Documentation Workflow
 
 **SSOT**: This Git repository (`/workspace/docs/`)  
-**Publication**: Confluence (auto-synced or manual)  
-**Artifacts**: Temporary AI-generated drafts (reviewed and moved here)
-
-See [ADR-014](architecture/adrs/adr_014_documentation_ssot.md) for full details.
+**Publication**: Confluence (auto-synced)  
 
 ---
 
-## 📝 Contributing
-
-1. Edit markdown files in this directory
-2. Commit to Git with conventional commit format
-3. Sync to Confluence (manual or automated)
-
----
-
-## 🔗 Quick Links
-
-- **[ADR Index](architecture/adrs/README.md)** - All architectural decisions
-- **[Frontend Development](guides/development/FRONTEND_DEVELOPMENT.md)** - Next.js/React guide
-- **[Monorepo Guide](guides/development/monorepo-complete-guide.md)** - Understand the structure
-- **[Secrets Management](guides/security/SECRETS_AND_CREDENTIALS.md)** 🔐 - Credential SSOT
-- **[Style Guide](architecture/concepts/style_guide.md)** - Writing and code style
-
----
-
-**Last Updated**: 2025-12-12  
+**Last Updated**: 2025-12-18  
 **Maintained By**: Geoff Bevans + Antigravity
