@@ -352,10 +352,10 @@ cd automatonic-marketing
 
 ### Step 2: Install Dependencies
 ```bash
-npm install framer-motion
-npm install next-themes
-npm install react-hook-form @hookform/resolvers zod
-npm install lucide-react  # Icon library
+pnpm add framer-motion
+pnpm add next-themes
+pnpm add react-hook-form @hookform/resolvers zod
+pnpm add lucide-react # Icon library
 npx shadcn-ui@latest init
 ```
 

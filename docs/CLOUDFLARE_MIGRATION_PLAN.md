@@ -55,8 +55,8 @@ Sprint 4: Feature Development (Ongoing)    ━━━━━━━━━━━━�
 4. Add one API route (`/api/hello`)
 
 **Acceptance Criteria:**
-- ✅ App runs locally with `npm run dev`
-- ✅ Build succeeds with `npm run build`
+- ✅ App runs locally with `pnpm run dev`
+- ✅ Build succeeds with `pnpm run build`
 
 ---
 
@@ -65,7 +65,7 @@ Sprint 4: Feature Development (Ongoing)    ━━━━━━━━━━━━�
 **Effort:** 3 hours
 
 **Steps:**
-1. Install OpenNext adapter: `npm install --save-dev @opennextjs/cloudflare`
+1. Install OpenNext adapter: `pnpm add --save-dev @opennextjs/cloudflare`
 2. Configure `next.config.js`:
    ```js
    import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev'
@@ -99,9 +99,9 @@ Sprint 4: Feature Development (Ongoing)    ━━━━━━━━━━━━�
 **Effort:** 2 hours
 
 **Steps:**
-1. Initialize Worker project: `npm create cloudflare@latest -- worker-test`
+1. Initialize Worker project: `pnpm create cloudflare@latest -- worker-test`
 2. Choose TypeScript template
-3. Add Hono framework: `npm install hono`
+3. Add Hono framework: `pnpm add hono`
 4. Create basic routes:
    ```typescript
    import { Hono } from 'hono'
@@ -148,7 +148,7 @@ Sprint 4: Feature Development (Ongoing)    ━━━━━━━━━━━━�
    ```
 4. Add Postgres client to Worker:
    ```bash
-   npm install postgres
+   pnpm add postgres
    ```
 5. Test query in Worker:
    ```typescript
@@ -306,14 +306,14 @@ Sprint 4: Feature Development (Ongoing)    ━━━━━━━━━━━━�
 
 5. Test:
    ```bash
-   npm run db:up
+   pnpm run db:up
    psql postgresql://chronos:local_dev_password@localhost:5432/chronos -c "SELECT PostGIS_Version();"
    ```
 
 **Acceptance Criteria:**
-- ✅ `npm run db:up` starts PostgreSQL with all extensions
-- ✅ `npm run db:down` stops cleanly
-- ✅ `npm run db:reset` wipes data and restarts
+- ✅ `pnpm run db:up` starts PostgreSQL with all extensions
+- ✅ `pnpm run db:down` stops cleanly
+- ✅ `pnpm run db:reset` wipes data and restarts
 - ✅ PostGIS, pgcrypto extensions installed
 - ✅ Local DB matches Lightsail PostgreSQL version and config
 
@@ -424,7 +424,7 @@ Sprint 4: Feature Development (Ongoing)    ━━━━━━━━━━━━�
 1. Lock all dependency versions:
    ```bash
    # Review package.json - replace all ^x.x.x with x.x.x
-   npm install --save-exact
+   pnpm install --save-exact
    ```
 
 2. Enable Dependabot:
@@ -446,8 +446,8 @@ Sprint 4: Feature Development (Ongoing)    ━━━━━━━━━━━━�
 
 3. Run security audit:
    ```bash
-   npm audit
-   npm audit fix
+   pnpm audit
+   ppnpm audit fix
    ```
 
 4. Add pre-commit hook for dependency validation:
@@ -456,8 +456,8 @@ Sprint 4: Feature Development (Ongoing)    ━━━━━━━━━━━━�
    - repo: local
      hooks:
        - id: audit
-         name: NPM Security Audit
-         entry: npm audit --audit-level=moderate
+         name: PNPM Security Audit
+         entry: pnpm audit --audit-level=moderate
          language: system
          pass_filenames: false
    ```
@@ -469,7 +469,7 @@ Sprint 4: Feature Development (Ongoing)    ━━━━━━━━━━━━�
 
 **Acceptance Criteria:**
 - ✅ No dependency uses `^` or `~` (all locked)
-- ✅ `npm audit` shows 0 high/critical vulnerabilities
+- ✅ `pnpm audit` shows 0 high/critical vulnerabilities
 - ✅ Dependabot PRs enabled and configured
 - ✅ Pre-commit hook blocks unsafe dependencies
 
@@ -500,7 +500,7 @@ Sprint 4: Feature Development (Ongoing)    ━━━━━━━━━━━━�
 
    # Run migrations (if any)
    echo "🔄 Running database migrations..."
-   npm run db:migrate
+   pnpm run db:migrate
 
    # Start Next.js dev server
    echo "🌐 Starting Next.js..."
@@ -536,13 +536,13 @@ Sprint 4: Feature Development (Ongoing)    ━━━━━━━━━━━━�
    ```
 
 **Acceptance Criteria:**
-- ✅ `npm run dev` starts entire stack (DB, Next.js, Worker)
+- ✅ `pnpm run dev` starts entire stack (DB, Next.js, Worker)
 - ✅ All services healthy within 30 seconds
 - ✅ Changes hot-reload in both web and worker
 - ✅ Ctrl+C cleanly shuts down all processes
 
 **Documentation:** Update `README.md` with:
-- Quickstart: `npm run dev`
+- Quickstart: `pnpm run dev`
 - Individual service commands
 - Troubleshooting common issues
 
@@ -551,7 +551,7 @@ Sprint 4: Feature Development (Ongoing)    ━━━━━━━━━━━━�
 ### Sprint 1 Exit Criteria
 
 **Success:**
-- ✅ `npm run dev` starts everything in < 30 seconds
+- ✅ `pnpm run dev` starts everything in < 30 seconds
 - ✅ Zero cloud dependencies for local development
 - ✅ All team members can run locally
 - ✅ CI pipeline runs same tests as local
@@ -593,7 +593,7 @@ Week 5: Decommission Vercel
 1. Install OpenNext adapter in main project:
    ```bash
    cd apps/web
-   npm install --save-dev @opennextjs/cloudflare
+   pnpm add --save-dev @opennextjs/cloudflare
    ```
 
 2. Update `next.config.js`:
@@ -622,7 +622,7 @@ Week 5: Decommission Vercel
 
 4. Create Cloudflare Pages project:
    - Connect GitHub repo
-   - Build command: `npm run build:cloudflare`
+   - Build command: `pnpm run build:cloudflare`
    - Build output: `.vercel/output/static`
    - Environment variables:
      - `NODE_VERSION=20`
@@ -987,10 +987,10 @@ Week 5: Decommission Vercel
              node-version: '20'
              cache: 'npm'
 
-         - run: npm ci
-         - run: npm run lint
-         - run: npm run test
-         - run: npm run build
+         - run: pnpm install --frozen-lockfile
+         - run: pnpm run lint
+         - run: pnpm run test
+         - run: pnpm run build
 
      deploy:
        needs: test
@@ -1002,8 +1002,8 @@ Week 5: Decommission Vercel
            with:
              node-version: '20'
 
-         - run: npm ci
-         - run: npm run build:cloudflare
+         - run: pnpm install --frozen-lockfile
+         - run: pnpm run build:cloudflare
 
          - name: Deploy to Cloudflare Pages
            uses: cloudflare/pages-action@v1
@@ -1032,7 +1032,7 @@ Week 5: Decommission Vercel
          - uses: actions/checkout@v4
          - uses: actions/setup-node@v4
 
-         - run: npm ci
+         - run: pnpm install --frozen-lockfile
          - run: npx nx run worker:build
 
          - name: Deploy to Cloudflare Workers
@@ -1092,7 +1092,7 @@ Week 5: Decommission Vercel
 2. Install Sentry SDK in Next.js:
    ```bash
    cd apps/web
-   npm install @sentry/nextjs
+   pnpm add @sentry/nextjs
    npx @sentry/wizard@latest -i nextjs
    ```
 
@@ -1112,7 +1112,7 @@ Week 5: Decommission Vercel
 4. Add Sentry to Cloudflare Worker:
    ```bash
    cd apps/worker
-   npm install toucan-js
+   pnpm add toucan-js
    ```
 
    ```typescript

@@ -141,7 +141,7 @@ Payload CMS allows us to **rapidly iterate on blog content and marketing pages**
 
 **Implementation**:
 ```bash
-npm install payload @payloadcms/db-postgres
+pnpm add payload @payloadcms/db-postgres
 ```
 
 ```typescript
@@ -309,7 +309,7 @@ await resend.emails.send({
 
 **Implementation**:
 ```bash
-npm install resend @react-email/components
+pnpm add resend @react-email/components
 ```
 
 ```typescript
@@ -479,4 +479,3 @@ Total MVP cost: **$0/month** (Resend free tier + self-hosted Payload CMS).
 
 **Approved by:** Geoff Bevans
 **Implementation Start:** Sprint 10
-

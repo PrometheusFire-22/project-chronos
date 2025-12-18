@@ -65,7 +65,7 @@ Created **16 Jira tickets** for Cloudflare migration:
 - Type: Task
 - Priority: High
 - Story Points: 3
-- **Action:** Single npm run dev command for entire stack
+- **Action:** Single pnpm run dev command for entire stack
 - **Deliverables:** scripts/dev.sh, updated docs
 
 **CHRONOS-330: Document Local Development Setup**
@@ -204,7 +204,7 @@ Created **16 Jira tickets** for Cloudflare migration:
 ### Sprint 1: $0
 - All local development
 - Zero cloud costs
-- Docker, Nx, npm scripts
+- Docker, Nx, pnpm scripts
 
 ### Sprint 0: $0
 - **Cloudflare free tier covers everything:**
