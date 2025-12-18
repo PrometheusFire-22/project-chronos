@@ -8,8 +8,11 @@ const nextConfig = {
 
 // Check if we're running in Cloudflare context
 if (process.env.NODE_ENV === 'development') {
-  const { setupDevPlatform } = await import('@cloudflare/next-on-pages/next-dev');
-  await setupDevPlatform();
+  // Use IIFE to avoid top-level await which breaks Nx graph processing
+  (async () => {
+    const { setupDevPlatform } = await import('@cloudflare/next-on-pages/next-dev');
+    await setupDevPlatform();
+  })();
 }
 
 const plugins = [
