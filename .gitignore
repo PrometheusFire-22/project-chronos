@@ -130,6 +130,7 @@ pnpm-lock.yaml
 # dist/ (already ignored above)
 # build/ (already ignored above)
 .cache/
+.cache_ggshield
 .parcel-cache/
 .next/
 .nuxt/
