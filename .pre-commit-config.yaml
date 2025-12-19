@@ -88,6 +88,18 @@ repos:
         name: Security vulnerability scanner
         args: [-ll, -i, -x, tests/]
         files: ^src/
+        stages: [pre-commit]
+
+  # ============================================================================
+  # Secret Scanning (GitGuardian)
+  # ============================================================================
+  - repo: https://github.com/GitGuardian/ggshield
+    rev: v1.34.0
+    hooks:
+      - id: ggshield
+        name: Check for secrets (GitGuardian)
+        language_version: python3
+        stages: [commit]
 
   # ============================================================================
   # SQL Linting (Optional - requires sqlfluff installation)
