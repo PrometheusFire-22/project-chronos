@@ -90,7 +90,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 # Connect to database
-engine = create_engine('postgresql://prometheus:<REDACTED_PASSWORD>@localhost:5432/chronos_db')
+engine = create_engine('postgresql://prometheus:<DATABASE_PASSWORD>@localhost:5432/chronos_db')
 
 # Load GDP data
 df = pd.read_sql("""

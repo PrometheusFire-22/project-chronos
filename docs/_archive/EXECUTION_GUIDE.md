@@ -438,7 +438,7 @@ Replace with:
 
 ```ini
 # Use actual connection string (matches your .env)
-sqlalchemy.url = postgresql://prometheus:<REDACTED_PASSWORD>@chronos-db:5432/chronos_db
+sqlalchemy.url = postgresql://prometheus:<DATABASE_PASSWORD>@chronos-db:5432/chronos_db
 ```
 
 **Save the file.**
