@@ -13,8 +13,11 @@ async function createAdmin() {
     await client.connect();
     console.log('✅ Connected to database');
 
+    // Use admin credentials from environment or defaults
+    const email = process.env.ADMIN_EMAIL || 'geoff@automatonicai.com';
+    const password = process.env.ADMIN_PASSWORD || 'ChangeMe123!';
+    
     // Hash the password
-    const password = 'ChangeMe123!';
     const hash = await bcrypt.hash(password, 10);
 
     // Insert user
@@ -23,12 +26,12 @@ async function createAdmin() {
       VALUES ($1, NOW(), NOW(), $2, '')
       ON CONFLICT (email) DO NOTHING
       RETURNING id, email
-    `, ['geoff@automatonicai.com', hash]);
+    `, [email, hash]);
 
     if (result.rowCount > 0) {
       console.log('✅ Admin user created successfully!');
-      console.log('   Email: geoff@automatonicai.com');
-      console.log('   Password: ChangeMe123!');
+      console.log(`   Email: ${email}`);
+      console.log(`   Password: ${password}`);
       console.log('');
       console.log('⚠️  IMPORTANT: Change password after first login!');
       console.log('🔗  Login at: https://www.automatonicai.com/admin');

@@ -6,22 +6,26 @@
 # Password: ChangeMe123!
 # Pre-hashed: $2a$10$xvWEJYF8vz8uAK5r.j3SeeG6K0yN1QZ6EhV3JjXqFNp0LrZ7Yw8Uy
 
-POSTGRES_URL="postgresql://chronos:DZ4eNOynmfYVOtG8c8TBlXIGVGlqkvWKQR5ixYYjAMs=@16.52.210.100:5432/chronos"
+# Read from environment or source .env
+if [ -z "$POSTGRES_URL" ]; then
+  echo "❌ Error: POSTGRES_URL environment variable is not set"
+  exit 1
+fi
 
 psql "$POSTGRES_URL" <<EOF
 INSERT INTO users (email, "updatedAt", "createdAt", hash, salt)
 VALUES (
-  'geoff@automatonicai.com',
+  '${ADMIN_EMAIL:-admin@example.com}',
   NOW(),
   NOW(),
-  '\$2a\$10\$xvWEJYF8vz8uAK5r.j3SeeG6K0yN1QZ6EhV3JjXqFNp0LrZ7Yw8Uy',
+  '${ADMIN_HASH:-$2a$10$xvWEJYF8vz8uAK5r.j3SeeG6K0yN1QZ6EhV3JjXqFNp0LrZ7Yw8Uy}',
   ''
 )
 ON CONFLICT (email) DO NOTHING;
 EOF
 
 echo "✅ Admin user created (if it didn't exist)"
-echo "   Email: geoff@automatonicai.com"
-echo "   Password: ChangeMe123!"
+echo "   Email: ${ADMIN_EMAIL:-admin@example.com}"
+echo "   Password: [HIDDEN] (See .env ADMIN_PASSWORD)"
 echo ""
 echo "⚠️  CHANGE PASSWORD AFTER FIRST LOGIN!"

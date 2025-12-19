@@ -3,16 +3,19 @@
 // This script creates the first admin user using Payload's server-side API
 // It bypasses the broken client-side CreateFirstUser component
 
-const PRODUCTION_DB = 'postgresql://chronos:DZ4eNOynmfYVOtG8c8TBlXIGVGlqkvWKQR5ixYYjAMs=@16.52.210.100:5432/chronos';
-const PAYLOAD_SECRET = '9c16b26c34e6fc4ff3bd1e7397cf13d569f4468276ee532115dac41919f82fb8';
-const SERVER_URL = 'https://automatonicai.com';
+const PRODUCTION_DB = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+const PAYLOAD_SECRET = process.env.PAYLOAD_SECRET;
+const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'https://automatonicai.com';
 
-// Set environment variables for production
-process.env.POSTGRES_URL = PRODUCTION_DB;
-process.env.PAYLOAD_SECRET = PAYLOAD_SECRET;
-process.env.NEXT_PUBLIC_SERVER_URL = SERVER_URL;
-process.env.S3_BUCKET = 'project-chronos-media';
-process.env.S3_REGION = 'ca-central-1';
+if (!PRODUCTION_DB || !PAYLOAD_SECRET) {
+  console.error('❌ Missing required environment variables: DATABASE_URL and PAYLOAD_SECRET');
+  process.exit(1);
+}
+
+// Ensure Payload can find the config
+if (!process.env.PAYLOAD_CONFIG_PATH) {
+  process.env.PAYLOAD_CONFIG_PATH = '../apps/web/payload.config.ts';
+}
 
 console.log('🚀 Initializing Payload CMS...\n');
 
@@ -33,8 +36,8 @@ import('../apps/web/node_modules/payload/dist/index.js')
     return payload.create({
       collection: 'users',
       data: {
-        email: 'geoff@automatonicai.com',
-        password: 'ChangeMe123!',
+        email: process.env.ADMIN_EMAIL || 'admin@example.com',
+        password: process.env.ADMIN_PASSWORD || 'temporary-password',
       },
     });
   })
@@ -44,8 +47,8 @@ import('../apps/web/node_modules/payload/dist/index.js')
     console.log('   ID:', user.id);
     console.log('');
     console.log('🔗 Login at: https://automatonicai.com/admin');
-    console.log('   Email: geoff@automatonicai.com');
-    console.log('   Password: ChangeMe123!');
+    console.log(`   Email: ${process.env.ADMIN_EMAIL || 'admin@example.com'}`);
+    console.log('   Password: [HIDDEN] (See .env ADMIN_PASSWORD)');
 
     process.exit(0);
   })

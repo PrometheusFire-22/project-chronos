@@ -3,7 +3,7 @@ import pkg from 'pg';
 const { Client } = pkg;
 
 const client = new Client({
-  connectionString: 'postgresql://chronos:DZ4eNOynmfYVOtG8c8TBlXIGVGlqkvWKQR5ixYYjAMs=@16.52.210.100:5432/chronos',
+  connectionString: process.env.DATABASE_URL || process.env.POSTGRES_URL,
 });
 
 async function checkSessions() {

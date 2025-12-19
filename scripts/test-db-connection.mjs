@@ -8,7 +8,12 @@
 import pg from 'pg';
 const { Client } = pg;
 
-const connectionString = process.env.POSTGRES_URL || 'postgresql://chronos:DZ4eNOynmfYVOtG8c8TBlXIGVGlqkvWKQR5ixYYjAMs=@16.52.210.100:5432/chronos';
+const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+
+if (!connectionString) {
+  console.error('❌ Error: DATABASE_URL or POSTGRES_URL environment variable is not set');
+  process.exit(1);
+}
 
 async function testConnection() {
   const client = new Client({ connectionString });
