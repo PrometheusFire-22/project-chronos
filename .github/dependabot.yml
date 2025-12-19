@@ -1,14 +1,55 @@
 version: 2
 updates:
-  - package-ecosystem: "pnpm"
+  # Maintain Frontend Dependencies (pnpm)
+  # Dependabot uses 'npm' ecosystem for pnpm-lock.yaml
+  - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 10
     groups:
-      pnpm-dependencies:
+       # Group next.js and react updates together
+      next-framework:
+        patterns:
+          - "next"
+          - "react"
+          - "react-dom"
+      # Group eslint related packages
+      linting:
+        patterns:
+          - "eslint*"
+          - "@typescript-eslint*"
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+
+  # Maintain Backend Dependencies (Poetry)
+  # Dependabot uses 'pip' ecosystem for pyproject.toml
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "09:00"
+      timezone: "America/New_York"
+    open-pull-requests-limit: 10
+    # Enable insecure-external-code-execution for Poetry if needed, 
+    # but strictly generally 'pip' works for standard dependencies.
+    groups:
+      # Group all python minor/patch updates
+      python-minor:
         patterns:
           - "*"
-    commit-message:
-      prefix: "deps"
-      prefix-development: "deps-dev"
-      include: "scope"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # Maintain CI/CD Workflows
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 5
