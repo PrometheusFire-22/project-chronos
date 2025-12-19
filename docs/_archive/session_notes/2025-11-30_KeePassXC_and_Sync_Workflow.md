@@ -287,7 +287,7 @@ rclone ls gdrive:KeePass_Backup | grep chronos_secrets.kdbx
 
 ```bash
 cd /home/prometheus/coding/finance/project-chronos
-source .venv/bin/activate
+source ..venv/bin/activate
 ```
 
 ### Step 2: Install Missing Dependencies
@@ -472,7 +472,7 @@ which rclone
 
 **Solution:**
 ```bash
-source .venv/bin/activate
+source ..venv/bin/activate
 pip install markdown2
 pip install atlassian-python-api
 ```

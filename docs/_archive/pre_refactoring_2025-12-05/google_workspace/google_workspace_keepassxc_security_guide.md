@@ -95,7 +95,7 @@ cp ~/.config/chronos/google-service-account-$(date +%Y%m%d).json \
 
 ```bash
 cd /home/prometheus/coding/finance/project-chronos
-source .venv/bin/activate
+source ..venv/bin/activate
 python -c "
 from chronos.integrations.google import GoogleWorkspaceAuth
 auth = GoogleWorkspaceAuth()

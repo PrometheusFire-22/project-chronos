@@ -32,10 +32,10 @@ htmlcov/
 dmypy.json
 
 # Virtual Environment
-venv/
+.venv/
 env/
 ENV/
-.venv/
+..venv/
 
 # Environment Variables
 .env

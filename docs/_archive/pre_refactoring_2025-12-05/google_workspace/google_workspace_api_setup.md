@@ -122,7 +122,7 @@ GOOGLE_PROJECT_ID=project-chronos-workspace
 ```bash
 # Test authentication
 cd /home/prometheus/coding/finance/project-chronos
-source .venv/bin/activate
+source ..venv/bin/activate
 python -c "
 from chronos.integrations.google import GoogleWorkspaceAuth
 auth = GoogleWorkspaceAuth()

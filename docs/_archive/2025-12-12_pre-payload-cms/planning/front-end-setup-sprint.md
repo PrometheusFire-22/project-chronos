@@ -597,7 +597,7 @@ pnpm test      # Node.js (future)
 ✅ **Python backend**: `src/chronos/` - ZERO changes
 ✅ **Database**: All schemas, migrations, data - UNTOUCHED
 ✅ **Docker services**: timescaledb, metabase, pgadmin - SAME
-✅ **Python environment**: `.venv/`, `pyproject.toml` - PRESERVED
+✅ **Python environment**: `..venv/`, `pyproject.toml` - PRESERVED
 
 ### Rollback Plan
 

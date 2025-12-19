@@ -209,7 +209,7 @@ This runbook covers three scenarios:
    ```bash
    # Create virtual environment
    python3 -m venv .venv
-   source .venv/bin/activate
+   source ..venv/bin/activate
    
    # Install dependencies
    pip install -r requirements.txt
@@ -307,7 +307,7 @@ This runbook covers three scenarios:
    python -m venv .venv
    
    # Activate (Git Bash)
-   source .venv/Scripts/activate
+   source ..venv/Scripts/activate
    
    # OR Activate (PowerShell)
    .venv\Scripts\Activate.ps1

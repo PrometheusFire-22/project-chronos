@@ -88,6 +88,7 @@ dev = [
     "ruff>=0.1.9",
     "mypy>=1.7.1",
     "pre-commit>=3.6.0",
+    "ggshield>=1.25.0",
 
     # Type Stubs
     "types-requests>=2.31.0",
@@ -247,8 +248,8 @@ omit = [
     "*/__init__.py",
     "*/migrations/*",
     "*/alembic/versions/*",
+    "*/..venv/*",
     "*/.venv/*",
-    "*/venv/*",
     "*/site-packages/*",
     "*/__pycache__/*",
 ]

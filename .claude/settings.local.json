@@ -1,7 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(source venv/bin/activate)",
+      "Bash(source .venv/bin/activate)",
       "Bash(pip install:*)",
       "Bash(pip show:*)",
       "Bash(python:*)",
@@ -16,7 +16,7 @@
       "Bash(tree -L 3 src/)",
       "Bash(tree -L 2 scripts/)",
       "Bash(python3 src/scripts/jira_cli.py list --limit 5)",
-      "Bash(source .venv/bin/activate)",
+      "Bash(source ..venv/bin/activate)",
       "Bash(git checkout:*)",
       "Bash(git mv:*)",
       "Bash(git branch:*)",

@@ -9,7 +9,7 @@ Operational automation scripts for Project Chronos.
 
 **Usage:**
 ```bash
-source .venv/bin/activate
+source ..venv/bin/activate
 
 # Sync content only
 python3 scripts/ops/sync_docs.py
@@ -47,7 +47,7 @@ python3 scripts/ops/sync_docs.py --dry-run-organize
 
 **Usage:**
 ```bash
-source .venv/bin/activate
+source ..venv/bin/activate
 
 # Preview changes (recommended first)
 python3 scripts/ops/organize_confluence_hierarchy.py --dry-run
@@ -83,7 +83,7 @@ python3 scripts/ops/organize_confluence_hierarchy.py
 **Recommended (One Command!):**
 ```bash
 # Activate virtual environment
-source .venv/bin/activate
+source ..venv/bin/activate
 
 # Sync content + organize hierarchy in one command
 python3 scripts/ops/sync_docs.py --organize
@@ -98,7 +98,7 @@ python3 scripts/ops/sync_docs.py --organize
 **Advanced (Separate Steps):**
 ```bash
 # 1. Activate virtual environment
-source .venv/bin/activate
+source ..venv/bin/activate
 
 # 2. Sync documentation content only
 python3 scripts/ops/sync_docs.py
@@ -132,7 +132,7 @@ python3 scripts/ops/organize_confluence_hierarchy.py
 **Check configuration:**
 ```bash
 # Verify environment variables are set
-source .venv/bin/activate
+source ..venv/bin/activate
 python3 -c "import os; from dotenv import load_dotenv; load_dotenv(); print(os.getenv('CONFLUENCE_URL'))"
 ```
 
@@ -154,7 +154,7 @@ cat .env | grep CONFLUENCE
 
 **Fix:**
 ```bash
-source .venv/bin/activate
+source ..venv/bin/activate
 pip install -r requirements.txt
 ```
 

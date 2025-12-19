@@ -245,7 +245,7 @@ sudo apt install python3 python3-venv python3-pip
 python3 -m venv .venv
 
 # Activate
-source .venv/bin/activate
+source ..venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
@@ -275,7 +275,7 @@ JIRA_API_TOKEN=[from KeePassXC]
 
 ```bash
 # Test Jira CLI
-source .venv/bin/activate
+source ..venv/bin/activate
 python3 src/chronos/cli/jira_cli.py list --limit 5
 
 # Test SSH to database

@@ -44,7 +44,7 @@ We have a Python script that handles the bulk synchronization of the `docs/` dir
 
 ```bash
 # Activate virtual environment
-source .venv/bin/activate
+source ..venv/bin/activate
 
 # Run the bulk sync script
 python3 scripts/ops/bulk_sync_confluence.py
@@ -91,7 +91,7 @@ confluence read "Page Title" --space PC
 
 3.  **Run Sync Script:**
     ```bash
-    source .venv/bin/activate
+    source ..venv/bin/activate
     python3 scripts/ops/sync_docs.py
     ```
 

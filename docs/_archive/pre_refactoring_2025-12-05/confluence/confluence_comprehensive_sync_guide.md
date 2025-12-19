@@ -213,7 +213,7 @@ These pages exist in Confluence and contain **actual secrets**. They are permane
 
 3. **Sync to Confluence** (read-only mirror):
    ```bash
-   source .venv/bin/activate
+   source ..venv/bin/activate
    python3 scripts/ops/sync_docs.py
    ```
 
@@ -256,7 +256,7 @@ These pages exist in Confluence and contain **actual secrets**. They are permane
 
 3. **Run sync to create Confluence page:**
    ```bash
-   source .venv/bin/activate
+   source ..venv/bin/activate
    python3 scripts/ops/sync_docs.py
    ```
 
@@ -693,7 +693,7 @@ Project Chronos Documentation (Root)
 
 ```bash
 # Sync all mapped docs to Confluence
-source .venv/bin/activate && python3 scripts/ops/sync_docs.py
+source ..venv/bin/activate && python3 scripts/ops/sync_docs.py
 
 # List all mapped files
 jq -r 'keys[]' docs/.confluence-mapping.json

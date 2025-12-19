@@ -173,7 +173,7 @@ CHRONOS-217 (Monitoring) + CHRONOS-218 (DR testing)
 ### Jira Operations
 ```bash
 # Activate venv
-source .venv/bin/activate
+source ..venv/bin/activate
 
 # List recent tickets
 python3 src/chronos/cli/jira_cli.py list --limit 10
@@ -345,7 +345,7 @@ After each session, create a note in `docs/session_notes/`:
 
 3. **Review Jira backlog:**
    ```bash
-   source .venv/bin/activate
+   source ..venv/bin/activate
    python3 src/chronos/cli/jira_cli.py list --limit 10
    ```
 

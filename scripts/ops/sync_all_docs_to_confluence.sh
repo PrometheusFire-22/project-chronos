@@ -18,7 +18,7 @@ fi
 export CONFLUENCE_SPACE="PC"
 
 cd /home/prometheus/coding/finance/project-chronos
-source .venv/bin/activate
+source ..venv/bin/activate
 
 echo "╔════════════════════════════════════════════════════════════╗"
 echo "║  Syncing All Documentation to Confluence                  ║"

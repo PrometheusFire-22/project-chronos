@@ -273,7 +273,7 @@ https://www.googleapis.com/auth/admin.directory.user,https://www.googleapis.com/
 === VERIFICATION ===
 Test command:
 cd /home/prometheus/coding/finance/project-chronos
-source .venv/bin/activate
+source ..venv/bin/activate
 python src/chronos/cli/google_cli.py admin list-users --max-results 5
 ```
 

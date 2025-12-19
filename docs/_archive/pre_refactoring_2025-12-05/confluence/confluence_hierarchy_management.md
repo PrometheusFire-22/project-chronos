@@ -81,7 +81,7 @@ Emojis are automatically added to page titles to improve visual navigation:
 **Command:**
 ```bash
 # Activate virtual environment
-source .venv/bin/activate
+source ..venv/bin/activate
 
 # Preview changes (dry-run)
 python3 scripts/ops/organize_confluence_hierarchy.py --dry-run

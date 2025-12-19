@@ -15,10 +15,10 @@ mkdir -p "${LOG_DIR}"
 cd "${PROJECT_ROOT}"
 
 # Activate virtual environment (try both .venv and venv)
-if [ -f ".venv/bin/activate" ]; then
+if [ -f "..venv/bin/activate" ]; then
+    source ..venv/bin/activate
+elif [ -f ".venv/bin/activate" ]; then
     source .venv/bin/activate
-elif [ -f "venv/bin/activate" ]; then
-    source venv/bin/activate
 else
     echo "ERROR: No virtual environment found"
     exit 1
