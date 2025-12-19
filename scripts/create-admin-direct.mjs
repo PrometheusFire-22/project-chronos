@@ -16,7 +16,7 @@ async function createAdmin() {
     // Use admin credentials from environment or defaults
     const email = process.env.ADMIN_EMAIL || 'geoff@automatonicai.com';
     const password = process.env.ADMIN_PASSWORD || 'ChangeMe123!';
-    
+
     // Hash the password
     const hash = await bcrypt.hash(password, 10);
 
