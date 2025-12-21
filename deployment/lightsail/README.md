@@ -168,9 +168,9 @@ docker logs chronos-db -f
 
 - **CHRONOS-349:** Directus CMS Integration (Epic)
 - **CHRONOS-350:** Install Directus on Lightsail VM ✅
-- **CHRONOS-351:** Configure Nginx Reverse Proxy 🔄 (Nginx configured, pending DNS + SSL)
+- **CHRONOS-351:** Configure Nginx Reverse Proxy ✅
 - **CHRONOS-352:** Configure PostgreSQL Connection ✅ (auto-configured)
-- **CHRONOS-353:** Set Up User Roles and Permissions (pending)
+- **CHRONOS-353:** Set Up User Roles and Permissions (next)
 
 ## Deployment History
 
@@ -186,4 +186,8 @@ docker logs chronos-db -f
   - Proxy configured: admin.automatonicai.com → localhost:8055
   - WebSocket support enabled for real-time features
   - 100MB max upload size configured
-  - Pending: DNS A record creation and SSL certificate
+  - DNS A record created: admin.automatonicai.com → 16.52.210.100
+  - SSL certificate obtained from Let's Encrypt (expires 2026-03-21)
+  - HTTPS enabled with automatic HTTP → HTTPS redirect
+  - Auto-renewal configured via certbot.timer (runs twice daily)
+  - **Status:** ✅ Directus admin UI accessible at https://admin.automatonicai.com
