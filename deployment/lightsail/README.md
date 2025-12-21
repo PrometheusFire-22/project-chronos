@@ -52,12 +52,107 @@ Required environment variables are documented in `.env.example`.
 
 **Security Note:** Never commit the actual `.env` file to version control.
 
+### Nginx Reverse Proxy Setup (CHRONOS-351)
+
+The Directus admin UI is exposed publicly via Nginx reverse proxy with SSL/TLS.
+
+#### Prerequisites
+
+- Nginx installed: `sudo apt install nginx`
+- Certbot installed: `sudo apt install certbot python3-certbot-nginx`
+- DNS A record configured (see DNS Setup below)
+
+#### Nginx Configuration
+
+1. Copy configuration to Nginx sites-available:
+   ```bash
+   sudo cp ~/chronos-db/nginx/directus.conf /etc/nginx/sites-available/directus
+   ```
+
+2. Enable the site:
+   ```bash
+   sudo ln -s /etc/nginx/sites-available/directus /etc/nginx/sites-enabled/directus
+   ```
+
+3. Test configuration:
+   ```bash
+   sudo nginx -t
+   ```
+
+4. Reload Nginx:
+   ```bash
+   sudo systemctl reload nginx
+   ```
+
+#### DNS Setup
+
+Configure DNS A record in Cloudflare Dashboard:
+
+1. Navigate to: https://dash.cloudflare.com
+2. Select domain: `automatonicai.com`
+3. Go to: DNS → Records
+4. Add A record:
+   - **Type:** A
+   - **Name:** admin
+   - **IPv4 address:** 16.52.210.100
+   - **Proxy status:** DNS only (gray cloud, not proxied)
+   - **TTL:** Auto
+5. Save record
+
+**Verify DNS propagation:**
+```bash
+dig admin.automatonicai.com +short
+# Should return: 16.52.210.100
+```
+
+#### SSL Certificate Setup
+
+Once DNS is configured and propagated, obtain SSL certificate:
+
+```bash
+sudo certbot --nginx -d admin.automatonicai.com
+```
+
+Certbot will:
+- Automatically verify domain ownership via ACME challenge
+- Obtain certificate from Let's Encrypt
+- Update Nginx configuration to enable HTTPS
+- Configure HTTP → HTTPS redirect
+
+**Test SSL configuration:**
+```bash
+curl -I https://admin.automatonicai.com
+# Should return: HTTP/2 200 (Directus health check)
+```
+
+#### SSL Certificate Renewal
+
+Certbot automatically sets up a systemd timer for renewal. Verify:
+
+```bash
+sudo systemctl status certbot.timer
+```
+
+Manual renewal (if needed):
+```bash
+sudo certbot renew --dry-run  # Test renewal
+sudo certbot renew            # Actual renewal
+```
+
 ### Accessing Directus
 
 - **Local (VM):** http://localhost:8055
-- **Public:** https://admin.automatonicai.com (requires Nginx configuration - CHRONOS-351)
+- **Public:** https://admin.automatonicai.com (requires DNS + SSL setup above)
+- **Admin Email:** geoff@automatonicai.com
+- **Admin Password:** Stored in `.env` file (DIRECTUS_ADMIN_PASSWORD)
 
 ### Logs
+
+View Nginx logs:
+```bash
+sudo tail -f /var/log/nginx/directus_access.log
+sudo tail -f /var/log/nginx/directus_error.log
+```
 
 View Directus logs:
 ```bash
@@ -73,7 +168,7 @@ docker logs chronos-db -f
 
 - **CHRONOS-349:** Directus CMS Integration (Epic)
 - **CHRONOS-350:** Install Directus on Lightsail VM ✅
-- **CHRONOS-351:** Configure Nginx Reverse Proxy (next)
+- **CHRONOS-351:** Configure Nginx Reverse Proxy 🔄 (Nginx configured, pending DNS + SSL)
 - **CHRONOS-352:** Configure PostgreSQL Connection ✅ (auto-configured)
 - **CHRONOS-353:** Set Up User Roles and Permissions (pending)
 
@@ -84,3 +179,11 @@ docker logs chronos-db -f
   - Connected to existing PostgreSQL database
   - Admin user created: geoff@automatonicai.com
   - Health check passing: http://localhost:8055/server/health
+
+- **2025-12-21:** Nginx reverse proxy configuration (CHRONOS-351)
+  - Nginx configuration created at `/etc/nginx/sites-available/directus`
+  - Site enabled and Nginx reloaded successfully
+  - Proxy configured: admin.automatonicai.com → localhost:8055
+  - WebSocket support enabled for real-time features
+  - 100MB max upload size configured
+  - Pending: DNS A record creation and SSL certificate
