@@ -1,0 +1,31 @@
+{
+  "name": "@chronos/database",
+  "version": "0.1.0",
+  "description": "Drizzle ORM database layer for Project Chronos",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.38.3",
+    "postgres": "^3.4.4"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.30.1",
+    "@types/node": "^25.0.0",
+    "typescript": "^5.9.3"
+  },
+  "keywords": [
+    "drizzle",
+    "orm",
+    "postgresql",
+    "database"
+  ],
+  "author": "Geoff Bevans <geoff@automatonicai.com>",
+  "license": "UNLICENSED"
+}
