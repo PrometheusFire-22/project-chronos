@@ -33,6 +33,7 @@
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
     "autoprefixer": "10.4.13",
+    "node-fetch": "^3.3.2",
     "nx": "22.2.0",
     "pg": "8.16.3",
     "postcss": "8.4.38",

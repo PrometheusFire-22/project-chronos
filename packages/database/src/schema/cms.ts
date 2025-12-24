@@ -252,6 +252,49 @@ export const legalPages = pgTable(
 );
 
 /**
+ * Waitlist Submissions
+ *
+ * Early access waitlist signups from marketing site.
+ * Captured via inline forms on homepage, features, about pages.
+ */
+export const waitlistSubmissions = pgTable(
+  'cms_waitlist_submissions',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+
+    // Contact Info
+    email: varchar('email', { length: 255 }).notNull().unique(),
+    firstName: varchar('first_name', { length: 100 }).notNull(),
+    lastName: varchar('last_name', { length: 100 }).notNull(),
+    company: varchar('company', { length: 255 }),
+
+    // Role/Context
+    role: varchar('role', { length: 50 }), // Partner, Principal, Associate, Other
+    heardFrom: varchar('heard_from', { length: 100 }), // How did you hear about us?
+
+    // Metadata
+    source: varchar('source', { length: 50 }).notNull().default('homepage'), // homepage, features, about, blog
+    utmSource: varchar('utm_source', { length: 100 }),
+    utmMedium: varchar('utm_medium', { length: 100 }),
+    utmCampaign: varchar('utm_campaign', { length: 100 }),
+
+    // Status
+    status: varchar('status', { length: 20 }).notNull().default('pending'), // pending, contacted, invited, archived
+    emailSent: boolean('email_sent').notNull().default(false),
+    notes: text('notes'),
+
+    // Audit
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    emailIdx: index('cms_waitlist_email_idx').on(table.email),
+    statusIdx: index('cms_waitlist_status_idx').on(table.status),
+    createdAtIdx: index('cms_waitlist_created_at_idx').on(table.createdAt),
+  })
+);
+
+/**
  * Export all CMS tables for Drizzle ORM
  */
 export const cmsSchema = {
@@ -261,4 +304,5 @@ export const cmsSchema = {
   features,
   announcements,
   legalPages,
+  waitlistSubmissions,
 };
