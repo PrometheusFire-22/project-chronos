@@ -154,6 +154,9 @@ importers:
       tailwind-merge:
         specifier: 3.4.0
         version: 3.4.0
+      zod:
+        specifier: ^4.2.1
+        version: 4.2.1
     devDependencies:
       '@cloudflare/next-on-pages':
         specifier: ^1.13.16
@@ -9053,6 +9056,9 @@ packages:
 
   zod@3.22.3:
     resolution: {integrity: sha512-EjIevzuJRiRPbVH4mGc8nApb/lVLKVpmUhAaR5R5doKGfAnGJ6Gr3CViAVjP+4FWSxCsybeWQdcgCtbX+7oZug==}
+
+  zod@4.2.1:
+    resolution: {integrity: sha512-0wZ1IRqGGhMP76gLqz8EyfBXKk0J2qo2+H3fi4mcUP/KtTocoX08nmIAHl1Z2kJIZbZee8KOpBCSNPRgauucjw==}
 
 snapshots:
 
@@ -19709,3 +19715,5 @@ snapshots:
       youch-core: 0.3.3
 
   zod@3.22.3: {}
+
+  zod@4.2.1: {}
