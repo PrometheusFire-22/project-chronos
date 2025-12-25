@@ -64,7 +64,7 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
         {/* Features Grid - Alternating Layout */}
         <div className="max-w-7xl mx-auto space-y-24">
           {features.map((feature, index) => {
-            const IconComponent = feature.icon ? iconMap[feature.icon] : Sparkles
+            const IconComponent = iconMap[feature.icon] ?? Sparkles
             const isEven = index % 2 === 0
 
             return (
