@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, ChevronRight, Activity, Network, Database, Globe } from 'lucide-react'
 import { Button } from '@chronos/ui/components/button'
+import type { HomepageHero } from '@/lib/directus'
 
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
@@ -21,7 +22,11 @@ const staggerContainer = {
   }
 }
 
-export function HeroSection() {
+interface HeroSectionProps {
+  data: HomepageHero
+}
+
+export function HeroSection({ data }: HeroSectionProps) {
   return (
     <section className="relative overflow-hidden bg-slate-950 pt-16 pb-32 md:pt-24 lg:pt-32">
         {/* Background Gradients */}
@@ -30,9 +35,9 @@ export function HeroSection() {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-          
+
           {/* Left Column: Copy */}
-          <motion.div 
+          <motion.div
             variants={staggerContainer}
             initial="visible"
             animate="visible"
@@ -51,26 +56,32 @@ export function HeroSection() {
 
             {/* Headline */}
             <motion.div variants={fadeIn}>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-4 leading-[1.1]">
-                Uncover Hidden <br />
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4 leading-[1.1]">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-sky-400 to-emerald-400">
-                  Market Connections
+                  {data.headline}
                 </span>
               </h1>
-              <p className="text-lg sm:text-xl text-slate-400 max-w-xl leading-relaxed">
-                The first multi-modal relationship intelligence platform for private markets. 
-                Combine graph, vector, and time-series data to see what others miss.
-              </p>
+              {data.subheadline && (
+                <p className="text-lg sm:text-xl text-slate-400 max-w-xl leading-relaxed">
+                  {data.subheadline}
+                </p>
+              )}
             </motion.div>
 
             {/* CTAs */}
             <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 mt-2">
-              <Button size="lg" className="bg-white text-slate-950 hover:bg-slate-200 font-semibold h-12 px-8 text-base">
-                Start Free Trial <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="lg" className="border-slate-800 text-white hover:bg-slate-800 h-12 px-8 text-base">
-                View Interactive Demo
-              </Button>
+              <Link href={data.cta_primary_link}>
+                <Button size="lg" className="bg-white text-slate-950 hover:bg-slate-200 font-semibold h-12 px-8 text-base">
+                  {data.cta_primary_text} <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              {data.cta_secondary_text && data.cta_secondary_link && (
+                <Link href={data.cta_secondary_link}>
+                  <Button variant="outline" size="lg" className="border-slate-800 text-white hover:bg-slate-800 h-12 px-8 text-base">
+                    {data.cta_secondary_text}
+                  </Button>
+                </Link>
+              )}
             </motion.div>
 
             {/* Tags */}
@@ -83,7 +94,7 @@ export function HeroSection() {
           </motion.div>
 
           {/* Right Column: Visual */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
@@ -91,19 +102,19 @@ export function HeroSection() {
           >
              {/* Glowing Card Effect */}
              <div className="absolute inset-0 bg-gradient-to-tr from-violet-500/10 to-sky-500/10 rounded-3xl border border-white/5 backdrop-blur-sm -z-10" />
-             
+
              {/* The Graph Illustration */}
-             <Image 
-                src="/illustrations/hero-graph.svg" 
-                alt="Graph Network Visualization" 
-                width={600} 
-                height={500} 
+             <Image
+                src="/illustrations/hero-graph.svg"
+                alt="Graph Network Visualization"
+                width={600}
+                height={500}
                 className="w-full h-auto drop-shadow-2xl"
                 priority
              />
 
              {/* Floating Elements (Decorative) */}
-             <motion.div 
+             <motion.div
                animate={{ y: [0, -20, 0] }}
                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                className="absolute top-1/4 right-0 p-4 bg-slate-900/90 backdrop-blur border border-slate-700 rounded-xl shadow-xl max-w-[200px]"
