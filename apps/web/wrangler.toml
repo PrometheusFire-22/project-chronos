@@ -5,8 +5,9 @@ compatibility_flags = [ "nodejs_compat" ]
 pages_build_output_dir = ".vercel/output/static"
 
 [vars]
-# Add public environment variables here
+# Public environment variables
 NEXT_PUBLIC_SITE_URL = "https://automatonicai.com"
+NEXT_PUBLIC_DIRECTUS_URL = "https://admin.automatonicai.com"
 
 [[hyperdrive]]
 binding = "DB"
