@@ -4,6 +4,7 @@ import { ProblemStatement } from '@/components/sections/ProblemStatement'
 import { SolutionPillars } from '@/components/sections/SolutionPillars'
 import { FeaturesPreview } from '@/components/sections/FeaturesPreview'
 import { UseCases } from '@/components/sections/UseCases'
+import { WaitlistSection } from '@/components/sections/WaitlistSection'
 import {
   getHomepageHero,
   getFeaturesByCategory,
@@ -40,6 +41,7 @@ export default async function HomePage() {
         <SolutionPillars pillars={pillars} />
         <FeaturesPreview features={features} />
         <UseCases useCases={useCases} />
+        <WaitlistSection />
       </>
     )
   } catch (error) {
