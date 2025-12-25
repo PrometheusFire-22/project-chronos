@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -50,7 +50,7 @@ jobs:
       # STEP 1: CHECKOUT & SETUP
       # --------------------------------------------------------------------------
       - name: 📂 Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🤫 Load Secrets into .env file
         # IMPORTANT: This step securely creates the .env file that our Docker
