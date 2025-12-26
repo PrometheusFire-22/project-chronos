@@ -10,12 +10,12 @@ import {
 } from '@/lib/directus'
 
 export const metadata: Metadata = {
-  title: 'Features - Chronos Multi-Modal Intelligence Platform',
+  title: 'Features - Chronos Multi-Model Intelligence Platform',
   description: 'Explore the powerful features of Chronos: graph database, vector search, time-series analytics, and geospatial operations for private market intelligence.',
   keywords: ['features', 'graph database', 'vector search', 'time-series', 'geospatial', 'private markets'],
   openGraph: {
     title: 'Features - Chronos Platform',
-    description: 'The most advanced multi-modal platform for private market intelligence.',
+    description: 'The most advanced multi-model platform for private market intelligence.',
     type: 'website',
   },
 }

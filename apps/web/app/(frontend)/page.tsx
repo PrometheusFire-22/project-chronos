@@ -13,12 +13,12 @@ import {
 } from '@/lib/directus'
 
 export const metadata: Metadata = {
-  title: 'Chronos - Multi-Modal Relationship Intelligence for Private Markets',
+  title: 'Chronos - Multi-Model Relationship Intelligence for Private Markets',
   description: 'The first platform combining graph, vector, time-series, and geospatial data to uncover hidden market connections. Trusted by leading private market investors.',
   keywords: ['private markets', 'relationship intelligence', 'graph database', 'vector search', 'investment intelligence'],
   openGraph: {
-    title: 'Chronos - Multi-Modal Relationship Intelligence',
-    description: 'Uncover hidden market connections with the first multi-modal intelligence platform for private markets.',
+    title: 'Chronos - Multi-Model Relationship Intelligence',
+    description: 'Uncover hidden market connections with the first multi-model intelligence platform for private markets.',
     type: 'website',
   },
 }

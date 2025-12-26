@@ -18,8 +18,8 @@ export function FeaturesHero() {
           {/* Headline */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-[1.1]">
             The Most Advanced{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-sky-400 to-emerald-400">
-              Multi-Modal Platform
+            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-300 via-sky-300 to-emerald-300">
+              Multi-Model Platform
             </span>{' '}
             for Private Markets
           </h1>

@@ -18,7 +18,7 @@ export function AboutHero() {
           {/* Headline */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-[1.1]">
             Building the Future of{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-sky-400 to-violet-400">
+            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-sky-300 to-violet-300">
               Private Market Intelligence
             </span>
           </h1>
