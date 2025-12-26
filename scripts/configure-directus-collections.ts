@@ -181,7 +181,7 @@ async function main() {
         icon: 'campaign',
         display_template: '{{message}}',
         note: 'Site-wide announcements and notifications',
-        sort_field: 'priority',
+        sort_field: 'created_at',
       },
     })
   );
