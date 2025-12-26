@@ -21,15 +21,9 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const validatedData = waitlistSubmissionSchema.parse(body)
 
-    // Get Directus URL from environment
-    const directusUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL
-    if (!directusUrl) {
-      console.error('NEXT_PUBLIC_DIRECTUS_URL is not configured')
-      return NextResponse.json(
-        { error: 'Server configuration error' },
-        { status: 500 }
-      )
-    }
+    // Get Directus URL from environment or use default
+    // On Cloudflare Pages, use the public URL directly since it's not sensitive
+    const directusUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL || 'https://admin.automatonicai.com'
 
     // Submit to Directus
     const response = await fetch(`${directusUrl}/items/cms_waitlist_submissions`, {
