@@ -3,10 +3,10 @@ compatibility_date = "2024-11-18"
 # Required for Next.js on Pages
 compatibility_flags = [ "nodejs_compat" ]
 
-[vars]
-# Public environment variables
-NEXT_PUBLIC_SITE_URL = "https://automatonicai.com"
-NEXT_PUBLIC_DIRECTUS_URL = "https://admin.automatonicai.com"
+# [vars]
+# # Public environment variables
+# NEXT_PUBLIC_SITE_URL = "https://automatonicai.com"
+# NEXT_PUBLIC_DIRECTUS_URL = "https://admin.automatonicai.com"
 
 [[hyperdrive]]
 binding = "DB"
