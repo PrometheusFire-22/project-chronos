@@ -72,7 +72,7 @@ export function SolutionPillars({ pillars }: SolutionPillarsProps) {
         {/* Pillars Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
           {pillars.map((pillar, index) => {
-            const IconComponent = pillar.icon ? iconMap[pillar.icon] : Database
+            const IconComponent: LucideIcon = (pillar.icon && pillar.icon in iconMap) ? iconMap[pillar.icon] : Database
             const colors = colorMap[index % 4]
 
             return (

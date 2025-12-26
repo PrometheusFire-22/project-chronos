@@ -44,7 +44,7 @@ export function UseCases({ useCases }: UseCasesProps) {
         {/* Use Cases Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
           {useCases.map((useCase, index) => {
-            const IconComponent = useCase.icon ? iconMap[useCase.icon] : Briefcase
+            const IconComponent: LucideIcon = (useCase.icon && useCase.icon in iconMap) ? iconMap[useCase.icon] : Briefcase
             const isEven = index % 2 === 0
 
             return (

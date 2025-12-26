@@ -55,7 +55,7 @@ export function FeaturesPreview({ features }: FeaturesPreviewProps) {
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {features.map((feature) => {
-            const IconComponent = feature.icon ? iconMap[feature.icon] : Sparkles
+            const IconComponent: LucideIcon = (feature.icon && feature.icon in iconMap) ? iconMap[feature.icon] : Sparkles
 
             return (
               <div

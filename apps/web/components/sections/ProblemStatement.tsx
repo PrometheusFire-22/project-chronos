@@ -44,7 +44,7 @@ export function ProblemStatement({ problems }: ProblemStatementProps) {
         {/* Problem Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {problems.map((problem) => {
-            const IconComponent = problem.icon ? iconMap[problem.icon] : AlertCircle
+            const IconComponent: LucideIcon = (problem.icon && problem.icon in iconMap) ? iconMap[problem.icon] : AlertCircle
 
             return (
               <div

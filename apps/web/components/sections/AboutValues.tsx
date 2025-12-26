@@ -47,7 +47,7 @@ export function AboutValues({ values }: AboutValuesProps) {
         {/* Values Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {values.map((value, index) => {
-            const IconComponent = value.icon ? iconMap[value.icon] : Heart
+            const IconComponent: LucideIcon = (value.icon && value.icon in iconMap) ? iconMap[value.icon] : Heart
 
             // Cycle through accent colors
             const colorClasses = [
