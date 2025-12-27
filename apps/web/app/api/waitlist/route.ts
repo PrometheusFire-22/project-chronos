@@ -3,9 +3,6 @@ import { z } from 'zod'
 import { Resend } from 'resend'
 import { getWaitlistConfirmationEmail } from '@/utils/emails/waitlist-confirmation'
 
-// Initialize Resend
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 // Validation schema for waitlist submissions
 const waitlistSubmissionSchema = z.object({
   email: z.string().email(),
@@ -74,6 +71,9 @@ export async function POST(request: NextRequest) {
 
     // Send confirmation email (non-blocking - don't fail submission if email fails)
     try {
+      // Initialize Resend client (only at runtime, not build time)
+      const resend = new Resend(process.env.RESEND_API_KEY)
+
       const emailTemplate = getWaitlistConfirmationEmail({
         firstName: validatedData.first_name,
         email: validatedData.email,
