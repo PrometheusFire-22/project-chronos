@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "build": {
+    "command": "npx @opennextjs/cloudflare build",
+    "cwd": "apps/web",
+    "cache_directories": [
+      ".next/cache",
+      "node_modules/.cache",
+      ".nx/cache"
+    ]
+  }
+}

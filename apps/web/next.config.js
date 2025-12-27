@@ -5,6 +5,32 @@ import { withSentryConfig } from "@sentry/nextjs";
 const nextConfig = {
   nx: {},
   transpilePackages: ['@chronos/ui'],
+
+  // Build caching and performance optimizations
+  experimental: {
+    // Client trace metadata for better debugging
+    clientTraceMetadata: ['action', 'request'],
+
+    // Optimize bundle splitting
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-slot'],
+  },
+
+  // Compiler optimizations
+  compiler: {
+    // Remove console.log in production
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
+  },
+
+  // Optimize builds
+  swcMinify: true, // Use SWC minifier (faster than Terser)
+
+  // Enable build output caching
+  generateBuildId: async () => {
+    // Use git commit hash for build ID to enable proper caching
+    return process.env.CF_PAGES_COMMIT_SHA || 'development'
+  },
 };
 
 // Check if we're running in Cloudflare context
