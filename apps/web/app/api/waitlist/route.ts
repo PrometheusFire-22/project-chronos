@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
+import { Resend } from 'resend'
+import { getWaitlistConfirmationEmail } from '@/utils/emails/waitlist-confirmation'
+
+// Initialize Resend
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 // Validation schema for waitlist submissions
 const waitlistSubmissionSchema = z.object({
@@ -66,6 +71,28 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await response.json()
+
+    // Send confirmation email (non-blocking - don't fail submission if email fails)
+    try {
+      const emailTemplate = getWaitlistConfirmationEmail({
+        firstName: validatedData.first_name,
+        email: validatedData.email,
+      })
+
+      await resend.emails.send({
+        from: 'Chronos <waitlist@automatonicai.com>',
+        to: validatedData.email,
+        reply_to: 'geoff@automatonicai.com',
+        subject: emailTemplate.subject,
+        html: emailTemplate.html,
+        text: emailTemplate.text,
+      })
+
+      console.log('Waitlist confirmation email sent to:', validatedData.email)
+    } catch (emailError) {
+      // Log error but don't fail the request - user is still on waitlist
+      console.error('Failed to send confirmation email:', emailError)
+    }
 
     return NextResponse.json(
       {
