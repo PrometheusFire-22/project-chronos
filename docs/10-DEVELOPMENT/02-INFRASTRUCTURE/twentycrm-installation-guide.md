@@ -1,9 +1,11 @@
 # TwentyCRM Self-Hosted Installation Guide
 
-**Status**: 📋 Ready to Implement
-**Estimated Time**: 30-60 minutes
-**Prerequisites**: Access to Lightsail VM, Cloudflare account
-**Complexity**: ⭐⭐⭐ Medium (similar to Directus setup)
+**Status**: ✅ Completed - 2025-12-27
+**Actual Time**: ~2 hours (including troubleshooting)
+**Jira Ticket**: [CHRONOS-377](https://automatonicai.atlassian.net/browse/CHRONOS-377)
+**Complexity**: ⭐⭐⭐⭐ Medium-High
+
+> **Note**: This guide documents the actual implementation. For post-installation configuration and maintenance, see [twentycrm-post-installation.md](./twentycrm-post-installation.md)
 
 ---
 
@@ -23,18 +25,27 @@ Install TwentyCRM on the existing Lightsail VM (`admin.automatonicai.com`) to re
 ## Architecture
 
 ```
-Current Setup:
-admin.automatonicai.com:443 → nginx → Directus (Docker)
-                                    ↓
-                                PostgreSQL
+Deployed Architecture (Lightsail VM: 16.52.210.100):
 
-After TwentyCRM:
-admin.automatonicai.com:443 → nginx → Directus (Docker)
+Internet (Cloudflare CDN)
+    ↓
+Nginx (Port 443 - SSL)
+    ├── admin.automatonicai.com → Directus:8055
+    └── crm.automatonicai.com → TwentyCRM:3020
                                     ↓
-crm.automatonicai.com:443 → nginx → TwentyCRM (Docker)
+                            Redis:6379 (Cache)
                                     ↓
-                                PostgreSQL (same server, different DB)
+                    PostgreSQL:5432 (chronos database)
+                    ├── public schema (Directus + App)
+                    ├── core schema (TwentyCRM tables)
+                    └── metadata schema (TwentyCRM metadata)
 ```
+
+**Key Implementation Details**:
+- **Single Database**: TwentyCRM uses schemas, not a separate database
+- **Redis Required**: TwentyCRM needs Redis for caching (not optional)
+- **Docker Network**: Services communicate via `chronos-network` bridge
+- **Image**: `twentycrm/twenty:latest` (not `twentyhq/twenty`)
 
 ---
 
