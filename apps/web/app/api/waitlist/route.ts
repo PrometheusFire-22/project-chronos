@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
       await resend.emails.send({
         from: 'Chronos <waitlist@automatonicai.com>',
         to: validatedData.email,
-        reply_to: 'geoff@automatonicai.com',
+        replyTo: 'geoff@automatonicai.com',
         subject: emailTemplate.subject,
         html: emailTemplate.html,
         text: emailTemplate.text,
