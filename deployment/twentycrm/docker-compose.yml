@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  twenty:
+    image: twentyhq/twenty:latest
+    container_name: twenty
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3020:3000"
+    environment:
+      # Database - Using 'twenty' schema in 'chronos' database
+      PG_DATABASE_URL: postgresql://twenty_user:TwentySecure2025!ChangeMe@host.docker.internal:5432/chronos?schema=twenty
+
+      # Server URLs
+      SERVER_URL: https://crm.automatonicai.com
+      FRONT_BASE_URL: https://crm.automatonicai.com
+
+      # Security secrets (will be auto-generated during installation)
+      ACCESS_TOKEN_SECRET: __GENERATED_ACCESS_SECRET__
+      REFRESH_TOKEN_SECRET: __GENERATED_REFRESH_SECRET__
+      LOGIN_TOKEN_SECRET: __GENERATED_LOGIN_SECRET__
+      FILE_TOKEN_SECRET: __GENERATED_FILE_SECRET__
+
+      # Storage
+      STORAGE_TYPE: local
+      STORAGE_LOCAL_PATH: /app/storage
+
+      # Email configuration
+      EMAIL_FROM_ADDRESS: crm@automatonicai.com
+      EMAIL_FROM_NAME: Chronos CRM
+
+    volumes:
+      - twenty_storage:/app/storage
+      - twenty_server_local_maps:/app/server/.local-maps
+    networks:
+      - twenty_network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  twenty_storage:
+  twenty_server_local_maps:
+
+networks:
+  twenty_network:
+    driver: bridge
