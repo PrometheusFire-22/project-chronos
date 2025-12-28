@@ -1,0 +1,24 @@
+# pgBackRest Configuration Template
+# Copy this file to pgbackrest.conf and fill in your actual credentials
+
+[global]
+repo1-type=s3
+repo1-s3-bucket=YOUR_S3_BUCKET_NAME
+repo1-s3-region=YOUR_AWS_REGION
+repo1-s3-endpoint=s3.YOUR_AWS_REGION.amazonaws.com
+repo1-s3-key=YOUR_AWS_ACCESS_KEY
+repo1-s3-key-secret=YOUR_AWS_SECRET_KEY
+repo1-cipher-type=aes-256-cbc
+repo1-cipher-pass=YOUR_ENCRYPTION_PASSPHRASE
+repo1-retention-full=7
+repo1-retention-diff=7
+log-level-file=info
+start-fast=y
+process-max=2
+
+[chronos-v2]
+pg1-path=/var/lib/postgresql/data
+pg1-port=5432
+pg1-socket-path=/var/run/postgresql
+pg1-user=chronos
+pg1-database=chronos_db
