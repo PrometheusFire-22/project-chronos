@@ -24,7 +24,7 @@
     "@directus/sdk": "^20.3.0",
     "@nx/js": "22.2.0",
     "@nx/next": "22.2.1",
-    "@nx/workspace": "22.3.0",
+    "@nx/workspace": "22.3.3",
     "@swc-node/register": "1.9.2",
     "@swc/cli": "0.6.0",
     "@swc/core": "1.5.29",
