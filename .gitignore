@@ -164,3 +164,6 @@ docs/security/
 .vercel
 .env*.local
 deployment/**/.env
+
+# OpenNext build output
+.open-next
