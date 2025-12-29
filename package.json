@@ -26,7 +26,7 @@
     "@nx/next": "22.3.3",
     "@nx/workspace": "22.3.3",
     "@swc-node/register": "1.11.1",
-    "@swc/cli": "0.6.0",
+    "@swc/cli": "0.7.9",
     "@swc/core": "1.5.29",
     "@swc/helpers": "0.5.18",
     "@types/node": "25.0.3",
