@@ -23,7 +23,7 @@
     "@cloudflare/workers-types": "4.20251213.0",
     "@directus/sdk": "^20.3.0",
     "@nx/js": "22.2.0",
-    "@nx/next": "22.2.1",
+    "@nx/next": "22.3.3",
     "@nx/workspace": "22.3.3",
     "@swc-node/register": "1.11.1",
     "@swc/cli": "0.6.0",
