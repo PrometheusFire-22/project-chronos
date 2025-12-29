@@ -21,6 +21,9 @@ export const metadata: Metadata = {
   },
 }
 
+// Force dynamic rendering to avoid build-time Directus dependency
+export const dynamic = 'force-dynamic'
+
 export default async function AboutPage() {
   try {
     // Fetch about section content from Directus
