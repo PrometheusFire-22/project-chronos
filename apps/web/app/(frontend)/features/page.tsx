@@ -1,7 +1,5 @@
 import type { Metadata } from 'next'
 
-export const runtime = 'edge'
-
 import { FeaturesHero } from '@/components/sections/FeaturesHero'
 import { FeatureDetails } from '@/components/sections/FeatureDetails'
 import { FeatureComparison } from '@/components/sections/FeatureComparison'
@@ -23,8 +21,9 @@ export const metadata: Metadata = {
   },
 }
 
-// Force dynamic rendering to avoid build-time Directus dependency
-export const dynamic = 'force-dynamic'
+// Generate static page at build time
+export const dynamic = 'force-static'
+export const revalidate = false // Cache forever (rebuild to update)
 
 export default async function FeaturesPage() {
   try {

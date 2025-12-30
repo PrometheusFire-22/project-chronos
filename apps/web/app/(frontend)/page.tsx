@@ -1,7 +1,4 @@
 import type { Metadata } from 'next'
-
-export const runtime = 'edge'
-
 import { HeroSection } from '@/components/sections/HeroSection'
 import { ProblemStatement } from '@/components/sections/ProblemStatement'
 import { SolutionPillars } from '@/components/sections/SolutionPillars'
@@ -26,8 +23,9 @@ export const metadata: Metadata = {
   },
 }
 
-// Force dynamic rendering to avoid build-time Directus dependency
-export const dynamic = 'force-dynamic'
+// Generate static page at build time
+export const dynamic = 'force-static'
+export const revalidate = false // Cache forever (rebuild to update)
 
 export default async function HomePage() {
   try {
