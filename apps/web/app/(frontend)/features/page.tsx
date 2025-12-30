@@ -1,4 +1,7 @@
 import type { Metadata } from 'next'
+
+export const runtime = 'edge'
+
 import { FeaturesHero } from '@/components/sections/FeaturesHero'
 import { FeatureDetails } from '@/components/sections/FeatureDetails'
 import { FeatureComparison } from '@/components/sections/FeatureComparison'
