@@ -73,9 +73,10 @@ export function UseCases({ useCases }: UseCasesProps) {
                 </h3>
 
                 {/* Description */}
-                <p className="text-slate-400 leading-relaxed whitespace-pre-line">
-                  {useCase.description}
-                </p>
+                <div
+                  className="text-slate-400 leading-relaxed [&>p]:mb-3 [&>strong]:font-semibold [&>strong]:text-white"
+                  dangerouslySetInnerHTML={{ __html: useCase.description }}
+                />
 
                 {/* Decorative gradient line */}
                 <div

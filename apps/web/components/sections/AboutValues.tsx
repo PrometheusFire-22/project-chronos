@@ -73,9 +73,10 @@ export function AboutValues({ values }: AboutValuesProps) {
                 </h3>
 
                 {/* Description */}
-                <p className="text-slate-400 leading-relaxed whitespace-pre-line">
-                  {value.description}
-                </p>
+                <div
+                  className="text-slate-400 leading-relaxed [&>p]:mb-3 [&>strong]:font-semibold [&>strong]:text-white"
+                  dangerouslySetInnerHTML={{ __html: value.description }}
+                />
               </div>
             )
           })}

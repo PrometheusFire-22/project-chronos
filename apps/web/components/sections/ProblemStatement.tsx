@@ -62,9 +62,10 @@ export function ProblemStatement({ problems }: ProblemStatementProps) {
                 </h3>
 
                 {/* Description */}
-                <p className="text-slate-400 leading-relaxed whitespace-pre-line">
-                  {problem.description}
-                </p>
+                <div
+                  className="text-slate-400 leading-relaxed [&>p]:mb-3 [&>strong]:font-semibold [&>strong]:text-white"
+                  dangerouslySetInnerHTML={{ __html: problem.description }}
+                />
               </div>
             )
           })}

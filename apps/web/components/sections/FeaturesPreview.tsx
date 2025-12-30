@@ -76,9 +76,10 @@ export function FeaturesPreview({ features }: FeaturesPreviewProps) {
                 </div>
 
                 {/* Description */}
-                <p className="text-slate-400 text-sm leading-relaxed whitespace-pre-line">
-                  {feature.description}
-                </p>
+                <div
+                  className="text-slate-400 text-sm leading-relaxed [&>p]:mb-3 [&>strong]:font-semibold [&>strong]:text-white"
+                  dangerouslySetInnerHTML={{ __html: feature.description }}
+                />
 
                 {/* Hover indicator */}
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-violet-500 to-sky-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-b-xl" />

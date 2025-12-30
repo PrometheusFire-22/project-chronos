@@ -91,9 +91,10 @@ export function SolutionPillars({ pillars }: SolutionPillarsProps) {
                 </h3>
 
                 {/* Description */}
-                <p className="text-slate-400 leading-relaxed text-sm whitespace-pre-line">
-                  {pillar.description}
-                </p>
+                <div
+                  className="text-slate-400 leading-relaxed text-sm [&>p]:mb-3 [&>strong]:font-semibold [&>strong]:text-white"
+                  dangerouslySetInnerHTML={{ __html: pillar.description }}
+                />
 
                 {/* Decorative corner accent */}
                 <div className={`absolute top-4 right-4 w-2 h-2 rounded-full ${colors.bg} ${colors.icon} opacity-60`} />
