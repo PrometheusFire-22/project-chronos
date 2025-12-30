@@ -87,10 +87,9 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
                   </h3>
 
                   {/* Description */}
-                  <div
-                    className="text-lg text-slate-400 leading-relaxed mb-6 prose prose-invert max-w-none"
-                    dangerouslySetInnerHTML={{ __html: feature.description }}
-                  />
+                  <p className="text-lg text-slate-400 leading-relaxed mb-6 whitespace-pre-line">
+                    {feature.description}
+                  </p>
 
                   {/* Key Points - if description is long, we could split it */}
                   <div className="flex flex-wrap gap-3">

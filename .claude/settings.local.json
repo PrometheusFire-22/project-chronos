@@ -62,7 +62,8 @@
       "Bash(npm install:*)",
       "Bash(wc:*)",
       "Bash(pnpm add:*)",
-      "Bash(pnpm dev)"
+      "Bash(pnpm dev)",
+      "Bash(pnpm run deploy)"
     ],
     "deny": [],
     "ask": []
