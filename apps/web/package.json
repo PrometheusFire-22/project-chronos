@@ -11,7 +11,7 @@
     "preview": "opennextjs-cloudflare",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
     "deploy:local": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "cf:build": "opennextjs-cloudflare build"
+    "cf:build": "opennextjs-cloudflare build && mv .open-next/worker.js .open-next/_worker.js"
   },
   "dependencies": {
     "@chronos/ui": "workspace:*",
