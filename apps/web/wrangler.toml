@@ -1,13 +1,10 @@
 name = "chronos-web"
 compatibility_date = "2025-12-29"
-# Required for Next.js on Workers with OpenNext
+# Required for Next.js on Pages with OpenNext
 compatibility_flags = [ "nodejs_compat" ]
 
-# OpenNext Cloudflare Workers configuration
-main = ".open-next/worker.js"
-
-[assets]
-directory = ".open-next/assets"
+# OpenNext Cloudflare Pages configuration
+pages_build_output_dir = ".open-next"
 
 [vars]
 # Public environment variables
@@ -28,8 +25,3 @@ bucket_name = "chronos-media"
 [[r2_buckets]]
 binding = "NEXT_INC_CACHE_R2_BUCKET"
 bucket_name = "chronos-next-cache"
-
-# Required for OpenNext self-reference
-[[services]]
-binding = "WORKER_SELF_REFERENCE"
-service = "chronos-web"
