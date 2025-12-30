@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "preview": "opennextjs-cloudflare",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "deploy:local": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "cf:build": "opennextjs-cloudflare build"
   },
   "dependencies": {

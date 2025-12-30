@@ -23,9 +23,6 @@ const nextConfig = {
     } : false,
   },
 
-  // Optimize builds
-  swcMinify: true, // Use SWC minifier (faster than Terser)
-
   // Enable build output caching
   generateBuildId: async () => {
     // Use git commit hash for build ID to enable proper caching
