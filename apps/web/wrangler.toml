@@ -1,4 +1,4 @@
-name = "chronos-web"
+name = "project-chronos"
 compatibility_date = "2025-12-29"
 # Required for Next.js on Pages with OpenNext
 compatibility_flags = [ "nodejs_compat" ]
