@@ -1,55 +1,32 @@
 version: 2
 updates:
-  # Maintain Frontend Dependencies (pnpm)
-  # Dependabot uses 'npm' ecosystem for pnpm-lock.yaml
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "America/New_York"
+    # Only create PRs for security updates and patch versions
+    # Ignore major version updates (they can break things)
     open-pull-requests-limit: 10
+    ignore:
+      # Ignore Next.js major versions (manual upgrade only)
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      # Ignore React major versions
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      # Ignore other major framework updates
+      - dependency-name: "@nx/*"
+        update-types: ["version-update:semver-major"]
+    # Group related updates together
     groups:
-       # Group next.js and react updates together
       next-framework:
         patterns:
           - "next"
           - "react"
           - "react-dom"
-      # Group eslint related packages
-      linting:
+      nx-framework:
         patterns:
-          - "eslint*"
-          - "@typescript-eslint*"
-    commit-message:
-      prefix: "chore(deps)"
-      prefix-development: "chore(deps-dev)"
-
-  # Maintain Backend Dependencies (Poetry)
-  # Dependabot uses 'pip' ecosystem for pyproject.toml
-  - package-ecosystem: "pip"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-      day: "tuesday"
-      time: "09:00"
-      timezone: "America/New_York"
-    open-pull-requests-limit: 10
-    # Enable insecure-external-code-execution for Poetry if needed, 
-    # but strictly generally 'pip' works for standard dependencies.
-    groups:
-      # Group all python minor/patch updates
-      python-minor:
-        patterns:
-          - "*"
-        update-types:
-          - "minor"
-          - "patch"
-
-  # Maintain CI/CD Workflows
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "monthly"
-    open-pull-requests-limit: 5
+          - "@nx/*"
+          - "nx"
