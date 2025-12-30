@@ -1,4 +1,7 @@
 import type { Metadata } from 'next'
+
+export const runtime = 'edge';
+
 import { HeroSection } from '@/components/sections/HeroSection'
 import { ProblemStatement } from '@/components/sections/ProblemStatement'
 import { SolutionPillars } from '@/components/sections/SolutionPillars'
