@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata} from 'next'
 import { AboutHero } from '@/components/sections/AboutHero'
 import { AboutStory } from '@/components/sections/AboutStory'
 import { AboutValues } from '@/components/sections/AboutValues'

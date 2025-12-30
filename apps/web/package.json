@@ -7,11 +7,7 @@
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "preview": "opennextjs-cloudflare",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
-    "deploy:local": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "cf:build": "opennextjs-cloudflare build && mv .open-next/worker.js .open-next/_worker.js"
+    "lint": "next lint"
   },
   "dependencies": {
     "@chronos/ui": "workspace:*",
@@ -35,7 +31,7 @@
     "node": ">=20.0.0"
   },
   "devDependencies": {
-    "@opennextjs/cloudflare": "^1.14.7",
+    "@cloudflare/next-on-pages": "^1.13.16",
     "@types/node": "^25.0.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
@@ -43,6 +39,7 @@
     "postcss": "8.5.6",
     "tailwindcss": "3.4.3",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "~5.9.3"
+    "typescript": "~5.9.3",
+    "vercel": "^47.0.4"
   }
 }
