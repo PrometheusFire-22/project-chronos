@@ -4,6 +4,7 @@ compatibility_date = "2025-12-29"
 compatibility_flags = [ "nodejs_compat" ]
 
 # OpenNext Cloudflare Pages configuration
+# This directory will be used by Cloudflare Pages for deployment
 pages_build_output_dir = ".open-next"
 
 [vars]
