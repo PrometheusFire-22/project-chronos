@@ -22,8 +22,9 @@ export const metadata: Metadata = {
 }
 
 // Generate static page at build time
+// Note: Static export means ISR doesn't work - rebuilds required for updates
 export const dynamic = 'force-static'
-export const revalidate = false // Cache forever (rebuild to update)
+// Removed: revalidate = false (was causing issues with content updates)
 
 export default async function FeaturesPage() {
   try {
