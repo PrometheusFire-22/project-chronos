@@ -1,0 +1,27 @@
+# Cloudflare Pages Headers Configuration
+# This file controls caching behavior for the deployed site
+
+# Cache static assets (JS, CSS, images) for 1 year
+/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Don't cache HTML pages - always revalidate with origin
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# Specific pages that fetch Directus content - force fresh content
+/
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/features
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/about
+  Cache-Control: no-cache, no-store, must-revalidate
