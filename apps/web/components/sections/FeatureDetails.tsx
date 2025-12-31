@@ -20,6 +20,7 @@ import {
   type LucideIcon
 } from 'lucide-react'
 import type { Feature } from '@/lib/directus'
+import { renderRichText } from '@/lib/content-renderer'
 
 // Icon mapping for feature icons
 const iconMap: Record<string, LucideIcon> = {
@@ -88,8 +89,8 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
 
                   {/* Description */}
                   <div
-                    className="text-lg text-slate-400 leading-relaxed mb-6 [&>p]:mb-4 [&>strong]:font-semibold [&>strong]:text-white"
-                    dangerouslySetInnerHTML={{ __html: feature.description }}
+                    className="prose prose-invert prose-lg max-w-none [&>p]:mb-4 [&>p]:text-slate-400 [&>strong]:font-semibold [&>strong]:text-white [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-white [&>h2]:mt-8 [&>h2]:mb-4 [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-white [&>h3]:mt-6 [&>h3]:mb-3 [&>ul]:list-disc [&>ul]:ml-5 [&>ul]:text-slate-400 [&>ol]:list-decimal [&>ol]:ml-5 [&>ol]:text-slate-400"
+                    dangerouslySetInnerHTML={{ __html: renderRichText(feature.description) }}
                   />
 
                   {/* Key Points - if description is long, we could split it */}

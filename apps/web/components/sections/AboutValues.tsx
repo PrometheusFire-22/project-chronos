@@ -10,6 +10,7 @@ import {
   type LucideIcon
 } from 'lucide-react'
 import type { Feature } from '@/lib/directus'
+import { renderRichText } from '@/lib/content-renderer'
 
 // Icon mapping for value icons
 const iconMap: Record<string, LucideIcon> = {
@@ -75,7 +76,7 @@ export function AboutValues({ values }: AboutValuesProps) {
                 {/* Description */}
                 <div
                   className="text-slate-400 leading-relaxed [&>p]:mb-3 [&>strong]:font-semibold [&>strong]:text-white"
-                  dangerouslySetInnerHTML={{ __html: value.description }}
+                  dangerouslySetInnerHTML={{ __html: renderRichText(value.description) }}
                 />
               </div>
             )

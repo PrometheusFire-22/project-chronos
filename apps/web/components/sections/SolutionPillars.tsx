@@ -10,6 +10,7 @@ import {
   type LucideIcon
 } from 'lucide-react'
 import type { Feature } from '@/lib/directus'
+import { renderRichText } from '@/lib/content-renderer'
 
 // Icon mapping for solution pillar icons
 const iconMap: Record<string, LucideIcon> = {
@@ -93,7 +94,7 @@ export function SolutionPillars({ pillars }: SolutionPillarsProps) {
                 {/* Description */}
                 <div
                   className="text-slate-400 leading-relaxed text-sm [&>p]:mb-3 [&>strong]:font-semibold [&>strong]:text-white"
-                  dangerouslySetInnerHTML={{ __html: pillar.description }}
+                  dangerouslySetInnerHTML={{ __html: renderRichText(pillar.description) }}
                 />
 
                 {/* Decorative corner accent */}

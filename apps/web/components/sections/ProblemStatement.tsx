@@ -10,6 +10,7 @@ import {
   type LucideIcon
 } from 'lucide-react'
 import type { Feature } from '@/lib/directus'
+import { renderRichText } from '@/lib/content-renderer'
 
 // Icon mapping for Directus icon field
 const iconMap: Record<string, LucideIcon> = {
@@ -64,7 +65,7 @@ export function ProblemStatement({ problems }: ProblemStatementProps) {
                 {/* Description */}
                 <div
                   className="text-slate-400 leading-relaxed [&>p]:mb-3 [&>strong]:font-semibold [&>strong]:text-white"
-                  dangerouslySetInnerHTML={{ __html: problem.description }}
+                  dangerouslySetInnerHTML={{ __html: renderRichText(problem.description) }}
                 />
               </div>
             )
