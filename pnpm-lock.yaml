@@ -50,8 +50,8 @@ importers:
         version: 2.8.1
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: 4.20251213.0
-        version: 4.20251213.0
+        specifier: 4.20251231.0
+        version: 4.20251231.0
       '@directus/sdk':
         specifier: ^20.3.0
         version: 20.3.0
@@ -117,7 +117,7 @@ importers:
         version: 5.9.3
       wrangler:
         specifier: 4.55.0
-        version: 4.55.0(@cloudflare/workers-types@4.20251213.0)
+        version: 4.55.0(@cloudflare/workers-types@4.20251231.0)
 
   apps/web:
     dependencies:
@@ -184,7 +184,7 @@ importers:
     devDependencies:
       '@cloudflare/next-on-pages':
         specifier: ^1.13.16
-        version: 1.13.16(@cloudflare/workers-types@4.20251213.0)(next@15.4.10(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.97.1))(vercel@47.0.4(@swc/core@1.5.29(@swc/helpers@0.5.18))(encoding@0.1.13)(rollup@4.53.5))(wrangler@4.55.0(@cloudflare/workers-types@4.20251213.0))
+        version: 1.13.16(@cloudflare/workers-types@4.20251231.0)(next@15.4.10(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.97.1))(vercel@47.0.4(@swc/core@1.5.29(@swc/helpers@0.5.18))(encoding@0.1.13)(rollup@4.53.5))(wrangler@4.55.0(@cloudflare/workers-types@4.20251231.0))
       '@types/dompurify':
         specifier: ^3.2.0
         version: 3.2.0
@@ -222,7 +222,7 @@ importers:
     dependencies:
       drizzle-orm:
         specifier: ^0.45.1
-        version: 0.45.1(@cloudflare/workers-types@4.20251213.0)(@opentelemetry/api@1.9.0)(@types/pg@8.15.6)(gel@2.2.0)(pg@8.16.3)(postgres@3.4.7)
+        version: 0.45.1(@cloudflare/workers-types@4.20251231.0)(@opentelemetry/api@1.9.0)(@types/pg@8.15.6)(gel@2.2.0)(pg@8.16.3)(postgres@3.4.7)
       postgres:
         specifier: ^3.4.4
         version: 3.4.7
@@ -958,8 +958,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@cloudflare/workers-types@4.20251213.0':
-    resolution: {integrity: sha512-PJAGdKfU7hs39C2YOFNLTdrfdqG6rbaVj5UuI306zS+TPokiskRLEgUXKqS6avN9Uu9Nyuf2a0hqoumLQCnJlQ==}
+  '@cloudflare/workers-types@4.20251231.0':
+    resolution: {integrity: sha512-XOP7h2y9Nu3ECuZM9S7w3g4GSliTgj6SEEkYj6G6d3TEQtOiV/cHXuI/fKiLj8Z9+qJK/RLLcKkX14NxajrXCw==}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -1197,8 +1197,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@eslint-community/eslint-utils@4.9.0':
-    resolution: {integrity: sha512-ayVFHdtZ+hsq1t2Dy24wCmGXGe4q9Gu3smhLYALJrr473ZH27MsnSL+LKUlimp4BWJqMDMLmPpx/Q9R3OAlL4g==}
+  '@eslint-community/eslint-utils@4.9.1':
+    resolution: {integrity: sha512-phrYmNiYppR7znFEdqgfWHXR6NCkZEK7hwWDHZUjit/2/U0r6XvkDl0SYnoM51Hq7FhCGdLDT6zxCCOY1hexsQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
@@ -4980,6 +4980,10 @@ packages:
     resolution: {integrity: sha512-ca9pw9fomFcKPvFLXhBKUK90ZvGibiGOvRJNbjljY7s7uq/5YO4BOzcYtJqExdx99rF6aAcnRxHmcUHcz6sQsg==}
     engines: {node: '>=0.10'}
 
+  esquery@1.7.0:
+    resolution: {integrity: sha512-Ap6G0WQwcU/LHsvLwON1fAQX9Zp0A2Y6Y/cJBl9r/JbW90Zyg4/zbG6zzKa2OTALELarYHmKu0GhpM5EO+7T0g==}
+    engines: {node: '>=0.10'}
+
   esrecurse@4.3.0:
     resolution: {integrity: sha512-KmfKL3b6G+RXvP8N1vr3Tq1kL/oCFgn2NYXEtqP8/L3pKapUA4G8cFVaoF3SU323CD4XypR/ffioHmkti6/Tag==}
     engines: {node: '>=4.0'}
@@ -8560,6 +8564,7 @@ packages:
   wrangler@4.55.0:
     resolution: {integrity: sha512-50icmLX8UbNaq0FmFHbcvvOh7I6rDA/FyaMYRcNSl1iX0JwuKswezmmtYvYPxPTkbYz7FUYR8GPZLaT23uzFqw==}
     engines: {node: '>=20.0.0'}
+    deprecated: This version can incorrectly automatically delegate 'wrangler deploy' to 'opennextjs-cloudflare'
     hasBin: true
     peerDependencies:
       '@cloudflare/workers-types': ^4.20251213.0
@@ -9501,7 +9506,7 @@ snapshots:
     dependencies:
       mime: 3.0.0
 
-  '@cloudflare/next-on-pages@1.13.16(@cloudflare/workers-types@4.20251213.0)(next@15.4.10(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.97.1))(vercel@47.0.4(@swc/core@1.5.29(@swc/helpers@0.5.18))(encoding@0.1.13)(rollup@4.53.5))(wrangler@4.55.0(@cloudflare/workers-types@4.20251213.0))':
+  '@cloudflare/next-on-pages@1.13.16(@cloudflare/workers-types@4.20251231.0)(next@15.4.10(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.97.1))(vercel@47.0.4(@swc/core@1.5.29(@swc/helpers@0.5.18))(encoding@0.1.13)(rollup@4.53.5))(wrangler@4.55.0(@cloudflare/workers-types@4.20251231.0))':
     dependencies:
       acorn: 8.15.0
       ast-types: 0.14.2
@@ -9517,9 +9522,9 @@ snapshots:
       pcre-to-regexp: 1.1.0
       semver: 7.7.3
       vercel: 47.0.4(@swc/core@1.5.29(@swc/helpers@0.5.18))(encoding@0.1.13)(rollup@4.53.5)
-      wrangler: 4.55.0(@cloudflare/workers-types@4.20251213.0)
+      wrangler: 4.55.0(@cloudflare/workers-types@4.20251231.0)
     optionalDependencies:
-      '@cloudflare/workers-types': 4.20251213.0
+      '@cloudflare/workers-types': 4.20251231.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -9560,7 +9565,7 @@ snapshots:
   '@cloudflare/workerd-windows-64@1.20251213.0':
     optional: true
 
-  '@cloudflare/workers-types@4.20251213.0': {}
+  '@cloudflare/workers-types@4.20251231.0': {}
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
@@ -9705,7 +9710,7 @@ snapshots:
   '@esbuild/win32-x64@0.25.12':
     optional: true
 
-  '@eslint-community/eslint-utils@4.9.0(eslint@9.39.2(jiti@2.6.1))':
+  '@eslint-community/eslint-utils@4.9.1(eslint@9.39.2(jiti@2.6.1))':
     dependencies:
       eslint: 9.39.2(jiti@2.6.1)
       eslint-visitor-keys: 3.4.3
@@ -13776,9 +13781,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.45.1(@cloudflare/workers-types@4.20251213.0)(@opentelemetry/api@1.9.0)(@types/pg@8.15.6)(gel@2.2.0)(pg@8.16.3)(postgres@3.4.7):
+  drizzle-orm@0.45.1(@cloudflare/workers-types@4.20251231.0)(@opentelemetry/api@1.9.0)(@types/pg@8.15.6)(gel@2.2.0)(pg@8.16.3)(postgres@3.4.7):
     optionalDependencies:
-      '@cloudflare/workers-types': 4.20251213.0
+      '@cloudflare/workers-types': 4.20251231.0
       '@opentelemetry/api': 1.9.0
       '@types/pg': 8.15.6
       gel: 2.2.0
@@ -13945,7 +13950,7 @@ snapshots:
 
   eslint@9.39.2(jiti@2.6.1):
     dependencies:
-      '@eslint-community/eslint-utils': 4.9.0(eslint@9.39.2(jiti@2.6.1))
+      '@eslint-community/eslint-utils': 4.9.1(eslint@9.39.2(jiti@2.6.1))
       '@eslint-community/regexpp': 4.12.2
       '@eslint/config-array': 0.21.1
       '@eslint/config-helpers': 0.4.2
@@ -13965,7 +13970,7 @@ snapshots:
       eslint-scope: 8.4.0
       eslint-visitor-keys: 4.2.1
       espree: 10.4.0
-      esquery: 1.6.0
+      esquery: 1.7.0
       esutils: 2.0.3
       fast-deep-equal: 3.1.3
       file-entry-cache: 8.0.0
@@ -13993,6 +13998,10 @@ snapshots:
   esprima@4.0.1: {}
 
   esquery@1.6.0:
+    dependencies:
+      estraverse: 5.3.0
+
+  esquery@1.7.0:
     dependencies:
       estraverse: 5.3.0
 
@@ -17995,7 +18004,7 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20251213.0
       '@cloudflare/workerd-windows-64': 1.20251213.0
 
-  wrangler@4.55.0(@cloudflare/workers-types@4.20251213.0):
+  wrangler@4.55.0(@cloudflare/workers-types@4.20251231.0):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.1
       '@cloudflare/unenv-preset': 2.7.13(unenv@2.0.0-rc.24)(workerd@1.20251213.0)
@@ -18006,7 +18015,7 @@ snapshots:
       unenv: 2.0.0-rc.24
       workerd: 1.20251213.0
     optionalDependencies:
-      '@cloudflare/workers-types': 4.20251213.0
+      '@cloudflare/workers-types': 4.20251231.0
       fsevents: 2.3.3
     transitivePeerDependencies:
       - bufferutil

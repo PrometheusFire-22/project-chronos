@@ -20,7 +20,7 @@
     "help": "pnpm -h"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "4.20251213.0",
+    "@cloudflare/workers-types": "4.20251231.0",
     "@directus/sdk": "^20.3.0",
     "@nx/js": "22.2.0",
     "@nx/next": "22.3.3",
