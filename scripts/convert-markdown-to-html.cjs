@@ -179,8 +179,38 @@ async function main() {
     }
   }
 
-  console.log('✨ Done! Your Directus webhook will trigger a rebuild automatically.')
-  console.log('   Wait 2-3 minutes and check your site.')
+  console.log('✨ Content updated in Directus!')
+  console.log('')
+  console.log('🚀 Triggering Cloudflare Pages rebuild...')
+
+  // Trigger rebuild directly (don't rely on Directus webhook)
+  try {
+    const rebuildUrl = 'https://api.cloudflare.com/client/v4/pages/webhooks/deploy_hooks/bbb1dec2-0e0e-4963-880e-9b91454f6d2c'
+    await new Promise((resolve, reject) => {
+      const https = require('https')
+      const req = https.request(rebuildUrl, { method: 'POST' }, (res) => {
+        let body = ''
+        res.on('data', chunk => body += chunk)
+        res.on('end', () => {
+          if (res.statusCode === 200) {
+            const result = JSON.parse(body)
+            console.log(`✅ Rebuild triggered! Deployment ID: ${result.result.id}`)
+            resolve()
+          } else {
+            reject(new Error(`Failed to trigger rebuild: ${res.statusCode}`))
+          }
+        })
+      })
+      req.on('error', reject)
+      req.end()
+    })
+  } catch (error) {
+    console.error('⚠️  Failed to trigger rebuild:', error.message)
+    console.error('   You can manually trigger it in Cloudflare Pages dashboard')
+  }
+
+  console.log('')
+  console.log('⏱️  Wait 2-3 minutes, then check https://automatonicai.com/')
 }
 
 // Run the script
