@@ -51,8 +51,8 @@ export default withSentryConfig(
 
     // Suppresses source map uploading logs during bundling
     silent: true,
-    org: "project-chronos",
-    project: "web-app",
+    org: "automatonic-ai",
+    project: "project-chronos-web",
   },
   {
     // For all available options, see:
