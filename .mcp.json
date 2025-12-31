@@ -21,11 +21,12 @@
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-postgres"],
       "env": {
-        "PGHOST": "localhost",
-        "PGPORT": "5432",
-        "PGDATABASE": "chronos",
+        "PGHOST": "${PGHOST:-16.52.210.100}",
+        "PGPORT": "${PGPORT:-5432}",
+        "PGDATABASE": "${PGDATABASE:-chronos}",
         "PGUSER": "${POSTGRES_USER:-chronos}",
-        "PGPASSWORD": "${POSTGRES_PASSWORD}"
+        "PGPASSWORD": "${POSTGRES_PASSWORD}",
+        "PGSSLMODE": "${PGSSLMODE:-require}"
       }
     },
     "git": {
@@ -40,6 +41,53 @@
       "args": ["-y", "@modelcontextprotocol/server-brave-search"],
       "env": {
         "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      }
+    },
+    "sentry": {
+      "url": "https://mcp.sentry.dev/mcp",
+      "env": {
+        "SENTRY_ORG_SLUG": "${SENTRY_ORG_SLUG}"
+      }
+    },
+    "nx": {
+      "command": "npx",
+      "args": ["-y", "nx-mcp"],
+      "env": {
+        "NX_WORKSPACE_ROOT": "/home/prometheus/coding/finance/project-chronos"
+      }
+    },
+    "directus": {
+      "command": "npx",
+      "args": ["-y", "@directus/content-mcp"],
+      "env": {
+        "DIRECTUS_URL": "${DIRECTUS_URL}",
+        "DIRECTUS_EMAIL": "${DIRECTUS_EMAIL}",
+        "DIRECTUS_PASSWORD": "${DIRECTUS_PASSWORD}"
+      }
+    },
+    "twenty-crm": {
+      "command": "npx",
+      "args": ["-y", "twenty-crm-mcp-server"],
+      "env": {
+        "TWENTY_API_URL": "${TWENTY_API_URL:-https://api.twenty.com}",
+        "TWENTY_API_KEY": "${TWENTY_API_KEY}"
+      }
+    },
+    "google-workspace": {
+      "command": "npx",
+      "args": ["-y", "@taylorwilsdon/google_workspace_mcp"],
+      "env": {
+        "GOOGLE_CLIENT_ID": "${GOOGLE_CLIENT_ID}",
+        "GOOGLE_CLIENT_SECRET": "${GOOGLE_CLIENT_SECRET}"
+      }
+    },
+    "atlassian": {
+      "command": "npx",
+      "args": ["-y", "@atlassian/mcp-server-atlassian"],
+      "env": {
+        "ATLASSIAN_INSTANCE_URL": "${ATLASSIAN_INSTANCE_URL}",
+        "ATLASSIAN_EMAIL": "${ATLASSIAN_EMAIL}",
+        "ATLASSIAN_API_TOKEN": "${ATLASSIAN_API_TOKEN}"
       }
     }
   }
