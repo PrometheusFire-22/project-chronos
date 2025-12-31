@@ -3,23 +3,33 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
-    # Only create PRs for security updates and patch versions
-    # Ignore major version updates (they can break things)
-    open-pull-requests-limit: 10
+      interval: "monthly"  # Changed from weekly to reduce noise
+    # ONLY create PRs for patch updates and critical security fixes
+    # All major and minor updates require manual review
+    open-pull-requests-limit: 5  # Reduced from 10
     ignore:
-      # Ignore Next.js major versions (manual upgrade only)
+      # Ignore ALL major version updates (breaking changes)
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+      # Ignore minor updates for critical frameworks (too risky)
       - dependency-name: "next"
-        update-types: ["version-update:semver-major"]
-      # Ignore React major versions
+        update-types: ["version-update:semver-minor"]
       - dependency-name: "react"
-        update-types: ["version-update:semver-major"]
+        update-types: ["version-update:semver-minor"]
       - dependency-name: "react-dom"
-        update-types: ["version-update:semver-major"]
-      # Ignore other major framework updates
+        update-types: ["version-update:semver-minor"]
       - dependency-name: "@nx/*"
-        update-types: ["version-update:semver-major"]
-    # Group related updates together
+        update-types: ["version-update:semver-minor"]
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-minor"]
+
+      # Ignore tooling that doesn't affect production
+      - dependency-name: "prettier"
+      - dependency-name: "@swc/*"
+      - dependency-name: "eslint"
+
+    # Group related updates together to reduce PR count
     groups:
       next-framework:
         patterns:
@@ -30,3 +40,6 @@ updates:
         patterns:
           - "@nx/*"
           - "nx"
+      dev-dependencies:
+        dependency-type: "development"
+        update-types: ["patch"]
