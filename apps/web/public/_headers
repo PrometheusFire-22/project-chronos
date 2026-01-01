@@ -1,5 +1,6 @@
 # Cloudflare Pages Headers Configuration
 # This file controls caching behavior for the deployed site
+# NOTE: More specific rules must come BEFORE catch-all rules
 
 # Cache static assets (JS, CSS, images) for 1 year
 /static/*
@@ -8,22 +9,36 @@
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
 
+# Pages with Directus content - slightly longer cache (10 minutes)
+# Content updates appear within 10 min, but pages load fast from cache
+# IMPORTANT: These specific routes must come BEFORE the /* catch-all
+/
+  Cache-Control: public, s-maxage=600, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/features
+  Cache-Control: public, s-maxage=600, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/about
+  Cache-Control: public, s-maxage=600, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+
 # HTML pages - short cache (5 minutes) for balance of freshness and performance
 # CDN caches for 5 min, browser revalidates on each visit
+# This catch-all must come LAST
 /*
   Cache-Control: public, s-maxage=300, max-age=0, must-revalidate
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
-
-# Pages with Directus content - slightly longer cache (10 minutes)
-# Content updates appear within 10 min, but pages load fast from cache
-/
-  Cache-Control: public, s-maxage=600, max-age=0, must-revalidate
-
-/features
-  Cache-Control: public, s-maxage=600, max-age=0, must-revalidate
-
-/about
-  Cache-Control: public, s-maxage=600, max-age=0, must-revalidate
