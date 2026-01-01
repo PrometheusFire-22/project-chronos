@@ -7,6 +7,8 @@ import {
   Target,
   Lightbulb,
   LineChart,
+  Network,
+  Globe,
   type LucideIcon
 } from 'lucide-react'
 import type { Feature } from '@/lib/directus'
@@ -22,6 +24,8 @@ const iconMap: Record<string, LucideIcon> = {
   'target': Target,
   'lightbulb': Lightbulb,
   'line-chart': LineChart,
+  'network': Network,
+  'globe': Globe,
 }
 
 interface UseCasesProps {
