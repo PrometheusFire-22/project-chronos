@@ -16,9 +16,6 @@ Sentry.init({
   integrations: [
     // HTTP instrumentation
     Sentry.httpIntegration(),
-
-    // Node.js performance monitoring
-    Sentry.nodeProfilingIntegration(),
   ],
 
   // Filter sensitive server data
