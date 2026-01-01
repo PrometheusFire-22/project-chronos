@@ -31,7 +31,7 @@ Sentry.init({
       delete event.request.headers;
 
       // Sanitize query params
-      if (event.request.query_string) {
+      if (event.request.query_string && typeof event.request.query_string === 'string') {
         event.request.query_string = event.request.query_string
           .replace(/([?&])(email|token|key|password|api_key)=[^&]*/gi, '$1$2=REDACTED');
       }
