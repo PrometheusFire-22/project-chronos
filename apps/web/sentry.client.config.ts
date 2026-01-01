@@ -69,6 +69,41 @@ Sentry.init({
     'adsbygoogle',
   ],
 
-  // User context (if you have auth)
-  // Will be set via Sentry.setUser() after login
+  // Track deployment information
+  initialScope: {
+    tags: {
+      deployment: process.env.CF_PAGES_COMMIT_SHA || 'local',
+      runtime: 'browser',
+    },
+  },
 });
+
+// Set default anonymous user context
+Sentry.setUser({
+  id: 'anonymous',
+  ip_address: '{{auto}}', // Sentry auto-detects and anonymizes
+});
+
+/**
+ * Set user context when user logs in
+ * Call this after successful authentication
+ */
+export function setSentryUser(user: {
+  id: string;
+  email?: string;
+  username?: string;
+} | null) {
+  if (user) {
+    Sentry.setUser({
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    });
+  } else {
+    // Clear user on logout
+    Sentry.setUser({
+      id: 'anonymous',
+      ip_address: '{{auto}}',
+    });
+  }
+}
