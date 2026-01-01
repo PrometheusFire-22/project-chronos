@@ -75,7 +75,7 @@ export function AboutValues({ values }: AboutValuesProps) {
 
                 {/* Description */}
                 <div
-                  className="text-slate-400 leading-relaxed [&>p]:mb-3 [&>strong]:font-semibold [&>strong]:text-white [&>h2]:text-xl [&>h2]:font-bold [&>h2]:text-white [&>h2]:mt-6 [&>h2]:mb-3 [&>h3]:text-lg [&>h3]:font-semibold [&>h3]:text-white [&>h3]:mt-4 [&>h3]:mb-2 [&>ul]:list-disc [&>ul]:ml-5 [&>ul]:text-slate-400 [&>ol]:list-decimal [&>ol]:ml-5 [&>ol]:text-slate-400"
+                  className="prose prose-invert max-w-none"
                   dangerouslySetInnerHTML={{ __html: renderRichText(value.description) }}
                 />
               </div>

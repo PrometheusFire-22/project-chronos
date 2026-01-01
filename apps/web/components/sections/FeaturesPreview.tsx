@@ -11,6 +11,10 @@ import {
   FileText,
   Filter,
   Share2,
+  Network,
+  Globe,
+  Database,
+  TrendingUp,
   type LucideIcon
 } from 'lucide-react'
 import type { Feature } from '@/lib/directus'
@@ -30,6 +34,10 @@ const iconMap: Record<string, LucideIcon> = {
   'file-text': FileText,
   'filter': Filter,
   'share-2': Share2,
+  'network': Network,
+  'globe': Globe,
+  'database': Database,
+  'trending-up': TrendingUp,
 }
 
 interface FeaturesPreviewProps {
@@ -78,7 +86,7 @@ export function FeaturesPreview({ features }: FeaturesPreviewProps) {
 
                 {/* Description */}
                 <div
-                  className="prose prose-invert prose-sm max-w-none [&>p]:mb-3 [&>p]:text-slate-400 [&>strong]:font-semibold [&>strong]:text-white [&>h2]:text-lg [&>h2]:font-bold [&>h2]:text-white [&>h2]:mt-4 [&>h2]:mb-2"
+                  className="prose prose-invert prose-sm max-w-none"
                   dangerouslySetInnerHTML={{ __html: renderRichText(feature.description) }}
                 />
 

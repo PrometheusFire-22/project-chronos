@@ -64,7 +64,7 @@ export function ProblemStatement({ problems }: ProblemStatementProps) {
 
                 {/* Description */}
                 <div
-                  className="text-slate-400 leading-relaxed [&>p]:mb-3 [&>strong]:font-semibold [&>strong]:text-white"
+                  className="prose prose-invert max-w-none prose-sm"
                   dangerouslySetInnerHTML={{ __html: renderRichText(problem.description) }}
                 />
               </div>

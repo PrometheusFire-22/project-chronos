@@ -75,7 +75,7 @@ export function UseCases({ useCases }: UseCasesProps) {
 
                 {/* Description */}
                 <div
-                  className="text-slate-400 leading-relaxed [&>p]:mb-3 [&>strong]:font-semibold [&>strong]:text-white"
+                  className="prose prose-invert max-w-none"
                   dangerouslySetInnerHTML={{ __html: renderRichText(useCase.description) }}
                 />
 

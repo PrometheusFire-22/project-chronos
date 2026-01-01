@@ -89,7 +89,7 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
 
                   {/* Description */}
                   <div
-                    className="prose prose-invert prose-lg max-w-none [&>p]:mb-4 [&>p]:text-slate-400 [&>strong]:font-semibold [&>strong]:text-white [&>h2]:text-2xl [&>h2]:font-bold [&>h2]:text-white [&>h2]:mt-8 [&>h2]:mb-4 [&>h3]:text-xl [&>h3]:font-semibold [&>h3]:text-white [&>h3]:mt-6 [&>h3]:mb-3 [&>ul]:list-disc [&>ul]:ml-5 [&>ul]:text-slate-400 [&>ol]:list-decimal [&>ol]:ml-5 [&>ol]:text-slate-400"
+                    className="prose prose-invert prose-lg max-w-none"
                     dangerouslySetInnerHTML={{ __html: renderRichText(feature.description) }}
                   />
 
