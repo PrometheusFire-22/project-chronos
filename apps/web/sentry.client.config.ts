@@ -6,9 +6,10 @@ Sentry.init({
   // Performance monitoring - sample 10% in production (reduce costs)
   tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
 
-  // Session replay - sample 10% of sessions for debugging UX issues
-  replaysSessionSampleRate: 0.1,
-  replaysOnErrorSampleRate: 1.0, // Always capture replays on errors
+  // Session replay - TEMPORARILY DISABLED due to duplicate instance error
+  // TODO: Re-enable after fixing Next.js 15 integration
+  replaysSessionSampleRate: 0,
+  replaysOnErrorSampleRate: 0,
 
   // Environment tracking
   environment: process.env.NEXT_PUBLIC_VERCEL_ENV || process.env.NODE_ENV || 'development',
@@ -18,11 +19,11 @@ Sentry.init({
 
   // Integrations
   integrations: [
-    // Session Replay for visual bug reproduction
-    Sentry.replayIntegration({
-      maskAllText: true,
-      blockAllMedia: true,
-    }),
+    // Session Replay - TEMPORARILY DISABLED (causing duplicate instance error)
+    // Sentry.replayIntegration({
+    //   maskAllText: true,
+    //   blockAllMedia: true,
+    // }),
 
     // Browser tracing for performance monitoring
     Sentry.browserTracingIntegration({
