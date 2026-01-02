@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "nxCloudId": "693a3a62afa88f57bc137da7",
+  "nxCloudAccessToken": "${NX_CLOUD_ACCESS_TOKEN}",
   "plugins": [
     {
       "plugin": "@nx/next/plugin",
