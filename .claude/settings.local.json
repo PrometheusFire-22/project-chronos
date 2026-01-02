@@ -63,7 +63,9 @@
       "Bash(wc:*)",
       "Bash(pnpm add:*)",
       "Bash(pnpm dev)",
-      "Bash(pnpm run deploy)"
+      "Bash(pnpm run deploy)",
+      "Bash(git log:*)",
+      "Bash(node scripts/verify-directus-content.cjs:*)"
     ],
     "deny": [],
     "ask": []
