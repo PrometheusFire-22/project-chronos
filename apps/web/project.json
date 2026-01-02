@@ -4,5 +4,14 @@
   "sourceRoot": "apps/web",
   "projectType": "application",
   "tags": ["type:app", "scope:marketing"],
-  "targets": {}
+  "targets": {
+    "build": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "build"
+      },
+      "outputs": ["{projectRoot}/out", "{projectRoot}/.next"],
+      "cache": true
+    }
+  }
 }
