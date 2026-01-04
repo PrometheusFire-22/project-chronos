@@ -7,6 +7,10 @@ import {
   Globe,
   Activity,
   Zap,
+  Layers,
+  FileSearch,
+  Axis3d,
+  FileSpreadsheet,
   type LucideIcon
 } from 'lucide-react'
 import type { Feature } from '@/lib/directus'
@@ -22,6 +26,10 @@ const iconMap: Record<string, LucideIcon> = {
   'globe': Globe,
   'activity': Activity,
   'zap': Zap,
+  'layers': Layers,
+  'search': FileSearch,
+  'axis-3d': Axis3d,
+  'file-spreadsheet': FileSpreadsheet,
 }
 
 interface ProblemStatementProps {
