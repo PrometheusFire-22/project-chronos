@@ -1,0 +1,112 @@
+/**
+ * REFERENCE IMPLEMENTATION: Webhook Revalidation Endpoint
+ *
+ * This file is a reference implementation and is NOT active in the current build.
+ *
+ * To enable this endpoint:
+ * 1. Remove `output: 'export'` from next.config.js
+ * 2. Copy this file to app/api/revalidate/route.ts
+ * 3. Deploy to a platform that supports Next.js server features
+ *
+ * Location when active: app/api/revalidate/route.ts
+ */
+
+import { NextRequest, NextResponse } from 'next/server'
+import { revalidateTag, revalidatePath } from 'next/cache'
+
+export const dynamic = 'force-dynamic'
+
+interface RevalidateRequest {
+  collection?: string
+  slug?: string
+  tags?: string[]
+  paths?: string[]
+}
+
+export async function POST(request: NextRequest) {
+  // Verify secret token to prevent unauthorized revalidation
+  const secret = request.headers.get('x-revalidate-secret')
+  const expectedSecret = process.env.REVALIDATE_SECRET
+
+  if (!expectedSecret) {
+    return NextResponse.json(
+      { error: 'REVALIDATE_SECRET not configured' },
+      { status: 500 }
+    )
+  }
+
+  if (secret !== expectedSecret) {
+    return NextResponse.json(
+      { error: 'Invalid secret' },
+      { status: 401 }
+    )
+  }
+
+  try {
+    const body: RevalidateRequest = await request.json()
+    const revalidated: { tags: string[]; paths: string[] } = {
+      tags: [],
+      paths: [],
+    }
+
+    // Revalidate by collection
+    if (body.collection === 'cms_blog_posts') {
+      // Revalidate blog listing
+      revalidatePath('/blog')
+      revalidated.paths.push('/blog')
+
+      // Revalidate all blog posts tag
+      revalidateTag('blog-posts')
+      revalidated.tags.push('blog-posts')
+
+      // Revalidate specific post if slug provided
+      if (body.slug) {
+        revalidatePath(`/blog/${body.slug}`)
+        revalidated.paths.push(`/blog/${body.slug}`)
+
+        revalidateTag(`blog-post-${body.slug}`)
+        revalidated.tags.push(`blog-post-${body.slug}`)
+      }
+    }
+
+    // Revalidate specific tags
+    if (body.tags && body.tags.length > 0) {
+      body.tags.forEach((tag) => {
+        revalidateTag(tag)
+        revalidated.tags.push(tag)
+      })
+    }
+
+    // Revalidate specific paths
+    if (body.paths && body.paths.length > 0) {
+      body.paths.forEach((path) => {
+        revalidatePath(path)
+        revalidated.paths.push(path)
+      })
+    }
+
+    return NextResponse.json({
+      revalidated: true,
+      message: 'Cache revalidated successfully',
+      ...revalidated,
+      timestamp: new Date().toISOString(),
+    })
+  } catch (error) {
+    console.error('Revalidation error:', error)
+    return NextResponse.json(
+      {
+        error: 'Failed to revalidate',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 }
+    )
+  }
+}
+
+// Health check endpoint
+export async function GET() {
+  return NextResponse.json({
+    status: 'ready',
+    message: 'Revalidation endpoint is configured',
+  })
+}
