@@ -15,6 +15,7 @@ import {
   Globe,
   Database,
   TrendingUp,
+  Route,
   type LucideIcon
 } from 'lucide-react'
 import type { Feature } from '@/lib/directus'
@@ -38,6 +39,7 @@ const iconMap: Record<string, LucideIcon> = {
   'globe': Globe,
   'database': Database,
   'trending-up': TrendingUp,
+  'route': Route,
 }
 
 interface FeaturesPreviewProps {

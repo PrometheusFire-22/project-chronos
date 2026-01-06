@@ -9,6 +9,9 @@ import {
   LineChart,
   Network,
   Globe,
+  Workflow,
+  Share2,
+  Map,
   type LucideIcon
 } from 'lucide-react'
 import type { Feature } from '@/lib/directus'
@@ -26,6 +29,9 @@ const iconMap: Record<string, LucideIcon> = {
   'line-chart': LineChart,
   'network': Network,
   'globe': Globe,
+  'sitemap': Workflow,
+  'share-2': Share2,
+  'map': Map,
 }
 
 interface UseCasesProps {
@@ -55,19 +61,17 @@ export function UseCases({ useCases }: UseCasesProps) {
             return (
               <div
                 key={useCase.id}
-                className={`group relative p-8 rounded-2xl border transition-all duration-300 ${
-                  isEven
-                    ? 'bg-gradient-to-br from-violet-500/5 to-transparent border-violet-500/20 hover:border-violet-500/40'
-                    : 'bg-gradient-to-br from-sky-500/5 to-transparent border-sky-500/20 hover:border-sky-500/40'
-                } hover:shadow-xl`}
+                className={`group relative p-8 rounded-2xl border transition-all duration-300 ${isEven
+                  ? 'bg-gradient-to-br from-violet-500/5 to-transparent border-violet-500/20 hover:border-violet-500/40'
+                  : 'bg-gradient-to-br from-sky-500/5 to-transparent border-sky-500/20 hover:border-sky-500/40'
+                  } hover:shadow-xl`}
               >
                 {/* Icon */}
                 <div
-                  className={`mb-6 w-12 h-12 rounded-xl flex items-center justify-center ${
-                    isEven
-                      ? 'bg-violet-500/10 text-violet-400'
-                      : 'bg-sky-500/10 text-sky-400'
-                  }`}
+                  className={`mb-6 w-12 h-12 rounded-xl flex items-center justify-center ${isEven
+                    ? 'bg-violet-500/10 text-violet-400'
+                    : 'bg-sky-500/10 text-sky-400'
+                    }`}
                 >
                   <IconComponent className="w-6 h-6" />
                 </div>
@@ -85,11 +89,10 @@ export function UseCases({ useCases }: UseCasesProps) {
 
                 {/* Decorative gradient line */}
                 <div
-                  className={`absolute bottom-0 left-0 w-full h-0.5 rounded-b-2xl scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left ${
-                    isEven
-                      ? 'bg-gradient-to-r from-violet-500 to-transparent'
-                      : 'bg-gradient-to-r from-sky-500 to-transparent'
-                  }`}
+                  className={`absolute bottom-0 left-0 w-full h-0.5 rounded-b-2xl scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left ${isEven
+                    ? 'bg-gradient-to-r from-violet-500 to-transparent'
+                    : 'bg-gradient-to-r from-sky-500 to-transparent'
+                    }`}
                 />
               </div>
             )

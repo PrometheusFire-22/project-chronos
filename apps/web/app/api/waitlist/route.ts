@@ -79,6 +79,7 @@ export async function POST(request: NextRequest) {
         email: validatedData.email,
       })
 
+      // Send user confirmation email
       await resend.emails.send({
         from: 'Chronos <waitlist@automatonicai.com>',
         to: validatedData.email,
@@ -89,6 +90,44 @@ export async function POST(request: NextRequest) {
       })
 
       console.log('Waitlist confirmation email sent to:', validatedData.email)
+
+      // Send admin notification email
+      const adminNotificationHtml = `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #334155;">New Waitlist Signup</h2>
+          <p>A new user has joined the waitlist:</p>
+
+          <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <p style="margin: 8px 0;"><strong>Name:</strong> ${validatedData.first_name} ${validatedData.last_name}</p>
+            <p style="margin: 8px 0;"><strong>Email:</strong> ${validatedData.email}</p>
+            ${validatedData.company ? `<p style="margin: 8px 0;"><strong>Company:</strong> ${validatedData.company}</p>` : ''}
+            ${validatedData.role ? `<p style="margin: 8px 0;"><strong>Role:</strong> ${validatedData.role}</p>` : ''}
+            ${validatedData.heard_from ? `<p style="margin: 8px 0;"><strong>Heard From:</strong> ${validatedData.heard_from}</p>` : ''}
+          </div>
+
+          ${validatedData.utm_source || validatedData.utm_medium || validatedData.utm_campaign ? `
+          <div style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin: 20px 0;">
+            <p style="margin: 0 0 8px 0; font-weight: 600; color: #64748b;">UTM Parameters:</p>
+            ${validatedData.utm_source ? `<p style="margin: 4px 0; color: #64748b;">Source: ${validatedData.utm_source}</p>` : ''}
+            ${validatedData.utm_medium ? `<p style="margin: 4px 0; color: #64748b;">Medium: ${validatedData.utm_medium}</p>` : ''}
+            ${validatedData.utm_campaign ? `<p style="margin: 4px 0; color: #64748b;">Campaign: ${validatedData.utm_campaign}</p>` : ''}
+          </div>
+          ` : ''}
+
+          <p style="margin-top: 20px; color: #64748b; font-size: 14px;">
+            Submission Source: ${validatedData.source}
+          </p>
+        </div>
+      `
+
+      await resend.emails.send({
+        from: 'Chronos Notifications <waitlist@automatonicai.com>',
+        to: 'geoff@automatonicai.com',
+        subject: `New Waitlist Signup: ${validatedData.first_name} ${validatedData.last_name}`,
+        html: adminNotificationHtml,
+      })
+
+      console.log('Admin notification email sent for:', validatedData.email)
     } catch (emailError) {
       // Log error but don't fail the request - user is still on waitlist
       console.error('Failed to send confirmation email:', emailError)

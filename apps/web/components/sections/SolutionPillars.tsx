@@ -7,6 +7,9 @@ import {
   Activity,
   BarChart3,
   Map,
+  GitGraph,
+  Box,
+  MapPin,
   type LucideIcon
 } from 'lucide-react'
 import type { Feature } from '@/lib/directus'
@@ -22,6 +25,9 @@ const iconMap: Record<string, LucideIcon> = {
   'activity': Activity,
   'bar-chart-3': BarChart3,
   'map': Map,
+  'git-graph': GitGraph,
+  'box': Box,
+  'map-pin': MapPin,
 }
 
 // Color mapping for pillar accent colors
