@@ -35,3 +35,15 @@ clean:
 	find . -type d -name __pycache__ -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
 	rm -rf .pytest_cache .coverage htmlcov
+
+# ============================================================================
+# Environment Management
+# ============================================================================
+
+use-local:
+	@ln -sf .env.local .env
+	@echo "🔄 Switched to LOCAL environment (Docker)"
+
+use-aws:
+	@ln -sf .env.aws .env
+	@echo "🔄 Switched to AWS environment (Lightsail)"

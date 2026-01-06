@@ -19,22 +19,7 @@
     },
     "postgres": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-postgres"],
-      "env": {
-        "PGHOST": "${PGHOST:-16.52.210.100}",
-        "PGPORT": "${PGPORT:-5432}",
-        "PGDATABASE": "${PGDATABASE:-chronos}",
-        "PGUSER": "${POSTGRES_USER:-chronos}",
-        "PGPASSWORD": "${POSTGRES_PASSWORD}",
-        "PGSSLMODE": "${PGSSLMODE:-require}"
-      }
-    },
-    "git": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-git"],
-      "env": {
-        "GIT_DIR": "/home/prometheus/coding/finance/project-chronos/.git"
-      }
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}"]
     },
     "brave-search": {
       "command": "npx",
@@ -44,9 +29,10 @@
       }
     },
     "sentry": {
-      "url": "https://mcp.sentry.dev/mcp",
+      "command": "npx",
+      "args": ["-y", "@sentry/mcp-server"],
       "env": {
-        "SENTRY_ORG_SLUG": "${SENTRY_ORG_SLUG}"
+        "SENTRY_ACCESS_TOKEN": "${SENTRY_ACCESS_TOKEN}"
       }
     },
     "nx": {
@@ -61,8 +47,8 @@
       "args": ["-y", "@directus/content-mcp"],
       "env": {
         "DIRECTUS_URL": "${DIRECTUS_URL}",
-        "DIRECTUS_EMAIL": "${DIRECTUS_EMAIL}",
-        "DIRECTUS_PASSWORD": "${DIRECTUS_PASSWORD}"
+        "DIRECTUS_USER_EMAIL": "${DIRECTUS_EMAIL}",
+        "DIRECTUS_USER_PASSWORD": "${DIRECTUS_PASSWORD}"
       }
     },
     "twenty-crm": {
@@ -73,21 +59,29 @@
         "TWENTY_API_KEY": "${TWENTY_API_KEY}"
       }
     },
-    "google-workspace": {
-      "command": "npx",
-      "args": ["-y", "@taylorwilsdon/google_workspace_mcp"],
-      "env": {
-        "GOOGLE_CLIENT_ID": "${GOOGLE_CLIENT_ID}",
-        "GOOGLE_CLIENT_SECRET": "${GOOGLE_CLIENT_SECRET}"
-      }
-    },
     "atlassian": {
       "command": "npx",
-      "args": ["-y", "@atlassian/mcp-server-atlassian"],
+      "args": ["-y", "mcp-remote", "https://mcp.atlassian.com/v1/sse"],
       "env": {
         "ATLASSIAN_INSTANCE_URL": "${ATLASSIAN_INSTANCE_URL}",
         "ATLASSIAN_EMAIL": "${ATLASSIAN_EMAIL}",
         "ATLASSIAN_API_TOKEN": "${ATLASSIAN_API_TOKEN}"
+      }
+    },
+    "cloudflare": {
+      "command": "/home/prometheus/coding/finance/project-chronos/scripts/cloudflare-mcp-wrapper.sh",
+      "args": ["${CLOUDFLARE_ACCOUNT_ID}"],
+      "env": {
+        "CLOUDFLARE_API_TOKEN": "${CLOUDFLARE_API_TOKEN}"
+      }
+    },
+    "resend": {
+      "command": "node",
+      "args": ["/home/prometheus/coding/finance/project-chronos/mcp-send-email/build/index.js"],
+      "env": {
+        "RESEND_API_KEY": "${RESEND_API_KEY}",
+        "SENDER_EMAIL_ADDRESS": "waitlist@automatonicai.com",
+        "REPLY_TO_EMAIL_ADDRESS": "geoff@automatonicai.com"
       }
     }
   }
