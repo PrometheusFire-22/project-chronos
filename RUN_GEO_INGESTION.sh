@@ -6,7 +6,7 @@ echo "Starting geospatial data ingestion..."
 echo "This will load US and Canadian boundary layers into PostGIS."
 echo ""
 
-python src/chronos/ingestion/geospatial_cli.py
+PYTHONPATH=$(pwd)/src /workspace/.venv/bin/python src/chronos/ingestion/geospatial_cli.py
 
 echo ""
 echo "Ingestion complete! Check the summary above for results."

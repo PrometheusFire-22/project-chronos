@@ -56,6 +56,40 @@ services:
     networks:
       - chronos-network
 
+  # ------------------------------------------------------------------------------
+  #  Directus: Headless CMS 🐰
+  # ------------------------------------------------------------------------------
+  directus:
+    image: directus/directus:latest
+    container_name: chronos-directus
+    ports:
+      - "8055:8055"
+    env_file:
+      - ./deployment/lightsail/.env
+    environment:
+      DB_CLIENT: pg
+      DB_HOST: 16.52.210.100
+      DB_PORT: 5432
+      DB_DATABASE: ${POSTGRES_DB}
+      DB_USER: ${DIRECTUS_DB_USER}
+      DB_PASSWORD: ${DIRECTUS_DB_PASSWORD}
+      KEY: ${DIRECTUS_KEY}
+      SECRET: ${DIRECTUS_SECRET}
+      ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
+      PUBLIC_URL: https://admin.automatonicai.com
+      CORS_ENABLED: true
+      CORS_ORIGIN: https://automatonicai.com,https://www.automatonicai.com
+      DB_SEARCH_PATH: "public,timeseries,geospatial,metadata"
+    volumes:
+      - directus-uploads:/directus/uploads
+      - directus-extensions:/directus/extensions
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+    networks:
+      - chronos-network
+
 volumes:
   metabase-data:
     driver: local
@@ -65,4 +99,9 @@ volumes:
 
   # Define the new volume for MailHog (optional, but good practice)
   mailhog-data:
+    driver: local
+
+  directus-uploads:
+    driver: local
+  directus-extensions:
     driver: local

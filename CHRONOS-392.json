@@ -1,0 +1,587 @@
+{
+  "expand": "renderedFields,names,schema,operations,editmeta,changelog,versionedRepresentations",
+  "id": "11820",
+  "self": "https://automatonicai.atlassian.net/rest/api/3/issue/11820",
+  "key": "CHRONOS-392",
+  "fields": {
+    "statuscategorychangedate": "2026-01-06T10:26:28.637-0500",
+    "issuetype": {
+      "self": "https://automatonicai.atlassian.net/rest/api/3/issuetype/10001",
+      "id": "10001",
+      "description": "Tasks track small, distinct pieces of work.",
+      "iconUrl": "https://automatonicai.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10318?size=medium",
+      "name": "Task",
+      "subtask": false,
+      "avatarId": 10318,
+      "entityId": "8035d333-b6a7-4901-8cc6-ee9e0822abbc",
+      "hierarchyLevel": 0
+    },
+    "timespent": null,
+    "project": {
+      "self": "https://automatonicai.atlassian.net/rest/api/3/project/10000",
+      "id": "10000",
+      "key": "CHRONOS",
+      "name": "Project Chronos",
+      "projectTypeKey": "software",
+      "simplified": true,
+      "avatarUrls": {
+        "48x48": "https://automatonicai.atlassian.net/rest/api/3/universal_avatar/view/type/project/avatar/10419",
+        "24x24": "https://automatonicai.atlassian.net/rest/api/3/universal_avatar/view/type/project/avatar/10419?size=small",
+        "16x16": "https://automatonicai.atlassian.net/rest/api/3/universal_avatar/view/type/project/avatar/10419?size=xsmall",
+        "32x32": "https://automatonicai.atlassian.net/rest/api/3/universal_avatar/view/type/project/avatar/10419?size=medium"
+      }
+    },
+    "fixVersions": [],
+    "aggregatetimespent": null,
+    "customfield_10034": null,
+    "statusCategory": {
+      "self": "https://automatonicai.atlassian.net/rest/api/3/statuscategory/2",
+      "id": 2,
+      "key": "new",
+      "colorName": "blue-gray",
+      "name": "To Do"
+    },
+    "resolution": null,
+    "resolutiondate": null,
+    "workratio": -1,
+    "issuerestriction": {
+      "issuerestrictions": {},
+      "shouldDisplay": true
+    },
+    "watches": {
+      "self": "https://automatonicai.atlassian.net/rest/api/3/issue/CHRONOS-392/watchers",
+      "watchCount": 1,
+      "isWatching": true
+    },
+    "lastViewed": null,
+    "created": "2026-01-06T10:26:28.281-0500",
+    "customfield_10020": null,
+    "customfield_10021": null,
+    "priority": {
+      "self": "https://automatonicai.atlassian.net/rest/api/3/priority/3",
+      "iconUrl": "https://automatonicai.atlassian.net/images/icons/priorities/medium_new.svg",
+      "name": "Medium",
+      "id": "3"
+    },
+    "labels": [],
+    "customfield_10016": null,
+    "customfield_10019": "0|i002af:",
+    "timeestimate": null,
+    "aggregatetimeoriginalestimate": null,
+    "versions": [],
+    "issuelinks": [],
+    "assignee": null,
+    "updated": "2026-01-06T10:26:28.412-0500",
+    "status": {
+      "self": "https://automatonicai.atlassian.net/rest/api/3/status/10000",
+      "description": "",
+      "iconUrl": "https://automatonicai.atlassian.net/",
+      "name": "To Do",
+      "id": "10000",
+      "statusCategory": {
+        "self": "https://automatonicai.atlassian.net/rest/api/3/statuscategory/2",
+        "id": 2,
+        "key": "new",
+        "colorName": "blue-gray",
+        "name": "To Do"
+      }
+    },
+    "components": [],
+    "timeoriginalestimate": null,
+    "description": {
+      "type": "doc",
+      "version": 1,
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Verify that geospatial shapefiles exist and are properly configured for ingestion."
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Verification Steps:",
+              "marks": [
+                {
+                  "type": "strong"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "orderedList",
+          "attrs": {
+            "order": 1
+          },
+          "content": [
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Check that shapefiles exist in "
+                    },
+                    {
+                      "type": "text",
+                      "text": "/home/prometheus/coding/finance/project-chronos/gis_data/",
+                      "marks": [
+                        {
+                          "type": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Verify paths in "
+                    },
+                    {
+                      "type": "text",
+                      "text": "database/seeds/geospatial_catalog.csv",
+                      "marks": [
+                        {
+                          "type": "code"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "text": " match actual file locations"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Confirm gdal/geopandas dependencies are installed"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Test shapefile readability with GeoPandas"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Expected Shapefiles:",
+              "marks": [
+                {
+                  "type": "strong"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "\n"
+            },
+            {
+              "type": "text",
+              "text": "US Census TIGER/Line 2024:",
+              "marks": [
+                {
+                  "type": "strong"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "bulletList",
+          "content": [
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "US States: "
+                    },
+                    {
+                      "type": "text",
+                      "text": "gis_data/raw/USA/national/unzipped/tl_2024_us_state/tl_2024_us_state.shp",
+                      "marks": [
+                        {
+                          "type": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "US Counties: "
+                    },
+                    {
+                      "type": "text",
+                      "text": "gis_data/raw/USA/national/unzipped/tl_2024_us_county/tl_2024_us_county.shp",
+                      "marks": [
+                        {
+                          "type": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "US Places: "
+                    },
+                    {
+                      "type": "text",
+                      "text": "gis_data/raw/USA/national/unzipped/tl_2024_us_place/tl_2024_us_place.shp",
+                      "marks": [
+                        {
+                          "type": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "US ZCTAs: "
+                    },
+                    {
+                      "type": "text",
+                      "text": "gis_data/raw/USA/national/unzipped/tl_2024_us_zcta520/tl_2024_us_zcta520.shp",
+                      "marks": [
+                        {
+                          "type": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Stats Canada 2021:",
+              "marks": [
+                {
+                  "type": "strong"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "bulletList",
+          "content": [
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Provinces: "
+                    },
+                    {
+                      "type": "text",
+                      "text": "gis_data/raw/CAN/national/unzipped/lpr_000b21a_e/lpr_000b21a_e.shp",
+                      "marks": [
+                        {
+                          "type": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Census Divisions: "
+                    },
+                    {
+                      "type": "text",
+                      "text": "gis_data/raw/CAN/national/unzipped/lcd_000b21a_e/lcd_000b21a_e.shp",
+                      "marks": [
+                        {
+                          "type": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Census Subdivisions: "
+                    },
+                    {
+                      "type": "text",
+                      "text": "gis_data/raw/CAN/national/unzipped/lcsd000b21a_e/lcsd000b21a_e.shp",
+                      "marks": [
+                        {
+                          "type": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Dependencies Check:",
+              "marks": [
+                {
+                  "type": "strong"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "codeBlock",
+          "attrs": {
+            "language": "bash"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "python -c \"import geopandas; import psycopg2; print('Dependencies OK')\""
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Acceptance Criteria:",
+              "marks": [
+                {
+                  "type": "strong"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "bulletList",
+          "content": [
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "All 11 shapefile layers confirmed to exist"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Catalog paths verified to match actual locations"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Dependencies confirmed installed"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Test read successful for at least one shapefile"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "timetracking": {},
+    "customfield_10015": null,
+    "security": null,
+    "attachment": [],
+    "aggregatetimeestimate": null,
+    "summary": "Verify and configure geospatial data",
+    "creator": {
+      "self": "https://automatonicai.atlassian.net/rest/api/3/user?accountId=712020%3Ac9feac3f-908f-4469-847e-bf8e1db3cc6a",
+      "accountId": "712020:c9feac3f-908f-4469-847e-bf8e1db3cc6a",
+      "emailAddress": "geoff@automatonicai.com",
+      "avatarUrls": {
+        "48x48": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:c9feac3f-908f-4469-847e-bf8e1db3cc6a/4d32e8df-14f5-4d3b-bd56-d5e975c45464/48",
+        "24x24": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:c9feac3f-908f-4469-847e-bf8e1db3cc6a/4d32e8df-14f5-4d3b-bd56-d5e975c45464/24",
+        "16x16": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:c9feac3f-908f-4469-847e-bf8e1db3cc6a/4d32e8df-14f5-4d3b-bd56-d5e975c45464/16",
+        "32x32": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:c9feac3f-908f-4469-847e-bf8e1db3cc6a/4d32e8df-14f5-4d3b-bd56-d5e975c45464/32"
+      },
+      "displayName": "Geoff Bevans",
+      "active": true,
+      "timeZone": "America/Toronto",
+      "accountType": "atlassian"
+    },
+    "subtasks": [],
+    "reporter": {
+      "self": "https://automatonicai.atlassian.net/rest/api/3/user?accountId=712020%3Ac9feac3f-908f-4469-847e-bf8e1db3cc6a",
+      "accountId": "712020:c9feac3f-908f-4469-847e-bf8e1db3cc6a",
+      "emailAddress": "geoff@automatonicai.com",
+      "avatarUrls": {
+        "48x48": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:c9feac3f-908f-4469-847e-bf8e1db3cc6a/4d32e8df-14f5-4d3b-bd56-d5e975c45464/48",
+        "24x24": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:c9feac3f-908f-4469-847e-bf8e1db3cc6a/4d32e8df-14f5-4d3b-bd56-d5e975c45464/24",
+        "16x16": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:c9feac3f-908f-4469-847e-bf8e1db3cc6a/4d32e8df-14f5-4d3b-bd56-d5e975c45464/16",
+        "32x32": "https://avatar-management--avatars.us-west-2.prod.public.atl-paas.net/712020:c9feac3f-908f-4469-847e-bf8e1db3cc6a/4d32e8df-14f5-4d3b-bd56-d5e975c45464/32"
+      },
+      "displayName": "Geoff Bevans",
+      "active": true,
+      "timeZone": "America/Toronto",
+      "accountType": "atlassian"
+    },
+    "aggregateprogress": {
+      "progress": 0,
+      "total": 0
+    },
+    "customfield_10000": "{}",
+    "customfield_10001": null,
+    "environment": null,
+    "duedate": null,
+    "progress": {
+      "progress": 0,
+      "total": 0
+    },
+    "votes": {
+      "self": "https://automatonicai.atlassian.net/rest/api/3/issue/CHRONOS-392/votes",
+      "votes": 0,
+      "hasVoted": false
+    },
+    "comment": {
+      "comments": [],
+      "self": "https://automatonicai.atlassian.net/rest/api/3/issue/11820/comment",
+      "maxResults": 0,
+      "total": 0,
+      "startAt": 0
+    },
+    "worklog": {
+      "startAt": 0,
+      "maxResults": 20,
+      "total": 0,
+      "worklogs": []
+    }
+  }
+}

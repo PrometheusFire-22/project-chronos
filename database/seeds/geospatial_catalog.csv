@@ -1,12 +1,12 @@
 layer_id,country,geographic_level,year,layer_name,table_name,shapefile_path,status,description
 # USA NATIONAL LAYERS
-us_states,USA,national,2024,US States,us_states,gis_data/raw/USA/national/unzipped/tl_2024_us_state/tl_2024_us_state.shp,Active,US State boundaries
-us_counties,USA,national,2024,US Counties,us_counties,gis_data/raw/USA/national/unzipped/tl_2024_us_county/tl_2024_us_county.shp,Active,US County boundaries
-us_cbsa,USA,national,2024,Core Based Statistical Areas,us_cbsa,gis_data/raw/USA/national/unzipped/tl_2024_us_cbsa/tl_2024_us_cbsa.shp,Active,Metropolitan and Micropolitan Statistical Areas
-us_csa,USA,national,2024,Combined Statistical Areas,us_csa,gis_data/raw/USA/national/unzipped/tl_2024_us_csa/tl_2024_us_csa.shp,Active,Combined Statistical Areas
-us_metdiv,USA,national,2024,Metropolitan Divisions,us_metdiv,gis_data/raw/USA/national/unzipped/tl_2024_us_metdiv/tl_2024_us_metdiv.shp,Active,Metropolitan Divisions
-us_zcta,USA,national,2020,ZIP Code Tabulation Areas,us_zcta,gis_data/raw/USA/national/unzipped/tl_2020_us_zcta520/tl_2020_us_zcta520.shp,Active,ZIP Code Tabulation Areas
-us_uac,USA,national,2020,Urban Areas,us_uac,gis_data/raw/USA/national/unzipped/tl_2020_us_uac20/tl_2020_us_uac20.shp,Active,Urban Areas
+us_states,USA,national,2024,US States,us_states,gis_data/raw/USA/national/unzipped/tl_2024_us_state/tl_2024_us_state.shp,Inactive,US State boundaries
+us_counties,USA,national,2024,US Counties,us_counties,gis_data/raw/USA/national/unzipped/tl_2024_us_county/tl_2024_us_county.shp,Inactive,US County boundaries
+us_cbsa,USA,national,2024,Core Based Statistical Areas,us_cbsa,gis_data/raw/USA/national/unzipped/tl_2024_us_cbsa/tl_2024_us_cbsa.shp,Inactive,Metropolitan and Micropolitan Statistical Areas
+us_csa,USA,national,2024,Combined Statistical Areas,us_csa,gis_data/raw/USA/national/unzipped/tl_2024_us_csa/tl_2024_us_csa.shp,Inactive,Combined Statistical Areas
+us_metdiv,USA,national,2024,Metropolitan Divisions,us_metdiv,gis_data/raw/USA/national/unzipped/tl_2024_us_metdiv/tl_2024_us_metdiv.shp,Inactive,Metropolitan Divisions
+us_zcta,USA,national,2020,ZIP Code Tabulation Areas,us_zcta,gis_data/raw/USA/national/unzipped/tl_2020_us_zcta520/tl_2020_us_zcta520.shp,Inactive,ZIP Code Tabulation Areas
+us_uac,USA,national,2020,Urban Areas,us_uac,gis_data/raw/USA/national/unzipped/tl_2020_us_uac20/tl_2020_us_uac20.shp,Inactive,Urban Areas
 # CANADA NATIONAL LAYERS
 ca_provinces,CAN,national,2021,Provinces and Territories,ca_provinces,gis_data/raw/CAN/national/unzipped/lpr_000b21a_e/lpr_000b21a_e.shp,Active,Canadian Provinces and Territories
 ca_census_divisions,CAN,national,2021,Census Divisions,ca_census_divisions,gis_data/raw/CAN/national/unzipped/lcd_000b21a_e/lcd_000b21a_e.shp,Active,Canadian Census Divisions

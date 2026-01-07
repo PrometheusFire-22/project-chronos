@@ -6,7 +6,7 @@ echo "Starting time-series data ingestion..."
 echo "This will take approximately 5-10 minutes due to API rate limiting."
 echo ""
 
-docker compose exec app python src/chronos/ingestion/timeseries_cli.py
+PYTHONPATH=$(pwd)/src /workspace/.venv/bin/python src/chronos/ingestion/timeseries_cli.py
 
 echo ""
 echo "Ingestion complete! Check the summary above for results."
