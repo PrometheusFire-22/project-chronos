@@ -7,7 +7,7 @@ name = "project-chronos"
 version = "2.0.0"
 description = "Multi-modal data platform for relationship intelligence in private markets"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<4.0"
 license = {text = "Proprietary"}
 authors = [
     {name = "Geoff Bevans", email = "axiologycapital@gmail.com"}
@@ -88,7 +88,6 @@ dev = [
     "ruff>=0.1.9",
     "mypy>=1.7.1",
     "pre-commit>=3.6.0",
-    "ggshield>=1.25.0",
 
     # Type Stubs
     "types-requests>=2.31.0",

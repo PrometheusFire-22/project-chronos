@@ -13,6 +13,7 @@ import csv
 import os
 import sys
 import time
+import argparse
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -24,7 +25,8 @@ from chronos.ingestion.fred import FREDPlugin
 from chronos.ingestion.valet import ValetPlugin
 
 # Load environment
-env_path = Path(__file__).parent.parent.parent / ".env"
+# Load environment (look in project root)
+env_path = Path(__file__).parent.parent.parent.parent / ".env"
 load_dotenv(env_path)
 
 # Database configuration
@@ -199,6 +201,12 @@ def insert_observations(conn, series_id: str, observations: list, source_id: int
 
 def main():
     """Main ingestion orchestrator"""
+    parser = argparse.ArgumentParser(description="Project Chronos: Universal Economic Data Ingestion")
+    parser.add_argument("--source", help="Filter by data source (FRED, Valet)")
+    parser.add_argument("--series", action="append", help="Filter by series ID (can be repeated)")
+    parser.add_argument("--geography", help="Filter by geography name (e.g., Canada, United States)")
+    args = parser.parse_args()
+
     print("\n" + "=" * 60)
     print("🚀 Project Chronos: Universal Economic Data Ingestion")
     print("=" * 60 + "\n")
@@ -215,13 +223,24 @@ def main():
         sys.exit(1)
 
     print(f"📊 Loading catalog: {catalog_path}")
-    series_list = load_catalog(catalog_path)
+    all_series = load_catalog(catalog_path)
+
+    # Filter series list
+    series_list = []
+    for s in all_series:
+        if args.source and s["source"] != args.source:
+            continue
+        if args.geography and s["geography_name"] != args.geography:
+            continue
+        if args.series and s["series_id"] not in args.series:
+            continue
+        series_list.append(s)
 
     if not series_list:
-        print("⚠️  No active series found in catalog")
+        print("⚠️  No series matching filters found in catalog")
         sys.exit(0)
 
-    print(f"✅ Loaded {len(series_list)} active series\n")
+    print(f"✅ Loaded {len(series_list)} series for processing\n")
 
     # Connect to database
     conn = get_db_connection()

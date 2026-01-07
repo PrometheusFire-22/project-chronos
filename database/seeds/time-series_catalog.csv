@@ -39,17 +39,17 @@ STLFSI3,FRED,Active,St. Louis Fed Financial Stress Index,Financial Markets,Natio
 # CANADA MACRO (25 series - EXPANDED FOR CROSS-GEOGRAPHY COMPARISON)
 V41690973,Valet,Active,Consumer Price Index: All Items,Macro,National,Canada,Monthly,Inflation,CPI
 V41690914,Valet,Active,CPI: All Items Excluding Food and Energy,Macro,National,Canada,Monthly,Inflation,CPI
-V41690973,Valet,Active,CPI: All Items,Macro,National,Canada,Monthly,Inflation,CPI
-V41693271,Valet,Deprecated,CPI: Food,Macro,National,Canada,Monthly,Inflation,CPI
-V41693240,Valet,Deprecated,CPI: Energy,Macro,National,Canada,Monthly,Inflation,CPI
-V62305752,Valet,Deprecated,Real Gross Domestic Product,Macro,National,Canada,Quarterly,Growth,GDP
-V62305753,Valet,Deprecated,Nominal Gross Domestic Product,Macro,National,Canada,Quarterly,Growth,GDP
+V41690973,Valet,Deprecated,CPI: All Items (Duplicate),Macro,National,Canada,Monthly,Inflation,CPI
+V41693271,Valet,Active,CPI: Food,Macro,National,Canada,Monthly,Inflation,CPI
+V41693240,Valet,Active,CPI: Energy,Macro,National,Canada,Monthly,Inflation,CPI
+V62305752,Valet,Active,Real Gross Domestic Product,Macro,National,Canada,Quarterly,Growth,GDP
+V62305753,Valet,Active,Nominal Gross Domestic Product,Macro,National,Canada,Quarterly,Growth,GDP
 V2062815,Valet,Deprecated,Real GDP at Market Prices,Macro,National,Canada,Quarterly,Growth,GDP
-V2091072,Valet,Deprecated,Unemployment Rate,Macro,National,Canada,Monthly,Employment,Unemployment
-V2091073,Valet,Deprecated,Employment,Macro,National,Canada,Monthly,Employment,Total Employment
-V2091074,Valet,Deprecated,Labour Force,Macro,National,Canada,Monthly,Employment,Labor Force
-V2091075,Valet,Deprecated,Participation Rate,Macro,National,Canada,Monthly,Employment,Labor Force
-V735,Valet,Deprecated,Housing Starts: All Areas,Macro,National,Canada,Monthly,Housing,Construction
+V2091072,Valet,Active,Unemployment Rate,Macro,National,Canada,Monthly,Employment,Unemployment
+V2091073,Valet,Active,Employment,Macro,National,Canada,Monthly,Employment,Total Employment
+V2091074,Valet,Active,Labour Force,Macro,National,Canada,Monthly,Employment,Labor Force
+V2091075,Valet,Active,Participation Rate,Macro,National,Canada,Monthly,Employment,Labor Force
+V735,Valet,Active,Housing Starts: All Areas,Macro,National,Canada,Monthly,Housing,Construction
 V1992067,Valet,Deprecated,Retail Trade,Macro,National,Canada,Monthly,Consumption,Retail
 V62305723,Valet,Deprecated,Exports of Goods and Services,Macro,National,Canada,Monthly,Trade,Exports
 V62305724,Valet,Deprecated,Imports of Goods and Services,Macro,National,Canada,Monthly,Trade,Imports
@@ -80,3 +80,6 @@ DEXUSUK,FRED,Active,US Dollar to UK Pound Exchange Rate,Foreign Exchange,Global,
 DEXJPUS,FRED,Active,Japanese Yen to US Dollar Exchange Rate,Foreign Exchange,Global,World,Daily,Currency,Major Pairs
 DEXCHUS,FRED,Active,Chinese Yuan to US Dollar Exchange Rate,Foreign Exchange,Global,World,Daily,Currency,Major Pairs
 DEXSZUS,FRED,Active,Swiss Franc to US Dollar Exchange Rate,Foreign Exchange,Global,World,Daily,Currency,Major Pairs
+CANGDPASQ,FRED,Active,Real Gross Domestic Product (FRED Source),Macro,National,Canada,Quarterly,Growth,GDP
+CANURAMS,FRED,Active,Unemployment Rate (FRED Source),Macro,National,Canada,Monthly,Employment,Unemployment
+CANCPIALLMINMEI,FRED,Active,Consumer Price Index: All Items (FRED Source),Macro,National,Canada,Monthly,Inflation,CPI
