@@ -1,7 +1,7 @@
 services:
   timescaledb:
     build:
-      context: .
+      context: ../../
       dockerfile: Dockerfile.timescaledb
     container_name: chronos-db
     environment:
@@ -40,6 +40,7 @@ services:
       PUBLIC_URL: https://admin.automatonicai.com
       CORS_ENABLED: true
       CORS_ORIGIN: https://automatonicai.com,https://www.automatonicai.com
+      DB_SEARCH_PATH: "public,timeseries,geospatial,metadata"
     volumes:
       - directus-uploads:/directus/uploads
       - directus-extensions:/directus/extensions
