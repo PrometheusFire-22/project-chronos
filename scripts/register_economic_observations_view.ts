@@ -1,9 +1,6 @@
 import { createDirectus, rest, readCollections, createCollection, createField, createPermission, authentication } from '@directus/sdk';
-import * as dotenv from 'dotenv';
 
-// Load environment variables
-dotenv.config({ path: '.env.aws' });
-
+// Use environment variables directly (set via shell or .env file loaded by shell)
 const DIRECTUS_URL = process.env.DIRECTUS_URL || 'https://admin.automatonicai.com';
 const DIRECTUS_EMAIL = process.env.DIRECTUS_ADMIN_EMAIL;
 const DIRECTUS_PASSWORD = process.env.DIRECTUS_ADMIN_PASSWORD;
