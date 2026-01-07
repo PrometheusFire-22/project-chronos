@@ -65,9 +65,23 @@
       "Bash(pnpm dev)",
       "Bash(pnpm run deploy)",
       "Bash(git log:*)",
-      "Bash(node scripts/verify-directus-content.cjs:*)"
+      "Bash(node scripts/verify-directus-content.cjs:*)",
+      "mcp__postgres__query"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "enabledMcpjsonServers": [
+    "github",
+    "filesystem",
+    "postgres",
+    "brave-search",
+    "sentry",
+    "nx",
+    "directus",
+    "twenty-crm",
+    "atlassian",
+    "cloudflare",
+    "resend"
+  ]
 }
