@@ -18,7 +18,7 @@ async function registerView() {
     try {
         // Authenticate
         console.log('🔐 Authenticating with Directus...');
-        await client.login(DIRECTUS_EMAIL, DIRECTUS_PASSWORD);
+        await client.login({ email: DIRECTUS_EMAIL, password: DIRECTUS_PASSWORD });
         console.log('✅ Authenticated\n');
 
         // Check if collection already exists
