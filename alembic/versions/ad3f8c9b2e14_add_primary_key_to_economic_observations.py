@@ -20,13 +20,13 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    """Add PRIMARY KEY constraint to economic_observations.id"""
-    # The 'id' column already exists and has unique values
-    # We just need to add the PRIMARY KEY constraint
+    """Add PRIMARY KEY constraint to economic_observations(id, observation_date)"""
+    # The table is partitioned by observation_date, so the PRIMARY KEY
+    # must include the partitioning column
     op.execute(
         """
         ALTER TABLE timeseries.economic_observations
-        ADD PRIMARY KEY (id)
+        ADD PRIMARY KEY (id, observation_date)
         """
     )
 
