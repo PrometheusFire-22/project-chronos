@@ -1,4 +1,4 @@
-import { createDirectus, rest, readCollections, createCollection, createField, createPermission, authentication } from '@directus/sdk';
+import { createDirectus, rest, readCollections, readItems, createCollection, createField, createPermission, authentication } from '@directus/sdk';
 
 // Use environment variables directly (set via shell or .env file loaded by shell)
 const DIRECTUS_URL = process.env.DIRECTUS_URL || 'https://admin.automatonicai.com';
@@ -90,7 +90,11 @@ async function registerView() {
         console.log('🔐 Setting up permissions...');
 
         // Get Administrator policy ID
-        const policies = await client.request(rest().get('/policies'));
+        const policies: any = await client.request(
+            readItems('directus_policies' as any, {
+                filter: { name: { _in: ['Administrator', '$t:public_label', 'Public'] } }
+            })
+        );
         const adminPolicy = policies.find((p: any) => p.name === 'Administrator');
 
         if (adminPolicy) {
