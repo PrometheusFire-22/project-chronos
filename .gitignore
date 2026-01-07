@@ -68,6 +68,11 @@ PAYLOAD_CMS_AUDIT_REPORT.md
 *.sqlite3
 pgdata/
 
+# SQL data exports (large geospatial/time-series dumps)
+*.sql
+!alembic/versions/*.sql
+!database/*.sql
+
 # Logs
 # logs/ --- Commented out to commit gitkeep file
 *.log
