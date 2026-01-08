@@ -13,7 +13,7 @@ DROP VIEW IF EXISTS analytics.economic_observations_view CASCADE;
 CREATE OR REPLACE VIEW analytics.economic_observations_view AS
 SELECT
     -- Synthetic primary key (required by Directus)
-    ROW_NUMBER() OVER (ORDER BY eo.observation_date DESC, eo.series_id) as view_id,
+    CAST(ROW_NUMBER() OVER (ORDER BY eo.observation_date DESC, eo.series_id) AS INTEGER) as view_id,
     
     -- Core observation data
     eo.series_id,
