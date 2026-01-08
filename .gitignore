@@ -138,7 +138,8 @@ yarn.lock
 
 # Build outputs and generated files
 # lib/ (Commented out: Blocks packages/ui/lib source code)
-# !packages/*/lib/
+!apps/web/lib/
+!packages/*/lib/
 # dist/ (already ignored above)
 # build/ (already ignored above)
 .cache/
