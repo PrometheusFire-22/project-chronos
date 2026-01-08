@@ -124,18 +124,28 @@ export default function FilterSidebar({
                     <h3 className="text-sm font-bold tracking-widest uppercase text-slate-700 dark:text-slate-300">Geographic Focus</h3>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                    {geographies.map(geo => (
-                        <button
-                            key={geo}
-                            onClick={() => handleToggleGeo(geo)}
-                            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${selectedGeos.includes(geo)
-                                ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-500'
-                                : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-500 hover:border-slate-400'
-                                }`}
-                        >
-                            {geo.toUpperCase()}
-                        </button>
-                    ))}
+                    {geographies.map(geo => {
+                        const isCanada = geo.toUpperCase() === 'CANADA' || geo.toUpperCase() === 'CA';
+                        const isUS = geo.toUpperCase().includes('UNITED STATES') || geo.toUpperCase() === 'US';
+                        const isSelected = selectedGeos.includes(geo);
+
+                        let colorClasses = 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-500 hover:border-slate-400';
+                        if (isSelected) {
+                            if (isCanada) colorClasses = 'bg-red-500/10 border-red-500/50 text-red-500 shadow-[0_0_15px_-5px_#f87171]';
+                            else if (isUS) colorClasses = 'bg-blue-500/10 border-blue-500/50 text-blue-500 shadow-[0_0_15px_-5px_#60a5fa]';
+                            else colorClasses = 'bg-emerald-500/10 border-emerald-500/50 text-emerald-500';
+                        }
+
+                        return (
+                            <button
+                                key={geo}
+                                onClick={() => handleToggleGeo(geo)}
+                                className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${colorClasses} hover:scale-[1.05]`}
+                            >
+                                {geo}
+                            </button>
+                        );
+                    })}
                 </div>
             </div>
 
@@ -151,26 +161,37 @@ export default function FilterSidebar({
                     </span>
                 </div>
 
-                <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                    {filteredCatalog.map(series => (
-                        <button
-                            key={series.series_id}
-                            onClick={() => handleToggleSeries(series.series_id)}
-                            className={`w-full text-left p-4 rounded-xl border transition-all group ${selectedSeriesIds.includes(series.series_id)
-                                ? 'bg-blue-500/5 border-blue-500/40'
-                                : 'bg-slate-50/50 dark:bg-slate-950/50 border-slate-200 dark:border-slate-800 hover:border-slate-400'
-                                }`}
-                        >
-                            <div className="flex flex-col gap-1">
-                                <span className={`text-[9px] font-black uppercase tracking-widest ${selectedSeriesIds.includes(series.series_id) ? 'text-blue-500' : 'text-slate-400'}`}>
-                                    {series.geography}
-                                </span>
-                                <span className={`text-sm font-bold leading-tight ${selectedSeriesIds.includes(series.series_id) ? 'text-slate-900 dark:text-white' : 'text-slate-600 dark:text-slate-400'}`}>
-                                    {series.series_name}
-                                </span>
-                            </div>
-                        </button>
-                    ))}
+                <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                    {filteredCatalog.map(series => {
+                        const isCanada = series.geography.toUpperCase() === 'CANADA' || series.geography.toUpperCase() === 'CA';
+                        const isUS = series.geography.toUpperCase().includes('UNITED STATES') || series.geography.toUpperCase() === 'US';
+                        const geoColorClass = isCanada ? 'text-red-400' : isUS ? 'text-blue-400' : 'text-slate-400';
+                        const activeGeoColorClass = isCanada ? 'text-red-500' : isUS ? 'text-blue-500' : 'text-blue-500';
+                        const orbitColor = isCanada ? '#f87171' : isUS ? '#60a5fa' : '#3b82f6';
+                        const isSelected = selectedSeriesIds.includes(series.series_id);
+
+                        return (
+                            <button
+                                key={series.series_id}
+                                onClick={() => handleToggleSeries(series.series_id)}
+                                className={`w-full text-left p-4 rounded-xl border transition-all group overflow-hidden glow-orbit-container hover:scale-[1.02] hover:bg-white/5 dark:hover:bg-slate-800/50 ${isSelected
+                                    ? 'bg-blue-500/5 border-blue-500/40'
+                                    : 'bg-slate-50/50 dark:bg-slate-950/50 border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600'
+                                    }`}
+                                style={{ '--orbit-color': orbitColor } as React.CSSProperties}
+                            >
+                                <div className="glow-orbit-border" />
+                                <div className="flex flex-col gap-1 relative z-10">
+                                    <span className={`text-[9px] font-black uppercase tracking-widest transition-colors ${isSelected ? activeGeoColorClass : geoColorClass}`}>
+                                        {series.geography}
+                                    </span>
+                                    <span className={`text-sm font-bold leading-tight transition-all group-hover:scale-[1.01] origin-left ${isSelected ? 'text-slate-900 dark:text-white' : 'text-slate-600 dark:text-slate-400'}`}>
+                                        {series.series_name}
+                                    </span>
+                                </div>
+                            </button>
+                        );
+                    })}
                 </div>
 
                 <button

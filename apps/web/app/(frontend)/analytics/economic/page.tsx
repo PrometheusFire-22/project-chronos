@@ -6,7 +6,6 @@ import FilterSidebar from '@/components/analytics/FilterSidebar';
 import ActiveIndicatorCard from '@/components/analytics/ActiveIndicatorCard';
 
 export const dynamic = 'force-dynamic';
-export const runtime = 'edge';
 
 interface PageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

@@ -6,9 +6,6 @@ const nextConfig = {
   nx: {},
   transpilePackages: ['@chronos/ui'],
 
-  // Static export for Cloudflare Pages (no adapter needed)
-  output: 'export',
-
   // Disable image optimization for static export
   images: {
     unoptimized: true,

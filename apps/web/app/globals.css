@@ -120,4 +120,49 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Glow Orbit Animations */
+  @keyframes spin-glow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .glow-orbit-container {
+    position: relative;
+    z-index: 0;
+  }
+
+  .glow-orbit-border {
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    background: conic-gradient(
+      from var(--border-angle, 0deg),
+      transparent 70%,
+      var(--orbit-color, currentColor) 100%
+    );
+    border-radius: inherit;
+    animation: spin-glow 4s linear infinite;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    padding: 1px; /* The thickness of the 'running' part */
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  @property --border-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  @keyframes rotate-border {
+    to { --border-angle: 360deg; }
+  }
+
+  .group:hover .glow-orbit-border {
+    opacity: 1;
+    animation: rotate-border 3s linear infinite;
+  }
 }
