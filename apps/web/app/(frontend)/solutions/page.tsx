@@ -2,6 +2,7 @@ import React from 'react';
 import EconomicAnalyticsPage from '../analytics/economic/page';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
 
 export const metadata = {
     title: 'Solutions - Multi-Model Intelligence Dashboard',
