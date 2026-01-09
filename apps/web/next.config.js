@@ -12,11 +12,11 @@ const nextConfig = {
 
   // Build caching and performance optimizations
   experimental: {
-    // Client trace metadata for better debugging
-    clientTraceMetadata: ['action', 'request'],
-
     // Optimize bundle splitting
     optimizePackageImports: ['lucide-react', '@radix-ui/react-slot'],
+
+    // External packages to prevent bundling issues on Edge
+    serverExternalPackages: ['@neondatabase/serverless', 'pg'],
   },
 
   // Compiler optimizations
