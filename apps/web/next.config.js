@@ -4,6 +4,10 @@ import { composePlugins, withNx } from '@nx/next';
 const nextConfig = {
   nx: {},
   transpilePackages: ['@chronos/ui'],
+  webpack: (config) => {
+    config.resolve.alias['pg-native'] = false;
+    return config;
+  },
 
   // Disable image optimization for static export
   images: {
@@ -18,7 +22,7 @@ const nextConfig = {
    * External packages for Node.js runtime.
    * These won't be bundled, allowing Cloudflare's Node.js runtime to handle them natively.
    */
-  serverExternalPackages: ['pg', 'resend'],
+  serverExternalPackages: [],
 
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? {
