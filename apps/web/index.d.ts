@@ -17,3 +17,6 @@ declare global {
     };
   }
 }
+
+// This export makes this file a module, allowing declare global to work
+export {};
