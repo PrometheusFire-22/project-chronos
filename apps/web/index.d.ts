@@ -9,7 +9,11 @@ declare module '*.svg' {
 // Augment the existing CloudflareEnv interface from @opennextjs/cloudflare
 declare global {
   interface CloudflareEnv {
-    DB?: Hyperdrive;
-    MEDIA?: R2Bucket;
+    DB?: {
+      connectionString: string;
+    };
+    MEDIA?: {
+      [key: string]: any;
+    };
   }
 }
