@@ -11,7 +11,7 @@
     "build": {
       "executor": "nx:run-script",
       "options": {
-        "script": "build"
+        "script": "pages:build"
       },
       "outputs": [
         "{projectRoot}/out",
