@@ -64,9 +64,9 @@ export async function getTimeseriesData(filter: AnalyticsFilter): Promise<Timese
         const pool = await getPool();
         const result = await pool.query(query, params);
         return result.rows;
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error fetching timeseries data:', error);
-        throw new Error('Failed to fetch analytics data');
+        throw new Error(`Failed to fetch analytics data: ${error.message || String(error)}`);
     }
 }
 

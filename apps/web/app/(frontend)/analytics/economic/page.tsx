@@ -20,6 +20,17 @@ export default async function EconomicAnalyticsPage({ searchParams }: PageProps)
     let errorMsg: string | null = null;
     let selectedSeriesIds: number[] = [];
 
+    // Capture environment state for debugging
+    const dbVar = process.env.DB;
+    const dbUrlVar = process.env.DATABASE_URL;
+    const envDiagnostics = {
+        DB_TYPE: typeof dbVar,
+        DB_EXISTS: !!dbVar,
+        DB_URL_TYPE: typeof dbUrlVar,
+        DB_URL_EXISTS: !!dbUrlVar,
+        NODE_ENV: process.env.NODE_ENV,
+    };
+
     try {
         allSeries = await getActiveSeries();
         geographies = await getGeographies();
@@ -56,33 +67,35 @@ export default async function EconomicAnalyticsPage({ searchParams }: PageProps)
 
     if (errorMsg) {
         return (
-            <div className="p-12 text-center bg-slate-900 min-h-screen text-white">
+            <div className="p-12 text-center bg-slate-900 min-h-screen text-white font-sans">
                 <div className="max-w-4xl mx-auto">
                     <h1 className="text-3xl font-extrabold text-red-500 mb-6 flex items-center justify-center gap-3">
                         <span className="p-2 bg-red-500/10 rounded-lg">⚠️</span>
                         Cloudflare Runtime Exception
                     </h1>
-                    <div className="p-8 bg-slate-800/50 rounded-2xl border border-red-500/20 backdrop-blur-xl shadow-2xl">
-                        <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Error Stack trace</h3>
-                        <pre className="p-6 bg-black/40 rounded-xl overflow-auto text-left text-sm font-mono text-emerald-400 border border-white/5 whitespace-pre-wrap">
+                    <div className="p-8 bg-slate-800/50 rounded-2xl border border-red-500/20 backdrop-blur-xl shadow-2xl overflow-hidden">
+                        <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 text-left">Error Surface</h3>
+                        <pre className="p-6 bg-black/40 rounded-xl overflow-auto text-left text-sm font-mono text-red-400 border border-white/5 whitespace-pre-wrap mb-8">
                             {errorMsg}
                         </pre>
-                        <div className="mt-8 pt-8 border-t border-white/10 grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                            <div>
-                                <h4 className="text-sm font-bold text-white mb-2">Checklist</h4>
-                                <ul className="text-xs space-y-2 text-slate-400">
-                                    <li>• Verify DATABASE_URL secret on Cloudflare</li>
-                                    <li>• Check Hyperdrive binding status</li>
-                                    <li>• Confirm TimescaleDB accessibility</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 className="text-sm font-bold text-white mb-2">Environment</h4>
-                                <pre className="text-[10px] text-slate-500 bg-black/20 p-2 rounded">
-                                    Runtime: Edge (nodejs_compat)
-                                    Node: {process.version}
-                                </pre>
-                            </div>
+
+                        <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 text-left">Diagnostics</h3>
+                        <div className="grid grid-cols-2 gap-4 text-left">
+                            {Object.entries(envDiagnostics).map(([key, val]) => (
+                                <div key={key} className="bg-black/20 p-3 rounded-lg border border-white/5">
+                                    <div className="text-[10px] text-slate-500 uppercase">{key}</div>
+                                    <div className="text-sm font-mono text-emerald-400">{String(val)}</div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="mt-8 pt-8 border-t border-white/10 text-left">
+                            <h4 className="text-sm font-bold text-white mb-2">Checklist</h4>
+                            <ul className="text-xs space-y-2 text-slate-400">
+                                <li>• Ensure Hyperdrive binding named <code className="text-emerald-400 font-mono">DB</code> is attached to the Pages project.</li>
+                                <li>• Verify that the DB secret is not being overwritten by a plain string in Settings.</li>
+                                <li>• Confirm any <code className="text-emerald-400 font-mono">NODE_VERSION</code> requirements (Standard is 20+).</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -90,24 +103,21 @@ export default async function EconomicAnalyticsPage({ searchParams }: PageProps)
         );
     }
 
-    const selectedGeos = params.geos ? String(params.geos).split(',') : [];
-
-    // Get active metadata for visible series to support coloring and naming
     const activeMetadata = allSeries.filter(s => selectedSeriesIds.includes(s.series_id));
-
-    // Assign Colors centrally
     const colorAssignments = assignSeriesColors(activeMetadata);
-
-    // Transform data for Recharts (Pivot by time)
     const chartDataMap: Record<string, any> = {};
 
     rawData.forEach(point => {
-        const timeStr = new Date(point.time).toISOString();
-        if (!chartDataMap[timeStr]) {
-            chartDataMap[timeStr] = { time: timeStr };
+        try {
+            const timeStr = new Date(point.time).toISOString();
+            if (!chartDataMap[timeStr]) {
+                chartDataMap[timeStr] = { time: timeStr };
+            }
+            const key = `s_${point.series_id}`;
+            chartDataMap[timeStr][key] = point.value !== null ? Number(point.value) : null;
+        } catch (err) {
+            // Ignore malformed points
         }
-        const key = `s_${point.series_id}`;
-        chartDataMap[timeStr][key] = point.value !== null ? Number(point.value) : null;
     });
 
     const chartData = Object.values(chartDataMap).sort((a: any, b: any) =>
@@ -142,7 +152,7 @@ export default async function EconomicAnalyticsPage({ searchParams }: PageProps)
                             allSeries={allSeries}
                             geographies={geographies}
                             selectedSeriesIds={selectedSeriesIds}
-                            selectedGeos={selectedGeos}
+                            selectedGeos={params.geos ? String(params.geos).split(',') : []}
                         />
                     </div>
 
