@@ -36,8 +36,10 @@ const plugins = [
   withNx,
 ];
 
-// Initialize OpenNext for Cloudflare development
+// Initialize OpenNext for Cloudflare development (only in dev mode, not during builds)
 import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare';
-initOpenNextCloudflareForDev();
+if (process.env.NODE_ENV === 'development') {
+  initOpenNextCloudflareForDev();
+}
 
 export default composePlugins(...plugins)(nextConfig);
