@@ -1,3 +1,4 @@
+/*
 import * as Sentry from '@sentry/nextjs';
 
 export function register() {
@@ -50,7 +51,7 @@ export function register() {
       // Sanitize URLs (remove email addresses, tokens, etc.)
       if (event.request.url) {
         event.request.url = event.request.url
-          .replace(/([?&])(email|token|key|password)=[^&]*/gi, '$1$2=REDACTED');
+          .replace(/([?&])(email|token|key|password)=[^&]*!/gi, '$1$2=REDACTED');
       }
     }
 
@@ -90,10 +91,7 @@ export function register() {
 // Export router transition tracking for Next.js App Router
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
 
-/**
- * Set user context when user logs in
- * Call this after successful authentication
- */
+
 export function setSentryUser(user: {
   id: string;
   email?: string;
@@ -113,3 +111,7 @@ export function setSentryUser(user: {
     });
   }
 }
+*/
+export function register() { }
+export const onRouterTransitionStart = () => { };
+export function setSentryUser() { }
