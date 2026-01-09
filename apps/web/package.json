@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
-    "pages:build": "opennextjs-cloudflare build --config ../../wrangler.toml && cp -r .open-next/assets/* .open-next/ && esbuild .open-next/worker.js --bundle --minify --platform=node --format=esm --target=node20 --external:node:* --external:cloudflare:* --banner:js=\"import { Buffer } from 'node:buffer'; globalThis.Buffer = Buffer; globalThis.process = globalThis.process || { env: {} };\" --outfile=.open-next/_worker.js && rm -rf .open-next/server-functions",
+    "pages:build": "opennextjs-cloudflare build --config ../../wrangler.toml && cp -r .open-next/assets/* .open-next/ && esbuild .open-next/worker.js --bundle --minify --platform=node --format=esm --target=node20 --external:node:* --external:cloudflare:* --inject:./polyfills.js --outfile=.open-next/_worker.js && rm -rf .open-next/server-functions",
     "start": "next start",
     "lint": "next lint"
   },
