@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
-    "pages:build": "opennextjs-cloudflare build --config ../../wrangler.toml && cp -r .open-next/assets/* .open-next/ && mv .open-next/worker.js .open-next/_worker.js",
+    "pages:build": "opennextjs-cloudflare build --config ../../wrangler.toml && cp -r .open-next/assets/* .open-next/ && esbuild .open-next/worker.js --bundle --minify --platform=node --target=node20 --external:node:* --external:cloudflare:* --outfile=.open-next/_worker.js && rm -rf .open-next/server-functions",
     "start": "next start",
     "lint": "next lint"
   },
@@ -45,6 +45,7 @@
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "10.4.13",
+    "esbuild": "^0.25.0",
     "postcss": "8.5.6",
     "tailwindcss": "3.4.3",
     "tailwindcss-animate": "^1.0.7",
