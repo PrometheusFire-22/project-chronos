@@ -14,10 +14,11 @@ const nextConfig = {
   experimental: {
     // Optimize bundle splitting
     optimizePackageImports: ['lucide-react', '@radix-ui/react-slot'],
-
-    // External packages to prevent bundling issues on Edge
-    serverExternalPackages: ['@neondatabase/serverless', 'pg'],
   },
+
+  // External packages to prevent bundling issues on Edge
+  // In Next.js 15, this is a top-level property
+  serverExternalPackages: ['@neondatabase/serverless', 'pg'],
 
   // Compiler optimizations
   compiler: {

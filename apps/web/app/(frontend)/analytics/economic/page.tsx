@@ -14,35 +14,83 @@ interface PageProps {
 
 export default async function EconomicAnalyticsPage({ searchParams }: PageProps) {
     const params = await searchParams;
-    const allSeries = await getActiveSeries();
-    const geographies = await getGeographies();
-
-    // Determine currently selected series
+    let allSeries: any[] = [];
+    let geographies: string[] = [];
+    let rawData: any[] = [];
+    let errorMsg: string | null = null;
     let selectedSeriesIds: number[] = [];
-    const seriesParam = params.series;
-    const isInitialLoad = !seriesParam;
 
-    if (seriesParam && seriesParam !== 'none') {
-        selectedSeriesIds = String(seriesParam).split(',').map(Number);
-    } else if (isInitialLoad) {
-        // True initial load - default to verified treasury indicators
-        selectedSeriesIds = [71, 107, 72];
-    } else {
-        // User cleared series but kept other filters
-        selectedSeriesIds = [];
+    try {
+        allSeries = await getActiveSeries();
+        geographies = await getGeographies();
+
+        // Determine currently selected series
+        const seriesParam = params.series;
+        const isInitialLoad = !seriesParam;
+
+        if (seriesParam && seriesParam !== 'none') {
+            selectedSeriesIds = String(seriesParam).split(',').map(Number);
+        } else if (isInitialLoad) {
+            // True initial load - default to verified treasury indicators
+            selectedSeriesIds = [71, 107, 72];
+        } else {
+            // User cleared series but kept other filters
+            selectedSeriesIds = [];
+        }
+
+        const selectedGeos = params.geos ? String(params.geos).split(',') : [];
+        const startDate = params.start ? String(params.start) : undefined;
+        const endDate = params.end ? String(params.end) : undefined;
+
+        rawData = await getTimeseriesData({
+            seriesIds: selectedSeriesIds,
+            geographies: selectedGeos,
+            startDate,
+            endDate,
+            bucketInterval: '1 month',
+        });
+    } catch (e: any) {
+        console.error('Runtime Error:', e);
+        errorMsg = e.message || String(e);
+    }
+
+    if (errorMsg) {
+        return (
+            <div className="p-12 text-center bg-slate-900 min-h-screen text-white">
+                <div className="max-w-4xl mx-auto">
+                    <h1 className="text-3xl font-extrabold text-red-500 mb-6 flex items-center justify-center gap-3">
+                        <span className="p-2 bg-red-500/10 rounded-lg">⚠️</span>
+                        Cloudflare Runtime Exception
+                    </h1>
+                    <div className="p-8 bg-slate-800/50 rounded-2xl border border-red-500/20 backdrop-blur-xl shadow-2xl">
+                        <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Error Stack trace</h3>
+                        <pre className="p-6 bg-black/40 rounded-xl overflow-auto text-left text-sm font-mono text-emerald-400 border border-white/5 whitespace-pre-wrap">
+                            {errorMsg}
+                        </pre>
+                        <div className="mt-8 pt-8 border-t border-white/10 grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                            <div>
+                                <h4 className="text-sm font-bold text-white mb-2">Checklist</h4>
+                                <ul className="text-xs space-y-2 text-slate-400">
+                                    <li>• Verify DATABASE_URL secret on Cloudflare</li>
+                                    <li>• Check Hyperdrive binding status</li>
+                                    <li>• Confirm TimescaleDB accessibility</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 className="text-sm font-bold text-white mb-2">Environment</h4>
+                                <pre className="text-[10px] text-slate-500 bg-black/20 p-2 rounded">
+                                    Runtime: Edge (nodejs_compat)
+                                    Node: {process.version}
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     const selectedGeos = params.geos ? String(params.geos).split(',') : [];
-    const startDate = params.start ? String(params.start) : undefined;
-    const endDate = params.end ? String(params.end) : undefined;
-
-    const rawData = await getTimeseriesData({
-        seriesIds: selectedSeriesIds,
-        geographies: selectedGeos,
-        startDate,
-        endDate,
-        bucketInterval: '1 month',
-    });
 
     // Get active metadata for visible series to support coloring and naming
     const activeMetadata = allSeries.filter(s => selectedSeriesIds.includes(s.series_id));
@@ -51,17 +99,14 @@ export default async function EconomicAnalyticsPage({ searchParams }: PageProps)
     const colorAssignments = assignSeriesColors(activeMetadata);
 
     // Transform data for Recharts (Pivot by time)
-    // CRITICAL: Use s_{series_id} as the key to prevent naming collisions
     const chartDataMap: Record<string, any> = {};
 
     rawData.forEach(point => {
-        // Stable timezone-aware ISO string for merging
         const timeStr = new Date(point.time).toISOString();
         if (!chartDataMap[timeStr]) {
             chartDataMap[timeStr] = { time: timeStr };
         }
         const key = `s_${point.series_id}`;
-        // Force Number type to prevent string-based rendering issues in Recharts
         chartDataMap[timeStr][key] = point.value !== null ? Number(point.value) : null;
     });
 
@@ -72,8 +117,6 @@ export default async function EconomicAnalyticsPage({ searchParams }: PageProps)
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-slate-100 transition-colors duration-500">
             <div className="container mx-auto py-12 px-6">
-
-                {/* Header Section */}
                 <header className="mb-12 relative">
                     <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10">
@@ -94,7 +137,6 @@ export default async function EconomicAnalyticsPage({ searchParams }: PageProps)
                 </header>
 
                 <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
-                    {/* Sidebar Filters */}
                     <div className="xl:col-span-1">
                         <FilterSidebar
                             allSeries={allSeries}
@@ -104,7 +146,6 @@ export default async function EconomicAnalyticsPage({ searchParams }: PageProps)
                         />
                     </div>
 
-                    {/* Chart & Active Cards Area */}
                     <div className="xl:col-span-3 space-y-8">
                         <div className="relative group">
                             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-emerald-500 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
@@ -116,7 +157,6 @@ export default async function EconomicAnalyticsPage({ searchParams }: PageProps)
                             </div>
                         </div>
 
-                        {/* Active Indicator Cards */}
                         <div>
                             <div className="flex items-center gap-3 mb-6">
                                 <h3 className="text-xs font-bold tracking-widest uppercase text-slate-500 dark:text-slate-500">
