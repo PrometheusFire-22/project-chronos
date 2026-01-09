@@ -18,7 +18,22 @@ const nextConfig = {
 
   // External packages to prevent bundling issues on Edge
   // In Next.js 15, this is a top-level property
-  serverExternalPackages: ['@neondatabase/serverless', 'pg'],
+  serverExternalPackages: ['@neondatabase/serverless', 'pg', 'resend'],
+
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        stream: false,
+        net: false,
+        tls: false,
+        crypto: false,
+      };
+    }
+    return config;
+  },
 
   // Compiler optimizations
   compiler: {
