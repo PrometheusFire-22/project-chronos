@@ -6,12 +6,12 @@ declare module '*.svg' {
 }
 
 // Cloudflare Bindings type definitions
+// Augment the existing CloudflareEnv interface from @opennextjs/cloudflare
 declare module '@opennextjs/cloudflare' {
-  export interface CloudflareEnv {
+  interface CloudflareEnv {
     DB?: {
       connectionString: string;
     };
-    MEDIA?: R2Bucket;
-    [key: string]: any;
+    MEDIA?: any;
   }
 }
