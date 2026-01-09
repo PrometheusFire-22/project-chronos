@@ -29,6 +29,9 @@ const nextConfig = {
         dns: false,
         child_process: false,
         os: false,
+        crypto: false,
+        stream: false,
+        perf_hooks: false,
       };
     }
     return config;
