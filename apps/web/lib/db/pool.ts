@@ -1,16 +1,17 @@
-import postgres from 'postgres';
+import { Pool, neonConfig } from '@neondatabase/serverless';
 
-let sql: postgres.Sql | null = null;
+// Configure Neon to use direct TCP connections via Cloudflare Sockets
+// This ensures compatibility with Hyperdrive and nodejs_compat.
+neonConfig.useWshub = false;
+
+let pool: Pool | null = null;
 
 /**
- * Gets or creates a database client using the 'postgres' package.
- * This driver is native to Edge runtimes (Cloudflare, Vercel) and 
- * provides higher stability for TCP connections via Hyperdrive.
+ * Gets or creates a database connection pool using @neondatabase/serverless.
+ * This is the standard, Edge-compatible driver for Cloudflare.
  */
-export async function getPool(): Promise<any> {
-    if (sql) {
-        return createPgWrapper(sql);
-    }
+export async function getPool(): Promise<Pool> {
+    if (pool) return pool;
 
     let connectionString = process.env.DATABASE_URL || process.env.DB;
 
@@ -23,36 +24,13 @@ export async function getPool(): Promise<any> {
         throw new Error('❌ No database connection string found in DATABASE_URL or DB.');
     }
 
-    sql = postgres(connectionString, {
-        ssl: 'require',
-        max: 5,
-        idle_timeout: 20,
-        connect_timeout: 30,
+    pool = new Pool({
+        connectionString,
+        ssl: { rejectUnauthorized: false },
+        max: 10,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 5000,
     });
 
-    return createPgWrapper(sql);
-}
-
-/**
- * Creates a shim that mimics the 'pg' Pool interface for 
- * compatibility with existing analytics library code.
- */
-function createPgWrapper(sqlClient: postgres.Sql) {
-    return {
-        query: async (queryText: string, params: any[] = []) => {
-            try {
-                // postgres.js handles parameterized queries via unsafe or template tags
-                const rows = await sqlClient.unsafe(queryText, params);
-                return { rows };
-            } catch (error) {
-                console.error('Database query error:', error);
-                throw error;
-            }
-        },
-        end: async () => {
-            if (sql) {
-                await sql.end();
-            }
-        }
-    };
+    return pool;
 }

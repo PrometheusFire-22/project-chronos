@@ -5,7 +5,7 @@ const nextConfig = {
   nx: {},
   transpilePackages: ['@chronos/ui'],
 
-  // Disable image optimization for static export
+  // Disable image optimization for static export (or for Cloudflare compatibility)
   images: {
     unoptimized: true,
   },
@@ -16,26 +16,13 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-slot'],
   },
 
-  // External packages to prevent bundling issues on Edge
-  serverExternalPackages: ['resend', 'postgres'],
-
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
-        dns: false,
-        child_process: false,
-        os: false,
-        crypto: false,
-        stream: false,
-        perf_hooks: false,
-      };
-    }
-    return config;
-  },
+  /**
+   * IMPORTANT: 'serverExternalPackages' is the standard Next.js 15 way to handle 
+   * Node-dependent libraries on the Edge. Telling Next.js NOT to bundle these
+   * allows Cloudflare's runtime (with nodejs_compat) to provide the actual 
+   * functional modules instead of broken Webpack shims.
+   */
+  serverExternalPackages: ['@neondatabase/serverless', 'resend'],
 
   // Compiler optimizations
   compiler: {

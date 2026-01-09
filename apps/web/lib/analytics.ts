@@ -104,7 +104,7 @@ export async function getGeographies() {
     try {
         const pool = await getPool();
         const result = await pool.query(query);
-        return result.rows.map(r => r.geography);
+        return result.rows.map((r: any) => r.geography);
     } catch (error) {
         console.error('Error fetching geographies:', error);
         return [];
