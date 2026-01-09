@@ -14,3 +14,11 @@ if (!globalThis.setImmediate) {
     globalThis.setImmediate = (cb, ...args) => setTimeout(cb, 0, ...args);
     globalThis.clearImmediate = (id) => clearTimeout(id);
 }
+
+// Polyfill require() for ESM environment (crucial for Next.js dynamic requires)
+import { createRequire } from 'node:module';
+try {
+    globalThis.require = createRequire(import.meta.url);
+} catch (e) {
+    console.warn('Failed to polyfill require():', e);
+}
