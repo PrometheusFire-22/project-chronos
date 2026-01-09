@@ -30,6 +30,8 @@ const nextConfig = {
         net: false,
         tls: false,
         crypto: false,
+        dns: false,
+        os: false,
       };
     }
     return config;
