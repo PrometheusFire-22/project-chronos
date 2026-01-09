@@ -6,7 +6,7 @@ import FilterSidebar from '@/components/analytics/FilterSidebar';
 import ActiveIndicatorCard from '@/components/analytics/ActiveIndicatorCard';
 
 export const dynamic = 'force-dynamic';
-export const runtime = 'edge';
+// Using Node.js runtime for database operations with Cloudflare Hyperdrive
 
 interface PageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

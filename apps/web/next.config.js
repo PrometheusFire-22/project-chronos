@@ -15,28 +15,10 @@ const nextConfig = {
   },
 
   /**
-   * 'serverExternalPackages' prevents Next.js from bundling Node-specific code.
-   * This is critical for getting standard drivers to play nice with Cloudflare.
+   * External packages for Node.js runtime.
+   * These won't be bundled, allowing Cloudflare's Node.js runtime to handle them natively.
    */
-  serverExternalPackages: ['pg', 'pg-cloudflare', 'resend'],
-
-  // Webpack configuration for minimal Edge shimming
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        // Standard pg and its dependencies sometimes try to load these.
-        // We shim them to false because they are NOT available on the Edge.
-        fs: false,
-        dns: false,
-        os: false,
-        child_process: false,
-        tls: false,
-        net: false,
-      };
-    }
-    return config;
-  },
+  serverExternalPackages: ['pg', 'resend'],
 
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production' ? {
