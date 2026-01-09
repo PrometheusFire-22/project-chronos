@@ -1,7 +1,7 @@
 import * as esbuild from 'esbuild';
 
 await esbuild.build({
-    entryPoints: ['.open-next/worker.js'],
+    entryPoints: ['worker-wrapper.js'],
     bundle: true,
     minify: true,
     platform: 'node',
