@@ -1,8 +1,12 @@
 import { Pool, neonConfig } from '@neondatabase/serverless';
 
-// Essential for Edge environments where TCP is restricted or requires WebSockets
+// Configure for Cloudflare Workers Error 530 fix:
+// Disable the WebSocket-to-TCP proxy (wshub) and use native Cloudflare Sockets
+// This is essential when connecting to non-Neon databases or via Hyperdrive.
 if (typeof window === 'undefined') {
-    // This allows the driver to use the Edge environment's fetch/websocket capabilities
+    (neonConfig as any).wsProxy = false;
+    // Also use direct connect for pool
+    (neonConfig as any).useWshub = false;
 }
 
 let pool: Pool | null = null;
