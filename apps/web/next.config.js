@@ -18,7 +18,7 @@ const nextConfig = {
    * 'serverExternalPackages' prevents Next.js from bundling Node-specific code.
    * This is critical for getting standard drivers to play nice with Cloudflare.
    */
-  serverExternalPackages: ['pg', 'resend'],
+  serverExternalPackages: ['pg', 'pg-cloudflare', 'resend'],
 
   // Webpack configuration for minimal Edge shimming
   webpack: (config, { isServer }) => {
