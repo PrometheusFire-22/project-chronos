@@ -2,7 +2,7 @@ import { Pool, neonConfig } from '@neondatabase/serverless';
 
 // Configure Neon to use direct TCP connections via Cloudflare Sockets
 // This ensures compatibility with Hyperdrive and nodejs_compat.
-neonConfig.useWshub = false;
+(neonConfig as any).useWshub = false;
 
 let pool: Pool | null = null;
 
