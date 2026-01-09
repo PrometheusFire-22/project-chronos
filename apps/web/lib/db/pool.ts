@@ -5,38 +5,40 @@ let pool: Pool | null = null;
 /**
  * Gets or creates a database connection pool using standard 'pg'.
  * This works with Cloudflare Hyperdrive in the Node.js runtime.
- * 
- * In Cloudflare Pages Functions, bindings are available via the platform context,
- * not process.env. We need to check both locations.
  */
 export async function getPool(): Promise<Pool> {
     if (pool) return pool;
 
-    // Try to get connection string from various sources
     let connectionString: string | undefined;
 
-    // First, try the Cloudflare binding (available in runtime context)
-    // @ts-ignore - Cloudflare injects this at runtime
-    if (typeof globalThis.DB !== 'undefined' && globalThis.DB?.connectionString) {
-        // @ts-ignore
-        connectionString = globalThis.DB.connectionString;
+    // 1. Try Cloudflare binding (Pages Functions injection)
+    // @ts-ignore
+    const cfBinding = globalThis.DB || process.env.DB;
+    if (cfBinding && typeof cfBinding === 'object' && cfBinding.connectionString) {
+        connectionString = cfBinding.connectionString;
+        console.log('✅ Found Hyperdrive connection string in binding');
     }
-    // Fallback to environment variables
+    // 2. Fallback to direct environment variables
     else if (process.env.DATABASE_URL) {
         connectionString = process.env.DATABASE_URL;
+        console.log('✅ Using DATABASE_URL from environment');
     }
-    // Handle Hyperdrive binding passed as env (object)
-    else if (process.env.DB) {
-        const dbEnv = process.env.DB;
-        if (typeof dbEnv === 'string') {
-            connectionString = dbEnv;
-        } else if (typeof dbEnv === 'object' && (dbEnv as any).connectionString) {
-            connectionString = (dbEnv as any).connectionString;
-        }
+    // 3. Last resort check process.env.DB as string
+    else if (typeof process.env.DB === 'string') {
+        connectionString = process.env.DB;
+        console.log('✅ Using DB string from environment');
     }
 
     if (!connectionString) {
-        throw new Error('❌ No database connection string found. Check Hyperdrive binding configuration.');
+        // Log environment keys to help debug missing bindings
+        const envKeys = Object.keys(process.env).filter(k => !k.includes('KEY') && !k.includes('SECRET'));
+        throw new Error(`❌ No database connection found. Available env: ${envKeys.join(', ')}`);
+    }
+
+    // Security check: Ensure we aren't using a Neon WebSocket URL if we want TCP
+    // If it contains 'wshub', it will force WebSocket, which Hyperdrive doesn't support.
+    if (connectionString.includes('wshub')) {
+        console.warn('⚠️ Warning: Connection string contains wshub, which may force WebSockets.');
     }
 
     pool = new Pool({
@@ -44,8 +46,18 @@ export async function getPool(): Promise<Pool> {
         ssl: { rejectUnauthorized: false },
         max: 10,
         idleTimeoutMillis: 30000,
-        connectionTimeoutMillis: 5000,
+        connectionTimeoutMillis: 10000, // Increased for stability
     });
+
+    // Simple connection test
+    try {
+        const client = await pool.connect();
+        client.release();
+        console.log('✨ Database connection test successful');
+    } catch (err) {
+        console.error('❌ Database connection test failed:', err);
+        // Don't rethrow here, let the actual query handle it
+    }
 
     return pool;
 }

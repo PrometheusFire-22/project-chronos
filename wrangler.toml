@@ -3,8 +3,8 @@ compatibility_date = "2025-12-29"
 # Required for Cloudflare Pages Functions
 compatibility_flags = [ "nodejs_compat" ]
 
-# Cloudflare Pages build output directory (Next.js with next-on-pages)
-pages_build_output_dir = "apps/web/.vercel/output/static"
+# Cloudflare Pages build output directory (OpenNext)
+pages_build_output_dir = "apps/web/.open-next"
 
 [vars]
 # Public environment variables
