@@ -14,9 +14,7 @@
         "script": "pages:build"
       },
       "outputs": [
-        "{projectRoot}/out",
-        "{projectRoot}/.next",
-        "{projectRoot}/.vercel"
+        "{projectRoot}/.open-next"
       ],
       "cache": true
     }
