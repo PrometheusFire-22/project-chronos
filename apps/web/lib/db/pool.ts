@@ -1,21 +1,18 @@
-import { Pool, neonConfig } from '@neondatabase/serverless';
-
-// Configure Neon to use direct TCP connections via Cloudflare Sockets
-// This ensures compatibility with Hyperdrive and nodejs_compat.
-(neonConfig as any).useWshub = false;
+import pg from 'pg';
+const { Pool } = pg;
 
 let pool: Pool | null = null;
 
 /**
- * Gets or creates a database connection pool using @neondatabase/serverless.
- * This is the standard, Edge-compatible driver for Cloudflare.
+ * Gets or creates a database connection pool using standard 'pg'.
+ * This is the recommended approach for Cloudflare Hyperdrive which uses direct TCP.
  */
 export async function getPool(): Promise<Pool> {
     if (pool) return pool;
 
     let connectionString = process.env.DATABASE_URL || process.env.DB;
 
-    // Handle potential object-based bindings from Cloudflare
+    // Handle potential object-based bindings from Cloudflare (Hyperdrive)
     if (connectionString && typeof connectionString !== 'string') {
         connectionString = (connectionString as any).connectionString || String(connectionString);
     }

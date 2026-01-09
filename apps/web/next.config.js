@@ -5,42 +5,51 @@ const nextConfig = {
   nx: {},
   transpilePackages: ['@chronos/ui'],
 
-  // Disable image optimization for static export (or for Cloudflare compatibility)
+  // Disable image optimization for static export
   images: {
     unoptimized: true,
   },
 
-  // Build caching and performance optimizations
   experimental: {
-    // Optimize bundle splitting
     optimizePackageImports: ['lucide-react', '@radix-ui/react-slot'],
   },
 
   /**
-   * IMPORTANT: 'serverExternalPackages' is the standard Next.js 15 way to handle 
-   * Node-dependent libraries on the Edge. Telling Next.js NOT to bundle these
-   * allows Cloudflare's runtime (with nodejs_compat) to provide the actual 
-   * functional modules instead of broken Webpack shims.
+   * 'serverExternalPackages' prevents Next.js from bundling Node-specific code.
+   * This is critical for getting standard drivers to play nice with Cloudflare.
    */
-  serverExternalPackages: ['@neondatabase/serverless', 'resend'],
+  serverExternalPackages: ['pg', 'resend'],
 
-  // Compiler optimizations
+  // Webpack configuration for minimal Edge shimming
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        // Standard pg and its dependencies sometimes try to load these.
+        // We shim them to false because they are NOT available on the Edge.
+        fs: false,
+        dns: false,
+        os: false,
+        child_process: false,
+        tls: false,
+        net: false,
+      };
+    }
+    return config;
+  },
+
   compiler: {
-    // Remove console.log in production
     removeConsole: process.env.NODE_ENV === 'production' ? {
       exclude: ['error', 'warn'],
     } : false,
   },
 
-  // Enable build output caching
   generateBuildId: async () => {
-    // Use git commit hash for build ID to enable proper caching
     return process.env.CF_PAGES_COMMIT_SHA || 'development'
   },
 };
 
 const plugins = [
-  // Add more Next.js plugins to this list if needed.
   withNx,
 ];
 
