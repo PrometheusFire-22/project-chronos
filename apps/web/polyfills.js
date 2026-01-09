@@ -31,6 +31,7 @@ import * as _http from 'node:http';
 import * as _https from 'node:https';
 import * as _os from 'node:os';
 import * as _process from 'node:process';
+import * as _vm from 'node:vm';
 import { createRequire } from 'node:module';
 
 const builtinMap = {
@@ -49,6 +50,7 @@ const builtinMap = {
     'node:https': _https, 'https': _https,
     'node:os': _os, 'os': _os,
     'node:process': _process, 'process': _process,
+    'node:vm': _vm, 'vm': _vm,
 };
 
 let realRequire;
