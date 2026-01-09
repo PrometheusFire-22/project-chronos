@@ -32,6 +32,10 @@ const nextConfig = {
         crypto: false,
         dns: false,
         os: false,
+        child_process: false,
+        http: false,
+        https: false,
+        zlib: false,
       };
     }
     return config;
