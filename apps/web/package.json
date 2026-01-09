@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
-    "pages:build": "opennextjs-cloudflare build --config ../../wrangler.toml",
+    "pages:build": "opennextjs-cloudflare build --config ../../wrangler.toml && cp -r .open-next/assets/* .open-next/ && mv .open-next/worker.js .open-next/_worker.js",
     "start": "next start",
     "lint": "next lint"
   },
