@@ -1,13 +1,22 @@
-import { Pool } from 'pg';
+import postgres from 'postgres';
 
-let pool: Pool | null = null;
+let sql: postgres.Sql | null = null;
+
+// Mock the Pool type to match expected usage in analytics.ts
+interface QueryResult {
+    rows: any[];
+}
+
+interface DbClient {
+    query(text: string, params?: any[]): Promise<QueryResult>;
+}
 
 /**
- * Gets or creates a database connection pool using standard 'pg'.
- * This works with Cloudflare Hyperdrive in the Node.js runtime.
+ * Gets or creates a database connection using 'postgres.js' (lightweight driver).
+ * This replaces 'pg' to significantly reduce the Cloudflare worker bundle size.
  */
-export async function getPool(): Promise<Pool> {
-    if (pool) return pool;
+export async function getPool(): Promise<DbClient> {
+    if (sql) return createWrapper(sql);
 
     let connectionString: string | undefined;
 
@@ -30,34 +39,41 @@ export async function getPool(): Promise<Pool> {
     }
 
     if (!connectionString) {
-        // Log environment keys to help debug missing bindings
         const envKeys = Object.keys(process.env).filter(k => !k.includes('KEY') && !k.includes('SECRET'));
         throw new Error(`❌ No database connection found. Available env: ${envKeys.join(', ')}`);
     }
 
-    // Security check: Ensure we aren't using a Neon WebSocket URL if we want TCP
-    // If it contains 'wshub', it will force WebSocket, which Hyperdrive doesn't support.
     if (connectionString.includes('wshub')) {
         console.warn('⚠️ Warning: Connection string contains wshub, which may force WebSockets.');
     }
 
-    pool = new Pool({
-        connectionString,
-        ssl: { rejectUnauthorized: false },
+    // Initialize the singleton connection
+    sql = postgres(connectionString, {
+        ssl: { rejectUnauthorized: false }, // Necessary for many cloud DBs
+        prepare: false, // Hyperdrive often works better with simple query mode
         max: 10,
-        idleTimeoutMillis: 30000,
-        connectionTimeoutMillis: 10000, // Increased for stability
+        idle_timeout: 30,
+        connect_timeout: 10,
     });
 
     // Simple connection test
     try {
-        const client = await pool.connect();
-        client.release();
+        await sql`SELECT 1`;
         console.log('✨ Database connection test successful');
     } catch (err) {
         console.error('❌ Database connection test failed:', err);
-        // Don't rethrow here, let the actual query handle it
     }
 
-    return pool;
+    return createWrapper(sql);
+}
+
+function createWrapper(sqlClient: postgres.Sql): DbClient {
+    return {
+        async query(text: string, params: any[] = []): Promise<QueryResult> {
+            // Use .unsafe() to allow $1, $2 syntax which plain template tags don't support
+            // postgres.js handles value matching for protocol-level params in unsafe mode
+            const rows = await sqlClient.unsafe(text, params);
+            return { rows };
+        }
+    };
 }

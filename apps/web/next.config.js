@@ -4,10 +4,7 @@ import { composePlugins, withNx } from '@nx/next';
 const nextConfig = {
   nx: {},
   transpilePackages: ['@chronos/ui'],
-  webpack: (config) => {
-    config.resolve.alias['pg-native'] = false;
-    return config;
-  },
+
 
   // Disable image optimization for static export
   images: {
