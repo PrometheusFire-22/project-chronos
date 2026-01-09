@@ -1,4 +1,5 @@
 import postgres from 'postgres';
+import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 let sql: postgres.Sql | null = null;
 
@@ -20,34 +21,33 @@ export async function getPool(): Promise<DbClient> {
 
     let connectionString: string | undefined;
 
-    // specific cloudflare binding check logic avoiding crashes
-    const g = globalThis as any;
-
     try {
-        // 1. Try Cloudflare binding (Pages Functions injection)
-        const cfBinding = g.DB || (g.process && g.process.env && g.process.env.DB);
-
-        if (cfBinding && typeof cfBinding === 'object' && cfBinding.connectionString) {
-            connectionString = cfBinding.connectionString;
-            console.log('✅ Found Hyperdrive connection string in binding');
-        }
-        // 2. Fallback to direct environment variables
-        else if (g.process && g.process.env && g.process.env.DATABASE_URL) {
-            connectionString = g.process.env.DATABASE_URL;
-            console.log('✅ Using DATABASE_URL from environment');
-        }
-        // 3. Last resort check process.env.DB as string
-        else if (g.process && g.process.env && typeof g.process.env.DB === 'string') {
-            connectionString = g.process.env.DB;
-            console.log('✅ Using DB string from environment');
+        // 1. Try Cloudflare Hyperdrive binding (proper OpenNext way)
+        try {
+            const { env } = await getCloudflareContext();
+            if (env?.DB?.connectionString) {
+                connectionString = env.DB.connectionString;
+                console.log('✅ Found Hyperdrive connection string from Cloudflare binding');
+            }
+        } catch (contextError) {
+            // getCloudflareContext() might not be available in all environments (e.g., build time)
+            console.log('⚠️ Cloudflare context not available (likely build time or local dev)');
         }
 
-        if (!connectionString && g.process && g.process.env) {
-            const envKeys = Object.keys(g.process.env).filter(k => !k.includes('KEY') && !k.includes('SECRET'));
-            console.warn(`❌ No database connection found. Available env: ${envKeys.join(', ')}`);
+        // 2. Fallback to DATABASE_URL for local development
+        if (!connectionString && process.env.DATABASE_URL) {
+            connectionString = process.env.DATABASE_URL;
+            console.log('✅ Using DATABASE_URL from environment (local dev)');
+        }
+
+        if (!connectionString) {
+            const availableEnvKeys = Object.keys(process.env).filter(k =>
+                !k.includes('KEY') && !k.includes('SECRET') && !k.includes('TOKEN')
+            );
+            console.warn(`❌ No database connection found. Available env keys: ${availableEnvKeys.join(', ')}`);
         }
     } catch (e) {
-        console.error("Error accessing environment:", e);
+        console.error("Error accessing database connection:", e);
     }
 
     if (!connectionString) {

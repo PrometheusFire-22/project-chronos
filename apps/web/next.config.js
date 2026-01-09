@@ -36,4 +36,8 @@ const plugins = [
   withNx,
 ];
 
+// Initialize OpenNext for Cloudflare development
+import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare';
+initOpenNextCloudflareForDev();
+
 export default composePlugins(...plugins)(nextConfig);

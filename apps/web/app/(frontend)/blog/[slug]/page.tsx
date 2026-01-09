@@ -11,8 +11,8 @@ interface BlogPostPageProps {
 }
 
 // Allow pages to be generated beyond those returned by generateStaticParams
-// This is set to false for static export - only pre-generated pages will exist
-export const dynamicParams = false
+// Set to true to enable runtime generation on Cloudflare Pages
+export const dynamicParams = true
 
 // Generate static paths for all published blog posts
 export async function generateStaticParams() {
