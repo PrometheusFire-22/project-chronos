@@ -1,4 +1,4 @@
-import pool from './db/pool';
+import { getPool } from './db/pool';
 
 export interface TimeseriesPoint {
     time: string;
@@ -61,6 +61,7 @@ export async function getTimeseriesData(filter: AnalyticsFilter): Promise<Timese
   `;
 
     try {
+        const pool = await getPool();
         const result = await pool.query(query, params);
         return result.rows;
     } catch (error) {
@@ -81,6 +82,7 @@ export async function getActiveSeries() {
   `;
 
     try {
+        const pool = await getPool();
         const result = await pool.query(query);
         return result.rows;
     } catch (error) {
@@ -100,6 +102,7 @@ export async function getGeographies() {
     ORDER BY geography ASC;
   `;
     try {
+        const pool = await getPool();
         const result = await pool.query(query);
         return result.rows.map(r => r.geography);
     } catch (error) {
@@ -112,14 +115,15 @@ export async function getGeographies() {
  * Fetches related series using Apache AGE (Graph) capabilities.
  */
 export async function getRelatedSeries(seriesId: number) {
-    await pool.query('SET search_path = "public", "ag_catalog";');
-    const query = `
+    try {
+        const pool = await getPool();
+        await pool.query('SET search_path = "public", "ag_catalog";');
+        const query = `
     SELECT * FROM cypher('economic_graph', $$
       MATCH (s:Series {id: $id})-[r:RELATES_TO]->(related:Series)
       RETURN related.id, related.name, r.type
     $$, $params) as (id agtype, name agtype, type agtype);
   `;
-    try {
         const result = await pool.query(query, [JSON.stringify({ id: seriesId })]);
         return result.rows;
     } catch (error) {

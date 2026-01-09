@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+
+export const runtime = 'edge';
 import { z } from 'zod'
 import { Resend } from 'resend'
 import { getWaitlistConfirmationEmail } from '@/utils/emails/waitlist-confirmation'

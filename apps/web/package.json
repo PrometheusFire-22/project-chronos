@@ -13,6 +13,7 @@
   "dependencies": {
     "@chronos/ui": "workspace:*",
     "@hookform/resolvers": "^5.2.2",
+    "@neondatabase/serverless": "^1.0.2",
     "@radix-ui/react-slot": "^1.1.1",
     "@sentry/nextjs": "^10.32.1",
     "class-variance-authority": "0.7.1",
@@ -25,11 +26,10 @@
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "react-hook-form": "^7.69.0",
+    "recharts": "^2.15.0",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
     "resend": "^6.6.0",
-    "pg": "^8.16.3",
-    "recharts": "^2.15.0",
     "tailwind-merge": "3.4.0",
     "zod": "^4.2.1"
   },
@@ -40,7 +40,6 @@
     "@cloudflare/next-on-pages": "^1.13.16",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^25.0.3",
-    "@types/pg": "^8.11.10",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "10.4.13",
