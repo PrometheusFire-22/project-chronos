@@ -4,3 +4,14 @@ declare module '*.svg' {
   export const ReactComponent: any;
   export default content;
 }
+
+// Cloudflare Bindings type definitions
+declare module '@opennextjs/cloudflare' {
+  export interface CloudflareEnv {
+    DB?: {
+      connectionString: string;
+    };
+    MEDIA?: R2Bucket;
+    [key: string]: any;
+  }
+}
