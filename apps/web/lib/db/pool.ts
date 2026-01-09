@@ -20,27 +20,39 @@ export async function getPool(): Promise<DbClient> {
 
     let connectionString: string | undefined;
 
-    // 1. Try Cloudflare binding (Pages Functions injection)
-    // @ts-ignore
-    const cfBinding = globalThis.DB || process.env.DB;
-    if (cfBinding && typeof cfBinding === 'object' && cfBinding.connectionString) {
-        connectionString = cfBinding.connectionString;
-        console.log('✅ Found Hyperdrive connection string in binding');
-    }
-    // 2. Fallback to direct environment variables
-    else if (process.env.DATABASE_URL) {
-        connectionString = process.env.DATABASE_URL;
-        console.log('✅ Using DATABASE_URL from environment');
-    }
-    // 3. Last resort check process.env.DB as string
-    else if (typeof process.env.DB === 'string') {
-        connectionString = process.env.DB;
-        console.log('✅ Using DB string from environment');
+    // specific cloudflare binding check logic avoiding crashes
+    const g = globalThis as any;
+
+    try {
+        // 1. Try Cloudflare binding (Pages Functions injection)
+        const cfBinding = g.DB || (g.process && g.process.env && g.process.env.DB);
+
+        if (cfBinding && typeof cfBinding === 'object' && cfBinding.connectionString) {
+            connectionString = cfBinding.connectionString;
+            console.log('✅ Found Hyperdrive connection string in binding');
+        }
+        // 2. Fallback to direct environment variables
+        else if (g.process && g.process.env && g.process.env.DATABASE_URL) {
+            connectionString = g.process.env.DATABASE_URL;
+            console.log('✅ Using DATABASE_URL from environment');
+        }
+        // 3. Last resort check process.env.DB as string
+        else if (g.process && g.process.env && typeof g.process.env.DB === 'string') {
+            connectionString = g.process.env.DB;
+            console.log('✅ Using DB string from environment');
+        }
+
+        if (!connectionString && g.process && g.process.env) {
+            const envKeys = Object.keys(g.process.env).filter(k => !k.includes('KEY') && !k.includes('SECRET'));
+            console.warn(`❌ No database connection found. Available env: ${envKeys.join(', ')}`);
+        }
+    } catch (e) {
+        console.error("Error accessing environment:", e);
     }
 
     if (!connectionString) {
-        const envKeys = Object.keys(process.env).filter(k => !k.includes('KEY') && !k.includes('SECRET'));
-        throw new Error(`❌ No database connection found. Available env: ${envKeys.join(', ')}`);
+        console.warn("⚠️ No connection string found, returning mock client to prevent crash.");
+        return createMockThrowingClient();
     }
 
     if (connectionString.includes('wshub')) {
@@ -74,6 +86,14 @@ function createWrapper(sqlClient: postgres.Sql): DbClient {
             // postgres.js handles value matching for protocol-level params in unsafe mode
             const rows = await sqlClient.unsafe(text, params);
             return { rows };
+        }
+    };
+}
+
+function createMockThrowingClient(): DbClient {
+    return {
+        async query() {
+            throw new Error("❌ Database not connected: No connection string found during initialization.");
         }
     };
 }
