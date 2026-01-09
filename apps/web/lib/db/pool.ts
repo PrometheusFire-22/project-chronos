@@ -1,51 +1,58 @@
-import pg from 'pg';
-import type { Pool as PgPoolType } from 'pg';
-const { Pool } = pg;
+import postgres from 'postgres';
 
-let pool: PgPoolType | null = null;
+let sql: postgres.Sql | null = null;
 
 /**
- * Gets or creates a database connection pool.
- * Uses standard pg library with nodejs_compat for Edge TCP support.
+ * Gets or creates a database client using the 'postgres' package.
+ * This driver is native to Edge runtimes (Cloudflare, Vercel) and 
+ * provides higher stability for TCP connections via Hyperdrive.
  */
-export async function getPool(): Promise<PgPoolType> {
-    if (pool) return pool;
+export async function getPool(): Promise<any> {
+    if (sql) {
+        return createPgWrapper(sql);
+    }
 
-    // Use connection string if provided (standard for Hyperdrive/Cloudflare)
     let connectionString = process.env.DATABASE_URL || process.env.DB;
 
-    // Handle potential object-based bindings from Cloudflare (if not mapped to string)
+    // Handle potential object-based bindings from Cloudflare
     if (connectionString && typeof connectionString !== 'string') {
-        console.warn('⚠️ DB binding is not a string. Attempting to extract connection string...');
         connectionString = (connectionString as any).connectionString || String(connectionString);
     }
 
-    if (!connectionString && !process.env.DATABASE_HOST) {
-        console.error('❌ No database connection string found in DATABASE_URL or DB.');
+    if (!connectionString) {
+        throw new Error('❌ No database connection string found in DATABASE_URL or DB.');
     }
 
-    // In Cloudflare Workers with Hyperdrive, we connect via TCP.
-    // Standard pg.Pool works because of nodejs_compat.
-    pool = connectionString
-        ? new Pool({
-            connectionString,
-            ssl: {
-                rejectUnauthorized: false
-            },
-            // Reduce pool size for edge environment
-            max: 5,
-        }) as unknown as PgPoolType
-        : new Pool({
-            host: process.env.DATABASE_HOST,
-            port: parseInt(process.env.DATABASE_PORT || '5432'),
-            database: process.env.DATABASE_NAME,
-            user: process.env.DATABASE_USER,
-            password: process.env.DATABASE_PASSWORD,
-            ssl: {
-                rejectUnauthorized: false
-            },
-            max: 5,
-        }) as unknown as PgPoolType;
+    sql = postgres(connectionString, {
+        ssl: 'require',
+        max: 5,
+        idle_timeout: 20,
+        connect_timeout: 30,
+    });
 
-    return pool;
+    return createPgWrapper(sql);
+}
+
+/**
+ * Creates a shim that mimics the 'pg' Pool interface for 
+ * compatibility with existing analytics library code.
+ */
+function createPgWrapper(sqlClient: postgres.Sql) {
+    return {
+        query: async (queryText: string, params: any[] = []) => {
+            try {
+                // postgres.js handles parameterized queries via unsafe or template tags
+                const rows = await sqlClient.unsafe(queryText, params);
+                return { rows };
+            } catch (error) {
+                console.error('Database query error:', error);
+                throw error;
+            }
+        },
+        end: async () => {
+            if (sql) {
+                await sql.end();
+            }
+        }
+    };
 }
