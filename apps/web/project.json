@@ -3,14 +3,21 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/web",
   "projectType": "application",
-  "tags": ["type:app", "scope:marketing"],
+  "tags": [
+    "type:app",
+    "scope:marketing"
+  ],
   "targets": {
     "build": {
       "executor": "nx:run-script",
       "options": {
         "script": "build"
       },
-      "outputs": ["{projectRoot}/out", "{projectRoot}/.next"],
+      "outputs": [
+        "{projectRoot}/out",
+        "{projectRoot}/.next",
+        "{projectRoot}/.vercel"
+      ],
       "cache": true
     }
   }
