@@ -1,21 +1,14 @@
-import { Pool, neonConfig } from '@neondatabase/serverless';
+import pg from 'pg';
+import type { Pool as PgPoolType } from 'pg';
+const { Pool } = pg;
 
-// Configure for Cloudflare Workers Error 530 fix:
-// Disable the WebSocket-to-TCP proxy (wshub) and use native Cloudflare Sockets
-// This is essential when connecting to non-Neon databases or via Hyperdrive.
-if (typeof window === 'undefined') {
-    (neonConfig as any).wsProxy = false;
-    // Also use direct connect for pool
-    (neonConfig as any).useWshub = false;
-}
-
-let pool: Pool | null = null;
+let pool: PgPoolType | null = null;
 
 /**
  * Gets or creates a database connection pool.
- * Uses @neondatabase/serverless for Edge compatibility.
+ * Uses standard pg library with nodejs_compat for Edge TCP support.
  */
-export async function getPool(): Promise<Pool> {
+export async function getPool(): Promise<PgPoolType> {
     if (pool) return pool;
 
     // Use connection string if provided (standard for Hyperdrive/Cloudflare)
@@ -31,13 +24,17 @@ export async function getPool(): Promise<Pool> {
         console.error('❌ No database connection string found in DATABASE_URL or DB.');
     }
 
+    // In Cloudflare Workers with Hyperdrive, we connect via TCP.
+    // Standard pg.Pool works because of nodejs_compat.
     pool = connectionString
         ? new Pool({
             connectionString,
             ssl: {
                 rejectUnauthorized: false
-            }
-        })
+            },
+            // Reduce pool size for edge environment
+            max: 5,
+        }) as unknown as PgPoolType
         : new Pool({
             host: process.env.DATABASE_HOST,
             port: parseInt(process.env.DATABASE_PORT || '5432'),
@@ -46,8 +43,9 @@ export async function getPool(): Promise<Pool> {
             password: process.env.DATABASE_PASSWORD,
             ssl: {
                 rejectUnauthorized: false
-            }
-        });
+            },
+            max: 5,
+        }) as unknown as PgPoolType;
 
     return pool;
 }
