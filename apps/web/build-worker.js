@@ -1,4 +1,5 @@
 import * as esbuild from 'esbuild';
+import path from 'node:path';
 
 await esbuild.build({
     entryPoints: ['worker-wrapper.js'],
@@ -14,9 +15,12 @@ await esbuild.build({
         {
             name: 'crypto-shim-alias',
             setup(build) {
-                const shimPath = '/workspace/apps/web/shims/crypto.js';
+                // Use relative path resolved from CWD to ensure it works in CI/Cloudflare
+                const shimPath = path.resolve('shims/crypto.js');
+
                 build.onResolve({ filter: /^node:crypto$/ }, args => {
-                    if (args.importer.endsWith('shims/crypto.js')) return { path: args.path, external: true };
+                    // Prevent circular dependency: if the shim itself is importing node:crypto, let it pass as external
+                    if (args.importer === shimPath) return { path: args.path, external: true };
                     return { path: shimPath };
                 });
                 build.onResolve({ filter: /^crypto$/ }, args => {
