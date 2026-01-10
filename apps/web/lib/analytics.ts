@@ -48,7 +48,7 @@ export async function getTimeseriesData(filter: AnalyticsFilter): Promise<Timese
     }
 
     const query = `
-    SELECT 
+    SELECT
       time_bucket($1, eo.observation_date) AS time,
       eo.series_id,
       AVG(eo.value)::float AS value,
@@ -61,7 +61,7 @@ export async function getTimeseriesData(filter: AnalyticsFilter): Promise<Timese
   `;
 
     try {
-        const pool = await getPool();
+        const pool = getPool();
         const result = await pool.query(query, params);
         return result.rows;
     } catch (error: any) {
@@ -82,7 +82,7 @@ export async function getActiveSeries() {
   `;
 
     try {
-        const pool = await getPool();
+        const pool = getPool();
         const result = await pool.query(query);
         return result.rows;
     } catch (error) {
@@ -96,13 +96,13 @@ export async function getActiveSeries() {
  */
 export async function getGeographies() {
     const query = `
-    SELECT DISTINCT geography 
-    FROM metadata.series_metadata 
+    SELECT DISTINCT geography
+    FROM metadata.series_metadata
     WHERE is_active = TRUE AND geography IS NOT NULL
     ORDER BY geography ASC;
   `;
     try {
-        const pool = await getPool();
+        const pool = getPool();
         const result = await pool.query(query);
         return result.rows.map((r: any) => r.geography);
     } catch (error) {
@@ -116,7 +116,7 @@ export async function getGeographies() {
  */
 export async function getRelatedSeries(seriesId: number) {
     try {
-        const pool = await getPool();
+        const pool = getPool();
         await pool.query('SET search_path = "public", "ag_catalog";');
         const query = `
     SELECT * FROM cypher('economic_graph', $$
