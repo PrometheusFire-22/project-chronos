@@ -11,13 +11,11 @@ pages_build_output_dir = "apps/web/.open-next"
 NEXT_PUBLIC_SITE_URL = "https://automatonicai.com"
 NEXT_PUBLIC_DIRECTUS_URL = "https://admin.automatonicai.com"
 
-# TEMPORARILY DISABLED: Hyperdrive binding to allow GUI configuration
-# Once Hyperdrive is properly configured in Cloudflare GUI, we can re-enable this
-# [[hyperdrive]]
-# binding = "DB"
-# id = "004d95e1a3b94c01b4ba235c2b6167c3"
+[[hyperdrive]]
+binding = "DB"
+id = "57a11e939cad4f4a96422a12f07f8142"
 # localConnectionString only needed for local development/testing
-# localConnectionString = "postgresql://user:pass@localhost:5432/chronos"
+# localConnectionString = "postgresql://chronos:password@localhost:5432/chronos"
 
 [[r2_buckets]]
 binding = "MEDIA"
