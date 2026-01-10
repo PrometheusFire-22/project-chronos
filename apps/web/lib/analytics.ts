@@ -1,4 +1,4 @@
-import { getPool } from './db/pool';
+import { getPoolAsync } from './db/pool';
 
 export interface TimeseriesPoint {
     time: string;
@@ -61,7 +61,7 @@ export async function getTimeseriesData(filter: AnalyticsFilter): Promise<Timese
   `;
 
     try {
-        const pool = getPool();
+        const pool = await getPoolAsync();
         const result = await pool.query(query, params);
         return result.rows;
     } catch (error: any) {
@@ -82,7 +82,7 @@ export async function getActiveSeries() {
   `;
 
     try {
-        const pool = getPool();
+        const pool = await getPoolAsync();
         const result = await pool.query(query);
         return result.rows;
     } catch (error) {
@@ -102,7 +102,7 @@ export async function getGeographies() {
     ORDER BY geography ASC;
   `;
     try {
-        const pool = getPool();
+        const pool = await getPoolAsync();
         const result = await pool.query(query);
         return result.rows.map((r: any) => r.geography);
     } catch (error) {
@@ -116,7 +116,7 @@ export async function getGeographies() {
  */
 export async function getRelatedSeries(seriesId: number) {
     try {
-        const pool = getPool();
+        const pool = await getPoolAsync();
         await pool.query('SET search_path = "public", "ag_catalog";');
         const query = `
     SELECT * FROM cypher('economic_graph', $$
