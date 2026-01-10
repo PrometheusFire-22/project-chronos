@@ -13,7 +13,7 @@ NEXT_PUBLIC_DIRECTUS_URL = "https://admin.automatonicai.com"
 
 [[hyperdrive]]
 binding = "DB"
-id = "cbdc3f3e22f3454580f0d1ab56c9a1ea"
+id = "004d95e1a3b94c01b4ba235c2b6167c3"
 # localConnectionString only needed for local development/testing
 # localConnectionString = "postgresql://user:pass@localhost:5432/chronos"
 
