@@ -60,24 +60,26 @@ export async function getPool(): Promise<DbClient> {
 
     console.log(`✅ Using database connection from: ${source}`);
 
-    // Initialize the singleton connection
-    sql = postgres(connectionString, {
-        ssl: { rejectUnauthorized: false }, // Necessary for many cloud DBs
-        prepare: false, // Hyperdrive often works better with simple query mode
-        max: 10,
-        idle_timeout: 30,
-        connect_timeout: 10,
-    });
-
-    // Simple connection test
+    // Initialize the singleton connection with full error handling
     try {
+        sql = postgres(connectionString, {
+            ssl: { rejectUnauthorized: false }, // Necessary for many cloud DBs
+            prepare: false, // Hyperdrive often works better with simple query mode
+            max: 10,
+            idle_timeout: 30,
+            connect_timeout: 10,
+        });
+
+        // Simple connection test
         await sql`SELECT 1`;
         console.log('✨ Database connection test successful');
+        return createWrapper(sql);
     } catch (err) {
-        console.error('❌ Database connection test failed:', err);
+        console.error('❌ Database initialization failed:', err instanceof Error ? err.message : String(err));
+        console.error('⚠️ Full error:', err);
+        sql = null; // Reset to allow retry
+        return createMockThrowingClient();
     }
-
-    return createWrapper(sql);
 }
 
 function createWrapper(sqlClient: postgres.Sql): DbClient {
@@ -94,7 +96,10 @@ function createWrapper(sqlClient: postgres.Sql): DbClient {
 function createMockThrowingClient(): DbClient {
     return {
         async query() {
-            throw new Error("❌ Database not connected: No connection string found during initialization.");
+            throw new Error(
+                "❌ Database not connected: Check Cloudflare Pages logs for initialization errors. " +
+                "Ensure DATABASE_URL environment variable is set or Hyperdrive binding 'DB' is configured."
+            );
         }
     };
 }
