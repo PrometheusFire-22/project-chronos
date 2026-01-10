@@ -1,8 +1,6 @@
 import postgres from 'postgres';
 import { getCloudflareContext } from '@opennextjs/cloudflare';
 
-let sql: postgres.Sql | null = null;
-
 // Mock the Pool type to match expected usage in analytics.ts
 interface QueryResult {
     rows: any[];
@@ -12,94 +10,149 @@ interface DbClient {
     query(text: string, params?: any[]): Promise<QueryResult>;
 }
 
+// Lazy initialization state
+let connectionPromise: Promise<postgres.Sql | null> | null = null;
+let connectionError: Error | null = null;
+
 /**
- * Gets or creates a database connection using 'postgres.js' (lightweight driver).
- * This replaces 'pg' to significantly reduce the Cloudflare worker bundle size.
- *
- * Connection string priority:
- * 1. Cloudflare Hyperdrive binding (env.DB.connectionString) in production
- * 2. DATABASE_URL environment variable for local development
+ * LAZY database connection getter - does NOT attempt connection until first query.
+ * This prevents Worker crashes during initialization.
  */
-export async function getPool(): Promise<DbClient> {
-    if (sql) return createWrapper(sql);
+export function getPool(): DbClient {
+    console.log('📦 getPool() called - returning lazy client');
+    return createLazyClient();
+}
 
-    let connectionString: string | undefined;
-    let source = 'unknown';
+/**
+ * Lazy client that defers connection until first actual query
+ */
+function createLazyClient(): DbClient {
+    return {
+        async query(text: string, params: any[] = []): Promise<QueryResult> {
+            console.log('🔍 Lazy query called, will ensure connection...');
 
-    try {
-        // Try to get Cloudflare Hyperdrive binding (production/Cloudflare Pages)
-        const { env } = await getCloudflareContext({ async: true });
-        if (env?.DB?.connectionString) {
-            connectionString = env.DB.connectionString;
-            source = 'Hyperdrive binding (env.DB.connectionString)';
+            const sql = await ensureConnection();
+
+            if (!sql) {
+                // Connection failed - throw detailed error
+                const msg = connectionError?.message || 'Database connection not available';
+                console.error('❌ Query failed - no connection:', msg);
+                throw new Error(
+                    `Database unavailable: ${msg}\n\n` +
+                    `This could mean:\n` +
+                    `1. Hyperdrive binding 'DB' is not configured in Cloudflare Pages\n` +
+                    `2. DATABASE_URL environment variable is not set\n` +
+                    `3. Database credentials are incorrect\n\n` +
+                    `Check Cloudflare Pages Settings → Environment Variables and Bindings`
+                );
+            }
+
+            try {
+                console.log('🔄 Executing query:', text.substring(0, 100));
+                const rows = await sql.unsafe(text, params);
+                console.log('✅ Query successful, rows:', rows.length);
+                return { rows };
+            } catch (err) {
+                console.error('❌ Query execution error:', err);
+                throw err;
+            }
         }
-    } catch (err) {
-        // getCloudflareContext might not be available in all contexts
-        console.log('⚠️ getCloudflareContext not available:', err instanceof Error ? err.message : String(err));
+    };
+}
+
+/**
+ * Ensures database connection is established (lazy initialization)
+ */
+async function ensureConnection(): Promise<postgres.Sql | null> {
+    // If we already have a connection promise, wait for it
+    if (connectionPromise) {
+        console.log('⏳ Connection already in progress, waiting...');
+        return await connectionPromise;
     }
 
-    // Fallback to environment variables
-    if (!connectionString && process.env.HYPERDRIVE_URL) {
-        connectionString = process.env.HYPERDRIVE_URL;
-        source = 'HYPERDRIVE_URL env var';
-    }
+    // Start new connection attempt
+    console.log('🚀 Starting lazy database connection...');
+    connectionPromise = attemptConnection();
 
-    if (!connectionString && process.env.DATABASE_URL) {
-        connectionString = process.env.DATABASE_URL;
-        source = 'DATABASE_URL env var (local dev)';
-    }
+    return await connectionPromise;
+}
 
-    if (!connectionString) {
-        const availableEnvKeys = Object.keys(process.env).filter(k =>
-            !k.includes('KEY') && !k.includes('SECRET') && !k.includes('TOKEN')
-        );
-        console.error(`❌ No database connection found. Available env keys: ${availableEnvKeys.join(', ')}`);
-        console.error("⚠️ Returning mock client to prevent crash.");
-        return createMockThrowingClient();
-    }
-
-    console.log(`✅ Using database connection from: ${source}`);
-
-    // Initialize the singleton connection with full error handling
+/**
+ * Attempts to establish database connection with comprehensive error handling
+ */
+async function attemptConnection(): Promise<postgres.Sql | null> {
     try {
-        sql = postgres(connectionString, {
-            ssl: { rejectUnauthorized: false }, // Necessary for many cloud DBs
-            prepare: false, // Hyperdrive often works better with simple query mode
+        let connectionString: string | undefined;
+        let source = 'unknown';
+
+        // Try Cloudflare Hyperdrive binding first
+        try {
+            console.log('🔍 Attempting to get Cloudflare context...');
+            const { env } = await getCloudflareContext({ async: true });
+            console.log('📊 Cloudflare env available, checking for DB binding...');
+
+            if (env?.DB?.connectionString) {
+                connectionString = env.DB.connectionString;
+                source = 'Hyperdrive binding (env.DB.connectionString)';
+                console.log('✅ Found Hyperdrive binding!');
+            } else {
+                console.log('⚠️ Cloudflare env exists but no DB.connectionString');
+                console.log('Available env keys:', Object.keys(env || {}).join(', '));
+            }
+        } catch (err) {
+            console.log('⚠️ getCloudflareContext failed:', err instanceof Error ? err.message : String(err));
+        }
+
+        // Fallback to environment variables
+        if (!connectionString && process.env.HYPERDRIVE_URL) {
+            connectionString = process.env.HYPERDRIVE_URL;
+            source = 'HYPERDRIVE_URL env var';
+            console.log('✅ Using HYPERDRIVE_URL from env');
+        }
+
+        if (!connectionString && process.env.DATABASE_URL) {
+            connectionString = process.env.DATABASE_URL;
+            source = 'DATABASE_URL env var';
+            console.log('✅ Using DATABASE_URL from env');
+        }
+
+        if (!connectionString) {
+            const availableEnvKeys = Object.keys(process.env)
+                .filter(k => !k.includes('KEY') && !k.includes('SECRET') && !k.includes('TOKEN'))
+                .slice(0, 20); // Limit to prevent log spam
+
+            const errorMsg = `No database connection string found.\nChecked: Hyperdrive binding (env.DB), HYPERDRIVE_URL, DATABASE_URL\nAvailable env vars: ${availableEnvKeys.join(', ')}`;
+            console.error('❌', errorMsg);
+            connectionError = new Error(errorMsg);
+            return null;
+        }
+
+        console.log(`✅ Connection string found from: ${source}`);
+        console.log(`🔌 Initializing postgres connection...`);
+
+        const sql = postgres(connectionString, {
+            ssl: { rejectUnauthorized: false },
+            prepare: false,
             max: 10,
             idle_timeout: 30,
             connect_timeout: 10,
         });
 
-        // Simple connection test
+        // Test the connection
+        console.log('🧪 Testing connection with SELECT 1...');
         await sql`SELECT 1`;
-        console.log('✨ Database connection test successful');
-        return createWrapper(sql);
+        console.log('✨ Database connection test successful!');
+
+        connectionError = null; // Clear any previous errors
+        return sql;
+
     } catch (err) {
-        console.error('❌ Database initialization failed:', err instanceof Error ? err.message : String(err));
-        console.error('⚠️ Full error:', err);
-        sql = null; // Reset to allow retry
-        return createMockThrowingClient();
+        const errorMsg = err instanceof Error ? err.message : String(err);
+        console.error('❌ Database connection failed:', errorMsg);
+        console.error('Full error:', err);
+
+        connectionError = err instanceof Error ? err : new Error(errorMsg);
+        connectionPromise = null; // Reset to allow retry
+        return null;
     }
-}
-
-function createWrapper(sqlClient: postgres.Sql): DbClient {
-    return {
-        async query(text: string, params: any[] = []): Promise<QueryResult> {
-            // Use .unsafe() to allow $1, $2 syntax which plain template tags don't support
-            // postgres.js handles value matching for protocol-level params in unsafe mode
-            const rows = await sqlClient.unsafe(text, params);
-            return { rows };
-        }
-    };
-}
-
-function createMockThrowingClient(): DbClient {
-    return {
-        async query() {
-            throw new Error(
-                "❌ Database not connected: Check Cloudflare Pages logs for initialization errors. " +
-                "Ensure DATABASE_URL environment variable is set or Hyperdrive binding 'DB' is configured."
-            );
-        }
-    };
 }
