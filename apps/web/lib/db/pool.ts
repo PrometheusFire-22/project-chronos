@@ -24,33 +24,41 @@ export async function getPool(): Promise<DbClient> {
     if (sql) return createWrapper(sql);
 
     let connectionString: string | undefined;
+    let source = 'unknown';
 
     try {
         // Try to get Cloudflare Hyperdrive binding (production/Cloudflare Pages)
         const { env } = await getCloudflareContext({ async: true });
         if (env?.DB?.connectionString) {
             connectionString = env.DB.connectionString;
-            console.log('✅ Using Hyperdrive connection from Cloudflare binding');
+            source = 'Hyperdrive binding (env.DB.connectionString)';
         }
     } catch (err) {
-        // getCloudflareContext will throw if not in Cloudflare environment
-        console.log('⚠️ Not in Cloudflare environment, trying local DATABASE_URL');
+        // getCloudflareContext might not be available in all contexts
+        console.log('⚠️ getCloudflareContext not available:', err instanceof Error ? err.message : String(err));
     }
 
-    // Fallback to DATABASE_URL for local development
+    // Fallback to environment variables
+    if (!connectionString && process.env.HYPERDRIVE_URL) {
+        connectionString = process.env.HYPERDRIVE_URL;
+        source = 'HYPERDRIVE_URL env var';
+    }
+
     if (!connectionString && process.env.DATABASE_URL) {
         connectionString = process.env.DATABASE_URL;
-        console.log('✅ Using DATABASE_URL from environment (local dev)');
+        source = 'DATABASE_URL env var (local dev)';
     }
 
     if (!connectionString) {
         const availableEnvKeys = Object.keys(process.env).filter(k =>
             !k.includes('KEY') && !k.includes('SECRET') && !k.includes('TOKEN')
         );
-        console.warn(`❌ No database connection found. Available env keys: ${availableEnvKeys.join(', ')}`);
-        console.warn("⚠️ No connection string found, returning mock client to prevent crash.");
+        console.error(`❌ No database connection found. Available env keys: ${availableEnvKeys.join(', ')}`);
+        console.error("⚠️ Returning mock client to prevent crash.");
         return createMockThrowingClient();
     }
+
+    console.log(`✅ Using database connection from: ${source}`);
 
     // Initialize the singleton connection
     sql = postgres(connectionString, {
