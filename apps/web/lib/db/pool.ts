@@ -1,5 +1,6 @@
-import postgres from 'postgres';
+import { Pool } from 'pg';
 import { getCloudflareContext } from '@opennextjs/cloudflare';
+import { cache } from 'react';
 
 /**
  * Simple database pool interface for compatibility with existing code
@@ -13,48 +14,59 @@ interface DbClient {
 }
 
 /**
- * Gets the database connection pool.
- * Creates a new connection for each request (required by Cloudflare Workers).
+ * Gets the database connection pool for SSR/SSG pages.
+ * Uses React cache to create one pool per request (required by Cloudflare Workers).
  */
-export function getPool(): DbClient {
-    return {
-        async query(text: string, params: any[] = []): Promise<QueryResult> {
-            // Create a new connection for each request (required by Cloudflare Workers)
-            const sql = await createConnection();
+export const getPool = cache((): DbClient => {
+    const { env } = getCloudflareContext();
+    const connectionString = env.DB.connectionString;
 
-            try {
-                const rows = await sql.unsafe(text, params);
-                return { rows };
-            } finally {
-                // Always close the connection after the query
-                await sql.end();
-            }
-        }
-    };
-}
-
-/**
- * Creates database connection using Cloudflare Hyperdrive binding.
- * Must create a new connection per request - no singletons/globals allowed.
- */
-async function createConnection(): Promise<postgres.Sql> {
-    const { env } = await getCloudflareContext({ async: true });
-
-    if (!env?.DB?.connectionString) {
+    if (!connectionString) {
         throw new Error(
             'Hyperdrive binding "DB" not found. ' +
             'Please configure it in Cloudflare Pages Settings → Bindings'
         );
     }
 
-    return postgres(env.DB.connectionString, {
-        ssl: { rejectUnauthorized: false },
-        prepare: false,
+    const pool = new Pool({
+        connectionString,
+        maxUses: 1, // Required for Cloudflare Workers - prevents connection reuse
         max: 1,
-        idle_timeout: 20,
-        connect_timeout: 10,
-        connection: {
-            application_name: 'chronos-web'
-        }
     });
-}
+
+    return {
+        async query(text: string, params: any[] = []): Promise<QueryResult> {
+            const result = await pool.query(text, params);
+            return { rows: result.rows };
+        }
+    };
+});
+
+/**
+ * Gets the database connection pool for ISR/dynamic pages.
+ * Uses async context retrieval for pages that need it.
+ */
+export const getPoolAsync = cache(async (): Promise<DbClient> => {
+    const { env } = await getCloudflareContext({ async: true });
+    const connectionString = env.DB.connectionString;
+
+    if (!connectionString) {
+        throw new Error(
+            'Hyperdrive binding "DB" not found. ' +
+            'Please configure it in Cloudflare Pages Settings → Bindings'
+        );
+    }
+
+    const pool = new Pool({
+        connectionString,
+        maxUses: 1, // Required for Cloudflare Workers - prevents connection reuse
+        max: 1,
+    });
+
+    return {
+        async query(text: string, params: any[] = []): Promise<QueryResult> {
+            const result = await pool.query(text, params);
+            return { rows: result.rows };
+        }
+    };
+});
