@@ -129,22 +129,26 @@ async function attemptConnection(): Promise<postgres.Sql | null> {
         }
 
         console.log(`✅ Connection string found from: ${source}`);
-        console.log(`🔌 Initializing postgres connection with 3-second timeout...`);
+        console.log(`🔌 Initializing postgres connection with 5-second timeout...`);
+        console.log(`🔗 Connection details: Host=${new URL(connectionString.replace('postgresql://', 'http://')).hostname}`);
 
         const sql = postgres(connectionString, {
             ssl: { rejectUnauthorized: false },
             prepare: false,
-            max: 10,
-            idle_timeout: 30,
-            connect_timeout: 3, // 3 second timeout - fail fast!
+            max: 1, // Minimal connections for Cloudflare Workers
+            idle_timeout: 20,
+            connect_timeout: 5, // 5 second timeout
+            connection: {
+                application_name: 'chronos-web-cloudflare'
+            }
         });
 
         // Test the connection with timeout wrapper
-        console.log('🧪 Testing connection with SELECT 1 (3s timeout)...');
+        console.log('🧪 Testing connection with SELECT 1 (5s timeout)...');
 
-        // Create a promise that times out after 3 seconds
+        // Create a promise that times out after 5 seconds
         const timeoutPromise = new Promise<never>((_, reject) => {
-            setTimeout(() => reject(new Error('Database connection test timed out after 3 seconds')), 3000);
+            setTimeout(() => reject(new Error('Database connection test timed out after 5 seconds')), 5000);
         });
 
         // Race between connection test and timeout
