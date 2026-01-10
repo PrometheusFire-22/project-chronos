@@ -24,12 +24,21 @@ let sql: postgres.Sql | null = null;
 export function getPool(): DbClient {
     return {
         async query(text: string, params: any[] = []): Promise<QueryResult> {
-            if (!sql) {
-                sql = await createConnection();
-            }
+            try {
+                if (!sql) {
+                    console.log('Creating database connection...');
+                    sql = await createConnection();
+                    console.log('Database connection created successfully');
+                }
 
-            const rows = await sql.unsafe(text, params);
-            return { rows };
+                console.log('Executing query:', text.substring(0, 100));
+                const rows = await sql.unsafe(text, params);
+                console.log('Query executed successfully, rows:', rows.length);
+                return { rows };
+            } catch (error) {
+                console.error('Database query error:', error);
+                throw error;
+            }
         }
     };
 }
@@ -38,23 +47,38 @@ export function getPool(): DbClient {
  * Creates database connection using Cloudflare Hyperdrive binding
  */
 async function createConnection(): Promise<postgres.Sql> {
-    const { env } = await getCloudflareContext({ async: true });
+    try {
+        console.log('Getting Cloudflare context...');
+        const { env } = await getCloudflareContext({ async: true });
+        console.log('Cloudflare context retrieved');
 
-    if (!env?.DB?.connectionString) {
-        throw new Error(
-            'Hyperdrive binding "DB" not found. ' +
-            'Please configure it in Cloudflare Pages Settings → Bindings'
-        );
-    }
-
-    return postgres(env.DB.connectionString, {
-        ssl: { rejectUnauthorized: false },
-        prepare: false,
-        max: 1, // Cloudflare Workers use single connection
-        idle_timeout: 20,
-        connect_timeout: 10,
-        connection: {
-            application_name: 'chronos-web'
+        if (!env?.DB?.connectionString) {
+            console.error('Hyperdrive binding not found. Available bindings:', Object.keys(env || {}));
+            throw new Error(
+                'Hyperdrive binding "DB" not found. ' +
+                'Please configure it in Cloudflare Pages Settings → Bindings'
+            );
         }
-    });
+
+        console.log('Creating postgres connection with Hyperdrive...');
+        const connection = postgres(env.DB.connectionString, {
+            ssl: { rejectUnauthorized: false },
+            prepare: false,
+            max: 1, // Cloudflare Workers use single connection
+            idle_timeout: 20,
+            connect_timeout: 10,
+            connection: {
+                application_name: 'chronos-web'
+            }
+        });
+
+        console.log('Testing connection...');
+        await connection`SELECT 1`;
+        console.log('Connection test successful');
+
+        return connection;
+    } catch (error) {
+        console.error('Failed to create database connection:', error);
+        throw error;
+    }
 }
