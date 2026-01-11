@@ -84,13 +84,13 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
     }, [seriesConfig]);
 
     if (!isMounted) {
-        return <div className="w-full h-[400px] md:h-[550px] bg-slate-100 dark:bg-slate-900/50 animate-pulse rounded-2xl" />;
+        return <div className="w-full h-[500px] md:h-[550px] bg-slate-100 dark:bg-slate-900/50 animate-pulse rounded-2xl" />;
     }
 
     return (
-        <div className="w-full h-[400px] md:h-[550px] p-4 md:p-6 bg-white dark:bg-slate-950 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 transition-all">
+        <div className="w-full h-[500px] md:h-[550px] p-4 md:p-6 bg-white dark:bg-slate-950 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 transition-all">
             <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 5 }}>
+                <LineChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 10 }}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.05} />
 
                     <XAxis
@@ -149,7 +149,7 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
 
                     <Legend
                         verticalAlign="bottom"
-                        height={36}
+                        height={60}
                         iconType="circle"
                         wrapperStyle={{ paddingTop: '10px', fontSize: '11px' }}
                         formatter={(value, entry: any) => {
