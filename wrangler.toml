@@ -14,8 +14,8 @@ NEXT_PUBLIC_DIRECTUS_URL = "https://admin.automatonicai.com"
 [[hyperdrive]]
 binding = "DB"
 id = "57a11e939cad4f4a96422a12f07f8142"
-# localConnectionString only needed for local development/testing
-# localConnectionString = "postgresql://chronos:password@localhost:5432/chronos"
+# localConnectionString set via CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_DB env var
+# or .dev.vars file for security (not committed to git)
 
 [[r2_buckets]]
 binding = "MEDIA"

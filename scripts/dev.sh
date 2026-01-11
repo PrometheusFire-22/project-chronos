@@ -62,15 +62,18 @@ trap cleanup SIGINT SIGTERM EXIT
 # 1. Start Database
 start_db
 
-# 2. Wait for DB port to be available (using .env DATABASE_PORT)
-# Check if DATABASE_PORT is set in .env
-if [ -f .env ]; then
-  source .env
+# 2. Load environment variables from apps/web/.env.local
+if [ -f apps/web/.env.local ]; then
+  set -a  # automatically export all variables
+  source apps/web/.env.local
+  set +a
+  # Set Cloudflare Hyperdrive local connection for development
+  export CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_DB="${DATABASE_URL}"
 fi
 
+# Wait for DB port to be available
 if [ -z "${DATABASE_PORT}" ]; then
-  echo "DATABASE_PORT not set in .env. Assuming default 5432 and proceeding without waiting for port."
-  # Proceed anyway, as docker compose up --wait should handle most cases
+  echo "DATABASE_PORT not set. Assuming default 5432 and proceeding without waiting for port."
 else
   wait_for_port "${DATABASE_PORT}"
 fi
