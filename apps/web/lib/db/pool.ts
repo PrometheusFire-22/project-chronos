@@ -19,12 +19,19 @@ interface DbClient {
  */
 export const getPool = cache((): DbClient => {
     const { env } = getCloudflareContext();
+
+    if (!env.DB) {
+        throw new Error(
+            'Hyperdrive binding "DB" not found. ' +
+            'Please configure it in Cloudflare Pages Settings → Bindings'
+        );
+    }
+
     const connectionString = env.DB.connectionString;
 
     if (!connectionString) {
         throw new Error(
-            'Hyperdrive binding "DB" not found. ' +
-            'Please configure it in Cloudflare Pages Settings → Bindings'
+            'Hyperdrive connectionString is missing from binding "DB"'
         );
     }
 
@@ -48,12 +55,19 @@ export const getPool = cache((): DbClient => {
  */
 export const getPoolAsync = cache(async (): Promise<DbClient> => {
     const { env } = await getCloudflareContext({ async: true });
+
+    if (!env.DB) {
+        throw new Error(
+            'Hyperdrive binding "DB" not found. ' +
+            'Please configure it in Cloudflare Pages Settings → Bindings'
+        );
+    }
+
     const connectionString = env.DB.connectionString;
 
     if (!connectionString) {
         throw new Error(
-            'Hyperdrive binding "DB" not found. ' +
-            'Please configure it in Cloudflare Pages Settings → Bindings'
+            'Hyperdrive connectionString is missing from binding "DB"'
         );
     }
 
