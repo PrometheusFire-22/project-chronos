@@ -84,13 +84,13 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
     }, [seriesConfig]);
 
     if (!isMounted) {
-        return <div className="w-full h-[550px] bg-slate-100 dark:bg-slate-900/50 animate-pulse rounded-2xl" />;
+        return <div className="w-full h-[400px] md:h-[550px] bg-slate-100 dark:bg-slate-900/50 animate-pulse rounded-2xl" />;
     }
 
     return (
-        <div className="w-full h-[550px] p-6 bg-white dark:bg-slate-950 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 transition-all">
+        <div className="w-full h-[400px] md:h-[550px] p-4 md:p-6 bg-white dark:bg-slate-950 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 transition-all">
             <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                <LineChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 5 }}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" opacity={0.05} />
 
                     <XAxis
@@ -98,7 +98,7 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
                         tickFormatter={(value) => new Date(value).getFullYear().toString()}
                         minTickGap={60}
                         stroke="#94a3b8"
-                        fontSize={12}
+                        fontSize={11}
                         tickLine={false}
                         axisLine={false}
                     />
@@ -106,10 +106,11 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
                     <YAxis
                         yAxisId="left"
                         stroke={leftAxisColor}
-                        fontSize={12}
+                        fontSize={10}
                         tickLine={false}
                         axisLine={false}
                         tickFormatter={(value) => value > 1000 ? `${(value / 1000).toFixed(1)}k` : value}
+                        width={40}
                     />
 
                     {seriesConfig.some(s => s.yAxisId === 'right') && (
@@ -117,10 +118,11 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
                             yAxisId="right"
                             orientation="right"
                             stroke={rightAxisColor}
-                            fontSize={12}
+                            fontSize={10}
                             tickLine={false}
                             axisLine={false}
                             tickFormatter={(value) => value > 1000 ? `${(value / 1000).toFixed(1)}k` : value.toFixed(1)}
+                            width={40}
                         />
                     )}
 
@@ -146,13 +148,14 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
                     />
 
                     <Legend
-                        verticalAlign="top"
-                        height={40}
+                        verticalAlign="bottom"
+                        height={36}
                         iconType="circle"
+                        wrapperStyle={{ paddingTop: '10px', fontSize: '11px' }}
                         formatter={(value, entry: any) => {
                             // entry.dataKey contains s_{id}
                             const config = seriesConfig.find(s => s.key === entry.dataKey);
-                            return <span className="text-sm font-semibold" style={{ color: config?.color || '#94a3b8' }}>{config?.series_name || value}</span>
+                            return <span className="text-xs md:text-sm font-semibold" style={{ color: config?.color || '#94a3b8' }}>{config?.series_name || value}</span>
                         }}
                     />
 
