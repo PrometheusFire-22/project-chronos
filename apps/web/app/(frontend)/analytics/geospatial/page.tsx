@@ -15,82 +15,77 @@ export default function GeospatialPage() {
     units: string;
     seriesName: string;
   } | null>(null);
+
   return (
-    <div className="container mx-auto px-4 py-12">
-      <div className="max-w-7xl mx-auto">
-        {/* Navigation */}
-        <AnalyticsNav />
-
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-            Geospatial Analytics
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
-            Explore economic indicators across geographic regions with interactive choropleth maps.
-          </p>
-        </div>
-
-        {/* Map Container */}
-        <div className="space-y-12">
-          {/* Example: US States Unemployment Rate */}
-          <section>
-            <div className="mb-4">
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                US States - Unemployment Rate
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                Unemployment rate by state across the United States.
+    <div className="min-h-screen bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-slate-100 transition-colors duration-500">
+      <div className="container mx-auto py-12 px-6">
+        <header className="mb-12 relative">
+          <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="px-3 py-1 bg-blue-500/10 text-blue-500 text-xs font-bold tracking-widest uppercase rounded-full border border-blue-500/20">
+                  Spatial Intelligence
+                </span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-500 dark:from-white dark:to-slate-400">
+                Geospatial Analytics
+              </h1>
+              <p className="mt-3 text-lg text-slate-600 dark:text-slate-400 max-w-2xl font-medium">
+                Visualize economic indicators across geographic regions with interactive choropleth maps.
               </p>
             </div>
-            <div className="grid lg:grid-cols-[1fr_300px] gap-6">
-              <GeospatialMap
-                geography="US"
-                level="state"
-                seriesId="1"
-                height="600px"
-                onFeatureClick={(id, name) => {
-                  console.log('Clicked:', { id, name });
-                }}
-                onDataLoad={setLegendData}
+            <div className="flex items-center gap-3">
+              <AnalyticsNav />
+            </div>
+          </div>
+        </header>
+
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
+          <div className="xl:col-span-1">
+            {legendData && (
+              <MapLegend
+                title={legendData.seriesName}
+                min={legendData.min}
+                max={legendData.max}
+                units={legendData.units}
               />
-              {legendData && (
-                <MapLegend
-                  title={legendData.seriesName}
-                  min={legendData.min}
-                  max={legendData.max}
-                  units={legendData.units}
+            )}
+          </div>
+
+          <div className="xl:col-span-3">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-emerald-500 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
+              <div className="relative">
+                <GeospatialMap
+                  geography="US"
+                  level="state"
+                  seriesId="71"
+                  height="700px"
+                  onFeatureClick={(id, name) => {
+                    console.log('Clicked:', { id, name });
+                  }}
+                  onDataLoad={setLegendData}
                 />
-              )}
+              </div>
             </div>
-          </section>
 
-          {/* Placeholder for additional maps */}
-          <section>
-            <div className="mb-4">
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
-                Canadian Provinces - Coming Soon
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                Additional geospatial visualizations will be available here.
+            <div className="mt-8 p-6 bg-blue-50 dark:bg-blue-900/10 rounded-2xl border border-blue-200 dark:border-blue-800/50">
+              <h3 className="text-sm font-bold tracking-widest uppercase text-blue-900 dark:text-blue-100 mb-2">
+                About This Dashboard
+              </h3>
+              <p className="text-blue-800 dark:text-blue-200 text-sm leading-relaxed mb-3">
+                Interactive choropleth maps visualizing economic time-series data across North American geographic regions.
+                Click on regions to view detailed information.
               </p>
+              <div className="p-3 bg-amber-100/50 dark:bg-amber-900/20 rounded-lg border border-amber-300/50 dark:border-amber-700/50">
+                <p className="text-amber-900 dark:text-amber-200 text-xs leading-relaxed">
+                  <strong>Note:</strong> Currently displaying demo data with sample unemployment rates by state/province.
+                  Production version will integrate with actual state-level economic series from the database.
+                </p>
+              </div>
             </div>
-            <div className="h-96 bg-gray-100 dark:bg-gray-800 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700 flex items-center justify-center">
-              <p className="text-gray-500 dark:text-gray-500">More maps coming soon</p>
-            </div>
-          </section>
-        </div>
-
-        {/* Info Footer */}
-        <div className="mt-12 p-6 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-          <h3 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">
-            About This Dashboard
-          </h3>
-          <p className="text-blue-800 dark:text-blue-200 text-sm">
-            This geospatial dashboard provides interactive choropleth maps powered by Leaflet and OpenStreetMap.
-            Click on regions to view detailed information. Data is sourced from our economic time-series database
-            and refreshed regularly.
-          </p>
+          </div>
         </div>
       </div>
     </div>

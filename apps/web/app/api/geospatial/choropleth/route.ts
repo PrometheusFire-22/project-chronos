@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPoolAsync } from '@/lib/db/pool';
 import type { ChoroplethFeatureCollection } from '@/lib/types/geospatial';
+import { demoStateLevelData, demoProvinceLevelData } from './demo-data';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -126,32 +127,17 @@ function buildChoroplethQuery(tableName: string, seriesId: string, date: string 
   const geography = tableName.startsWith('us_') ? 'US' : 'CANADA';
   const level = tableName.replace('us_', '').replace('ca_', '');
 
-  // Build date filter
-  let dateFilter = '';
-  let params: any[] = [parseInt(seriesId)];
+  // Use demo data for state/province-level visualization
+  // TODO: Replace with actual state-level economic series when available
+  const demoData = tableName === 'us_states' ? demoStateLevelData :
+                   tableName === 'ca_provinces' ? demoProvinceLevelData : {};
 
-  if (date) {
-    dateFilter = 'AND eo.observation_date <= $2';
-    params.push(date);
-  }
+  // Build CASE statement for demo values
+  const demoValueCases = Object.entries(demoData)
+    .map(([fipsCode, value]) => `WHEN g.${mapping.id} = '${fipsCode}' THEN ${value}`)
+    .join(' ');
 
-  // For now, we'll get the most recent observation for each region
-  // Future enhancement: support time-series animation by returning multiple dates
   const sql = `
-    WITH latest_observations AS (
-      SELECT
-        eo.series_id,
-        eo.value,
-        eo.observation_date,
-        sm.series_name,
-        sm.units,
-        sm.frequency
-      FROM timeseries.economic_observations eo
-      JOIN metadata.series_metadata sm ON eo.series_id = sm.series_id
-      WHERE eo.series_id = $1 ${dateFilter}
-      ORDER BY eo.observation_date DESC
-      LIMIT 1
-    )
     SELECT
       json_build_object(
         'type', 'Feature',
@@ -161,19 +147,18 @@ function buildChoroplethQuery(tableName: string, seriesId: string, date: string 
           'id', g.${mapping.id}::text,
           'geography', '${geography}',
           'level', '${level}',
-          'value', COALESCE(lo.value::float, null),
-          'seriesId', lo.series_id,
-          'seriesName', lo.series_name,
-          'units', lo.units,
-          'frequency', lo.frequency,
-          'date', lo.observation_date::text
+          'value', CASE ${demoValueCases} ELSE null END,
+          'seriesId', '${seriesId}',
+          'seriesName', 'Unemployment Rate (Demo Data)',
+          'units', 'Percent',
+          'frequency', 'Monthly',
+          'date', CURRENT_DATE::text
         ),
         'geometry', ST_AsGeoJSON(g.geom)::json
       ) as feature
     FROM geospatial.${tableName} g
-    CROSS JOIN latest_observations lo
     ORDER BY g.${mapping.name}
   `;
 
-  return { sql, params };
+  return { sql, params: [] };
 }

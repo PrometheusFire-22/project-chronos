@@ -4,6 +4,7 @@ import { assignSeriesColors } from '@/lib/analytics-colors';
 import EconomicChart from '@/components/analytics/EconomicChart';
 import FilterSidebar from '@/components/analytics/FilterSidebar';
 import ActiveIndicatorCard from '@/components/analytics/ActiveIndicatorCard';
+import AnalyticsNav from '@/components/analytics/AnalyticsNav';
 
 export const dynamic = 'force-dynamic';
 // Using Node.js runtime for database operations with Cloudflare Hyperdrive
@@ -142,6 +143,9 @@ export default async function EconomicAnalyticsPage({ searchParams }: PageProps)
                             <p className="mt-3 text-lg text-slate-600 dark:text-slate-400 max-w-2xl font-medium">
                                 Cross-pollinate macroeconomic indicators with real-time telemetry to discover hidden market signals.
                             </p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <AnalyticsNav />
                         </div>
                     </div>
                 </header>

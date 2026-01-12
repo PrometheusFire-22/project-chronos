@@ -94,13 +94,30 @@ function LeafletChoroplethMap({
         shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
       });
 
-      const mapInstance = L.map('geospatial-map').setView([39.8283, -98.5795], 4);
+      // North America bounds: [south-west, north-east]
+      // Approximate bounds covering USA and Canada
+      const northAmericaBounds: [[number, number], [number, number]] = [
+        [24, -168], // Southwest corner (southern Alaska, west coast)
+        [72, -52],  // Northeast corner (northern Canada, east coast)
+      ];
+
+      const mapInstance = L.map('geospatial-map', {
+        zoomControl: true,
+        attributionControl: false, // We'll add custom attribution
+      }).fitBounds(northAmericaBounds);
 
       // Add OpenStreetMap tiles
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         maxZoom: 19,
       }).addTo(mapInstance);
+
+      // Add minimal custom attribution in bottom right
+      const attributionControl = L.control.attribution({
+        position: 'bottomright',
+        prefix: false, // Remove "Leaflet" prefix
+      });
+      attributionControl.addAttribution('© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>');
+      attributionControl.addTo(mapInstance);
 
       setMap(mapInstance);
 
