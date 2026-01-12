@@ -164,7 +164,10 @@ function LeafletChoroplethMap({
         `);
 
         // Add tooltip for hover
-        const tooltipContent = `<strong>${props.name}</strong><br/>${props.value !== null ? props.value.toFixed(1) : 'N/A'} ${props.units}`;
+        // Format concisely: "3.2%" instead of "3.2 Percent"
+        const formattedValue = props.value !== null ? props.value.toFixed(1) : 'N/A';
+        const units = props.units === 'Percent' ? '%' : props.units;
+        const tooltipContent = `<strong>${props.name}</strong><br/>${formattedValue}${units}`;
         layer.bindTooltip(tooltipContent, {
           sticky: true, // Tooltip follows mouse
           className: 'choropleth-tooltip',

@@ -9,11 +9,11 @@ Supported sources:
 - Valet (Bank of Canada)
 - Future: BOE, ECB, BOJ, etc.
 """
+import argparse
 import csv
 import os
 import sys
 import time
-import argparse
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -106,11 +106,13 @@ def insert_series_metadata(conn, source_id: int, series_id: str, series_data: di
     query = """
     INSERT INTO metadata.series_metadata (
         source_id, source_series_id, series_name,
-        frequency, category, geography
-    ) VALUES (%s, %s, %s, %s, %s, %s)
+        frequency, category, geography, geography_type, geography_id
+    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     ON CONFLICT (source_id, source_series_id)
     DO UPDATE SET
         series_name = EXCLUDED.series_name,
+        geography_type = EXCLUDED.geography_type,
+        geography_id = EXCLUDED.geography_id,
         last_updated = NOW();
     """
 
@@ -123,6 +125,8 @@ def insert_series_metadata(conn, source_id: int, series_id: str, series_data: di
             series_data.get("frequency", "Unknown"),
             series_data.get("category", "Unknown"),
             series_data.get("geography_name", "Unknown"),
+            series_data.get("geography_type", "National"),
+            series_data.get("geography_id"),  # None/NULL for national data
         ),
     )
 
@@ -201,10 +205,14 @@ def insert_observations(conn, series_id: str, observations: list, source_id: int
 
 def main():
     """Main ingestion orchestrator"""
-    parser = argparse.ArgumentParser(description="Project Chronos: Universal Economic Data Ingestion")
+    parser = argparse.ArgumentParser(
+        description="Project Chronos: Universal Economic Data Ingestion"
+    )
     parser.add_argument("--source", help="Filter by data source (FRED, Valet)")
     parser.add_argument("--series", action="append", help="Filter by series ID (can be repeated)")
-    parser.add_argument("--geography", help="Filter by geography name (e.g., Canada, United States)")
+    parser.add_argument(
+        "--geography", help="Filter by geography name (e.g., Canada, United States)"
+    )
     args = parser.parse_args()
 
     print("\n" + "=" * 60)
@@ -215,7 +223,10 @@ def main():
 
     # Locate catalog (go up 4 levels: file -> ingestion -> chronos -> src -> project root)
     catalog_path = (
-        Path(__file__).parent.parent.parent.parent / "database" / "seeds" / "time-series_catalog.csv"
+        Path(__file__).parent.parent.parent.parent
+        / "database"
+        / "seeds"
+        / "time-series_catalog.csv"
     )
 
     if not catalog_path.exists():
@@ -288,9 +299,7 @@ def main():
             insert_series_metadata(conn, actual_source_id, series_id, series)
 
             # Insert observations
-            inserted, skipped = insert_observations(
-                conn, series_id, observations, actual_source_id
-            )
+            inserted, skipped = insert_observations(conn, series_id, observations, actual_source_id)
 
             print(f"    ✅ Inserted {inserted} observations (skipped {skipped})")
 

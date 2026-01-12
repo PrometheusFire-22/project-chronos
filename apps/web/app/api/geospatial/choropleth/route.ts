@@ -5,7 +5,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPoolAsync } from '@/lib/db/pool';
 import type { ChoroplethFeatureCollection } from '@/lib/types/geospatial';
-import { demoStateLevelData, demoProvinceLevelData } from './demo-data';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -113,31 +112,55 @@ function getTableName(geography: string | null, level: string | null): string | 
 
 function buildChoroplethQuery(tableName: string, seriesId: string, date: string | null) {
   // Column mappings for different tables
-  const columnMappings: Record<string, { id: string; name: string }> = {
-    'us_counties': { id: 'geoid', name: 'name' },
-    'us_states': { id: 'geoid', name: 'name' },
-    'us_cbsa': { id: 'geoid', name: 'name' },
-    'us_csa': { id: 'geoid', name: 'name' },
-    'us_metdiv': { id: 'geoid', name: 'name' },
-    'ca_provinces': { id: 'pruid', name: 'prname' },
-    'ca_census_divisions': { id: 'cduid', name: 'cdname' },
+  const columnMappings: Record<string, { id: string; name: string; geoType: string }> = {
+    'us_counties': { id: 'geoid', name: 'name', geoType: 'County' },
+    'us_states': { id: 'geoid', name: 'name', geoType: 'State' },
+    'us_cbsa': { id: 'geoid', name: 'name', geoType: 'CBSA' },
+    'us_csa': { id: 'geoid', name: 'name', geoType: 'CSA' },
+    'us_metdiv': { id: 'geoid', name: 'name', geoType: 'MetDiv' },
+    'ca_provinces': { id: 'pruid', name: 'prname', geoType: 'Province' },
+    'ca_census_divisions': { id: 'cduid', name: 'cdname', geoType: 'Census Division' },
   };
 
-  const mapping = columnMappings[tableName] || { id: 'geoid', name: 'name' };
+  const mapping = columnMappings[tableName] || { id: 'geoid', name: 'name', geoType: 'State' };
   const geography = tableName.startsWith('us_') ? 'US' : 'CANADA';
   const level = tableName.replace('us_', '').replace('ca_', '');
 
-  // Use demo data for state/province-level visualization
-  // TODO: Replace with actual state-level economic series when available
-  const demoData = tableName === 'us_states' ? demoStateLevelData :
-                   tableName === 'ca_provinces' ? demoProvinceLevelData : {};
-
-  // Build CASE statement for demo values
-  const demoValueCases = Object.entries(demoData)
-    .map(([fipsCode, value]) => `WHEN g.${mapping.id} = '${fipsCode}' THEN ${value}`)
-    .join(' ');
+  // Query real economic data by joining:
+  // 1. Geospatial boundary table with series_metadata via geography_id
+  // 2. Get latest observation (or observation at specific date) from economic_observations
+  // 3. Return GeoJSON with real values
 
   const sql = `
+    WITH latest_observations AS (
+      SELECT DISTINCT ON (series_id)
+        series_id,
+        observation_date,
+        value
+      FROM timeseries.economic_observations
+      WHERE series_id IN (
+        SELECT series_id
+        FROM metadata.series_metadata
+        WHERE geography_type = $1
+        AND source_series_id = $2
+      )
+      ${date ? 'AND observation_date <= $3' : ''}
+      ORDER BY series_id, observation_date DESC
+    ),
+    series_with_geography AS (
+      SELECT
+        sm.series_id,
+        sm.geography_id,
+        sm.series_name,
+        sm.frequency,
+        sm.category,
+        lo.value,
+        lo.observation_date
+      FROM metadata.series_metadata sm
+      LEFT JOIN latest_observations lo ON sm.series_id = lo.series_id
+      WHERE sm.geography_type = $1
+      ${seriesId !== 'auto' ? 'AND sm.source_series_id LIKE $2 || \'%\'' : ''}
+    )
     SELECT
       json_build_object(
         'type', 'Feature',
@@ -147,18 +170,24 @@ function buildChoroplethQuery(tableName: string, seriesId: string, date: string 
           'id', g.${mapping.id}::text,
           'geography', '${geography}',
           'level', '${level}',
-          'value', CASE ${demoValueCases} ELSE null END,
-          'seriesId', '${seriesId}',
-          'seriesName', 'Unemployment Rate (Demo Data)',
-          'units', 'Percent',
-          'frequency', 'Monthly',
-          'date', CURRENT_DATE::text
+          'value', swg.value,
+          'seriesId', $2,
+          'seriesName', COALESCE(swg.series_name, 'No Data'),
+          'units', CASE
+            WHEN swg.category = 'Employment' THEN 'Percent'
+            WHEN swg.category = 'Housing' THEN 'Index'
+            ELSE 'Value'
+          END,
+          'frequency', COALESCE(swg.frequency, 'Unknown'),
+          'date', COALESCE(swg.observation_date::text, CURRENT_DATE::text)
         ),
         'geometry', ST_AsGeoJSON(g.geom)::json
       ) as feature
     FROM geospatial.${tableName} g
+    LEFT JOIN series_with_geography swg ON g.${mapping.id} = swg.geography_id
     ORDER BY g.${mapping.name}
   `;
 
-  return { sql, params: [] };
+  const params = date ? [mapping.geoType, seriesId, date] : [mapping.geoType, seriesId];
+  return { sql, params };
 }
