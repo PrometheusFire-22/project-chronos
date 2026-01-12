@@ -8,13 +8,22 @@ import GeospatialMap from '@/components/analytics/GeospatialMap';
 import MapLegend from '@/components/analytics/MapLegend';
 import AnalyticsNav from '@/components/analytics/AnalyticsNav';
 
+type Geography = 'US' | 'CANADA';
+type Level = 'state' | 'province' | 'county';
+
 export default function GeospatialPage() {
+  const [selectedGeography, setSelectedGeography] = useState<Geography>('US');
   const [legendData, setLegendData] = useState<{
     min: number;
     max: number;
     units: string;
     seriesName: string;
   } | null>(null);
+
+  const geographyOptions: { value: Geography; label: string; level: Level }[] = [
+    { value: 'US', label: 'United States', level: 'state' },
+    { value: 'CANADA', label: 'Canada', level: 'province' },
+  ];
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-slate-100 transition-colors duration-500">
@@ -42,7 +51,38 @@ export default function GeospatialPage() {
         </header>
 
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
-          <div className="xl:col-span-1">
+          <div className="xl:col-span-1 space-y-6">
+            {/* Geography Selector */}
+            <div className="p-6 bg-white dark:bg-slate-900/40 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl">
+              <h3 className="text-sm font-bold tracking-widest uppercase text-slate-700 dark:text-slate-300 mb-4">
+                Region
+              </h3>
+              <div className="flex flex-col gap-2">
+                {geographyOptions.map((option) => {
+                  const isSelected = selectedGeography === option.value;
+                  const isCanada = option.value === 'CANADA';
+                  const isUS = option.value === 'US';
+
+                  let colorClasses = 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-500 hover:border-slate-400';
+                  if (isSelected) {
+                    if (isCanada) colorClasses = 'bg-red-500/10 border-red-500/50 text-red-500 shadow-[0_0_15px_-5px_#f87171]';
+                    else if (isUS) colorClasses = 'bg-blue-500/10 border-blue-500/50 text-blue-500 shadow-[0_0_15px_-5px_#60a5fa]';
+                  }
+
+                  return (
+                    <button
+                      key={option.value}
+                      onClick={() => setSelectedGeography(option.value)}
+                      className={`w-full px-4 py-3 rounded-xl text-sm font-bold transition-all border ${colorClasses} hover:scale-[1.02]`}
+                    >
+                      {option.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Legend */}
             {legendData && (
               <MapLegend
                 title={legendData.seriesName}
@@ -58,8 +98,8 @@ export default function GeospatialPage() {
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-emerald-500 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
               <div className="relative">
                 <GeospatialMap
-                  geography="US"
-                  level="state"
+                  geography={selectedGeography}
+                  level={geographyOptions.find(o => o.value === selectedGeography)?.level || 'state'}
                   seriesId="71"
                   height="700px"
                   onFeatureClick={(id, name) => {

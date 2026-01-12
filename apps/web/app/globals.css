@@ -170,4 +170,13 @@
     opacity: 1;
     animation: rotate-border 3s linear infinite;
   }
+
+  /* Choropleth Map Tooltip Styles */
+  .choropleth-tooltip {
+    @apply bg-slate-900 dark:bg-slate-800 text-white px-3 py-2 rounded-lg shadow-xl border border-slate-700 dark:border-slate-600 text-sm font-medium;
+  }
+
+  .choropleth-tooltip strong {
+    @apply font-semibold block mb-1;
+  }
 }

@@ -103,21 +103,14 @@ function LeafletChoroplethMap({
 
       const mapInstance = L.map('geospatial-map', {
         zoomControl: true,
-        attributionControl: false, // We'll add custom attribution
+        attributionControl: false, // Completely remove attribution
       }).fitBounds(northAmericaBounds);
 
       // Add OpenStreetMap tiles
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
+        attribution: '', // Remove attribution text
       }).addTo(mapInstance);
-
-      // Add minimal custom attribution in bottom right
-      const attributionControl = L.control.attribution({
-        position: 'bottomright',
-        prefix: false, // Remove "Leaflet" prefix
-      });
-      attributionControl.addAttribution('© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>');
-      attributionControl.addTo(mapInstance);
 
       setMap(mapInstance);
 
@@ -162,6 +155,7 @@ function LeafletChoroplethMap({
       onEachFeature: (feature: any, layer: any) => {
         const props = feature.properties;
 
+        // Bind popup for click
         layer.bindPopup(`
           <strong>${props.name}</strong><br/>
           Value: ${props.value !== null ? props.value.toLocaleString() : 'N/A'}<br/>
@@ -169,6 +163,27 @@ function LeafletChoroplethMap({
           Date: ${props.date}
         `);
 
+        // Add tooltip for hover
+        const tooltipContent = `<strong>${props.name}</strong><br/>${props.value !== null ? props.value.toFixed(1) : 'N/A'} ${props.units}`;
+        layer.bindTooltip(tooltipContent, {
+          sticky: true, // Tooltip follows mouse
+          className: 'choropleth-tooltip',
+        });
+
+        // Hover effects
+        layer.on('mouseover', function(this: any) {
+          this.setStyle({
+            weight: 2,
+            color: '#333',
+            fillOpacity: 0.9,
+          });
+        });
+
+        layer.on('mouseout', function(this: any) {
+          geoJsonLayer.resetStyle(this);
+        });
+
+        // Click handler
         layer.on('click', () => {
           if (onFeatureClick) {
             onFeatureClick(feature.id, props.name);
@@ -177,8 +192,11 @@ function LeafletChoroplethMap({
       },
     }).addTo(map);
 
-    // Fit map to bounds
-    map.fitBounds(geoJsonLayer.getBounds());
+    // Fit map to bounds with padding for better zoom
+    map.fitBounds(geoJsonLayer.getBounds(), {
+      padding: [50, 50],
+      maxZoom: 5, // Prevent zooming in too close
+    });
 
     return () => {
       map.removeLayer(geoJsonLayer);
