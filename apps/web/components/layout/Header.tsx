@@ -10,6 +10,7 @@ import { Button } from '@chronos/ui/components/button'
 const NAV_LINKS = [
   { href: '/features', label: 'Features' },
   { href: '/solutions', label: 'Solutions' },
+  { href: '/analytics/economic', label: 'Analytics' },
   { href: '/about', label: 'About' },
   { href: '/blog', label: 'Blog' },
 ]
@@ -38,10 +39,10 @@ export function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold text-xl tracking-tighter">
           {/* Using full wordmark, h-16 for maximum size. */}
-          <img 
-            src="/logos/final/logo-wordmark-full.svg" 
-            alt="Automatonic AI" 
-            className="h-16 w-auto dark:brightness-0 dark:invert" 
+          <img
+            src="/logos/final/logo-wordmark-full.svg"
+            alt="Automatonic AI"
+            className="h-16 w-auto dark:brightness-0 dark:invert"
           />
         </Link>
 
