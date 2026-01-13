@@ -172,7 +172,7 @@ function LeafletChoroplethMap({
   }, []);
 
   useEffect(() => {
-    if (!map || !data) return;
+    if (!map || !data || data.features.length === 0) return;
 
     const L = require('leaflet');
 
@@ -245,10 +245,13 @@ function LeafletChoroplethMap({
     }).addTo(map);
 
     // Fit map to bounds with padding for better zoom
-    map.fitBounds(geoJsonLayer.getBounds(), {
-      padding: [50, 50],
-      maxZoom: 5, // Prevent zooming in too close
-    });
+    const bounds = geoJsonLayer.getBounds();
+    if (bounds.isValid()) {
+      map.fitBounds(bounds, {
+        padding: [50, 50],
+        maxZoom: 5, // Prevent zooming in too close
+      });
+    }
 
     return () => {
       map.removeLayer(geoJsonLayer);

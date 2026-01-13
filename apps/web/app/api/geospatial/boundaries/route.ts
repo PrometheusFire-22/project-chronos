@@ -47,6 +47,7 @@ export async function GET(request: NextRequest) {
 
     // Execute query
     const result = await pool.query(query);
+    console.log('Boundaries query result rows:', result.rows.length);
 
     // Transform to GeoJSON FeatureCollection
     const features = result.rows.map(row => {
@@ -156,9 +157,8 @@ function buildBoundariesQuery(tableName: string, geography: Geography | null, le
           'name', ${mapping.name},
           'id', ${mapping.id}::text
         ),
-        'geometry', ST_AsGeoJSON(ST_Simplify(geom, 0.01))::json
+        'geometry', ST_AsGeoJSON(geom)::json
       ) as feature
-    FROM geospatial.${tableName}
-    ORDER BY ${mapping.name}
+    FROM ${tableName}    WHERE ST_IsValid(geom)    ORDER BY ${mapping.name}
   `;
 }
