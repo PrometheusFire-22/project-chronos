@@ -71,8 +71,8 @@ export default function GeospatialPage() {
                       key={option.value}
                       onClick={() => setSelectedCategory(option.value)}
                       className={`w-full px-4 py-3 rounded-xl text-sm font-bold transition-all border text-left ${isSelected
-                          ? 'bg-blue-500/10 border-blue-500/50 text-blue-500 shadow-[0_0_15px_-5px_#60a5fa]'
-                          : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-500 hover:border-slate-400'
+                        ? 'bg-blue-500/10 border-blue-500/50 text-blue-500 shadow-[0_0_15px_-5px_#60a5fa]'
+                        : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-500 hover:border-slate-400'
                         } hover:scale-[1.02]`}
                     >
                       <div className="font-bold">{option.label}</div>

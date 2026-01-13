@@ -26,8 +26,10 @@ export interface GeoJSONFeatureCollection {
 
 export interface ChoroplethFeature extends GeoJSONFeature {
   properties: GeoJSONFeature["properties"] & {
-    value: number;
-    seriesId: number;
+    value: number | null;
+    category: string;
+    seriesName: string;
+    units: string;
     date: string;
   };
 }
@@ -44,6 +46,6 @@ export interface BoundariesQueryParams {
 }
 
 export interface ChoroplethQueryParams extends BoundariesQueryParams {
-  seriesId?: string;
+  category?: string;
   date?: string;
 }

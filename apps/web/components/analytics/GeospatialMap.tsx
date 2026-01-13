@@ -58,7 +58,27 @@ function useChoroplethData(
         }
         const dataResponse = await fetch(`/api/geospatial/choropleth?${dataParams}`);
         if (!dataResponse.ok) {
-          throw new Error(`Failed to fetch choropleth data: ${dataResponse.statusText}`);
+          // If data fails, still show boundaries with null values
+          console.warn(`Failed to fetch choropleth data: ${dataResponse.statusText}`);
+          const features = boundaries.features.map((feature: any) => ({
+            ...feature,
+            properties: {
+              ...feature.properties,
+              value: null,
+              geography,
+              level,
+              category,
+              seriesName: category === 'Employment' ? 'Unemployment Rate' : 'House Price Index',
+              units: category === 'Employment' ? 'Percent' : 'Index',
+              date: new Date().toISOString().split('T')[0],
+            },
+          }));
+          const featureCollection: ChoroplethFeatureCollection = {
+            type: 'FeatureCollection',
+            features,
+          };
+          setData(featureCollection);
+          return;
         }
         const dataValues = await dataResponse.json();
 
