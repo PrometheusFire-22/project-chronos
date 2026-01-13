@@ -1,10 +1,9 @@
 // apps/web/app/api/geospatial/choropleth/route.ts
 // API endpoint: GET /api/geospatial/choropleth
-// Returns GeoJSON FeatureCollection with economic data values for choropleth coloring
+// Returns JSON object with geographic IDs mapped to economic data values for choropleth coloring
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getPoolAsync } from '@/lib/db/pool';
-import type { ChoroplethFeatureCollection } from '@/lib/types/geospatial';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -14,13 +13,13 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const geography = searchParams.get('geography')?.toUpperCase();
     const level = searchParams.get('level')?.toLowerCase();
-    const seriesId = searchParams.get('seriesId');
+    const category = searchParams.get('category');
     const date = searchParams.get('date');
 
     // Validate required parameters
-    if (!seriesId) {
+    if (!category) {
       return NextResponse.json(
-        { error: 'seriesId parameter is required' },
+        { error: 'category parameter is required' },
         { status: 400 }
       );
     }
@@ -48,21 +47,19 @@ export async function GET(request: NextRequest) {
     }
 
     // Build and execute choropleth query
-    const query = buildChoroplethQuery(tableName, seriesId, date || null);
+    const query = buildChoroplethQuery(tableName, category, date || null);
     console.log('Query:', query.sql, query.params);
     const result = await pool.query(query.sql, query.params);
     console.log('Query result rows:', result.rows.length);
 
-    // Transform to GeoJSON FeatureCollection
-    const features = result.rows.map(row => row.feature);
-
-    const featureCollection: ChoroplethFeatureCollection = {
-      type: 'FeatureCollection',
-      features,
-    };
+    // Transform to ID -> value mapping
+    const data: Record<string, number | null> = {};
+    result.rows.forEach(row => {
+      data[row.geography_id] = row.value;
+    });
 
     // Return with caching headers (shorter cache for data with values - 1 hour)
-    return NextResponse.json(featureCollection, {
+    return NextResponse.json(data, {
       headers: {
         'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
         'Content-Type': 'application/json',
@@ -114,7 +111,7 @@ function getTableName(geography: string | null, level: string | null): string | 
   return null;
 }
 
-function buildChoroplethQuery(tableName: string, seriesId: string, date: string | null) {
+function buildChoroplethQuery(tableName: string, category: string, date: string | null) {
   // Column mappings for different tables
   const columnMappings: Record<string, { id: string; name: string; geoType: string }> = {
     'us_counties': { id: 'geoid', name: 'name', geoType: 'County' },
@@ -127,13 +124,11 @@ function buildChoroplethQuery(tableName: string, seriesId: string, date: string 
   };
 
   const mapping = columnMappings[tableName] || { id: 'geoid', name: 'name', geoType: 'State' };
-  const geography = tableName.startsWith('us_') ? 'US' : 'CANADA';
-  const level = tableName.replace('us_', '').replace('ca_', '');
 
   // Query real economic data by joining:
   // 1. Geospatial boundary table with series_metadata via geography_id
   // 2. Get latest observation (or observation at specific date) from economic_observations
-  // 3. Return GeoJSON with real values
+  // 3. Return geography_id -> value mapping
 
   const sql = `
     WITH latest_observations AS (
@@ -146,7 +141,7 @@ function buildChoroplethQuery(tableName: string, seriesId: string, date: string 
         SELECT series_id
         FROM metadata.series_metadata
         WHERE geography_type = $1
-        ${seriesId === 'Employment' ? 'AND category = $2' : 'AND source_series_id = $2'}
+        AND category = $2
       )
       ${date ? 'AND observation_date <= $3' : ''}
       ORDER BY series_id, observation_date DESC
@@ -163,39 +158,16 @@ function buildChoroplethQuery(tableName: string, seriesId: string, date: string 
       FROM metadata.series_metadata sm
       LEFT JOIN latest_observations lo ON sm.series_id = lo.series_id
       WHERE sm.geography_type = $1
-      ${seriesId === 'Employment' ? 'AND sm.category = $2' : seriesId !== 'auto' ? 'AND sm.source_series_id LIKE $2 || \'%\'' : ''}
+      AND sm.category = $2
     )
     SELECT
-      json_build_object(
-        'type', 'Feature',
-        'id', g.${mapping.id}::text,
-        'properties', json_build_object(
-          'name', g.${mapping.name},
-          'id', g.${mapping.id}::text,
-          'geography', '${geography}',
-          'level', '${level}',
-          'value', swg.value,
-          'seriesId', $2,
-          'seriesName', CASE
-            WHEN swg.category = 'Employment' THEN 'Unemployment Rate'
-            WHEN swg.category = 'Housing' THEN 'House Price Index'
-            ELSE COALESCE(swg.series_name, 'No Data')
-          END,
-          'units', CASE
-            WHEN swg.category = 'Employment' THEN 'Percent'
-            WHEN swg.category = 'Housing' THEN 'Index'
-            ELSE 'Value'
-          END,
-          'frequency', COALESCE(swg.frequency, 'Unknown'),
-          'date', COALESCE(swg.observation_date::text, CURRENT_DATE::text)
-        ),
-        'geometry', ST_AsGeoJSON(g.geom)::json
-      ) as feature
+      g.${mapping.id}::text as geography_id,
+      swg.value
     FROM geospatial.${tableName} g
     LEFT JOIN series_with_geography swg ON g.${mapping.id} = swg.geography_id
     ORDER BY g.${mapping.name}
   `;
 
-  const params = date ? [mapping.geoType, seriesId, date] : [mapping.geoType, seriesId];
+  const params = date ? [mapping.geoType, category, date] : [mapping.geoType, category];
   return { sql, params };
 }

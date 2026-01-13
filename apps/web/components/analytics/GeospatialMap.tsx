@@ -11,7 +11,7 @@ import type { ChoroplethFeatureCollection, Geography, Level } from '@/lib/types/
 export interface GeospatialMapProps {
   geography: Geography;
   level: Level;
-  seriesId: string;
+  category: string;
   date?: string;
   height?: string;
   onFeatureClick?: (featureId: string, featureName: string) => void;
@@ -23,7 +23,7 @@ export interface GeospatialMapProps {
 function useChoroplethData(
   geography: Geography,
   level: Level,
-  seriesId: string,
+  category: string,
   date?: string
 ) {
   const [data, setData] = useState<ChoroplethFeatureCollection | null>(null);
@@ -36,23 +36,52 @@ function useChoroplethData(
         setLoading(true);
         setError(null);
 
-        const params = new URLSearchParams({
+        // Fetch boundaries
+        const boundariesParams = new URLSearchParams({
           geography,
           level,
-          seriesId,
         });
+        const boundariesResponse = await fetch(`/api/geospatial/boundaries?${boundariesParams}`);
+        if (!boundariesResponse.ok) {
+          throw new Error(`Failed to fetch boundaries: ${boundariesResponse.statusText}`);
+        }
+        const boundaries = await boundariesResponse.json();
 
+        // Fetch data values
+        const dataParams = new URLSearchParams({
+          geography,
+          level,
+          category,
+        });
         if (date) {
-          params.append('date', date);
+          dataParams.append('date', date);
         }
-
-        const response = await fetch(`/api/geospatial/choropleth?${params}`);
-
-        if (!response.ok) {
-          throw new Error(`Failed to fetch choropleth data: ${response.statusText}`);
+        const dataResponse = await fetch(`/api/geospatial/choropleth?${dataParams}`);
+        if (!dataResponse.ok) {
+          throw new Error(`Failed to fetch choropleth data: ${dataResponse.statusText}`);
         }
+        const dataValues = await dataResponse.json();
 
-        const featureCollection = await response.json();
+        // Combine boundaries with data
+        const features = boundaries.features.map((feature: any) => ({
+          ...feature,
+          properties: {
+            ...feature.properties,
+            value: dataValues[feature.id] || null,
+            geography,
+            level,
+            category,
+            seriesName: category === 'Employment' ? 'Unemployment Rate' : 'House Price Index',
+            units: category === 'Employment' ? 'Percent' : 'Index',
+            date: new Date().toISOString().split('T')[0], // Current date as fallback
+          },
+        }));
+
+        const featureCollection: ChoroplethFeatureCollection = {
+          type: 'FeatureCollection',
+          features,
+        };
+
         setData(featureCollection);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error');
@@ -62,7 +91,7 @@ function useChoroplethData(
     };
 
     fetchData();
-  }, [geography, level, seriesId, date]);
+  }, [geography, level, category, date]);
 
   return { data, loading, error };
 }
@@ -174,7 +203,7 @@ function LeafletChoroplethMap({
         });
 
         // Hover effects
-        layer.on('mouseover', function(this: any) {
+        layer.on('mouseover', function (this: any) {
           this.setStyle({
             weight: 2,
             color: '#333',
@@ -182,7 +211,7 @@ function LeafletChoroplethMap({
           });
         });
 
-        layer.on('mouseout', function(this: any) {
+        layer.on('mouseout', function (this: any) {
           geoJsonLayer.resetStyle(this);
         });
 
@@ -219,14 +248,14 @@ function LeafletChoroplethMap({
 export default function GeospatialMap({
   geography,
   level,
-  seriesId,
+  category,
   date,
   height = '600px',
   onFeatureClick,
   colorScale,
   onDataLoad,
 }: GeospatialMapProps) {
-  const { data, loading, error } = useChoroplethData(geography, level, seriesId, date);
+  const { data, loading, error } = useChoroplethData(geography, level, category, date);
 
   // Call onDataLoad when data changes
   useEffect(() => {

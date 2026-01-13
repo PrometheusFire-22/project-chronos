@@ -156,7 +156,7 @@ function buildBoundariesQuery(tableName: string, geography: Geography | null, le
           'name', ${mapping.name},
           'id', ${mapping.id}::text
         ),
-        'geometry', ST_AsGeoJSON(geom)::json
+        'geometry', ST_AsGeoJSON(ST_Simplify(geom, 0.01))::json
       ) as feature
     FROM geospatial.${tableName}
     ORDER BY ${mapping.name}

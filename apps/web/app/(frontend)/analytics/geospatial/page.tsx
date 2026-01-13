@@ -131,7 +131,7 @@ export default function GeospatialPage() {
                 <GeospatialMap
                   geography={selectedGeography}
                   level={geographyOptions.find(o => o.value === selectedGeography)?.level || 'state'}
-                  seriesId={selectedCategory}
+                  category={selectedCategory}
                   height="700px"
                   onFeatureClick={(id, name) => {
                     console.log('Clicked:', { id, name });
