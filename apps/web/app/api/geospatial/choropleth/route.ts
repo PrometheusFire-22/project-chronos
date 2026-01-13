@@ -142,7 +142,7 @@ function buildChoroplethQuery(tableName: string, seriesId: string, date: string 
         SELECT series_id
         FROM metadata.series_metadata
         WHERE geography_type = $1
-        AND source_series_id = $2
+        ${seriesId === 'Employment' ? 'AND category = $2' : 'AND source_series_id = $2'}
       )
       ${date ? 'AND observation_date <= $3' : ''}
       ORDER BY series_id, observation_date DESC
@@ -159,7 +159,7 @@ function buildChoroplethQuery(tableName: string, seriesId: string, date: string 
       FROM metadata.series_metadata sm
       LEFT JOIN latest_observations lo ON sm.series_id = lo.series_id
       WHERE sm.geography_type = $1
-      ${seriesId !== 'auto' ? 'AND sm.source_series_id LIKE $2 || \'%\'' : ''}
+      ${seriesId === 'Employment' ? 'AND sm.category = $2' : seriesId !== 'auto' ? 'AND sm.source_series_id LIKE $2 || \'%\'' : ''}
     )
     SELECT
       json_build_object(
@@ -172,7 +172,11 @@ function buildChoroplethQuery(tableName: string, seriesId: string, date: string 
           'level', '${level}',
           'value', swg.value,
           'seriesId', $2,
-          'seriesName', COALESCE(swg.series_name, 'No Data'),
+          'seriesName', CASE
+            WHEN swg.category = 'Employment' THEN 'Unemployment Rate'
+            WHEN swg.category = 'Housing' THEN 'House Price Index'
+            ELSE COALESCE(swg.series_name, 'No Data')
+          END,
           'units', CASE
             WHEN swg.category = 'Employment' THEN 'Percent'
             WHEN swg.category = 'Housing' THEN 'Index'
