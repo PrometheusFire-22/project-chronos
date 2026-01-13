@@ -83,19 +83,23 @@ function useChoroplethData(
         const dataValues = await dataResponse.json();
 
         // Combine boundaries with data
-        const features = boundaries.features.map((feature: any) => ({
-          ...feature,
-          properties: {
-            ...feature.properties,
-            value: dataValues[feature.id] || null,
-            geography,
-            level,
-            category,
-            seriesName: category === 'Employment' ? 'Unemployment Rate' : 'House Price Index',
-            units: category === 'Employment' ? 'Percent' : 'Index',
-            date: new Date().toISOString().split('T')[0], // Current date as fallback
-          },
-        }));
+        const features = boundaries.features.map((feature: any) => {
+          const rawValue = dataValues[feature.id];
+          const value = (rawValue !== null && rawValue !== undefined && typeof rawValue === 'number' && !isNaN(rawValue)) ? rawValue : null;
+          return {
+            ...feature,
+            properties: {
+              ...feature.properties,
+              value,
+              geography,
+              level,
+              category,
+              seriesName: category === 'Employment' ? 'Unemployment Rate' : 'House Price Index',
+              units: category === 'Employment' ? 'Percent' : 'Index',
+              date: new Date().toISOString().split('T')[0], // Current date as fallback
+            },
+          };
+        });
 
         const featureCollection: ChoroplethFeatureCollection = {
           type: 'FeatureCollection',
@@ -207,14 +211,14 @@ function LeafletChoroplethMap({
         // Bind popup for click
         layer.bindPopup(`
           <strong>${props.name}</strong><br/>
-          Value: ${props.value !== null ? props.value.toLocaleString() : 'N/A'}<br/>
+          Value: ${(props.value !== null && typeof props.value === 'number' && !isNaN(props.value)) ? props.value.toLocaleString() : 'N/A'}<br/>
           Series: ${props.seriesName}<br/>
           Date: ${props.date}
         `);
 
         // Add tooltip for hover
         // Format concisely: "3.2%" instead of "3.2 Percent"
-        const formattedValue = props.value !== null ? props.value.toFixed(1) : 'N/A';
+        const formattedValue = (props.value !== null && typeof props.value === 'number' && !isNaN(props.value)) ? props.value.toFixed(1) : 'N/A';
         const units = props.units === 'Percent' ? '%' : props.units;
         const tooltipContent = `<strong>${props.name}</strong><br/>${formattedValue}${units}`;
         layer.bindTooltip(tooltipContent, {
