@@ -213,6 +213,9 @@ def main():
     parser.add_argument(
         "--geography", help="Filter by geography name (e.g., Canada, United States)"
     )
+    parser.add_argument(
+        "--geography-type", help="Filter by geography type (e.g., State, Province, National)"
+    )
     args = parser.parse_args()
 
     print("\n" + "=" * 60)
@@ -242,6 +245,8 @@ def main():
         if args.source and s["source"] != args.source:
             continue
         if args.geography and s["geography_name"] != args.geography:
+            continue
+        if args.geography_type and s["geography_type"] != args.geography_type:
             continue
         if args.series and s["series_id"] not in args.series:
             continue
