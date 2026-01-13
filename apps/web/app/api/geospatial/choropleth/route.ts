@@ -35,9 +35,11 @@ export async function GET(request: NextRequest) {
 
     // Get database connection
     const pool = await getPoolAsync();
+    console.log('DB connection established');
 
     // Determine table based on geography and level
     const tableName = getTableName(geography || null, level || null);
+    console.log('Table name:', tableName);
     if (!tableName) {
       return NextResponse.json(
         { error: 'Invalid combination of geography and level' },
@@ -47,7 +49,9 @@ export async function GET(request: NextRequest) {
 
     // Build and execute choropleth query
     const query = buildChoroplethQuery(tableName, seriesId, date || null);
+    console.log('Query:', query.sql, query.params);
     const result = await pool.query(query.sql, query.params);
+    console.log('Query result rows:', result.rows.length);
 
     // Transform to GeoJSON FeatureCollection
     const features = result.rows.map(row => row.feature);
