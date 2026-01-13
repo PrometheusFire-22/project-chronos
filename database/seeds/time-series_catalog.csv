@@ -138,21 +138,20 @@ WVUR,FRED,Active,West Virginia Unemployment Rate,Macro,State,West Virginia,54,Mo
 WIUR,FRED,Active,Wisconsin Unemployment Rate,Macro,State,Wisconsin,55,Monthly,Employment,Unemployment
 WYUR,FRED,Active,Wyoming Unemployment Rate,Macro,State,Wyoming,56,Monthly,Employment,Unemployment
 # Canada Unemployment Rate by Province (13 series) - Monthly
-# Note: Statistics Canada vector IDs need to be confirmed - using placeholder format
 # Source: Statistics Canada Table 14-10-0287-01
-CAUR_NL,Valet,Inactive,Newfoundland and Labrador Unemployment Rate,Macro,Province,Newfoundland and Labrador,10,Monthly,Employment,Unemployment
-CAUR_PE,Valet,Inactive,Prince Edward Island Unemployment Rate,Macro,Province,Prince Edward Island,11,Monthly,Employment,Unemployment
-CAUR_NS,Valet,Inactive,Nova Scotia Unemployment Rate,Macro,Province,Nova Scotia,12,Monthly,Employment,Unemployment
-CAUR_NB,Valet,Inactive,New Brunswick Unemployment Rate,Macro,Province,New Brunswick,13,Monthly,Employment,Unemployment
-CAUR_QC,Valet,Inactive,Quebec Unemployment Rate,Macro,Province,Quebec,24,Monthly,Employment,Unemployment
-CAUR_ON,Valet,Inactive,Ontario Unemployment Rate,Macro,Province,Ontario,35,Monthly,Employment,Unemployment
-CAUR_MB,Valet,Inactive,Manitoba Unemployment Rate,Macro,Province,Manitoba,46,Monthly,Employment,Unemployment
-CAUR_SK,Valet,Inactive,Saskatchewan Unemployment Rate,Macro,Province,Saskatchewan,47,Monthly,Employment,Unemployment
-CAUR_AB,Valet,Inactive,Alberta Unemployment Rate,Macro,Province,Alberta,48,Monthly,Employment,Unemployment
-CAUR_BC,Valet,Inactive,British Columbia Unemployment Rate,Macro,Province,British Columbia,59,Monthly,Employment,Unemployment
-CAUR_YT,Valet,Inactive,Yukon Unemployment Rate,Macro,Province,Yukon,60,Monthly,Employment,Unemployment
-CAUR_NT,Valet,Inactive,Northwest Territories Unemployment Rate,Macro,Province,Northwest Territories,61,Monthly,Employment,Unemployment
-CAUR_NU,Valet,Inactive,Nunavut Unemployment Rate,Macro,Province,Nunavut,62,Monthly,Employment,Unemployment
+v2062815,Valet,Active,Newfoundland and Labrador Unemployment Rate,Macro,Province,Newfoundland and Labrador,10,Monthly,Employment,Unemployment
+v2062816,Valet,Active,Prince Edward Island Unemployment Rate,Macro,Province,Prince Edward Island,11,Monthly,Employment,Unemployment
+v2062817,Valet,Active,Nova Scotia Unemployment Rate,Macro,Province,Nova Scotia,12,Monthly,Employment,Unemployment
+v2062818,Valet,Active,New Brunswick Unemployment Rate,Macro,Province,New Brunswick,13,Monthly,Employment,Unemployment
+v2062819,Valet,Active,Quebec Unemployment Rate,Macro,Province,Quebec,24,Monthly,Employment,Unemployment
+v2062820,Valet,Active,Ontario Unemployment Rate,Macro,Province,Ontario,35,Monthly,Employment,Unemployment
+v2062821,Valet,Active,Manitoba Unemployment Rate,Macro,Province,Manitoba,46,Monthly,Employment,Unemployment
+v2062822,Valet,Active,Saskatchewan Unemployment Rate,Macro,Province,Saskatchewan,47,Monthly,Employment,Unemployment
+v2062823,Valet,Active,Alberta Unemployment Rate,Macro,Province,Alberta,48,Monthly,Employment,Unemployment
+v2062824,Valet,Active,British Columbia Unemployment Rate,Macro,Province,British Columbia,59,Monthly,Employment,Unemployment
+v2062825,Valet,Active,Yukon Unemployment Rate,Macro,Province,Yukon,60,Monthly,Employment,Unemployment
+v2062826,Valet,Active,Northwest Territories Unemployment Rate,Macro,Province,Northwest Territories,61,Monthly,Employment,Unemployment
+v2062827,Valet,Active,Nunavut Unemployment Rate,Macro,Province,Nunavut,62,Monthly,Employment,Unemployment
 # US House Price Index by State (51 series) - Quarterly
 ALSTHPI,FRED,Active,Alabama All-Transactions House Price Index,Macro,State,Alabama,01,Quarterly,Housing,Price Index
 AKSTHPI,FRED,Active,Alaska All-Transactions House Price Index,Macro,State,Alaska,02,Quarterly,Housing,Price Index
@@ -173,7 +172,7 @@ IASTHPI,FRED,Active,Iowa All-Transactions House Price Index,Macro,State,Iowa,19,
 KSSTHPI,FRED,Active,Kansas All-Transactions House Price Index,Macro,State,Kansas,20,Quarterly,Housing,Price Index
 KYSTHPI,FRED,Active,Kentucky All-Transactions House Price Index,Macro,State,Kentucky,21,Quarterly,Housing,Price Index
 LASTHPI,FRED,Active,Louisiana All-Transactions House Price Index,Macro,State,Louisiana,22,Quarterly,Housing,Price Index
-MESTH PI,FRED,Active,Maine All-Transactions House Price Index,Macro,State,Maine,23,Quarterly,Housing,Price Index
+MESTHPI,FRED,Active,Maine All-Transactions House Price Index,Macro,State,Maine,23,Quarterly,Housing,Price Index
 MDSTHPI,FRED,Active,Maryland All-Transactions House Price Index,Macro,State,Maryland,24,Quarterly,Housing,Price Index
 MASTHPI,FRED,Active,Massachusetts All-Transactions House Price Index,Macro,State,Massachusetts,25,Quarterly,Housing,Price Index
 MISTHPI,FRED,Active,Michigan All-Transactions House Price Index,Macro,State,Michigan,26,Quarterly,Housing,Price Index

@@ -146,6 +146,8 @@ extend-exclude = '''
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+
+[tool.ruff.lint]
 select = [
     "E",   # pycodestyle errors
     "W",   # pycodestyle warnings
@@ -177,7 +179,7 @@ exclude = [
     "tests/e2e/test_ingestion_workflow.py",
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]  # Allow unused imports in __init__.py
 "tests/**/*.py" = [
     "S101",   # Allow assert in tests
@@ -189,7 +191,7 @@ exclude = [
 ]
 
 # Import sorting configuration (isort)
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 known-first-party = ["chronos"]
 section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
 
