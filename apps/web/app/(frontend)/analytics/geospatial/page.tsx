@@ -13,6 +13,7 @@ type Level = 'state' | 'province' | 'county';
 
 export default function GeospatialPage() {
   const [selectedGeography, setSelectedGeography] = useState<Geography>('US');
+  const [selectedCategory, setSelectedCategory] = useState<'Employment' | 'Housing'>('Employment');
   const [legendData, setLegendData] = useState<{
     min: number;
     max: number;
@@ -23,6 +24,11 @@ export default function GeospatialPage() {
   const geographyOptions: { value: Geography; label: string; level: Level }[] = [
     { value: 'US', label: 'United States', level: 'state' },
     { value: 'CANADA', label: 'Canada', level: 'province' },
+  ];
+
+  const categoryOptions: { value: 'Employment' | 'Housing'; label: string; description: string }[] = [
+    { value: 'Employment', label: 'Unemployment Rate', description: 'State/provincial unemployment rates' },
+    { value: 'Housing', label: 'House Price Index', description: 'All-transactions house price indices' },
   ];
 
   return (
@@ -52,6 +58,31 @@ export default function GeospatialPage() {
 
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
           <div className="xl:col-span-1 space-y-6">
+            {/* Category Selector */}
+            <div className="p-6 bg-white dark:bg-slate-900/40 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl">
+              <h3 className="text-sm font-bold tracking-widest uppercase text-slate-700 dark:text-slate-300 mb-4">
+                Economic Indicator
+              </h3>
+              <div className="flex flex-col gap-2">
+                {categoryOptions.map((option) => {
+                  const isSelected = selectedCategory === option.value;
+                  return (
+                    <button
+                      key={option.value}
+                      onClick={() => setSelectedCategory(option.value)}
+                      className={`w-full px-4 py-3 rounded-xl text-sm font-bold transition-all border text-left ${isSelected
+                          ? 'bg-blue-500/10 border-blue-500/50 text-blue-500 shadow-[0_0_15px_-5px_#60a5fa]'
+                          : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-500 hover:border-slate-400'
+                        } hover:scale-[1.02]`}
+                    >
+                      <div className="font-bold">{option.label}</div>
+                      <div className="text-xs text-slate-400 mt-1">{option.description}</div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
             {/* Geography Selector */}
             <div className="p-6 bg-white dark:bg-slate-900/40 backdrop-blur-md rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xl">
               <h3 className="text-sm font-bold tracking-widest uppercase text-slate-700 dark:text-slate-300 mb-4">
@@ -100,7 +131,7 @@ export default function GeospatialPage() {
                 <GeospatialMap
                   geography={selectedGeography}
                   level={geographyOptions.find(o => o.value === selectedGeography)?.level || 'state'}
-                  seriesId="Employment"
+                  seriesId={selectedCategory}
                   height="700px"
                   onFeatureClick={(id, name) => {
                     console.log('Clicked:', { id, name });
