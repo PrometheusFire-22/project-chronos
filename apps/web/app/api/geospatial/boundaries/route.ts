@@ -48,7 +48,9 @@ export async function GET(request: NextRequest) {
     // Execute query
     const result = await pool.query(query);
     console.log('Boundaries query result rows:', result.rows.length);
-
+    // Log response size estimate
+    const responseSize = JSON.stringify(result.rows).length;
+    console.log('Estimated response size:', responseSize, 'bytes');
     // Transform to GeoJSON FeatureCollection
     const features = result.rows.map(row => {
       const feature = row.feature;
@@ -157,7 +159,10 @@ function buildBoundariesQuery(tableName: string, geography: Geography | null, le
           'name', ${mapping.name},
           'id', ${mapping.id}::text
         ),
-        'geometry', ST_AsGeoJSON(ST_Simplify(${mapping.geom}, 1.0), 2)::json
+        'geometry', CASE
+          WHEN ST_Area(${mapping.geom}) > 1000000 THEN ST_AsGeoJSON(ST_Envelope(${mapping.geom}), 2)::json
+          ELSE ST_AsGeoJSON(ST_Simplify(${mapping.geom}, 1.0), 2)::json
+        END
       ) as feature
     FROM geospatial.${tableName}    WHERE ST_IsValid(${mapping.geom})    ORDER BY ${mapping.name}
   `;
