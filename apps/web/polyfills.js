@@ -1,6 +1,12 @@
 import { Buffer } from 'node:buffer';
 import { AsyncLocalStorage } from 'node:async_hooks';
 
+// Polyfill for esbuild's keep-names helper that sometimes goes missing in Cloudflare Workers
+globalThis.__name = (target, value) => {
+    Object.defineProperty(target, 'name', { value, configurable: true });
+    return target;
+};
+
 globalThis.Buffer = Buffer;
 globalThis.AsyncLocalStorage = AsyncLocalStorage;
 globalThis.process = globalThis.process || { env: {} };
