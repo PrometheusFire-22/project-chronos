@@ -51,6 +51,9 @@ export async function GET(request: NextRequest) {
     console.log('Query:', query.sql, query.params);
     const result = await pool.query(query.sql, query.params);
     console.log('Query result rows:', result.rows.length);
+    if (result.rows.length > 0) {
+      console.log('Sample result:', result.rows[0]);
+    }
 
     // Transform to ID -> value mapping
     const data: Record<string, number | null> = {};

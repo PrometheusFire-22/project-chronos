@@ -51,7 +51,7 @@ function useChoroplethData(
         const dataParams = new URLSearchParams({
           geography,
           level,
-          category: category === 'Employment' ? 'Unemployment Rate' : category === 'Housing' ? 'House Prices Index' : category,
+          category,
         });
         if (date) {
           dataParams.append('date', date);
