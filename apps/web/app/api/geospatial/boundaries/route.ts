@@ -136,17 +136,17 @@ function getLevelFromTable(tableName: string): Level {
 
 function buildBoundariesQuery(tableName: string, geography: Geography | null, level: Level | null): string {
   // Build the SELECT query with proper column mapping per table
-  const columnMappings: Record<string, { id: string; name: string }> = {
-    'us_counties': { id: 'geoid', name: 'name' },
-    'us_states': { id: 'geoid', name: 'name' },
-    'us_cbsa': { id: 'geoid', name: 'name' },
-    'us_csa': { id: 'geoid', name: 'name' },
-    'us_metdiv': { id: 'geoid', name: 'name' },
-    'ca_provinces': { id: 'pruid', name: 'prname' },
-    'ca_census_divisions': { id: 'cduid', name: 'cdname' },
+  const columnMappings: Record<string, { id: string; name: string; geom: string }> = {
+    'us_counties': { id: 'geoid', name: 'name', geom: 'geom' },
+    'us_states': { id: 'geoid', name: 'name', geom: 'geom' },
+    'us_cbsa': { id: 'geoid', name: 'name', geom: 'geom' },
+    'us_csa': { id: 'geoid', name: 'name', geom: 'geom' },
+    'us_metdiv': { id: 'geoid', name: 'name', geom: 'geom' },
+    'ca_provinces': { id: 'pruid', name: 'prname', geom: 'geometry' },
+    'ca_census_divisions': { id: 'cduid', name: 'cdname', geom: 'geometry' },
   };
 
-  const mapping = columnMappings[tableName] || { id: 'geoid', name: 'name' };
+  const mapping = columnMappings[tableName] || { id: 'geoid', name: 'name', geom: 'geom' };
 
   return `
     SELECT
@@ -157,8 +157,8 @@ function buildBoundariesQuery(tableName: string, geography: Geography | null, le
           'name', ${mapping.name},
           'id', ${mapping.id}::text
         ),
-        'geometry', ST_AsGeoJSON(geom)::json
+        'geometry', ST_AsGeoJSON(${mapping.geom})::json
       ) as feature
-    FROM geospatial.${tableName}    WHERE ST_IsValid(geom)    ORDER BY ${mapping.name}
+    FROM geospatial.${tableName}    WHERE ST_IsValid(${mapping.geom})    ORDER BY ${mapping.name}
   `;
 }

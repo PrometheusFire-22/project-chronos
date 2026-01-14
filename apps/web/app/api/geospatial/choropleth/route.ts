@@ -113,14 +113,14 @@ function getTableName(geography: string | null, level: string | null): string | 
 
 function buildChoroplethQuery(tableName: string, category: string, date: string | null) {
   // Column mappings for different tables
-  const columnMappings: Record<string, { id: string; name: string; geoType: string }> = {
-    'us_counties': { id: 'geoid', name: 'name', geoType: 'County' },
-    'us_states': { id: 'geoid', name: 'name', geoType: 'State' },
-    'us_cbsa': { id: 'geoid', name: 'name', geoType: 'CBSA' },
-    'us_csa': { id: 'geoid', name: 'name', geoType: 'CSA' },
-    'us_metdiv': { id: 'geoid', name: 'name', geoType: 'MetDiv' },
-    'ca_provinces': { id: 'pruid', name: 'prname', geoType: 'Province' },
-    'ca_census_divisions': { id: 'cduid', name: 'cdname', geoType: 'Census Division' },
+  const columnMappings: Record<string, { id: string; name: string; geoType: string; geom: string }> = {
+    'us_counties': { id: 'geoid', name: 'name', geoType: 'County', geom: 'geom' },
+    'us_states': { id: 'geoid', name: 'name', geoType: 'State', geom: 'geom' },
+    'us_cbsa': { id: 'geoid', name: 'name', geoType: 'CBSA', geom: 'geom' },
+    'us_csa': { id: 'geoid', name: 'name', geoType: 'CSA', geom: 'geom' },
+    'us_metdiv': { id: 'geoid', name: 'name', geoType: 'MetDiv', geom: 'geom' },
+    'ca_provinces': { id: 'pruid', name: 'prname', geoType: 'Province', geom: 'geometry' },
+    'ca_census_divisions': { id: 'cduid', name: 'cdname', geoType: 'Census Division', geom: 'geometry' },
   };
 
   const mapping = columnMappings[tableName] || { id: 'geoid', name: 'name', geoType: 'State' };
