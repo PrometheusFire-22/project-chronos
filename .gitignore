@@ -181,3 +181,4 @@ deployment/**/.env
 # OpenNext build output
 .open-next
 .gemini.json
+.dev.vars

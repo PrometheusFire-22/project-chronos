@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
     // Return with caching headers (shorter cache for data with values - 1 hour)
     return NextResponse.json(data, {
       headers: {
-        'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
+        'Cache-Control': 'public, max-age=0, stale-while-revalidate=60',
         'Content-Type': 'application/json',
       },
     });
@@ -169,7 +169,7 @@ function buildChoroplethQuery(tableName: string, category: string, date: string 
         lo.value,
         lo.observation_date
       FROM metadata.series_metadata sm
-      LEFT JOIN latest_observations lo ON sm.series_id = lo.series_id
+      JOIN latest_observations lo ON sm.series_id = lo.series_id
       WHERE sm.geography_type = $1
       AND sm.category = $2
     )
@@ -177,7 +177,7 @@ function buildChoroplethQuery(tableName: string, category: string, date: string 
       g.${mapping.id}::text as geography_id,
       swg.value
     FROM geospatial.${tableName} g
-    LEFT JOIN series_with_geography swg ON g.${mapping.id} = swg.geography_id
+    LEFT JOIN series_with_geography swg ON g.${mapping.id}::text = swg.geography_id::text
     ORDER BY g.${mapping.name}
   `;
 

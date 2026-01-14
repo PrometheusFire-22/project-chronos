@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
     // Return with caching headers (24 hours)
     return NextResponse.json(featureCollection, {
       headers: {
-        'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800',
+        'Cache-Control': 'public, max-age=0, stale-while-revalidate=60',
         'Content-Type': 'application/json',
       },
     });
@@ -162,6 +162,12 @@ function buildBoundariesQuery(tableName: string, geography: Geography | null, le
 
   const mapping = columnMappings[tableName] || { id: 'geoid', name: 'name', geom: 'geom' };
 
+  // Use reasonable simplification: 0.01 degrees is ~1km, good for national maps
+  // Use ST_SimplifyPreserveTopology to avoid creating invalid geometries (gaps/overlaps)
+  // Use ST_MakeValid to ensure we handle any slightly invalid input geometries (fixing missing Nunavut/Ontario)
+  const simplificationTolerance = 0.01;
+  const geoJsonPrecision = 6;
+
   if (debug) {
     return `
       SELECT
@@ -169,7 +175,10 @@ function buildBoundariesQuery(tableName: string, geography: Geography | null, le
         ${mapping.name} as name,
         ST_IsValid(${mapping.geom}) as is_valid,
         ST_Area(${mapping.geom}::geography) as area_sq_m,
-        ST_AsGeoJSON(ST_Simplify(${mapping.geom}, 5.0), 1) as geometry_json
+        ST_AsGeoJSON(
+          ST_SimplifyPreserveTopology(ST_MakeValid(${mapping.geom}), ${simplificationTolerance}),
+          ${geoJsonPrecision}
+        ) as geometry_json
       FROM geospatial.${tableName}
       ORDER BY ${mapping.name}
     `;
@@ -184,8 +193,12 @@ function buildBoundariesQuery(tableName: string, geography: Geography | null, le
           'name', ${mapping.name},
           'id', ${mapping.id}::text
         ),
-        'geometry', ST_AsGeoJSON(ST_Simplify(${mapping.geom}, 5.0), 1)::json
+        'geometry', ST_AsGeoJSON(
+          ST_SimplifyPreserveTopology(ST_MakeValid(${mapping.geom}), ${simplificationTolerance}),
+          ${geoJsonPrecision}
+        )::json
       ) as feature
-    FROM geospatial.${tableName}    WHERE ST_IsValid(${mapping.geom})    ORDER BY ${mapping.name}
+    FROM geospatial.${tableName}
+    ORDER BY ${mapping.name}
   `;
 }

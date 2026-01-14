@@ -151,8 +151,8 @@ export default function GeospatialPage() {
               </p>
               <div className="p-3 bg-amber-100/50 dark:bg-amber-900/20 rounded-lg border border-amber-300/50 dark:border-amber-700/50">
                 <p className="text-amber-900 dark:text-amber-200 text-xs leading-relaxed">
-                  <strong>Note:</strong> Currently displaying demo data with sample unemployment rates by state/province.
-                  Production version will integrate with actual state-level economic series from the database.
+                  <strong>Note:</strong> Data sourced from live PostgreSQL/PostGIS backend database.
+                  Historical data availability varies by region.
                 </p>
               </div>
             </div>
