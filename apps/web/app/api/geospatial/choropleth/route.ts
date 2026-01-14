@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
     const level = searchParams.get('level')?.toLowerCase();
     const category = searchParams.get('category');
     const date = searchParams.get('date');
+    const debug = searchParams.get('debug') === 'true';
 
     // Validate required parameters
     if (!category) {
@@ -53,6 +54,15 @@ export async function GET(request: NextRequest) {
     console.log('Query result rows:', result.rows.length);
     if (result.rows.length > 0) {
       console.log('Sample result:', result.rows[0]);
+    }
+
+    if (debug) {
+      // Return raw debug data
+      return NextResponse.json({
+        query: query.sql,
+        params: query.params,
+        rows: result.rows
+      });
     }
 
     // Transform to ID -> value mapping

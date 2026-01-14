@@ -21,6 +21,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const geography = searchParams.get('geography')?.toUpperCase() as Geography | null;
     const level = searchParams.get('level')?.toLowerCase() as Level | null;
+    const debug = searchParams.get('debug') === 'true';
 
     // Validate parameters
     if (geography && !['US', 'CANADA'].includes(geography)) {
@@ -43,14 +44,25 @@ export async function GET(request: NextRequest) {
     const pool = await getPoolAsync();
 
     // Build query based on table
-    const query = buildBoundariesQuery(tableName, geography, level);
+    const query = buildBoundariesQuery(tableName, geography, level, debug);
 
     // Execute query
     const result = await pool.query(query);
     console.log('Boundaries query result rows:', result.rows.length);
+    console.log('Debug mode:', debug);
     // Log response size estimate
     const responseSize = JSON.stringify(result.rows).length;
     console.log('Estimated response size:', responseSize, 'bytes');
+
+    if (debug) {
+      // Return raw debug data
+      return NextResponse.json({
+        table: tableName,
+        total_rows: result.rows.length,
+        rows: result.rows
+      });
+    }
+
     // Transform to GeoJSON FeatureCollection
     const features = result.rows.map(row => {
       const feature = row.feature;
@@ -136,7 +148,7 @@ function getLevelFromTable(tableName: string): Level {
   return levelMap[tableName] || 'county';
 }
 
-function buildBoundariesQuery(tableName: string, geography: Geography | null, level: Level | null): string {
+function buildBoundariesQuery(tableName: string, geography: Geography | null, level: Level | null, debug: boolean = false): string {
   // Build the SELECT query with proper column mapping per table
   const columnMappings: Record<string, { id: string; name: string; geom: string }> = {
     'us_counties': { id: 'geoid', name: 'name', geom: 'geom' },
@@ -149,6 +161,19 @@ function buildBoundariesQuery(tableName: string, geography: Geography | null, le
   };
 
   const mapping = columnMappings[tableName] || { id: 'geoid', name: 'name', geom: 'geom' };
+
+  if (debug) {
+    return `
+      SELECT
+        ${mapping.id} as id,
+        ${mapping.name} as name,
+        ST_IsValid(${mapping.geom}) as is_valid,
+        ST_Area(${mapping.geom}::geography) as area_sq_m,
+        ST_AsGeoJSON(ST_SimplifyPreserveTopology(${mapping.geom}, 1.0), 2) as geometry_json
+      FROM geospatial.${tableName}
+      ORDER BY ${mapping.name}
+    `;
+  }
 
   return `
     SELECT
