@@ -163,7 +163,7 @@ function buildChoroplethQuery(tableName: string, category: string, date: string 
     SELECT
       g.${mapping.id}::text as geography_id,
       swg.value
-    FROM ${tableName} g
+    FROM geospatial.${tableName} g
     LEFT JOIN series_with_geography swg ON g.${mapping.id} = swg.geography_id
     ORDER BY g.${mapping.name}
   `;

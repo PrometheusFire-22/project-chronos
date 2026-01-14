@@ -157,6 +157,8 @@ function LeafletChoroplethMap({
       const mapInstance = L.map('geospatial-map', {
         zoomControl: true,
         attributionControl: false, // Completely remove attribution
+        center: [50, -100], // Center on North America
+        zoom: 4, // Better initial zoom
       }).fitBounds(northAmericaBounds);
 
       // Add OpenStreetMap tiles
