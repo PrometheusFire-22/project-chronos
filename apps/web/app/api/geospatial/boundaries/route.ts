@@ -159,11 +159,7 @@ function buildBoundariesQuery(tableName: string, geography: Geography | null, le
           'name', ${mapping.name},
           'id', ${mapping.id}::text
         ),
-        'geometry', CASE
-          WHEN ST_Area(${mapping.geom}::geography) > 500000000000 THEN ST_AsGeoJSON(ST_Envelope(${mapping.geom}), 1)::json
-          WHEN ST_Area(${mapping.geom}::geography) > 100000000000 THEN ST_AsGeoJSON(ST_Simplify(${mapping.geom}, 2.0), 1)::json
-          ELSE ST_AsGeoJSON(ST_Simplify(${mapping.geom}, 1.0), 2)::json
-        END
+        'geometry', ST_AsGeoJSON(ST_Simplify(${mapping.geom}, 1.0), 2)::json
       ) as feature
     FROM geospatial.${tableName}    WHERE ST_IsValid(${mapping.geom})    ORDER BY ${mapping.name}
   `;
