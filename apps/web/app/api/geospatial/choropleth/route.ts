@@ -174,10 +174,10 @@ function buildChoroplethQuery(tableName: string, category: string, date: string 
       AND sm.category = $2
     )
     SELECT
-      g.${mapping.id}::text as geography_id,
+      TRIM(g.${mapping.id}::text) as geography_id,
       swg.value
     FROM geospatial.${tableName} g
-    LEFT JOIN series_with_geography swg ON g.${mapping.id}::text = swg.geography_id::text
+    LEFT JOIN series_with_geography swg ON TRIM(g.${mapping.id}::text) = TRIM(swg.geography_id::text)
     ORDER BY g.${mapping.name}
   `;
 

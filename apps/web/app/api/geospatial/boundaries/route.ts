@@ -162,21 +162,26 @@ function buildBoundariesQuery(tableName: string, geography: Geography | null, le
 
   const mapping = columnMappings[tableName] || { id: 'geoid', name: 'name', geom: 'geom' };
 
-  // Use reasonable simplification: 0.01 degrees is ~1km, good for national maps
-  // Use ST_SimplifyPreserveTopology to avoid creating invalid geometries (gaps/overlaps)
-  // Use ST_MakeValid to ensure we handle any slightly invalid input geometries (fixing missing Nunavut/Ontario)
-  const simplificationTolerance = 0.01;
+  // Use high-fidelity simplification: 0.001 degrees is ~111m, good for detailed maps
+  // Pipeline:
+  // 1. ST_MakeValid: Repair invalid geometries
+  // 2. ST_CollectionExtract(..., 3): Extract only Polygons/MultiPolygons (discard dimensions 0/1)
+  // 3. ST_Multi: Force MultiPolygon type
+  // 4. ST_SimplifyPreserveTopology: Simplify without creating holes
+  const simplificationTolerance = 0.001;
   const geoJsonPrecision = 6;
+
+  const geomQuery = `ST_Multi(ST_CollectionExtract(ST_MakeValid(${mapping.geom}), 3))`;
 
   if (debug) {
     return `
       SELECT
-        ${mapping.id} as id,
+        TRIM(${mapping.id}::text) as id,
         ${mapping.name} as name,
         ST_IsValid(${mapping.geom}) as is_valid,
         ST_Area(${mapping.geom}::geography) as area_sq_m,
         ST_AsGeoJSON(
-          ST_SimplifyPreserveTopology(ST_MakeValid(${mapping.geom}), ${simplificationTolerance}),
+          ST_SimplifyPreserveTopology(${geomQuery}, ${simplificationTolerance}),
           ${geoJsonPrecision}
         ) as geometry_json
       FROM geospatial.${tableName}
@@ -188,13 +193,13 @@ function buildBoundariesQuery(tableName: string, geography: Geography | null, le
     SELECT
       json_build_object(
         'type', 'Feature',
-        'id', ${mapping.id}::text,
+        'id', TRIM(${mapping.id}::text),
         'properties', json_build_object(
           'name', ${mapping.name},
-          'id', ${mapping.id}::text
+          'id', TRIM(${mapping.id}::text)
         ),
         'geometry', ST_AsGeoJSON(
-          ST_SimplifyPreserveTopology(ST_MakeValid(${mapping.geom}), ${simplificationTolerance}),
+          ST_SimplifyPreserveTopology(${geomQuery}, ${simplificationTolerance}),
           ${geoJsonPrecision}
         )::json
       ) as feature
