@@ -10,7 +10,6 @@ await esbuild.build({
     target: 'node20',
     outfile: '.open-next/_worker.js',
     external: ['node:*', 'cloudflare:*'],
-    inject: ['./polyfills.js'],
     plugins: [
         {
             name: 'crypto-shim-alias',
