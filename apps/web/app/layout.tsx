@@ -1,4 +1,5 @@
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
+import ClientPolyfills from '@/components/ClientPolyfills'
 import './globals.css'
 
 export const metadata = {
@@ -18,6 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
+        <ClientPolyfills />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

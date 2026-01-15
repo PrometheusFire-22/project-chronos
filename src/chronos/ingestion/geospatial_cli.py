@@ -141,6 +141,7 @@ def ingest_with_ogr2ogr(
         "EPSG:4326",  # Target CRS to WGS84
         "-nlt",
         "PROMOTE_TO_MULTI",  # Promote singlepart to multipart geometries
+        "-makevalid",  # Force geometry validation on ingestion
         "-progress",  # Show progress
     ]
 
