@@ -26,13 +26,21 @@ export default async function BlogListingPage() {
     limit: 50,
   })
 
-  const { data: posts } = await fetchDirectus<DirectusCollectionResponse<BlogPost>>(
-    `/items/cms_blog_posts${query}`,
-    {
-      revalidate: 3600, // 1 hour
-      tags: ['blog-posts'],
-    }
-  )
+  let posts: BlogPost[] = []
+
+  try {
+    const { data } = await fetchDirectus<DirectusCollectionResponse<BlogPost>>(
+      `/items/cms_blog_posts${query}`,
+      {
+        revalidate: 60, // 1 minute
+        tags: ['blog-posts'],
+      }
+    )
+    posts = data
+  } catch (err) {
+    console.warn('Failed to fetch blog posts from Directus:', err)
+    // Fallback to empty array to prevents build failure
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
@@ -76,15 +84,15 @@ export default async function BlogListingPage() {
 function BlogPostCard({ post }: { post: BlogPost }) {
   const publishedDate = post.published_at
     ? new Date(post.published_at).toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      })
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    })
     : new Date(post.created_at).toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      })
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    })
 
   return (
     <Link
