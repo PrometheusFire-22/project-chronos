@@ -17,34 +17,12 @@ const waitlistSubmissionSchema = z.object({
   utm_source: z.string().nullable(),
   utm_medium: z.string().nullable(),
   utm_campaign: z.string().nullable(),
-  // Anti-spam fields
-  fax: z.string().optional(),
-  timestamp: z.string().optional(),
 })
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-
-    // Anti-spam check 1: Honeypot field
-    if (body.fax) {
-      console.log('Honeypot field filled, likely a bot. Silently rejecting.');
-      // Return a success-like response to not alert the bot
-      return NextResponse.json({ success: true, message: 'Successfully joined the waitlist' }, { status: 201 });
-    }
-
-    // Anti-spam check 2: Timestamp difference
-    const MIN_SUBMISSION_TIME_MS = 3000; // 3 seconds
-    if (body.timestamp) {
-      const formLoadTime = parseInt(body.timestamp, 10);
-      const submissionTime = Date.now();
-      if (submissionTime - formLoadTime < MIN_SUBMISSION_TIME_MS) {
-        console.log('Form submitted too quickly, likely a bot. Silently rejecting.');
-        return NextResponse.json({ success: true, message: 'Successfully joined the waitlist' }, { status: 201 });
-      }
-    }
-
     // Parse and validate request body
+    const body = await request.json()
     const validatedData = waitlistSubmissionSchema.parse(body)
 
     // Get Directus URL from environment or use default

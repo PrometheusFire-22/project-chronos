@@ -19,7 +19,6 @@
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "framer-motion": "^12.23.26",
-    "leaflet": "1.9.4",
     "lucide-react": "^0.562.0",
     "marked": "^17.0.1",
     "next": "15.4.10",
@@ -28,7 +27,6 @@
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "react-hook-form": "^7.69.0",
-    "react-leaflet": "4.2.1",
     "recharts": "^2.15.0",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
@@ -42,7 +40,6 @@
   "devDependencies": {
     "@opennextjs/cloudflare": "^1.14.8",
     "@tailwindcss/typography": "^0.5.19",
-    "@types/leaflet": "1.9.14",
     "@types/node": "^25.0.3",
     "@types/pg": "^8.11.10",
     "@types/react": "^19.2.7",

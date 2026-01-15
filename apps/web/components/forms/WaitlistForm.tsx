@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -15,9 +15,6 @@ const waitlistFormSchema = z.object({
   company: z.string().max(255).optional(),
   role: z.string().max(255).optional(),
   heardFrom: z.string().max(255).optional(),
-  // Anti-spam fields
-  fax: z.string().max(0, { message: 'Fax number should not be filled' }).optional(),
-  timestamp: z.string().optional(),
 })
 
 type WaitlistFormData = z.infer<typeof waitlistFormSchema>
@@ -27,11 +24,6 @@ type SubmissionState = 'idle' | 'submitting' | 'success' | 'error'
 export function WaitlistForm() {
   const [submissionState, setSubmissionState] = useState<SubmissionState>('idle')
   const [errorMessage, setErrorMessage] = useState<string>('')
-  const [timestamp, setTimestamp] = useState('')
-
-  useEffect(() => {
-    setTimestamp(Date.now().toString())
-  }, [])
 
   const {
     register,
@@ -40,15 +32,9 @@ export function WaitlistForm() {
     reset,
   } = useForm<WaitlistFormData>({
     resolver: zodResolver(waitlistFormSchema),
-    defaultValues: {
-      timestamp: timestamp,
-    },
   })
 
-  // This is a trick to re-set the timestamp in the form data upon submission
-  // as the default value can be stale.
   const onSubmit = async (data: WaitlistFormData) => {
-    data.timestamp = timestamp
     setSubmissionState('submitting')
     setErrorMessage('')
 
@@ -75,9 +61,6 @@ export function WaitlistForm() {
           utm_source: utmSource,
           utm_medium: utmMedium,
           utm_campaign: utmCampaign,
-          // Anti-spam fields
-          fax: data.fax,
-          timestamp: data.timestamp,
         }),
       })
 
@@ -176,13 +159,6 @@ export function WaitlistForm() {
             )}
           </div>
         </div>
-
-        {/* Honeypot Field */}
-        <div className="opacity-0 absolute -z-50 -left-[9999px]">
-          <label htmlFor="fax">Fax</label>
-          <input {...register('fax')} type="text" id="fax" tabIndex={-1} autoComplete="off" />
-        </div>
-        <input {...register('timestamp')} type="hidden" id="timestamp" />
 
         {/* Company */}
         <div>

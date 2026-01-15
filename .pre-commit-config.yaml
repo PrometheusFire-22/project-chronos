@@ -12,7 +12,7 @@ repos:
     hooks:
       - id: black
         name: Format Python code (black)
-        language_version: python3.11
+        language_version: python3.12
         args: [--line-length=100]
 
   # ============================================================================
@@ -91,15 +91,15 @@ repos:
         stages: [pre-commit]
 
   # ============================================================================
-  # Secret Scanning (GitGuardian) - Disabled (requires API key)
+  # Secret Scanning (GitGuardian)
   # ============================================================================
-  # - repo: https://github.com/GitGuardian/ggshield
-  #   rev: v1.34.0
-  #   hooks:
-  #     - id: ggshield
-  #       name: Check for secrets (GitGuardian)
-  #       language_version: python3
-  #       stages: [pre-commit]
+  - repo: https://github.com/GitGuardian/ggshield
+    rev: v1.34.0
+    hooks:
+      - id: ggshield
+        name: Check for secrets (GitGuardian)
+        language_version: python3
+        stages: [commit]
 
   # ============================================================================
   # SQL Linting (Optional - requires sqlfluff installation)
@@ -144,7 +144,7 @@ repos:
 # Configuration
 # ============================================================================
 default_language_version:
-  python: python3.11
+  python: python3.12
 
 # Fail fast on first error
 fail_fast: false
