@@ -16,23 +16,31 @@ export const metadata: Metadata = {
 
 export default async function BlogListingPage() {
   // Fetch published blog posts from Directus
-  const query = buildQuery({
-    filter: {
-      status: { _eq: 'published' },
-      published_at: { _lte: '$NOW' },
-    },
-    sort: ['-published_at', '-created_at'],
-    fields: ['*'],
-    limit: 50,
-  })
+  let posts: BlogPost[] = []
 
-  const { data: posts } = await fetchDirectus<DirectusCollectionResponse<BlogPost>>(
-    `/items/cms_blog_posts${query}`,
-    {
-      revalidate: 3600, // 1 hour
-      tags: ['blog-posts'],
-    }
-  )
+  try {
+    const query = buildQuery({
+      filter: {
+        status: { _eq: 'published' },
+        published_at: { _lte: '$NOW' },
+      },
+      sort: ['-published_at', '-created_at'],
+      fields: ['*'],
+      limit: 50,
+    })
+
+    const { data } = await fetchDirectus<DirectusCollectionResponse<BlogPost>>(
+      `/items/cms_blog_posts${query}`,
+      {
+        revalidate: 0, // No cache on error
+        tags: ['blog-posts'],
+      }
+    )
+    posts = data
+  } catch (error) {
+    console.error('Failed to fetch blog posts from Directus:', error)
+    // Fallback to empty list so build succeeds
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
@@ -76,15 +84,15 @@ export default async function BlogListingPage() {
 function BlogPostCard({ post }: { post: BlogPost }) {
   const publishedDate = post.published_at
     ? new Date(post.published_at).toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      })
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    })
     : new Date(post.created_at).toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      })
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    })
 
   return (
     <Link

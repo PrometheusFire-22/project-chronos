@@ -91,15 +91,20 @@ async function getPost(slug: string): Promise<BlogPost | null> {
     limit: 1,
   })
 
-  const { data: posts } = await fetchDirectus<DirectusCollectionResponse<BlogPost>>(
-    `/items/cms_blog_posts${query}`,
-    {
-      revalidate: 3600, // 1 hour
-      tags: [`blog-post-${slug}`],
-    }
-  )
+  try {
+    const { data: posts } = await fetchDirectus<DirectusCollectionResponse<BlogPost>>(
+      `/items/cms_blog_posts${query}`,
+      {
+        revalidate: 0, // No cache
+        tags: [`blog-post-${slug}`],
+      }
+    )
 
-  return posts[0] || null
+    return posts[0] || null
+  } catch (error) {
+    console.error(`Failed to fetch blog post ${slug}:`, error)
+    return null
+  }
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
@@ -112,15 +117,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   const publishedDate = post.published_at
     ? new Date(post.published_at).toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      })
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    })
     : new Date(post.created_at).toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      })
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    })
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
