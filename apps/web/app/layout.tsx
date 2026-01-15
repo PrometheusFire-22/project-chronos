@@ -18,22 +18,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if (typeof globalThis !== 'undefined') {
-                if (!(globalThis).__name) {
-                  globalThis.__name = function(target, value) {
-                    Object.defineProperty(target, 'name', { value: value, configurable: true });
-                    return target;
-                  };
-                }
-              }
-            `,
-          }}
-        />
-      </head>
       <body>
         <ClientPolyfills />
         <ThemeProvider
