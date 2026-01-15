@@ -20,6 +20,22 @@ export interface GeospatialMapProps {
 }
 
 // Abstracted data fetching hook - can be replaced for deck.gl
+const PROVINCE_TO_PRUID: Record<string, string> = {
+  'Newfoundland and Labrador': '10',
+  'Prince Edward Island': '11',
+  'Nova Scotia': '12',
+  'New Brunswick': '13',
+  'Quebec': '24',
+  'Ontario': '35',
+  'Manitoba': '46',
+  'Saskatchewan': '47',
+  'Alberta': '48',
+  'British Columbia': '59',
+  'Yukon': '60',
+  'Northwest Territories': '61',
+  'Nunavut': '62',
+};
+
 function useChoroplethData(
   geography: Geography,
   level: Level,
@@ -36,78 +52,77 @@ function useChoroplethData(
         setLoading(true);
         setError(null);
 
-        // Fetch boundaries
-        const boundariesParams = new URLSearchParams({
-          geography,
-          level,
-        });
-        const boundariesResponse = await fetch(`/api/geospatial/boundaries?${boundariesParams}`);
-        if (!boundariesResponse.ok) {
-          throw new Error(`Failed to fetch boundaries: ${boundariesResponse.statusText}`);
+        // 1. Fetch Static Geometry
+        let geoUrl = '';
+        if (geography === 'US') {
+          geoUrl = '/geo/us-states.json';
+        } else if (geography === 'CANADA') {
+          geoUrl = '/geo/canada.json';
+        } else {
+          throw new Error(`Unsupported geography: ${geography}`);
         }
-        const boundaries = await boundariesResponse.json();
 
-        // Fetch data values
-        const dataParams = new URLSearchParams({
-          geography,
-          level,
-          category,
-        });
-        if (date) {
-          dataParams.append('date', date);
-        }
+        const geoResponse = await fetch(geoUrl);
+        if (!geoResponse.ok) throw new Error(`Failed to load geometry: ${geoResponse.statusText}`);
+        const boundaryData = await geoResponse.json();
+
+        // 2. Fetch Economic Data
+        const dataParams = new URLSearchParams({ geography, category });
+        if (date) dataParams.append('date', date);
+
         const dataResponse = await fetch(`/api/geospatial/choropleth?${dataParams}`);
-        if (!dataResponse.ok) {
-          // If data fails, still show boundaries with null values
-          console.warn(`Failed to fetch choropleth data: ${dataResponse.statusText}`);
-          const features = boundaries.features.map((feature: any) => ({
-            ...feature,
-            properties: {
-              ...feature.properties,
-              value: null,
-              geography,
-              level,
-              category,
-              seriesName: category === 'Employment' ? 'Unemployment Rate' : 'House Price Index',
-              units: category === 'Employment' ? 'Percent' : 'Index',
-              date: new Date().toISOString().split('T')[0],
-            },
-          }));
-          const featureCollection: ChoroplethFeatureCollection = {
-            type: 'FeatureCollection',
-            features,
-          };
-          setData(featureCollection);
-          return;
-        }
-        const dataValues = await dataResponse.json();
+        let dataValues: Record<string, number | null> = {};
 
-        // Combine boundaries with data
-        const features = boundaries.features.map((feature: any) => {
-          const rawValue = dataValues[feature.id];
-          const value = (rawValue !== null && rawValue !== undefined && typeof rawValue === 'number' && !isNaN(rawValue)) ? rawValue : null;
+        if (dataResponse.ok) {
+          dataValues = await dataResponse.json();
+        } else {
+          console.warn('Failed to fetch data, displaying map only.');
+        }
+
+        // 3. Join Data with Geometry
+        const features = boundaryData.features.map((feature: any) => {
+          let id = feature.id; // US: FIPS code
+
+          // Handle Canada ID Mapping
+          if (geography === 'CANADA') {
+            const name = feature.properties?.name;
+            if (name && PROVINCE_TO_PRUID[name]) {
+              id = PROVINCE_TO_PRUID[name];
+            }
+          }
+
+          // Ensure ID is string for lookup
+          const lookupId = id ? String(id).padStart(2, '0') : '';
+
+          const rawValue = dataValues[lookupId];
+          const value = (rawValue !== null && rawValue !== undefined && typeof rawValue === 'number' && !isNaN(rawValue))
+            ? rawValue
+            : null;
+
           return {
             ...feature,
+            id: lookupId, // Standardize ID in feature
             properties: {
               ...feature.properties,
               value,
               geography,
               level,
               category,
+              name: feature.properties.name || 'Unknown',
               seriesName: category === 'Employment' ? 'Unemployment Rate' : 'House Price Index',
               units: category === 'Employment' ? 'Percent' : 'Index',
-              date: new Date().toISOString().split('T')[0], // Current date as fallback
+              date: date || new Date().toISOString().split('T')[0],
             },
           };
         });
 
-        const featureCollection: ChoroplethFeatureCollection = {
+        setData({
           type: 'FeatureCollection',
           features,
-        };
+        });
 
-        setData(featureCollection);
       } catch (err) {
+        console.error("Map Data Error:", err);
         setError(err instanceof Error ? err.message : 'Unknown error');
       } finally {
         setLoading(false);

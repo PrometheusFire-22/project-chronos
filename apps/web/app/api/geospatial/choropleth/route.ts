@@ -125,23 +125,22 @@ function getTableName(geography: string | null, level: string | null): string | 
 }
 
 function buildChoroplethQuery(tableName: string, category: string, date: string | null) {
-  // Column mappings for different tables
-  const columnMappings: Record<string, { id: string; name: string; geoType: string; geom: string }> = {
-    'us_counties': { id: 'geoid', name: 'name', geoType: 'County', geom: 'geom' },
-    'us_states': { id: 'geoid', name: 'name', geoType: 'State', geom: 'geom' },
-    'us_cbsa': { id: 'geoid', name: 'name', geoType: 'CBSA', geom: 'geom' },
-    'us_csa': { id: 'geoid', name: 'name', geoType: 'CSA', geom: 'geom' },
-    'us_metdiv': { id: 'geoid', name: 'name', geoType: 'MetDiv', geom: 'geom' },
-    'ca_provinces': { id: 'pruid', name: 'prname', geoType: 'Province', geom: 'geometry' },
-    'ca_census_divisions': { id: 'cduid', name: 'cdname', geoType: 'Census Division', geom: 'geometry' },
+  // Map tables to geography types
+  const geoTypeMapping: Record<string, string> = {
+    'us_counties': 'County',
+    'us_states': 'State',
+    'us_cbsa': 'CBSA',
+    'us_csa': 'CSA',
+    'us_metdiv': 'MetDiv',
+    'ca_provinces': 'Province',
+    'ca_census_divisions': 'Census Division'
   };
 
-  const mapping = columnMappings[tableName] || { id: 'geoid', name: 'name', geoType: 'State' };
+  const geoType = geoTypeMapping[tableName] || 'State';
 
-  // Query real economic data by joining:
-  // 1. Geospatial boundary table with series_metadata via geography_id
-  // 2. Get latest observation (or observation at specific date) from economic_observations
-  // 3. Return geography_id -> value mapping
+  // Simplified query: Fetch data directly from metadata and observations
+  // identifying geography by geography_id.
+  // We no longer join on geospatial tables here; the client maps Data ID -> Shape ID.
 
   const sql = `
     WITH latest_observations AS (
@@ -158,29 +157,16 @@ function buildChoroplethQuery(tableName: string, category: string, date: string 
       )
       ${date ? 'AND observation_date <= $3' : ''}
       ORDER BY series_id, observation_date DESC
-    ),
-    series_with_geography AS (
-      SELECT
-        sm.series_id,
-        sm.geography_id,
-        sm.series_name,
-        sm.frequency,
-        sm.category,
-        lo.value,
-        lo.observation_date
-      FROM metadata.series_metadata sm
-      JOIN latest_observations lo ON sm.series_id = lo.series_id
-      WHERE sm.geography_type = $1
-      AND sm.category = $2
     )
     SELECT
-      TRIM(g.${mapping.id}::text) as geography_id,
-      swg.value
-    FROM geospatial.${tableName} g
-    LEFT JOIN series_with_geography swg ON TRIM(g.${mapping.id}::text) = TRIM(swg.geography_id::text)
-    ORDER BY g.${mapping.name}
+      TRIM(sm.geography_id) as geography_id,
+      lo.value
+    FROM metadata.series_metadata sm
+    JOIN latest_observations lo ON sm.series_id = lo.series_id
+    WHERE sm.geography_type = $1
+    AND sm.category = $2
   `;
 
-  const params = date ? [mapping.geoType, category, date] : [mapping.geoType, category];
+  const params = date ? [geoType, category, date] : [geoType, category];
   return { sql, params };
 }
