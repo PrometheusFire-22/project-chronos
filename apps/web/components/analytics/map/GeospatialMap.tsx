@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
 import { scaleSequential } from 'd3-scale';
 import { interpolateYlOrRd } from 'd3-scale-chromatic';
@@ -37,6 +37,7 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
     const [geoData, setGeoData] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const geoJsonLayerRef = useRef<L.GeoJSON | null>(null);
 
     // State for dynamic scaling
     const [stats, setStats] = useState<{ min: number; max: number } | null>(null);
@@ -54,6 +55,7 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
             try {
                 setLoading(true);
                 setError(null);
+                setGeoData(null); // CRITICAL: Clear old data to force layer unmount
 
                 // Normalize metric to lowercase for API consistency
                 const normalizedMetric = metric.toLowerCase();
