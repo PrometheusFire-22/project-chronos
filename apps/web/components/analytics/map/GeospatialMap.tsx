@@ -103,11 +103,20 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                    });
                    combinedGeoJson = { ...geoJson, features: mergedFeatures };
                    setStats({ min: min === Infinity ? 0 : min, max: max === -Infinity ? 10 : max });
+                   
+                   console.log(`[GeospatialMap] Fetched ${normalizedMetric}:`, {
+                       dataPoints: dataPoints.length,
+                       min,
+                       max,
+                       sampleData: dataPoints.slice(0, 3),
+                       mergedFeatures: mergedFeatures.length
+                   });
                 } else {
                     console.warn('Failed to fetch economic data');
                 }
 
                 setGeoData(combinedGeoJson);
+                console.log(`[GeospatialMap] Set geoData for ${normalizedMetric}, features:`, combinedGeoJson.features.length);
 
             } catch (err: any) {
                 console.error('Map Error:', err);
@@ -267,6 +276,7 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
             )}
 
             <MapContainer
+                key={`map-${metric}`}
                 center={[48, -95]}
                 zoom={3.5}
                 scrollWheelZoom={true}
