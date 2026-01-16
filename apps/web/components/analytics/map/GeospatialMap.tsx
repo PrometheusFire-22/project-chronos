@@ -8,6 +8,7 @@ import 'leaflet/dist/leaflet.css';
 import './tooltip.css';
 import { Card } from '@chronos/ui/components/card';
 import { Loader2 } from 'lucide-react';
+import { getMetricConfig, formatMetricValue } from '@/lib/metrics/config';
 // Fix Leaflet marker icons in Next.js
 import L from 'leaflet';
 // @ts-ignore
@@ -102,8 +103,6 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                    });
                    combinedGeoJson = { ...geoJson, features: mergedFeatures };
                    setStats({ min: min === Infinity ? 0 : min, max: max === -Infinity ? 10 : max });
-
-                   console.log(`[GeospatialMap] Metric: ${normalizedMetric}, Min: ${min}, Max: ${max}, Features: ${mergedFeatures.length}`);
                 } else {
                     console.warn('Failed to fetch economic data');
                 }
@@ -138,47 +137,23 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
             const stateName = props.name || 'Unknown';
             const rawValue = props.value;
             const metricType = props.metric || metric.toLowerCase();
-
-            console.log(`[Tooltip] State: ${stateName}, Metric: ${metricType}, RawValue: ${rawValue}, Type: ${typeof rawValue}`);
-
-            // Format value with % for rates - CRITICAL: handle string values
-            let displayValue = 'N/A';
-            if (rawValue !== null && rawValue !== undefined) {
-                const numVal = typeof rawValue === 'string' ? parseFloat(rawValue) : rawValue;
-                console.log(`[Tooltip] ${stateName} - Parsed: ${numVal}, isNaN: ${isNaN(numVal)}`);
-                if (!isNaN(numVal)) {
-                    const isRate = metricType.toLowerCase().includes('rate') ||
-                                  metricType.toLowerCase() === 'unemployment';
-                    displayValue = isRate ? `${numVal.toFixed(2)}%` : numVal.toFixed(2);
-                }
-            }
-
-            // Get metric display name and frequency
-            const getMetricInfo = (m: string) => {
-                const lower = m.toLowerCase();
-                if (lower === 'unemployment' || lower.includes('unemployment')) {
-                    return { name: 'Unemployment Rate', freq: 'MONTHLY' };
-                }
-                if (lower === 'hpi' || lower.includes('house')) {
-                    return { name: 'House Price Index', freq: 'QUARTERLY' };
-                }
-                return { name: m.toUpperCase().replace(/_/g, ' '), freq: 'MONTHLY' };
-            };
-
-            const metricInfo = getMetricInfo(metricType);
+            
+            // Get metric configuration from registry
+            const config = getMetricConfig(metricType);
+            const displayValue = formatMetricValue(rawValue, config);
 
             // Compact glassmorphic tooltip
             const tooltipContent = `
                 <div class="backdrop-blur-xl bg-slate-900/90 border border-white/10 rounded-lg p-2 shadow-2xl">
                     <div class="text-sm font-bold text-white mb-1">${stateName}</div>
-                    <div class="text-[8px] text-slate-500 uppercase tracking-widest font-bold mb-0.5">${metricInfo.name}</div>
+                    <div class="text-[8px] text-slate-500 uppercase tracking-widest font-bold mb-0.5">${config.displayName}</div>
                     <div class="flex items-center justify-between gap-2">
                         <div class="text-lg font-bold text-orange-400">${displayValue}</div>
                         <div class="flex items-center gap-0.5">
                             <svg class="w-1.5 h-1.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                             </svg>
-                            <span class="text-[7px] text-slate-500 uppercase tracking-wider font-semibold">${metricInfo.freq}</span>
+                            <span class="text-[7px] text-slate-500 uppercase tracking-wider font-semibold">${config.frequency}</span>
                         </div>
                     </div>
                 </div>
@@ -210,14 +185,14 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
 
                     popupDiv.innerHTML = `
                         <div class="text-sm font-bold text-white mb-1 pr-4">${stateName}</div>
-                        <div class="text-[8px] text-slate-500 uppercase tracking-widest font-bold mb-0.5">${metricInfo.name}</div>
+                        <div class="text-[8px] text-slate-500 uppercase tracking-widest font-bold mb-0.5">${config.displayName}</div>
                         <div class="flex items-center justify-between gap-2">
                             <div class="text-lg font-bold text-orange-400">${displayValue}</div>
                             <div class="flex items-center gap-0.5">
                                 <svg class="w-1.5 h-1.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                                 </svg>
-                                <span class="text-[7px] text-slate-500 uppercase tracking-wider font-semibold">${metricInfo.freq}</span>
+                                <span class="text-[7px] text-slate-500 uppercase tracking-wider font-semibold">${config.frequency}</span>
                             </div>
                         </div>
                     `;
@@ -305,9 +280,10 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                 />
 
                 {geoData && (
-                    <GeoJSON
-                        data={geoData}
-                        style={style}
+                    <GeoJSON 
+                        key={metric}
+                        data={geoData} 
+                        style={style} 
                         onEachFeature={onEachFeature}
                     />
                 )}
