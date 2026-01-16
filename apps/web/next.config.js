@@ -30,6 +30,15 @@ const nextConfig = {
   generateBuildId: async () => {
     return process.env.CF_PAGES_COMMIT_SHA || 'development'
   },
+
+  async rewrites() {
+    return [
+      {
+        source: '/api-proxy/:path*',
+        destination: 'http://localhost:3005/api/:path*',
+      },
+    ]
+  },
 };
 
 const plugins = [
