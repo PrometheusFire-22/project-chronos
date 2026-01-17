@@ -122,7 +122,8 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
         fetchData();
     }, [metric, date]);
 
-    const style = (feature: any) => {
+    // Memoize style function to prevent unnecessary re-renders
+    const style = useMemo(() => (feature: any) => {
         const val = feature.properties.value ? parseFloat(feature.properties.value) : null;
 
         return {
@@ -132,9 +133,12 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
             color: '#0f172a', // Slate-900 borders
             fillOpacity: 0.8
         };
-    };
+    }, [colorScale]);
 
-    const onEachFeature = (feature: any, layer: any) => {
+    // Memoize onEachFeature to prevent event listener churn
+    // Note: We use a callback ref pattern inside if interactions start lagging,
+    // but for now simple memoization helps.
+    const onEachFeature = useMemo(() => (feature: any, layer: any) => {
         if (feature.properties) {
             const props = feature.properties;
             const stateName = props.name || 'Unknown';
@@ -171,18 +175,16 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                 offset: [0, -10]
             });
 
-            // Click to pin tooltip
+            // Click to pin tooltip logic
             let popup: any = null;
 
             layer.on('click', function(e: any) {
                 L.DomEvent.stopPropagation(e);
 
                 if (popup) {
-                    // Close existing popup
                     e.target._map.closePopup(popup);
                     popup = null;
                 } else {
-                    // Create popup content
                     const popupDiv = document.createElement('div');
                     popupDiv.className = 'backdrop-blur-xl bg-slate-900/90 border border-white/10 rounded-lg p-2 shadow-2xl relative';
 
@@ -200,7 +202,6 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                         </div>
                     `;
 
-                    // Create close button
                     const closeBtn = document.createElement('button');
                     closeBtn.className = 'absolute top-1 right-1 text-slate-400 hover:text-white transition-colors z-10';
                     closeBtn.innerHTML = `
@@ -211,7 +212,6 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
 
                     popupDiv.insertBefore(closeBtn, popupDiv.firstChild);
 
-                    // Create and open popup
                     popup = L.popup({
                         className: 'leaflet-popup-custom',
                         closeButton: false,
@@ -223,7 +223,6 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                     .setContent(popupDiv)
                     .openOn(e.target._map);
 
-                    // Attach close handler after popup is added to DOM
                     setTimeout(() => {
                         const btn = popupDiv.querySelector('button');
                         if (btn) {
@@ -237,7 +236,7 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                 }
             });
         }
-    };
+    }, [metric]);
 
     if (error) return (
         <Card className="h-[600px] flex items-center justify-center bg-slate-900/50 border-red-500/20">
@@ -249,11 +248,11 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
         <Card className="h-[600px] w-full overflow-hidden relative border-0 ring-1 ring-white/10 shadow-2xl bg-slate-950">
             {loading && (
                 <div className="absolute inset-0 z-[1000] flex flex-col items-center justify-center bg-slate-950/20 backdrop-blur-sm">
-                    <Loader2 className="w-8 h-8 animate-spin text-blue-500 mb-2" />
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mb-2"></div>
                 </div>
             )}
 
-            {/* Dynamic Legend */}
+            {/* Dynamic Legend - Same as before */}
             {stats && (
                 <div className="absolute bottom-6 right-6 z-[500] bg-slate-900/90 backdrop-blur border border-slate-700 p-3 rounded-lg shadow-2xl flex flex-col gap-1 w-48">
                     <div className="flex justify-between text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">
@@ -273,7 +272,19 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                 key={`map-${metric}`}
                 center={[48, -95]}
                 zoom={3.5}
-                scrollWheelZoom={true}
+                maxBounds={[[15, -170], [80, -50]]} // Constrain panning to NA
+                minZoom={2.5}
+                maxZoom={8}
+                
+                // UX & Performance Improvements
+                scrollWheelZoom={true} // Keep scrolling working
+                wheelDebounceTime={100} // Smoother scroll zoom
+                wheelPxPerZoomLevel={60} // Less aggressive zooming on trackpads
+                
+                doubleClickZoom={true}
+                dragging={true}
+                bounceAtZoomLimits={true}
+                
                 style={{ height: '100%', width: '100%', background: '#020617' }}
                 className="z-0"
                 attributionControl={false}

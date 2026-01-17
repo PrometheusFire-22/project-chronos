@@ -111,6 +111,7 @@ media_assets/
 gha-creds-*.json
 docs/.secrets-template.md
 *.kdbx
+.gemini.json
 
 # Secrets protection
 .secrets_tmp/
