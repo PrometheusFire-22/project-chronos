@@ -39,11 +39,41 @@ geo.get('/choropleth', async (c) => {
         const validDate = targetDate ? targetDate : null;
 
         // QUERY BRANCHING:
+        // mode=boundaries: return just GeoJSON boundaries (no metric data)
         // mode=data: lighter query, return plain JSON array of values (FAST)
         // mode=geo (default): return heavy GeoJSON with geometry (SLOW, LEGACY)
         const mode = c.req.query('mode') || 'geo';
 
         console.log(`[GEO] Fetching Map Data (mode=${mode}, date=${validDate || 'latest'})...`);
+        
+        // Handle boundaries-only mode (no metric data needed)
+        if (mode === 'boundaries') {
+            const boundariesQuery = `
+                SELECT 
+                    region_name as name,
+                    country_code as country,
+                    ST_AsGeoJSON(geometry)::json as geometry
+                FROM analytics.vw_choropleth_boundaries
+                ORDER BY region_name
+            `;
+            
+            const res = await pool.query(boundariesQuery);
+            console.log(`[GEO] Boundaries query completed. Rows: ${res.rows.length}`);
+            
+            const features = res.rows.map(row => ({
+                type: 'Feature',
+                geometry: row.geometry,
+                properties: {
+                    name: row.name,
+                    country: row.country
+                }
+            }));
+            
+            return c.json({
+                type: 'FeatureCollection',
+                features
+            });
+        }
         
         let query = '';
         if (mode === 'data') {
