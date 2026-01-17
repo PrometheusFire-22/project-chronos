@@ -60,13 +60,13 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                 // Normalize metric to lowercase for API consistency
                 const normalizedMetric = metric.toLowerCase();
 
-                // 1. Fetch Static Geometry
-                const geoRes = await fetch('/north_america.json');
+                // 1. Fetch Static Geometry from API
+                const apiUrl = '/api-proxy';
+                const geoRes = await fetch(`${apiUrl}/geo/choropleth?metric=${encodeURIComponent(normalizedMetric)}&mode=boundaries`);
                 if (!geoRes.ok) throw new Error(`Failed to load map boundaries: ${geoRes.statusText}`);
                 const geoJson = await geoRes.json();
 
                 // 2. Fetch Live Economic Data
-                const apiUrl = '/api-proxy';
                 const dataRes = await fetch(`${apiUrl}/geo/choropleth?metric=${encodeURIComponent(normalizedMetric)}&mode=data`);
 
 
