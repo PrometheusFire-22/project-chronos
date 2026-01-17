@@ -32,10 +32,13 @@ const nextConfig = {
   },
 
   async rewrites() {
+    // Use environment variable for API URL (supports local + production)
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3005';
+    
     return [
       {
         source: '/api-proxy/:path*',
-        destination: 'http://localhost:3005/api/:path*',
+        destination: `${apiUrl}/api/:path*`,
       },
     ]
   },
