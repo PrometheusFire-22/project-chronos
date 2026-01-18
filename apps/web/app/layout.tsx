@@ -18,6 +18,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.__name = function(func, name) { return Object.defineProperty(func, 'name', { value: name, configurable: true }); };`,
+          }}
+        />
+
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
