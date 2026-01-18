@@ -50,11 +50,11 @@ geo.get('/choropleth', async (c) => {
         if (mode === 'boundaries') {
             const boundariesQuery = `
                 SELECT
-                    region_name as name,
+                    name,
                     country_code as country,
                     ST_AsGeoJSON(geometry)::json as geometry
-                FROM analytics.mv_choropleth_boundaries
-                ORDER BY region_name
+                FROM geospatial.ne_boundaries
+                ORDER BY name
             `;
 
             const res = await pool.query(boundariesQuery);
@@ -91,15 +91,15 @@ geo.get('/choropleth', async (c) => {
                     ORDER BY geography, observation_date DESC
                 )
                 SELECT
-                    b.region_name as name,
+                    b.name,
                     b.country_code as country,
                     lm.value,
                     lm.units,
                     lm.metric_type as metric,
                     lm.observation_date as date
-                FROM analytics.vw_choropleth_boundaries b
+                FROM geospatial.ne_boundaries b
                 LEFT JOIN latest_metrics lm
-                    ON b.region_name = lm.geography
+                    ON b.name = lm.geography
             `;
         } else {
              query = `
@@ -116,16 +116,16 @@ geo.get('/choropleth', async (c) => {
                     ORDER BY geography, observation_date DESC
                 )
                 SELECT
-                    b.region_name,
+                    b.name as region_name,
                     b.country_code,
                     ST_AsGeoJSON(b.geometry)::json as geometry,
                     lm.value as metric_value,
                     lm.units,
                     lm.metric_type,
                     lm.observation_date
-                FROM analytics.mv_choropleth_boundaries b
+                FROM geospatial.ne_boundaries b
                 LEFT JOIN latest_metrics lm
-                    ON b.region_name = lm.geography
+                    ON b.name = lm.geography
                 ORDER BY lm.value DESC NULLS LAST
             `;
         }

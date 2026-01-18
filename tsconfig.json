@@ -1,102 +1,18 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    /**
-     * TARGET: JavaScript version to compile to
-     * ───────────────────────────────────────────────────────────────
-     * "ES2022" = Modern JavaScript (async/await, optional chaining, etc.)
-     * Browsers/Node.js 18+ support this
-     */
     "target": "ES2022",
-
-    /**
-     * MODULE: How to handle imports/exports
-     * ───────────────────────────────────────────────────────────────
-     * "ESNext" = Use modern ES modules (import/export)
-     * Matches package.json "type": "module"
-     */
     "module": "ESNext",
-
-    /**
-     * MODULE RESOLUTION: How to find imported modules
-     * ───────────────────────────────────────────────────────────────
-     * "bundler" = Modern resolution (for Vite, Webpack, etc.)
-     */
     "moduleResolution": "bundler",
-
-    /**
-     * LIB: Built-in type definitions to include
-     * ───────────────────────────────────────────────────────────────
-     * "ES2022" = Modern JavaScript features
-     * "DOM" = Browser APIs (document, window, etc.)
-     */
     "lib": ["ES2022"],
-
-    /**
-     * TYPE CHECKING STRICTNESS
-     * ───────────────────────────────────────────────────────────────
-     * "strict": true = Enable ALL strict checks (recommended!)
-     * Catches more bugs at compile-time
-     */
     "strict": true,
-
-    /**
-     * ES MODULE INTEROP
-     * ───────────────────────────────────────────────────────────────
-     * Allows importing CommonJS modules (older Node.js style)
-     * Example: import sharp from 'sharp' (sharp uses CommonJS)
-     */
     "esModuleInterop": true,
-
-    /**
-     * SKIP LIB CHECK: Skip type checking of .d.ts files
-     * ───────────────────────────────────────────────────────────────
-     * Speeds up compilation (checks your code, not libraries)
-     */
     "skipLibCheck": true,
-
-    /**
-     * FORCE CONSISTENT CASING
-     * ───────────────────────────────────────────────────────────────
-     * Ensures imports match exact file name casing
-     * (macOS/Windows are case-insensitive, Linux is not)
-     */
     "forceConsistentCasingInFileNames": true,
-
-    /**
-     * RESOLVE JSON MODULES
-     * ───────────────────────────────────────────────────────────────
-     * Allows: import config from './config.json'
-     */
     "resolveJsonModule": true,
-
-    /**
-     * ALLOW .JS FILES
-     * ───────────────────────────────────────────────────────────────
-     * Allows mixing .js and .ts files (useful for migration)
-     */
     "allowJs": true,
-
-    /**
-     * OUTPUT DIRECTORY (if compiling to JS)
-     * ───────────────────────────────────────────────────────────────
-     * NOT used with tsx (runs directly)
-     * Only applies if you run: tsc (TypeScript compiler)
-     */
     "outDir": "./dist",
-
-    /**
-     * SOURCE MAPS: Enable debugging
-     * ───────────────────────────────────────────────────────────────
-     * Creates .map files for debugging TypeScript in browser/Node.js
-     */
     "sourceMap": true,
-
-    /**
-     * TYPES: Auto-include type definitions
-     * ───────────────────────────────────────────────────────────────
-     * "node" = Node.js built-in types (fs, path, process, etc.)
-     */
     "paths": {
       "@chronos/ui": ["./packages/ui/index.tsx"],
       "@chronos/ui/*": ["./packages/ui/*"],
@@ -108,22 +24,10 @@
     },
     "types": ["node"]
   },
-
-  /**
-   * INCLUDE: Which files to process
-   * ───────────────────────────────────────────────────────────────────
-   * Glob patterns for files to include in compilation
-   */
   "include": [
     "marketing/scripts/**/*.ts",
     "marketing/scripts/**/*.tsx"
   ],
-
-  /**
-   * EXCLUDE: Which files to ignore
-   * ───────────────────────────────────────────────────────────────────
-   * Prevents checking node_modules, dist, etc.
-   */
   "exclude": [
     "node_modules",
     "dist",

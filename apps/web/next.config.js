@@ -33,8 +33,9 @@ const nextConfig = {
 
   async rewrites() {
     // Use environment variable for API URL (supports local + production)
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3005';
-    
+    // FALLBACK: Hardcoding production URL to ensure Cloudflare Pages works if ENV is missing
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.automatonicai.com';
+
     return [
       {
         source: '/api-proxy/:path*',
