@@ -58,12 +58,29 @@
 
 ## 2. Database Architecture
 
-### 2.1 Dual ORM Strategy
+### 2.1 Dual ORM Strategy (BOUNDARIES EXIST)
 
-| Ecosystem | ORM | Migrations | Use Case |
-|-----------|-----|------------|----------|
-| **Python** | SQLAlchemy | Alembic | Data pipelines, economic time series |
-| **TypeScript** | Drizzle | Drizzle-kit | Frontend, API, content |
+**Good news:** Clear boundaries already exist in the codebase. We just need to document and enforce them.
+
+| Ecosystem | ORM | Migrations | Use Case | Config |
+|-----------|-----|------------|----------|--------|
+| **Python** | SQLAlchemy | Alembic (5 migrations) | Data warehouse, economic data | `alembic.ini` |
+| **TypeScript** | Drizzle | Drizzle-kit (2 migrations) | CMS content, app tables | `packages/database/drizzle.config.ts` |
+
+**Drizzle Table Filter (already configured):**
+```typescript
+// packages/database/drizzle.config.ts
+tablesFilter: ['cms_*', 'app_*']
+```
+
+**Drizzle-Managed Tables (cms.ts):**
+- `cms_blog_posts` - Blog content
+- `cms_docs_pages` - Documentation
+- `cms_homepage_hero` - Marketing content
+- `cms_features` - Product features
+- `cms_announcements` - Site notifications
+- `cms_legal_pages` - Terms/Privacy
+- `cms_waitlist_submissions` - Lead capture
 
 ### 2.2 Schema Inventory (Actual)
 
@@ -88,19 +105,27 @@
 
 | Issue | Reality |
 |-------|---------|
-| **Schema Ownership** | None. No clear boundaries or rules. |
-| **Performance** | Likely contention from shared DB. |
-| **Backups** | pgbackrest to S3 (cost-efficient). No schema-level strategy. |
-| **Migration Conflicts** | Alembic and Drizzle both exist, unclear when to use which. |
+| **Schema Ownership** | ✅ Actually exists in code, just undocumented |
+| **Performance** | Likely contention from shared DB |
+| **Backups** | pgbackrest to S3 (cost-efficient) |
+| **Migration Conflicts** | ✅ Already separated - Drizzle filters to `cms_*`/`app_*` only |
 
-### 2.4 ORM Decision Context
+### 2.4 ORM Strategy: FINALIZED
 
-**History:**
-- Started with Python/Alembic for data science exploration
-- Moved to Next.js/TypeScript for frontend scalability
-- Now have both ecosystems with no clear boundary
+**The boundary already exists. We just document and enforce it.**
 
-**Goal:** Simplify. One clear strategy going forward.
+| ORM | Owns | Hands Off |
+|-----|------|-----------|
+| **Alembic** | `timeseries.*`, `geospatial.*`, `metadata.*`, `analytics.*` | Everything else |
+| **Drizzle** | `public.cms_*`, `public.app_*` (via table filter) | Everything else |
+| **Directus** | `public.directus_*` (auto-managed) | N/A |
+| **TwentyCRM** | `core.*`, `workspace_*` (TypeORM auto-managed) | N/A |
+
+**Rules going forward:**
+1. **Data warehouse work** → Python CLI with Alembic migrations
+2. **CMS/App tables** → TypeScript with Drizzle migrations
+3. **Never touch** → `directus_*`, `core.*`, `workspace_*` (auto-managed by apps)
+4. **New tables** → Use `cms_` or `app_` prefix if Drizzle, dedicated schema if Alembic
 
 ---
 
@@ -131,16 +156,22 @@ project-chronos/
 
 | Area | Reality |
 |------|---------|
-| **Python in Nx** | Unknown. Python existed before Nx was added. No integration. |
-| **Dependency Mgmt** | pnpm for JS. Poetry for Python BUT also .venv dirs (conflicting). |
-| **Build Pipeline** | Nx only coordinates TS builds. Python is separate/manual. |
-| **Testing** | No unified strategy. Dated Python tests cause more problems than they solve. |
+| **Python in Nx** | Not integrated. Python predates Nx. |
+| **Dependency Mgmt** | pnpm for JS. Standard venv for Python (not Poetry). |
+| **Build Pipeline** | Nx coordinates TS builds. Python is manual. |
+| **Testing** | No unified strategy. Some Python tests exist but may be stale. |
+
+**Python Setup (Clarified):**
+- `pyproject.toml` uses **setuptools** (not Poetry)
+- No `poetry.lock` file exists
+- Single `.venv/` at project root is correct
+- Install: `python -m venv .venv && source .venv/bin/activate && pip install -e ".[dev]"`
 
 **History:**
 - Started as Python-only (Plotly Dash planned)
 - Moved to Next.js for scalability/extensibility
 - Added Nx for monorepo management (TS-focused)
-- Python CLI now orphaned in structure
+- Python CLI now orphaned in structure (but functional)
 
 ---
 
@@ -271,46 +302,46 @@ External APIs (FRED, StatsCan, etc.)
 
 ---
 
-## 7. Decisions Needed
+## 7. Decisions & Status
 
-### 7.1 ORM Simplification (PRIORITY)
+### 7.1 ORM Strategy: ✅ RESOLVED
 
-**Current State:** Two ORMs (Alembic + Drizzle) with no clear boundaries.
+**Decision:** Option C - Keep both ORMs with clear boundaries (boundaries already exist in code).
 
-**Options:**
-
-| Option | Pros | Cons |
-|--------|------|------|
-| **A: All Drizzle** | Single toolchain, TS-native | Need to migrate Python ingestion to TS |
-| **B: All Alembic** | Keep Python pipelines | Frontend devs need Python knowledge |
-| **C: Clear Boundaries** | Keep both, document ownership | Complexity remains |
-
-**Recommended: Option C with strict rules:**
-- Alembic owns: `timeseries`, `geospatial`, `metadata`, `analytics`
-- Drizzle owns: `public.cms_*`, `public.users*`, any new app tables
-- Hands off: `core`, `workspace_*` (TwentyCRM), `directus_*` (Directus)
+See Section 2.4 for the finalized strategy. The Drizzle config already filters to `cms_*`/`app_*` tables.
 
 ### 7.2 Public Schema Cleanup
 
-Tables in `public` that need decisions:
+Tables in `public` that need attention:
 
-| Table | Owner | Action |
+| Table | Owner | Status |
 |-------|-------|--------|
-| `directus_*` | Directus | Leave (auto-managed) |
-| `cms_*` | Drizzle? | Move to dedicated schema or keep |
-| `users`, `users_sessions` | Drizzle | Keep or merge with Directus auth |
-| `alembic_version` | Alembic | Keep (migration tracking) |
-| `backup_test` | Unknown | **DELETE** |
-| `spatial_ref_sys` | PostGIS | Leave (system table) |
+| `directus_*` | Directus | ✅ Leave (auto-managed) |
+| `cms_*` | Drizzle | ✅ Keep in public (matches Drizzle config) |
+| `users`, `users_sessions` | Drizzle | ⚠️ Review: may conflict with Directus auth |
+| `alembic_version` | Alembic | ✅ Keep (migration tracking) |
+| `backup_test` | Unknown | 🗑️ **DELETE** |
+| `spatial_ref_sys` | PostGIS | ✅ Leave (system table) |
 
-### 7.3 Python Dependency Cleanup
+### 7.3 Python Dependency: ✅ CLARIFIED
 
-**Current:** Both Poetry and .venv exist, causing confusion.
+**Finding:** Not using Poetry. Using standard setuptools + venv.
 
-**Recommendation:**
-1. Delete all `.venv` directories
-2. Use Poetry exclusively (`poetry install`, `poetry run`)
-3. Add `.venv/` to `.gitignore` if not already
+**Current setup is correct:**
+- `.venv/` at project root (standard Python virtual environment)
+- `pyproject.toml` with setuptools (modern Python packaging)
+- No Poetry configuration exists
+
+**Usage:**
+```bash
+# Activate existing venv
+source .venv/bin/activate
+
+# Or create new if needed
+python -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+```
 
 ### 7.4 Remaining Questions
 
@@ -318,16 +349,24 @@ Tables in `public` that need decisions:
 - [ ] Security group configuration audit
 - [ ] Backup verification (pgbackrest to S3)
 - [ ] CI/CD pipeline (Vercel auto-deploy? Manual for Lightsail?)
+- [ ] Cloudflare R2 integration (currently not configured)
 
 ---
 
 ## 8. Next Actions
 
-1. **CHRONOS-440**: Map infrastructure topology
-2. **CHRONOS-441**: Audit database schema
-3. **CHRONOS-439**: Document ORM strategy
-4. **CHRONOS-442**: Research choropleth alternatives (deferred)
+| Ticket | Task | Status |
+|--------|------|--------|
+| **CHRONOS-440** | Map infrastructure topology | ✅ Done (Section 4) |
+| **CHRONOS-441** | Audit database schema | ✅ Done (Section 2.2) |
+| **CHRONOS-439** | Document ORM strategy | ✅ Done (Section 2.4) |
+| **CHRONOS-442** | Research choropleth alternatives | 🔜 Deferred |
+
+**Immediate cleanup tasks:**
+1. Delete `backup_test` table from database
+2. Review `users`/`users_sessions` tables (potential auth conflict)
+3. Create ADR (Architecture Decision Record) formalizing ORM ownership
 
 ---
 
-*Last Updated: 2025-01-19*
+*Last Updated: 2025-01-19 (Session 2 - Architecture Discovery Complete)*
