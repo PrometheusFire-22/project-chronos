@@ -35,6 +35,7 @@ function MapController() {
 
 export default function GeospatialMap({ metric = 'Unemployment', date }: GeospatialMapProps) {
     const [geoData, setGeoData] = useState<any | null>(null);
+    const [lakesData, setLakesData] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const geoJsonLayerRef = useRef<L.GeoJSON | null>(null);
@@ -123,6 +124,14 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
             return colorScale;
         };
     }, [stats, metric, colorScale]);
+
+    // Load Great Lakes once on mount
+    useEffect(() => {
+        fetch('/data/great_lakes.geojson')
+            .then(res => res.json())
+            .then(data => setLakesData(data))
+            .catch(err => console.error('Failed to load Great Lakes:', err));
+    }, []);
 
     useEffect(() => {
         async function fetchData() {
@@ -413,6 +422,22 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                     url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
                 />
 
+                {/* Great Lakes water bodies */}
+                {lakesData && (
+                    <GeoJSON
+                        key="great-lakes"
+                        data={lakesData}
+                        style={() => ({
+                            fillColor: '#3b82f6',
+                            fillOpacity: 0.4,
+                            weight: 1,
+                            opacity: 0.8,
+                            color: '#1e40af'
+                        })}
+                    />
+                )}
+
+                {/* State/Province boundaries with data */}
                 {geoData && (
                     <GeoJSON
                         key={metric}
