@@ -72,7 +72,7 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                     '#60a5fa', // 40-60th: Medium blue
                     '#2563eb', // 60-80th: Dark blue
                     '#1e40af', // 80-95th: Deeper blue
-                    '#1e3a8a'  // 95-100th (outliers): Very dark blue (stark contrast)
+                    '#0a0a1a'  // 95-100th (outliers): Nearly black with blue tinge
                 ]);
         } else {
             // Yellow-Orange-Red palette for unemployment (warmer, attention-grabbing)
@@ -84,7 +84,7 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                     '#fb923c', // 40-60th: Orange
                     '#f97316', // 60-80th: Dark orange
                     '#dc2626', // 80-95th: Red
-                    '#7f1d1d'  // 95-100th (outliers): Very dark red (stark contrast)
+                    '#1a0000'  // 95-100th (outliers): Nearly black with red tinge
                 ]);
         }
     }, [stats, metric]);
@@ -105,7 +105,7 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                             '#60a5fa', // Medium blue
                             '#2563eb', // Dark blue
                             '#1e40af', // Deeper blue
-                            '#1e3a8a'  // Very dark blue
+                            '#0a0a1a'  // Nearly black with blue tinge
                         ]);
                 } else if (country === 'CA' && stats.caMin !== undefined && stats.caMax !== undefined) {
                     return scaleQuantile<string>()
@@ -116,7 +116,7 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                             '#60a5fa', // Medium blue
                             '#2563eb', // Dark blue
                             '#1e40af', // Deeper blue
-                            '#1e3a8a'  // Very dark blue
+                            '#0a0a1a'  // Nearly black with blue tinge
                         ]);
                 }
             }
