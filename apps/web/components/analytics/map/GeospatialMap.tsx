@@ -390,7 +390,7 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
             <MapContainer
                 key={`map-${metric}`}
                 center={[48, -95]}
-                zoom={3.5}
+                zoom={4.5}
                 maxBounds={[[15, -170], [80, -50]]} // Constrain panning to NA
                 minZoom={2.5}
                 maxZoom={8}
