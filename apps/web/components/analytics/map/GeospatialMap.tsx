@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
-import { scaleSequential } from 'd3-scale';
+import { scaleQuantile, scaleSequential } from 'd3-scale';
 import { interpolateYlOrRd } from 'd3-scale-chromatic';
 import 'leaflet/dist/leaflet.css';
 import './tooltip.css';
@@ -39,16 +39,57 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
     const [error, setError] = useState<string | null>(null);
     const geoJsonLayerRef = useRef<L.GeoJSON | null>(null);
 
-    // State for dynamic scaling
-    const [stats, setStats] = useState<{ min: number; max: number } | null>(null);
+    // State for dynamic scaling with country separation
+    const [stats, setStats] = useState<{
+        min: number;
+        max: number;
+        p95: number;
+        usMin?: number;
+        usMax?: number;
+        caMin?: number;
+        caMax?: number;
+    } | null>(null);
 
-    // Color Scale (D3) - Continuous Yellow-Orange-Red gradient
+    // Color Scale (D3) - Quantile-based with outlier capping
     const colorScale = useMemo(() => {
         if (!stats) return null;
-        // scaleSequential provides continuous interpolation (not discrete buckets)
-        return scaleSequential(interpolateYlOrRd)
-            .domain([stats.min, stats.max]);
+
+        // Use quantile scale for better distribution
+        // Cap at 95th percentile to handle outliers (territories)
+        const effectiveMax = stats.p95;
+
+        return scaleQuantile<string>()
+            .domain([stats.min, effectiveMax])
+            .range([
+                '#fef3c7', // 0-20th percentile: Very light yellow
+                '#fcd34d', // 20-40th: Light yellow
+                '#fb923c', // 40-60th: Orange
+                '#f97316', // 60-80th: Dark orange
+                '#dc2626', // 80-95th: Red
+                '#991b1b'  // 95-100th (outliers): Dark red
+            ]);
     }, [stats]);
+
+    // Country-specific color scales for HPI
+    const getCountrySpecificScale = useMemo(() => {
+        return (country: string) => {
+            if (!stats) return null;
+
+            // For HPI, use country-specific ranges
+            if (metric.toLowerCase().includes('house') || metric.toLowerCase().includes('hpi')) {
+                if (country === 'US' && stats.usMin !== undefined && stats.usMax !== undefined) {
+                    return scaleQuantile<string>()
+                        .domain([stats.usMin, stats.usMax])
+                        .range(['#fef3c7', '#fcd34d', '#fb923c', '#f97316', '#dc2626', '#991b1b']);
+                } else if (country === 'CA' && stats.caMin !== undefined && stats.caMax !== undefined) {
+                    return scaleQuantile<string>()
+                        .domain([stats.caMin, stats.caMax])
+                        .range(['#fef3c7', '#fcd34d', '#fb923c', '#f97316', '#dc2626', '#991b1b']);
+                }
+            }
+            return colorScale;
+        };
+    }, [stats, metric, colorScale]);
 
     useEffect(() => {
         async function fetchData() {
@@ -78,14 +119,28 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                    const apiResponse = await dataRes.json();
                    const dataPoints = apiResponse.data || [];
 
-                   // Calculate Min/Max for dynamic scaling
+                   // Calculate Min/Max and percentiles for dynamic scaling
+                   const values: number[] = [];
+                   const usValues: number[] = [];
+                   const caValues: number[] = [];
+
                    dataPoints.forEach((d: any) => {
                        const val = parseFloat(d.value);
                        if (!isNaN(val)) {
+                           values.push(val);
                            if (val < min) min = val;
                            if (val > max) max = val;
+
+                           // Separate by country for HPI
+                           if (d.country === 'US') usValues.push(val);
+                           else if (d.country === 'CA') caValues.push(val);
                        }
                    });
+
+                   // Calculate 95th percentile for outlier capping
+                   values.sort((a, b) => a - b);
+                   const p95Index = Math.floor(values.length * 0.95);
+                   const p95 = values[p95Index] || max;
 
                    // 3. Merge Data into Geometry
                    const mergedFeatures = geoJson.features.map((feature: any) => {
@@ -104,8 +159,18 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                         return feature;
                    });
                    combinedGeoJson = { ...geoJson, features: mergedFeatures };
-                   setStats({ min: min === Infinity ? 0 : min, max: max === -Infinity ? 10 : max });
-                   
+
+                   // Set stats with country-specific ranges
+                   setStats({
+                       min: min === Infinity ? 0 : min,
+                       max: max === -Infinity ? 10 : max,
+                       p95,
+                       usMin: usValues.length > 0 ? Math.min(...usValues) : undefined,
+                       usMax: usValues.length > 0 ? Math.max(...usValues) : undefined,
+                       caMin: caValues.length > 0 ? Math.min(...caValues) : undefined,
+                       caMax: caValues.length > 0 ? Math.max(...caValues) : undefined
+                   });
+
                 } else {
                     console.warn('Failed to fetch economic data');
                 }
@@ -125,15 +190,19 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
     // Memoize style function to prevent unnecessary re-renders
     const style = useMemo(() => (feature: any) => {
         const val = feature.properties.value ? parseFloat(feature.properties.value) : null;
+        const country = feature.properties.country;
+
+        // Use country-specific scale for HPI, otherwise use default
+        const scale = getCountrySpecificScale(country) || colorScale;
 
         return {
-            fillColor: val !== null && colorScale ? colorScale(val) : 'transparent',
+            fillColor: val !== null && scale ? scale(val) : 'transparent',
             weight: 0.5,
             opacity: 1,
             color: '#0f172a', // Slate-900 borders
             fillOpacity: 0.8
         };
-    }, [colorScale]);
+    }, [colorScale, getCountrySpecificScale]);
 
     // Memoize onEachFeature to prevent event listener churn
     // Note: We use a callback ref pattern inside if interactions start lagging,
@@ -144,7 +213,7 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
             const stateName = props.name || 'Unknown';
             const rawValue = props.value;
             const metricType = props.metric || metric.toLowerCase();
-            
+
             // Get metric configuration from registry
             const config = getMetricConfig(metricType);
             const displayValue = formatMetricValue(rawValue, config);
@@ -262,9 +331,19 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                     <div className="h-2 w-full rounded-full bg-gradient-to-r from-yellow-100 via-orange-400 to-red-600" />
                     <div className="flex justify-between text-xs text-white font-mono mt-1">
                         <span>{stats.min.toFixed(1)}</span>
-                        <span>{stats.max.toFixed(1)}</span>
+                        <span>{stats.p95.toFixed(1)}</span>
                     </div>
+                    {stats.p95 < stats.max && (
+                        <div className="text-[8px] text-orange-400 text-center mt-0.5">
+                            ⚠ Outliers: {stats.max.toFixed(1)}
+                        </div>
+                    )}
                     <div className="text-[9px] text-slate-500 text-center mt-1 uppercase tracking-widest">{metric}</div>
+                    {(stats.usMax !== undefined && stats.caMax !== undefined) && (
+                        <div className="text-[7px] text-slate-600 text-center mt-1 border-t border-slate-700 pt-1">
+                            US: {stats.usMin?.toFixed(0)}-{stats.usMax?.toFixed(0)} | CA: {stats.caMin?.toFixed(0)}-{stats.caMax?.toFixed(0)}
+                        </div>
+                    )}
                 </div>
             )}
 
@@ -275,16 +354,16 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                 maxBounds={[[15, -170], [80, -50]]} // Constrain panning to NA
                 minZoom={2.5}
                 maxZoom={8}
-                
+
                 // UX & Performance Improvements
                 scrollWheelZoom={true} // Keep scrolling working
                 wheelDebounceTime={100} // Smoother scroll zoom
                 wheelPxPerZoomLevel={60} // Less aggressive zooming on trackpads
-                
+
                 doubleClickZoom={true}
                 dragging={true}
                 bounceAtZoomLimits={true}
-                
+
                 style={{ height: '100%', width: '100%', background: '#020617' }}
                 className="z-0"
                 attributionControl={false}
@@ -295,10 +374,10 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                 />
 
                 {geoData && (
-                    <GeoJSON 
+                    <GeoJSON
                         key={metric}
-                        data={geoData} 
-                        style={style} 
+                        data={geoData}
+                        style={style}
                         onEachFeature={onEachFeature}
                     />
                 )}
