@@ -419,7 +419,6 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                         data={geoData}
                         style={style}
                         onEachFeature={onEachFeature}
-                        smoothFactor={0}
                     />
                 )}
                 <MapController />
