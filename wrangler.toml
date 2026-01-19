@@ -10,6 +10,7 @@ pages_build_output_dir = "apps/web/.open-next"
 # Public environment variables
 NEXT_PUBLIC_SITE_URL = "https://automatonicai.com"
 NEXT_PUBLIC_DIRECTUS_URL = "https://admin.automatonicai.com"
+NEXT_PUBLIC_API_URL = "https://api.automatonicai.com"
 
 
 [[hyperdrive]]
