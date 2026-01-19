@@ -52,7 +52,10 @@ geo.get('/choropleth', async (c) => {
                 SELECT
                     name,
                     country_code as country,
-                    ST_AsGeoJSON(geometry)::json as geometry
+                    ST_AsGeoJSON(
+                        ST_MakeValid(geometry),
+                        6
+                    )::json as geometry
                 FROM geospatial.ne_boundaries
                 ORDER BY name
             `;
@@ -118,7 +121,10 @@ geo.get('/choropleth', async (c) => {
                 SELECT
                     b.name as region_name,
                     b.country_code,
-                    ST_AsGeoJSON(b.geometry)::json as geometry,
+                    ST_AsGeoJSON(
+                        ST_MakeValid(b.geometry),
+                        6
+                    )::json as geometry,
                     lm.value as metric_value,
                     lm.units,
                     lm.metric_type,
