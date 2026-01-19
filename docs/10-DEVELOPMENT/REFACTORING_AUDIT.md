@@ -151,36 +151,49 @@ Multiple `.env` files:
 
 ## 4. Cleanup Plan
 
-### Phase 1: Fix Great Lakes Feature (Immediate)
-- [ ] Fix file path for Great Lakes GeoJSON
-- [ ] Test choropleth map rendering
-- [ ] Verify deployment works
+### Phase 1: Fix Great Lakes Feature (Immediate) ✅ COMPLETED
+- [x] Fix file path for Great Lakes GeoJSON - **Fixed 2025-01-19**
+- [x] Test choropleth map rendering - Deployed to production
+- [x] Verify deployment works - Pushed to main
 
-### Phase 2: Remove Ghost Files
-- [ ] Delete `tmp/` directory contents
-- [ ] Archive or delete obsolete scripts in `scripts/ops/`
+### Phase 2: Remove Ghost Files ✅ COMPLETED
+- [x] Delete `tmp/` directory contents - **Deleted 2025-01-19**
+- [x] Remove root-level log files - **Removed from git tracking**
+- [x] Remove `apps/api/*.log` files - **Removed from git tracking**
+- [ ] Archive or delete obsolete scripts in `scripts/ops/` → **CHRONOS-436**
 - [ ] Move `scripts/_archive/` to proper archive
-- [ ] Remove root-level log files
-- [ ] Add proper `.gitignore` entries
 
-### Phase 3: Remove Large Files from Git
-- [ ] Add large SQL dumps to `.gitignore`
-- [ ] Consider git-lfs for necessary large files
-- [ ] Remove from git history if needed (BFG or filter-branch)
+### Phase 3: Remove Large Files from Git ✅ VERIFIED
+- [x] Large SQL dumps already gitignored (not in git history)
+- [ ] Delete local SQL dumps (~1.5GB) → **CHRONOS-437**
+- [ ] Document data import process
 
-### Phase 4: Consolidate Duplications
-- [ ] Create unified Jira client in `src/chronos/integrations/jira/`
-- [ ] Create unified Confluence client
-- [ ] Document which database layer to use when
+### Phase 4: Consolidate Duplications → **Jira Sprint Created**
+- [ ] Create unified Jira client → **CHRONOS-434**
+- [ ] Create unified Confluence client → **CHRONOS-435**
+- [ ] Document dual ORM strategy → **CHRONOS-439**
 
 ### Phase 5: Organize Configuration
-- [ ] Create single `.env.example` with all variables
-- [ ] Document environment strategy
-- [ ] Consolidate deployment configs
+- [ ] Consolidate environment files → **CHRONOS-438**
 
 ---
 
-## 5. Git History Context (Recent Commits)
+## 5. Jira Sprint: Technical Debt Elimination
+
+**Epic:** [CHRONOS-433](https://automatonicai.atlassian.net/browse/CHRONOS-433) - Technical Debt Elimination Sprint
+
+| Ticket | Summary | Status |
+|--------|---------|--------|
+| CHRONOS-434 | Consolidate Jira integrations (7 → 1) | To Do |
+| CHRONOS-435 | Consolidate Confluence integrations (5 → 1) | To Do |
+| CHRONOS-436 | Archive/delete geospatial debugging scripts | To Do |
+| CHRONOS-437 | Clean up large SQL data dumps | To Do |
+| CHRONOS-438 | Consolidate environment configuration (11+ → 3) | To Do |
+| CHRONOS-439 | Document dual ORM architecture strategy | To Do |
+
+---
+
+## 6. Git History Context (Recent Commits)
 
 The recent git history shows extensive work on the choropleth/Great Lakes feature:
 
@@ -201,12 +214,13 @@ This shows many iterations attempting to fix geometry rendering issues.
 
 ---
 
-## 6. Next Steps
+## 7. Next Steps
 
-1. **Fix the Great Lakes bug** - This is the blocker for the feature
-2. **Test the fix** - Ensure choropleth renders correctly
-3. **Execute cleanup** - Remove artifacts systematically
-4. **Document** - Update this file as we progress
+1. ~~**Fix the Great Lakes bug**~~ ✅ DONE
+2. ~~**Test the fix**~~ ✅ Deployed
+3. ~~**Create Jira sprint**~~ ✅ CHRONOS-433 created
+4. **Execute Jira sprint** - Work through tickets systematically
+5. **Architecture audit** - Review orchestration and deployment
 
 ---
 
