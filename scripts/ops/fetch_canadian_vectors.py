@@ -23,7 +23,7 @@ UNEMPLOYMENT_COORDS = {
         "Prince Edward Island": "3.7.1.1.1.1",
         "Nova Scotia": "4.7.1.1.1.1",
         "New Brunswick": "5.7.1.1.1.1",
-        "Quebec": "6.7.1.1.1.1",
+        "Québec": "6.7.1.1.1.1",
         "Ontario": "7.7.1.1.1.1",
         "Manitoba": "8.7.1.1.1.1",
         "Saskatchewan": "9.7.1.1.1.1",
@@ -41,7 +41,7 @@ HPI_COORDS = {
         "Prince Edward Island": "5.1",
         "Nova Scotia": "7.1",
         "New Brunswick": "9.1",
-        "Quebec": "11.1",
+        "Québec": "11.1",
         "Ontario": "17.1",
         "Manitoba": "29.1",
         "Saskatchewan": "31.1",
@@ -64,10 +64,10 @@ def fetch_vector_ids(coords: dict[str, str], product_id: int) -> dict[str, str]:
     try:
         headers = {
             "Content-Type": "application/json",
-            "Accept": "application/json",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
         }
         response = requests.post(STATSCAN_API_URL, json=payload, headers=headers)
+        if response.status_code != 200:
+            logger.error(f"Status: {response.status_code}, Content: {response.text[:200]}")
         response.raise_for_status()
         results = response.json()
 
@@ -115,7 +115,7 @@ def append_to_catalog(vectors: dict[str, str], category: str, subcategory: str, 
         # series_id,source,status,series_name,asset_class,geography_type,geography_name,frequency,category,subcategory
         new_row = {
             "series_id": vector_id,
-            "source": "Valet",
+            "source": "StatsCan",
             "status": "Active",
             "series_name": f"{subcategory} - {region}",
             "asset_class": "Macro",
@@ -159,17 +159,18 @@ def main():
     logger.info("Starting Canadian Vector Sync...")
 
     # 1. Unemployment (Provincial)
-    # logger.info("Fetching Unemployment Vectors...")
-    # unemployment_vectors = fetch_vector_ids(UNEMPLOYMENT_COORDS["Provincial"], 14100287)
-    # append_to_catalog(unemployment_vectors, "Employment", "Unemployment Rate", "Monthly")
+    logger.info("Fetching Unemployment Vectors...")
+    unemployment_vectors = fetch_vector_ids(UNEMPLOYMENT_COORDS["Provincial"], 14100287)
+    append_to_catalog(unemployment_vectors, "Employment", "Unemployment Rate", "Monthly")
 
     # 2. HPI (Provincial)
-    # logger.info("Fetching HPI Vectors...")
-    # hpi_vectors = fetch_vector_ids(HPI_COORDS["Provincial"], 18100205)
-    # append_to_catalog(hpi_vectors, "Housing", "New Housing Price Index", "Monthly")
+    logger.info("Fetching HPI Vectors...")
+    hpi_vectors = fetch_vector_ids(HPI_COORDS["Provincial"], 18100205)
+    append_to_catalog(hpi_vectors, "Housing", "New Housing Price Index", "Monthly")
 
     # 3. Deactivate FRED Series
     logger.info("Deactivating FRED series...")
+    deactivate_fred_series()
     deactivate_fred_series()
 
     logger.info("Sync Complete.")

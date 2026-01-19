@@ -9,11 +9,11 @@ Supported sources:
 - Valet (Bank of Canada)
 - Future: BOE, ECB, BOJ, etc.
 """
+import argparse
 import csv
 import os
 import sys
 import time
-import argparse
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -22,6 +22,7 @@ from dotenv import load_dotenv
 
 # Import plugins
 from chronos.ingestion.fred import FREDPlugin
+from chronos.ingestion.statscan import StatsCanPlugin
 from chronos.ingestion.valet import ValetPlugin
 
 # Load environment
@@ -41,6 +42,7 @@ DB_CONFIG = {
 PLUGINS = {
     "FRED": FREDPlugin(os.getenv("FRED_API_KEY")),
     "Valet": ValetPlugin(),
+    "StatsCan": StatsCanPlugin(),
     # Add future plugins here:
     # "BOE": BOEPlugin(os.getenv("BOE_API_KEY")),
     # "ECB": ECBPlugin(),
@@ -201,10 +203,14 @@ def insert_observations(conn, series_id: str, observations: list, source_id: int
 
 def main():
     """Main ingestion orchestrator"""
-    parser = argparse.ArgumentParser(description="Project Chronos: Universal Economic Data Ingestion")
+    parser = argparse.ArgumentParser(
+        description="Project Chronos: Universal Economic Data Ingestion"
+    )
     parser.add_argument("--source", help="Filter by data source (FRED, Valet)")
     parser.add_argument("--series", action="append", help="Filter by series ID (can be repeated)")
-    parser.add_argument("--geography", help="Filter by geography name (e.g., Canada, United States)")
+    parser.add_argument(
+        "--geography", help="Filter by geography name (e.g., Canada, United States)"
+    )
     args = parser.parse_args()
 
     print("\n" + "=" * 60)
@@ -215,7 +221,10 @@ def main():
 
     # Locate catalog (go up 4 levels: file -> ingestion -> chronos -> src -> project root)
     catalog_path = (
-        Path(__file__).parent.parent.parent.parent / "database" / "seeds" / "time-series_catalog.csv"
+        Path(__file__).parent.parent.parent.parent
+        / "database"
+        / "seeds"
+        / "time-series_catalog.csv"
     )
 
     if not catalog_path.exists():
@@ -288,9 +297,7 @@ def main():
             insert_series_metadata(conn, actual_source_id, series_id, series)
 
             # Insert observations
-            inserted, skipped = insert_observations(
-                conn, series_id, observations, actual_source_id
-            )
+            inserted, skipped = insert_observations(conn, series_id, observations, actual_source_id)
 
             print(f"    ✅ Inserted {inserted} observations (skipped {skipped})")
 

@@ -83,3 +83,24 @@ DEXSZUS,FRED,Deprecated,Swiss Franc to US Dollar Exchange Rate,Foreign Exchange,
 CANGDPASQ,FRED,Deprecated,Real Gross Domestic Product (FRED Source),Macro,National,Canada,Quarterly,Growth,GDP
 CANURAMS,FRED,Deprecated,Unemployment Rate (FRED Source),Macro,National,Canada,Monthly,Employment,Unemployment
 CANCPIALLMINMEI,FRED,Deprecated,Consumer Price Index: All Items (FRED Source),Macro,National,Canada,Monthly,Inflation,CPI
+# CANADA PROVINCIAL DATA (20 series)
+v2063004,StatsCan,Active,Unemployment Rate - Newfoundland and Labrador,Macro,Provincial,Newfoundland and Labrador,Monthly,Employment,Unemployment Rate
+v2063193,StatsCan,Active,Unemployment Rate - Prince Edward Island,Macro,Provincial,Prince Edward Island,Monthly,Employment,Unemployment Rate
+v2063382,StatsCan,Active,Unemployment Rate - Nova Scotia,Macro,Provincial,Nova Scotia,Monthly,Employment,Unemployment Rate
+v2063571,StatsCan,Active,Unemployment Rate - New Brunswick,Macro,Provincial,New Brunswick,Monthly,Employment,Unemployment Rate
+v2063760,StatsCan,Active,Unemployment Rate - Québec,Macro,Provincial,Québec,Monthly,Employment,Unemployment Rate
+v2063949,StatsCan,Active,Unemployment Rate - Ontario,Macro,Provincial,Ontario,Monthly,Employment,Unemployment Rate
+v2064138,StatsCan,Active,Unemployment Rate - Manitoba,Macro,Provincial,Manitoba,Monthly,Employment,Unemployment Rate
+v2064327,StatsCan,Active,Unemployment Rate - Saskatchewan,Macro,Provincial,Saskatchewan,Monthly,Employment,Unemployment Rate
+v2064516,StatsCan,Active,Unemployment Rate - Alberta,Macro,Provincial,Alberta,Monthly,Employment,Unemployment Rate
+v2064705,StatsCan,Active,Unemployment Rate - British Columbia,Macro,Provincial,British Columbia,Monthly,Employment,Unemployment Rate
+v111955448,StatsCan,Active,New Housing Price Index - Newfoundland and Labrador,Macro,Provincial,Newfoundland and Labrador,Monthly,Housing,New Housing Price Index
+v111955454,StatsCan,Active,New Housing Price Index - Prince Edward Island,Macro,Provincial,Prince Edward Island,Monthly,Housing,New Housing Price Index
+v111955460,StatsCan,Active,New Housing Price Index - Nova Scotia,Macro,Provincial,Nova Scotia,Monthly,Housing,New Housing Price Index
+v111955466,StatsCan,Active,New Housing Price Index - New Brunswick,Macro,Provincial,New Brunswick,Monthly,Housing,New Housing Price Index
+v111955472,StatsCan,Active,New Housing Price Index - Québec,Macro,Provincial,Québec,Monthly,Housing,New Housing Price Index
+v111955490,StatsCan,Active,New Housing Price Index - Ontario,Macro,Provincial,Ontario,Monthly,Housing,New Housing Price Index
+v111955526,StatsCan,Active,New Housing Price Index - Manitoba,Macro,Provincial,Manitoba,Monthly,Housing,New Housing Price Index
+v111955532,StatsCan,Active,New Housing Price Index - Saskatchewan,Macro,Provincial,Saskatchewan,Monthly,Housing,New Housing Price Index
+v111955541,StatsCan,Active,New Housing Price Index - Alberta,Macro,Provincial,Alberta,Monthly,Housing,New Housing Price Index
+v111955550,StatsCan,Active,New Housing Price Index - British Columbia,Macro,Provincial,British Columbia,Monthly,Housing,New Housing Price Index
