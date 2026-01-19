@@ -65,22 +65,42 @@
 | **Python** | SQLAlchemy | Alembic | Data pipelines, economic time series |
 | **TypeScript** | Drizzle | Drizzle-kit | Frontend, API, content |
 
-### 2.2 Schema Namespaces
+### 2.2 Schema Inventory (Actual)
 
-| Schema | Owner | Purpose |
-|--------|-------|---------|
-| `public` | Mixed | Default, needs audit |
-| `analytics` | Python | Views for economic data |
-| `geospatial` | Python | PostGIS geographic data |
-| `directus_*` | Directus | CMS tables (auto-managed) |
-| `twenty_*` | TwentyCRM | CRM tables (auto-managed) |
+| Schema | Tables | Size | Owner | Purpose |
+|--------|--------|------|-------|---------|
+| `public` | 46 | ~10MB | **MIXED** | Directus tables + cms_* + alembic + users |
+| `core` | 53 | ~2MB | TwentyCRM | CRM metadata (TypeORM managed) |
+| `workspace_*` | 29 | ? | TwentyCRM | CRM data per workspace |
+| `geospatial` | 14 | **~1.1GB** | Python | PostGIS boundaries (US/CA) |
+| `analytics` | 6 views | - | Python | Materialized views for API |
+| `metadata` | 4 | ~1.4MB | Python | Series metadata, ingestion logs |
+| `timeseries` | 1 | ~48KB | Python | economic_observations (hypertable) |
+| `tiger` | 34 | ? | PostGIS | US Census TIGER data |
 
-### 2.3 Questions to Resolve
+**Key Findings:**
+- Directus tables are in `public` (not separate schema)
+- TwentyCRM uses `core` + dynamic `workspace_*` schemas
+- Geospatial data is **1.1GB** - largest by far
+- `public` schema is a dumping ground (needs cleanup)
 
-1. **Migration Conflicts**: How to prevent Alembic and Drizzle from conflicting?
-2. **Schema Boundaries**: Clear ownership rules for each namespace?
-3. **Performance**: Is shared DB causing contention?
-4. **Backups**: What's the backup strategy for each schema?
+### 2.3 Current State (Honest Assessment)
+
+| Issue | Reality |
+|-------|---------|
+| **Schema Ownership** | None. No clear boundaries or rules. |
+| **Performance** | Likely contention from shared DB. |
+| **Backups** | pgbackrest to S3 (cost-efficient). No schema-level strategy. |
+| **Migration Conflicts** | Alembic and Drizzle both exist, unclear when to use which. |
+
+### 2.4 ORM Decision Context
+
+**History:**
+- Started with Python/Alembic for data science exploration
+- Moved to Next.js/TypeScript for frontend scalability
+- Now have both ecosystems with no clear boundary
+
+**Goal:** Simplify. One clear strategy going forward.
 
 ---
 
@@ -107,38 +127,86 @@ project-chronos/
     └── integrations/ # External service clients
 ```
 
-### 3.2 Questions to Resolve
+### 3.2 Current State (Honest Assessment)
 
-1. **Python Integration**: How does Python CLI fit into Nx monorepo?
-2. **Dependency Management**: pnpm for JS, pip/poetry for Python?
-3. **Build Pipeline**: How do Nx tasks coordinate Python/TS builds?
-4. **Testing**: Unified test strategy across ecosystems?
+| Area | Reality |
+|------|---------|
+| **Python in Nx** | Unknown. Python existed before Nx was added. No integration. |
+| **Dependency Mgmt** | pnpm for JS. Poetry for Python BUT also .venv dirs (conflicting). |
+| **Build Pipeline** | Nx only coordinates TS builds. Python is separate/manual. |
+| **Testing** | No unified strategy. Dated Python tests cause more problems than they solve. |
+
+**History:**
+- Started as Python-only (Plotly Dash planned)
+- Moved to Next.js for scalability/extensibility
+- Added Nx for monorepo management (TS-focused)
+- Python CLI now orphaned in structure
 
 ---
 
-## 4. Infrastructure (To Map)
+## 4. Infrastructure (MAPPED)
 
-### 4.1 AWS Lightsail Inventory
+### 4.1 AWS Lightsail - Single VM
 
-| Instance | Purpose | Specs | Status |
-|----------|---------|-------|--------|
-| TBD | PostgreSQL + PostGIS | TBD | Unknown |
-| TBD | Directus CMS | TBD | Unknown |
-| TBD | Node.js API? | TBD | Unknown |
+**IP:** `16.52.210.100`
+**SSH:** `ssh -i <key> ubuntu@16.52.210.100`
+**Path:** `~/chronos-db`
+
+| Container | Port | Purpose | Public URL |
+|-----------|------|---------|------------|
+| `chronos-db` | 5432 | PostgreSQL 16.4 + TimescaleDB + PostGIS + pgvector + AGE | Internal only |
+| `chronos-directus` | 8055 | Directus CMS | https://admin.automatonicai.com |
+| `twenty` | 3020 | TwentyCRM | https://crm.automatonicai.com |
+
+**Note:** All three services run on ONE Lightsail VM via Docker Compose.
 
 ### 4.2 Cloudflare Services
 
 | Service | Purpose | Configuration |
 |---------|---------|---------------|
-| DNS | Domain routing | automatonicai.com |
-| R2 | Object storage (DAM) | Directus media |
-| Workers | Edge functions | apps/worker |
+| DNS | Domain routing | automatonicai.com, admin.*, crm.* |
+| R2 | Object storage (DAM) | **NOT CONFIGURED** - Directus uses local storage |
+| Workers | Edge functions | apps/worker (deployment status unknown) |
 
 ### 4.3 Vercel
 
 | Project | Purpose | Domain |
 |---------|---------|--------|
 | Web | Next.js app | automatonicai.com |
+
+### 4.4 Simplified Architecture
+
+```
+                    CLOUDFLARE (DNS)
+                          │
+          ┌───────────────┼───────────────┐
+          │               │               │
+          ▼               ▼               ▼
+    automatonicai    admin.automaton  crm.automaton
+      .com             icai.com        icai.com
+          │               │               │
+          ▼               │               │
+       VERCEL             │               │
+    (Next.js app)         │               │
+          │               └───────┬───────┘
+          │                       │
+          │                       ▼
+          │            AWS LIGHTSAIL (single VM)
+          │            ┌─────────────────────┐
+          │            │  Docker Compose     │
+          └───────────►│  ┌───────────────┐  │
+           API calls   │  │ PostgreSQL    │  │
+                       │  │ + PostGIS     │  │
+                       │  │ + TimescaleDB │  │
+                       │  └───────────────┘  │
+                       │  ┌───────────────┐  │
+                       │  │   Directus    │  │
+                       │  └───────────────┘  │
+                       │  ┌───────────────┐  │
+                       │  │  TwentyCRM    │  │
+                       │  └───────────────┘  │
+                       └─────────────────────┘
+```
 
 ---
 
@@ -203,24 +271,53 @@ External APIs (FRED, StatsCan, etc.)
 
 ---
 
-## 7. Open Questions
+## 7. Decisions Needed
 
-### 7.1 Infrastructure
-- [ ] Exact Lightsail instance inventory
-- [ ] Network topology between components
-- [ ] Cost breakdown by service
-- [ ] Security group configuration
+### 7.1 ORM Simplification (PRIORITY)
 
-### 7.2 Database
-- [ ] Complete schema inventory
-- [ ] Unused table identification
-- [ ] Migration workflow documentation
-- [ ] Performance metrics baseline
+**Current State:** Two ORMs (Alembic + Drizzle) with no clear boundaries.
 
-### 7.3 Deployment
-- [ ] CI/CD pipeline documentation
-- [ ] Environment promotion strategy
-- [ ] Rollback procedures
+**Options:**
+
+| Option | Pros | Cons |
+|--------|------|------|
+| **A: All Drizzle** | Single toolchain, TS-native | Need to migrate Python ingestion to TS |
+| **B: All Alembic** | Keep Python pipelines | Frontend devs need Python knowledge |
+| **C: Clear Boundaries** | Keep both, document ownership | Complexity remains |
+
+**Recommended: Option C with strict rules:**
+- Alembic owns: `timeseries`, `geospatial`, `metadata`, `analytics`
+- Drizzle owns: `public.cms_*`, `public.users*`, any new app tables
+- Hands off: `core`, `workspace_*` (TwentyCRM), `directus_*` (Directus)
+
+### 7.2 Public Schema Cleanup
+
+Tables in `public` that need decisions:
+
+| Table | Owner | Action |
+|-------|-------|--------|
+| `directus_*` | Directus | Leave (auto-managed) |
+| `cms_*` | Drizzle? | Move to dedicated schema or keep |
+| `users`, `users_sessions` | Drizzle | Keep or merge with Directus auth |
+| `alembic_version` | Alembic | Keep (migration tracking) |
+| `backup_test` | Unknown | **DELETE** |
+| `spatial_ref_sys` | PostGIS | Leave (system table) |
+
+### 7.3 Python Dependency Cleanup
+
+**Current:** Both Poetry and .venv exist, causing confusion.
+
+**Recommendation:**
+1. Delete all `.venv` directories
+2. Use Poetry exclusively (`poetry install`, `poetry run`)
+3. Add `.venv/` to `.gitignore` if not already
+
+### 7.4 Remaining Questions
+
+- [ ] Cost breakdown by service (Lightsail, Vercel, Cloudflare)
+- [ ] Security group configuration audit
+- [ ] Backup verification (pgbackrest to S3)
+- [ ] CI/CD pipeline (Vercel auto-deploy? Manual for Lightsail?)
 
 ---
 
