@@ -127,7 +127,7 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
 
     // Load Great Lakes once on mount
     useEffect(() => {
-        fetch('/data/great_lakes.geojson')
+        fetch('/api-proxy/geo/lakes')
             .then(res => res.json())
             .then(data => setLakesData(data))
             .catch(err => console.error('Failed to load Great Lakes:', err));

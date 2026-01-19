@@ -182,4 +182,23 @@ geo.get('/choropleth', async (c) => {
     }
 });
 
+/**
+ * GET /api/geo/lakes
+ * Returns GeoJSON for Great Lakes water bodies
+ */
+geo.get('/lakes', async (c) => {
+    try {
+        const fs = await import('fs/promises');
+        const path = await import('path');
+
+        const filePath = path.join(process.cwd(), 'data', 'great_lakes.geojson');
+        const data = await fs.readFile(filePath, 'utf-8');
+
+        return c.json(JSON.parse(data));
+    } catch (error) {
+        console.error('[GEO] Error loading Great Lakes:', error);
+        return c.json({ error: 'Failed to load Great Lakes data' }, 500);
+    }
+});
+
 export default geo;
