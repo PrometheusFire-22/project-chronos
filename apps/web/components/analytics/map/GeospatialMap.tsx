@@ -51,6 +51,7 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
     } | null>(null);
 
     // Color Scale (D3) - Quantile-based with outlier capping
+    // Different color schemes for different metrics
     const colorScale = useMemo(() => {
         if (!stats) return null;
 
@@ -58,17 +59,35 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
         // Cap at 95th percentile to handle outliers (territories)
         const effectiveMax = stats.p95;
 
-        return scaleQuantile<string>()
-            .domain([stats.min, effectiveMax])
-            .range([
-                '#fef3c7', // 0-20th percentile: Very light yellow
-                '#fcd34d', // 20-40th: Light yellow
-                '#fb923c', // 40-60th: Orange
-                '#f97316', // 60-80th: Dark orange
-                '#dc2626', // 80-95th: Red
-                '#991b1b'  // 95-100th (outliers): Dark red
-            ]);
-    }, [stats]);
+        // Metric-specific color palettes
+        const isHPI = metric.toLowerCase().includes('house') || metric.toLowerCase().includes('hpi');
+
+        if (isHPI) {
+            // Blues palette for HPI (cooler, professional)
+            return scaleQuantile<string>()
+                .domain([stats.min, effectiveMax])
+                .range([
+                    '#eff6ff', // 0-20th percentile: Very light blue
+                    '#bfdbfe', // 20-40th: Light blue
+                    '#60a5fa', // 40-60th: Medium blue
+                    '#2563eb', // 60-80th: Dark blue
+                    '#1e40af', // 80-95th: Deeper blue
+                    '#1e3a8a'  // 95-100th (outliers): Very dark blue (stark contrast)
+                ]);
+        } else {
+            // Yellow-Orange-Red palette for unemployment (warmer, attention-grabbing)
+            return scaleQuantile<string>()
+                .domain([stats.min, effectiveMax])
+                .range([
+                    '#fef3c7', // 0-20th percentile: Very light yellow
+                    '#fcd34d', // 20-40th: Light yellow
+                    '#fb923c', // 40-60th: Orange
+                    '#f97316', // 60-80th: Dark orange
+                    '#dc2626', // 80-95th: Red
+                    '#7f1d1d'  // 95-100th (outliers): Very dark red (stark contrast)
+                ]);
+        }
+    }, [stats, metric]);
 
     // Country-specific color scales for HPI
     const getCountrySpecificScale = useMemo(() => {
@@ -80,11 +99,25 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                 if (country === 'US' && stats.usMin !== undefined && stats.usMax !== undefined) {
                     return scaleQuantile<string>()
                         .domain([stats.usMin, stats.usMax])
-                        .range(['#fef3c7', '#fcd34d', '#fb923c', '#f97316', '#dc2626', '#991b1b']);
+                        .range([
+                            '#eff6ff', // Very light blue
+                            '#bfdbfe', // Light blue
+                            '#60a5fa', // Medium blue
+                            '#2563eb', // Dark blue
+                            '#1e40af', // Deeper blue
+                            '#1e3a8a'  // Very dark blue
+                        ]);
                 } else if (country === 'CA' && stats.caMin !== undefined && stats.caMax !== undefined) {
                     return scaleQuantile<string>()
                         .domain([stats.caMin, stats.caMax])
-                        .range(['#fef3c7', '#fcd34d', '#fb923c', '#f97316', '#dc2626', '#991b1b']);
+                        .range([
+                            '#eff6ff', // Very light blue
+                            '#bfdbfe', // Light blue
+                            '#60a5fa', // Medium blue
+                            '#2563eb', // Dark blue
+                            '#1e40af', // Deeper blue
+                            '#1e3a8a'  // Very dark blue
+                        ]);
                 }
             }
             return colorScale;
@@ -322,13 +355,19 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
             )}
 
             {/* Dynamic Legend - Same as before */}
-            {stats && (
-                <div className="absolute bottom-6 right-6 z-[500] bg-slate-900/90 backdrop-blur border border-slate-700 p-3 rounded-lg shadow-2xl flex flex-col gap-1 w-48">
-                    <div className="flex justify-between text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">
-                        <span>Low</span>
-                        <span>High</span>
-                    </div>
-                    <div className="h-2 w-full rounded-full bg-gradient-to-r from-yellow-100 via-orange-400 to-red-600" />
+            {stats && (() => {
+                const isHPI = metric.toLowerCase().includes('house') || metric.toLowerCase().includes('hpi');
+                const gradientClass = isHPI
+                    ? 'bg-gradient-to-r from-blue-50 via-blue-400 to-blue-900'
+                    : 'bg-gradient-to-r from-yellow-100 via-orange-400 to-red-900';
+
+                return (
+                    <div className="absolute bottom-6 right-6 z-[500] bg-slate-900/90 backdrop-blur border border-slate-700 p-3 rounded-lg shadow-2xl flex flex-col gap-1 w-48">
+                        <div className="flex justify-between text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">
+                            <span>Low</span>
+                            <span>High</span>
+                        </div>
+                        <div className={`h-2 w-full rounded-full ${gradientClass}`} />
                     <div className="flex justify-between text-xs text-white font-mono mt-1">
                         <span>{stats.min.toFixed(1)}</span>
                         <span>{stats.p95.toFixed(1)}</span>
@@ -345,7 +384,8 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                         </div>
                     )}
                 </div>
-            )}
+                );
+            })()}
 
             <MapContainer
                 key={`map-${metric}`}
