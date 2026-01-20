@@ -66,7 +66,9 @@
       "Bash(pnpm run deploy)",
       "Bash(git log:*)",
       "Bash(node scripts/verify-directus-content.cjs:*)",
-      "mcp__postgres__query"
+      "mcp__postgres__query",
+      "mcp__atlassian__createJiraIssue",
+      "mcp__atlassian__editJiraIssue"
     ],
     "deny": [],
     "ask": []

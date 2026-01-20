@@ -66,78 +66,36 @@ cp apps/web/public/data/great_lakes.geojson apps/api/data/
 
 ## 3. Identified Issues
 
-### 3.1 Duplicated Functionality
+### 3.1 Duplicated Functionality - ✅ RESOLVED
 
-#### Jira Integration (7 implementations!)
-1. `/src/chronos/cli/jira_ingest.py`
-2. `/src/chronos/cli/jira_update.py`
-3. `/scripts/ops/jira_close_ticket.py`
-4. `/scripts/ops/jira_list_sprints.py`
-5. `/src/_deprecated/jira_cli.py`
-6. `/scripts/_archive/historical/cleanup_jira_backlog.py`
-7. `/scripts/_archive/historical/organize_jira_retroactive.py`
+#### Jira Integration - ✅ DELETED (2025-01-19)
+All 10 custom Jira scripts deleted. **Superseded by Atlassian CLI + MCP tools.**
 
-#### Confluence Integration (5 implementations)
-1. `/src/chronos/cli/confluence_cli.py`
-2. `/scripts/ops/bulk_sync_confluence.py`
-3. `/scripts/ops/organize_confluence_hierarchy.py`
-4. `/scripts/ops/cleanup_confluence_duplicates.py`
-5. `/scripts/ops/sync_docs.py`
+#### Confluence Integration - ✅ DELETED (2025-01-19)
+All 7 Confluence scripts deleted. **Never worked properly. Superseded by Atlassian MCP.**
 
-#### Database Access (2 ORMs)
-- **Python:** SQLAlchemy in `src/chronos/database/`
-- **TypeScript:** Drizzle ORM in `packages/database/`
+#### Database Access (2 ORMs) - ✅ DOCUMENTED
+- **Python:** SQLAlchemy/Alembic → `timeseries.*`, `geospatial.*`, `metadata.*`, `analytics.*`
+- **TypeScript:** Drizzle → `public.cms_*`, `public.app_*`
 
-### 3.2 Troubleshooting Artifacts (Ghost Files)
+### 3.2 Troubleshooting Artifacts - ✅ DELETED (2025-01-19)
 
-#### scripts/ops/ - Geospatial debugging scripts
-- `analyze_canadian_geo.py`
-- `check_canadian_series.py`
-- `check_choropleth_view.py`
-- `fetch_canadian_vectors.py`
-- `fetch_provincial_statscan.py`
-- `fix_lakes_geometry.py`
-- `ingest_canadian_territories.py`
-- `ingest_statscan_provincial.py`
-- `inspect_shapefile.py`
-- `investigate_lakes_geometry.py`
-- `replace_us_states.py`
-- `retry_failed_hpi.py`
-- `verify_cb_shapefile.py`
+All ghost files removed:
+- ~~13 geospatial debug scripts~~ **DELETED**
+- ~~tmp/ directory contents~~ **DELETED** (previous session)
+- ~~Root level logs~~ **GITIGNORED** (previous session)
+- ~~apps/api/ logs~~ **GITIGNORED** (previous session)
 
-#### tmp/ - Should be deleted
-- `describe_economic_observations.py`
-- `describe_series_metadata.py`
-- `list_all_tables.py`
-- `list_geospatial_tables.py`
-- `Jira.csv`
-- `Jira_database_backups_&_geospatial.csv`
-- `jira_description.txt`
+### 3.3 Large Files - ✅ DELETED (2025-01-19)
 
-#### Root level logs - Should be gitignored
-- `api-direct.log`
-- `api-final.log`
-- `api-running.log`
-- `build_output.log`
-- `test-server.log`
-- `test-server-db.log`
-- `test-server-retry.log`
+Deleted ~1.4GB of SQL dumps:
+- ~~`ca_census_divisions.sql` (534MB)~~ **DELETED**
+- ~~`ca_provinces.sql` (511MB)~~ **DELETED**
+- ~~`us_counties.sql` (253MB)~~ **DELETED**
+- ~~`us_cbsa.sql` (105MB)~~ **DELETED**
+- ~~`us_csa.sql` (40MB)~~ **DELETED**
 
-#### apps/api/ logs - Should be gitignored
-- `api-3005.log`
-- `api-debug.log`
-- `api.log`
-- `api-minimal.log`
-- `api-step2.log`
-- `api-step3.log`
-- `api-stripped.log`
-
-### 3.3 Large Files That Shouldn't Be in Git
-- `ca_census_divisions.sql` (~500MB)
-- `ca_provinces.sql` (~500MB)
-- `us_cbsa.sql`, `us_counties.sql`, `us_csa.sql`, `us_metdiv.sql`
-- `/backups/sprint2_complete_20251119.dump` (~531MB)
-- `/backups/sprint2_final_20251119.dump` (~531MB)
+Note: Backup dumps already gitignored.
 
 ### 3.4 Scattered Configuration
 Multiple `.env` files:
@@ -149,32 +107,30 @@ Multiple `.env` files:
 
 ---
 
-## 4. Cleanup Plan
+## 4. Cleanup Plan - ✅ COMPLETED
 
-### Phase 1: Fix Great Lakes Feature (Immediate) ✅ COMPLETED
-- [x] Fix file path for Great Lakes GeoJSON - **Fixed 2025-01-19**
-- [x] Test choropleth map rendering - Deployed to production
-- [x] Verify deployment works - Pushed to main
+### Phase 1: Fix Great Lakes Feature ✅
+- [x] Fix file path for Great Lakes GeoJSON
+- [x] Test choropleth map rendering
+- [x] Verify deployment works
 
-### Phase 2: Remove Ghost Files ✅ COMPLETED
-- [x] Delete `tmp/` directory contents - **Deleted 2025-01-19**
-- [x] Remove root-level log files - **Removed from git tracking**
-- [x] Remove `apps/api/*.log` files - **Removed from git tracking**
-- [ ] Archive or delete obsolete scripts in `scripts/ops/` → **CHRONOS-436**
-- [ ] Move `scripts/_archive/` to proper archive
+### Phase 2: Remove Ghost Files ✅
+- [x] Delete `tmp/` directory contents
+- [x] Remove root-level log files
+- [x] Remove `apps/api/*.log` files
+- [x] Delete 13 geospatial debug scripts - **2025-01-19**
+- [x] Remove empty `scripts/_archive/` directory - **2025-01-19**
 
-### Phase 3: Remove Large Files from Git ✅ VERIFIED
-- [x] Large SQL dumps already gitignored (not in git history)
-- [ ] Delete local SQL dumps (~1.5GB) → **CHRONOS-437**
-- [ ] Document data import process
+### Phase 3: Remove Large Files ✅
+- [x] Delete ~1.4GB SQL dumps from disk - **2025-01-19**
 
-### Phase 4: Consolidate Duplications → **Jira Sprint Created**
-- [ ] Create unified Jira client → **CHRONOS-434**
-- [ ] Create unified Confluence client → **CHRONOS-435**
-- [ ] Document dual ORM strategy → **CHRONOS-439**
+### Phase 4: Consolidate Duplications ✅
+- [x] Delete all Jira scripts (superseded by Atlassian CLI/MCP) - **2025-01-19**
+- [x] Delete all Confluence scripts (never worked, superseded by MCP) - **2025-01-19**
+- [x] Document dual ORM strategy - **See ARCHITECTURE_DISCOVERY.md**
 
 ### Phase 5: Organize Configuration
-- [ ] Consolidate environment files → **CHRONOS-438**
+- [ ] Consolidate environment files → **CHRONOS-438** (deferred)
 
 ---
 
@@ -184,12 +140,12 @@ Multiple `.env` files:
 
 | Ticket | Summary | Status |
 |--------|---------|--------|
-| CHRONOS-434 | Consolidate Jira integrations (7 → 1) | To Do |
-| CHRONOS-435 | Consolidate Confluence integrations (5 → 1) | To Do |
-| CHRONOS-436 | Archive/delete geospatial debugging scripts | To Do |
-| CHRONOS-437 | Clean up large SQL data dumps | To Do |
-| CHRONOS-438 | Consolidate environment configuration (11+ → 3) | To Do |
-| CHRONOS-439 | Document dual ORM architecture strategy | To Do |
+| CHRONOS-434 | ~~Consolidate Jira integrations~~ | ✅ **DELETED** - Superseded by CLI/MCP |
+| CHRONOS-435 | ~~Consolidate Confluence integrations~~ | ✅ **DELETED** - Superseded by MCP |
+| CHRONOS-436 | Archive/delete geospatial debugging scripts | ✅ **DONE** |
+| CHRONOS-437 | Clean up large SQL data dumps | ✅ **DONE** |
+| CHRONOS-438 | Consolidate environment configuration (11+ → 3) | Deferred |
+| CHRONOS-439 | Document dual ORM architecture strategy | ✅ **DONE** |
 
 ---
 
@@ -219,21 +175,23 @@ This shows many iterations attempting to fix geometry rendering issues.
 1. ~~**Fix the Great Lakes bug**~~ ✅ DONE
 2. ~~**Test the fix**~~ ✅ Deployed
 3. ~~**Create Jira sprint**~~ ✅ CHRONOS-433 created
-4. **Execute Jira sprint** - Work through tickets systematically
-5. **Architecture audit** - Review orchestration and deployment
+4. ~~**Execute Jira sprint**~~ ✅ **5/6 tickets completed**
+5. **Remaining:** CHRONOS-438 (env consolidation) - deferred
 
 ---
 
-## Appendix: File Counts by Type
+## Appendix: Cleanup Summary (2025-01-19)
 
-| Location | Count | Notes |
-|----------|-------|-------|
-| scripts/ops/ | 35+ | Many are debug scripts |
-| scripts/_archive/ | 20+ | Historical, should archive |
-| tmp/ | 7 | Delete all |
-| docs/ | 150+ | Well organized |
-| Root logs | 7 | Delete/gitignore |
+| Action | Items Removed | Space Freed |
+|--------|---------------|-------------|
+| SQL dumps | 5 files | ~1.4GB |
+| Jira scripts | 10 files | - |
+| Confluence scripts | 7 files | - |
+| Geospatial debug | 13 files | - |
+| Misc ops scripts | 5 files | - |
+| Empty directories | 2 dirs | - |
+| **Total** | **42 items** | **~1.4GB** |
 
 ---
 
-*Last Updated: 2025-01-19*
+*Last Updated: 2025-01-19 (Technical Debt Sprint Complete)*
