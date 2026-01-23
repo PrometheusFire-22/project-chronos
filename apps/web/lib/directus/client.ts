@@ -54,6 +54,9 @@ export async function fetchDirectus<T>(
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
+        ...(process.env.NEXT_PUBLIC_DIRECTUS_KEY && {
+          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_DIRECTUS_KEY}`
+        }),
         ...options?.headers,
       },
       next: {
