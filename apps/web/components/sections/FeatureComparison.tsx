@@ -84,27 +84,22 @@ export function FeatureComparison({ comparisonItems, sectionData }: FeatureCompa
 
             {/* Table Rows */}
             <div className="divide-y divide-slate-800">
-              {features.map((feature, index) => {
-                const chronosValue = 'chronos_value' in feature ? feature.chronos_value : feature.chronos
-                const traditionalValue = 'traditional_value' in feature ? feature.traditional_value : feature.traditional
-
-                return (
-                  <div
-                    key={index}
-                    className="grid grid-cols-3 gap-4 p-6 bg-slate-950 hover:bg-slate-900/50 transition-colors"
-                  >
-                    <div className="text-white font-medium">{feature.category}</div>
-                    <div className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-emerald-400 flex-shrink-0" />
-                      <span className="text-slate-300 text-sm">{chronosValue}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <X className="w-5 h-5 text-red-400 flex-shrink-0" />
-                      <span className="text-slate-500 text-sm">{traditionalValue}</span>
-                    </div>
+              {features.map((feature, index) => (
+                <div
+                  key={index}
+                  className="grid grid-cols-3 gap-4 p-6 bg-slate-950 hover:bg-slate-900/50 transition-colors"
+                >
+                  <div className="text-white font-medium">{feature.category}</div>
+                  <div className="flex items-center gap-3">
+                    <Check className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                    <span className="text-slate-300 text-sm">{feature.chronos_value}</span>
                   </div>
-                )
-              })}
+                  <div className="flex items-center gap-3">
+                    <X className="w-5 h-5 text-red-400 flex-shrink-0" />
+                    <span className="text-slate-500 text-sm">{feature.traditional_value}</span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
