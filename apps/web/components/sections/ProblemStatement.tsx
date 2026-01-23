@@ -13,7 +13,7 @@ import {
   FileSpreadsheet,
   type LucideIcon
 } from 'lucide-react'
-import type { Feature } from '@/lib/directus'
+import type { Feature, PageSection } from '@/lib/directus'
 import { renderRichText } from '@/lib/content-renderer'
 
 // Icon mapping for Directus icon field
@@ -34,19 +34,25 @@ const iconMap: Record<string, LucideIcon> = {
 
 interface ProblemStatementProps {
   problems: Feature[]
+  sectionData?: PageSection | null
 }
 
-export function ProblemStatement({ problems }: ProblemStatementProps) {
+export function ProblemStatement({ problems, sectionData }: ProblemStatementProps) {
+  // Fallback values if CMS data is not available
+  const headline = sectionData?.headline ?? 'The Problem: Information is Public. Intelligence is Hidden.'
+  const subheadline = sectionData?.subheadline ??
+    'In a distressed market, the data you need is buried in 300-page monitor reports and fragmented spreadsheets. By the time you find the connection, the window has closed.'
+
   return (
     <section className="relative bg-slate-950 py-24 lg:py-32">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-            The Challenge
+            {headline}
           </h2>
           <p className="text-lg text-slate-400">
-            Private market investors struggle with fragmented data and hidden relationships
+            {subheadline}
           </p>
         </div>
 

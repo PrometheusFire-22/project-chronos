@@ -12,7 +12,7 @@ import {
   MapPin,
   type LucideIcon
 } from 'lucide-react'
-import type { Feature } from '@/lib/directus'
+import type { Feature, PageSection } from '@/lib/directus'
 import { renderRichText } from '@/lib/content-renderer'
 
 // Icon mapping for solution pillar icons
@@ -60,19 +60,25 @@ const colorMap: Record<number, { bg: string; icon: string; border: string; glow:
 
 interface SolutionPillarsProps {
   pillars: Feature[]
+  sectionData?: PageSection | null
 }
 
-export function SolutionPillars({ pillars }: SolutionPillarsProps) {
+export function SolutionPillars({ pillars, sectionData }: SolutionPillarsProps) {
+  // Fallback values if CMS data is not available
+  const headline = sectionData?.headline ?? 'Multi-Model Intelligence'
+  const subheadline = sectionData?.subheadline ??
+    'Four powerful database modalities working in harmony to deliver unprecedented insights'
+
   return (
     <section className="relative bg-slate-950 py-24 lg:py-32">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-            Multi-Model Intelligence
+            {headline}
           </h2>
           <p className="text-lg text-slate-400">
-            Four powerful database modalities working in harmony to deliver unprecedented insights
+            {subheadline}
           </p>
         </div>
 
@@ -113,7 +119,7 @@ export function SolutionPillars({ pillars }: SolutionPillarsProps) {
         {/* Bottom tagline */}
         <div className="text-center mt-12">
           <p className="text-sm text-slate-500 max-w-2xl mx-auto">
-            The first platform to combine graph relationships, vector embeddings, time-series analytics, and geospatial operations in a single unified query interface
+            {sectionData?.cta_text ?? 'Unifying public market ruins with private deal flow through one intelligence layer.'}
           </p>
         </div>
       </div>

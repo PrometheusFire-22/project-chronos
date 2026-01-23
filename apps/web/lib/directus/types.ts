@@ -180,6 +180,56 @@ export const WaitlistSubmissionSchema = z.object({
 export type WaitlistSubmission = z.infer<typeof WaitlistSubmissionSchema>;
 
 // =============================================================================
+// Page Sections
+// =============================================================================
+
+export const PageSectionSchema = z.object({
+  id: z.string().uuid(),
+  section_key: z.string(),
+  page_name: z.string(),
+  headline: z.string(),
+  subheadline: z.string().nullable(),
+  cta_text: z.string().nullable(),
+  cta_link: z.string().nullable(),
+  enabled: z.boolean(),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+});
+
+export type PageSection = z.infer<typeof PageSectionSchema>;
+
+/**
+ * Page section keys used in the CMS
+ */
+export const PageSectionKey = {
+  PROBLEM_STATEMENT: 'problem-statement',
+  SOLUTION_PILLARS: 'solution-pillars',
+  FEATURES_PREVIEW: 'features-preview',
+  USE_CASES: 'use-cases',
+  FEATURE_COMPARISON: 'feature-comparison',
+  ABOUT_STORY: 'about-story',
+} as const;
+
+export type PageSectionKeyType = (typeof PageSectionKey)[keyof typeof PageSectionKey];
+
+// =============================================================================
+// Comparison Items
+// =============================================================================
+
+export const ComparisonItemSchema = z.object({
+  id: z.string().uuid(),
+  category: z.string(),
+  chronos_value: z.string(),
+  traditional_value: z.string(),
+  sort_order: z.number().int(),
+  enabled: z.boolean(),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+});
+
+export type ComparisonItem = z.infer<typeof ComparisonItemSchema>;
+
+// =============================================================================
 // Directus API Response Wrappers
 // =============================================================================
 

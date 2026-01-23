@@ -7,7 +7,9 @@ import { AboutTeam } from '@/components/sections/AboutTeam'
 import { WaitlistSection } from '@/components/sections/WaitlistSection'
 import {
   getFeaturesByCategory,
+  getPageSection,
   FeatureCategory,
+  PageSectionKey,
   isDirectusError,
 } from '@/lib/directus'
 
@@ -29,13 +31,16 @@ export const dynamic = 'force-static'
 
 export default async function AboutPage() {
   try {
-    // Fetch about section content from Directus
-    const values = await getFeaturesByCategory(FeatureCategory.ABOUT_SECTION)
+    // Fetch about page content from Directus in parallel
+    const [values, storySection] = await Promise.all([
+      getFeaturesByCategory(FeatureCategory.ABOUT_SECTION),
+      getPageSection(PageSectionKey.ABOUT_STORY),
+    ])
 
     return (
       <>
         <AboutHero />
-        <AboutStory />
+        <AboutStory sectionData={storySection} />
         <AboutValues values={values} />
         <AboutTeam />
         <WaitlistSection />

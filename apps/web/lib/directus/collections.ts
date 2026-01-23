@@ -18,6 +18,8 @@ import {
   DocsPageSchema,
   AnnouncementSchema,
   LegalPageSchema,
+  PageSectionSchema,
+  ComparisonItemSchema,
   type HomepageHero,
   type Feature,
   type FeatureCategoryType,
@@ -25,6 +27,9 @@ import {
   type DocsPage,
   type Announcement,
   type LegalPage,
+  type PageSection,
+  type PageSectionKeyType,
+  type ComparisonItem,
   type DirectusSingleResponse,
   type DirectusCollectionResponse,
   type DirectusPaginatedResponse,
@@ -421,6 +426,112 @@ export async function getLegalPageBySlug(
   }
 
   return LegalPageSchema.parse(response.data[0]);
+}
+
+// =============================================================================
+// Page Sections
+// =============================================================================
+
+/**
+ * Get a page section by its key
+ *
+ * @example
+ * ```typescript
+ * const problemSection = await getPageSection('problem-statement');
+ * // { headline: "...", subheadline: "...", cta_text: "...", ... }
+ * ```
+ */
+export async function getPageSection(
+  sectionKey: PageSectionKeyType,
+  options?: FetchOptions
+): Promise<PageSection | null> {
+  const query = buildQuery({
+    filter: {
+      section_key: { _eq: sectionKey },
+      enabled: { _eq: true },
+    },
+    limit: 1,
+  });
+
+  const response = await fetchDirectus<DirectusCollectionResponse<PageSection>>(
+    `/items/cms_page_sections${query}`,
+    {
+      revalidate: 3600, // 1 hour
+      tags: [`page-section-${sectionKey}`],
+      ...options,
+    }
+  );
+
+  if (response.data.length === 0) {
+    return null;
+  }
+
+  return PageSectionSchema.parse(response.data[0]);
+}
+
+/**
+ * Get all page sections for a specific page
+ *
+ * @example
+ * ```typescript
+ * const homepageSections = await getPageSectionsByPage('homepage');
+ * ```
+ */
+export async function getPageSectionsByPage(
+  pageName: string,
+  options?: FetchOptions
+): Promise<PageSection[]> {
+  const query = buildQuery({
+    filter: {
+      page_name: { _eq: pageName },
+      enabled: { _eq: true },
+    },
+    sort: ['section_key'],
+  });
+
+  const response = await fetchDirectus<DirectusCollectionResponse<PageSection>>(
+    `/items/cms_page_sections${query}`,
+    {
+      revalidate: 3600, // 1 hour
+      tags: [`page-sections-${pageName}`],
+      ...options,
+    }
+  );
+
+  return response.data.map((item) => PageSectionSchema.parse(item));
+}
+
+// =============================================================================
+// Comparison Items
+// =============================================================================
+
+/**
+ * Get all comparison items
+ *
+ * @example
+ * ```typescript
+ * const items = await getComparisonItems();
+ * // Returns comparison table data sorted by sort_order
+ * ```
+ */
+export async function getComparisonItems(
+  options?: FetchOptions
+): Promise<ComparisonItem[]> {
+  const query = buildQuery({
+    filter: { enabled: { _eq: true } },
+    sort: ['sort_order'],
+  });
+
+  const response = await fetchDirectus<DirectusCollectionResponse<ComparisonItem>>(
+    `/items/cms_comparison_items${query}`,
+    {
+      revalidate: 3600, // 1 hour
+      tags: ['comparison-items'],
+      ...options,
+    }
+  );
+
+  return response.data.map((item) => ComparisonItemSchema.parse(item));
 }
 
 // =============================================================================

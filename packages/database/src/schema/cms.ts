@@ -295,6 +295,69 @@ export const waitlistSubmissions = pgTable(
 );
 
 /**
+ * Page Sections
+ *
+ * Configurable section headers and subheaders for marketing pages.
+ * Each section has a unique key (e.g., 'problem-statement', 'solution-pillars').
+ */
+export const pageSections = pgTable(
+  'cms_page_sections',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+
+    // Identification
+    sectionKey: varchar('section_key', { length: 100 }).notNull().unique(), // e.g., 'problem-statement', 'features-preview'
+    pageName: varchar('page_name', { length: 50 }).notNull(), // e.g., 'homepage', 'features', 'about'
+
+    // Content
+    headline: varchar('headline', { length: 255 }).notNull(),
+    subheadline: text('subheadline'),
+    ctaText: varchar('cta_text', { length: 100 }),
+    ctaLink: varchar('cta_link', { length: 255 }),
+
+    // Status
+    enabled: boolean('enabled').notNull().default(true),
+
+    // Audit
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    sectionKeyIdx: index('cms_page_sections_section_key_idx').on(table.sectionKey),
+    pageNameIdx: index('cms_page_sections_page_name_idx').on(table.pageName),
+  })
+);
+
+/**
+ * Comparison Items
+ *
+ * Feature comparison table data for "Why Choose Chronos?" section.
+ * Compares Chronos capabilities vs. traditional tools.
+ */
+export const comparisonItems = pgTable(
+  'cms_comparison_items',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+
+    // Content
+    category: varchar('category', { length: 100 }).notNull(), // e.g., 'Data Visibility'
+    chronosValue: varchar('chronos_value', { length: 255 }).notNull(), // e.g., 'Unified Market Intelligence'
+    traditionalValue: varchar('traditional_value', { length: 255 }).notNull(), // e.g., 'Fragmented Spreadsheets'
+
+    // Display
+    sortOrder: integer('sort_order').notNull().default(0),
+    enabled: boolean('enabled').notNull().default(true),
+
+    // Audit
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    sortOrderIdx: index('cms_comparison_items_sort_order_idx').on(table.sortOrder),
+  })
+);
+
+/**
  * Export all CMS tables for Drizzle ORM
  */
 export const cmsSchema = {
@@ -305,4 +368,6 @@ export const cmsSchema = {
   announcements,
   legalPages,
   waitlistSubmissions,
+  pageSections,
+  comparisonItems,
 };

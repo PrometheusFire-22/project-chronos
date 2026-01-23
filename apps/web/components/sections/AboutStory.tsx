@@ -1,30 +1,39 @@
 import { Lightbulb, TrendingUp, Target } from 'lucide-react'
+import type { PageSection } from '@/lib/directus'
 
-export function AboutStory() {
+interface AboutStoryProps {
+  sectionData?: PageSection | null
+}
+
+export function AboutStory({ sectionData }: AboutStoryProps) {
+  // Fallback story aligned with special situations focus
+  const defaultStory = {
+    headline: 'Our Story',
+    paragraphs: [
+      'Chronos was born in Toronto during the most dramatic liquidity reset in private markets since 2008. As LP interests trade at 30%+ discounts and maturity walls loom, we saw capital allocators drowning in monitor reports, PDFs, and fragmented spreadsheets—all while the window to act narrowed by the day.',
+      'We built Chronos to solve a fundamental problem: in distressed markets, information is abundant but intelligence is scarce. While everyone has access to the same public filings and monitor reports, the real edge comes from seeing the hidden connections—who the monitor trusts, which lender is overextended, where the geographic concentrations create systemic risk.',
+      'Today, we\'re building the first intelligence layer purpose-built for special situations and distressed markets in Canada. We combine public market ruins with private deal flow, turning buried narratives into actionable intelligence for credit investors, restructuring advisors, and opportunistic capital allocators.',
+    ],
+  }
+
+  const headline = sectionData?.headline ?? defaultStory.headline
+  const storyText = sectionData?.subheadline ?? defaultStory.paragraphs.join('\n\n')
+
+  // Split the story text into paragraphs (if it's a single string with line breaks)
+  const paragraphs = storyText.split('\n\n').filter(p => p.trim().length > 0)
+
   return (
     <section className="relative bg-slate-900 py-24 lg:py-32">
       <div className="container mx-auto px-4">
         {/* Main Story */}
         <div className="max-w-4xl mx-auto mb-20">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-            Our Story
+            {headline}
           </h2>
           <div className="space-y-6 text-lg text-slate-400 leading-relaxed">
-            <p>
-              Chronos was born from a simple observation: private market investors spend countless
-              hours manually piecing together relationships, tracking down connections, and searching
-              through fragmented data sources.
-            </p>
-            <p>
-              We saw an opportunity to fundamentally change this. By combining four powerful database
-              technologies—graph, vector, time-series, and geospatial—into a single unified platform,
-              we enable investors to see the complete picture in seconds, not days.
-            </p>
-            <p>
-              Today, we're building the most advanced relationship intelligence platform for private
-              markets, trusted by leading venture capital firms, private equity investors, and family
-              offices around the world.
-            </p>
+            {paragraphs.map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))}
           </div>
         </div>
 

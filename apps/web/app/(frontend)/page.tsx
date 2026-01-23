@@ -8,7 +8,9 @@ import { WaitlistSection } from '@/components/sections/WaitlistSection'
 import {
   getHomepageHero,
   getFeaturesByCategory,
+  getPageSection,
   FeatureCategory,
+  PageSectionKey,
   isDirectusError,
 } from '@/lib/directus'
 
@@ -31,21 +33,35 @@ export const dynamic = 'force-static'
 export default async function HomePage() {
   try {
     // Fetch all homepage data from Directus in parallel
-    const [hero, problems, pillars, features, useCases] = await Promise.all([
+    const [
+      hero,
+      problems,
+      pillars,
+      features,
+      useCases,
+      problemSection,
+      solutionSection,
+      featuresSection,
+      useCasesSection,
+    ] = await Promise.all([
       getHomepageHero(),
       getFeaturesByCategory(FeatureCategory.PROBLEM_POINT),
       getFeaturesByCategory(FeatureCategory.SOLUTION_PILLAR),
       getFeaturesByCategory(FeatureCategory.KEY_FEATURE),
       getFeaturesByCategory(FeatureCategory.USE_CASE),
+      getPageSection(PageSectionKey.PROBLEM_STATEMENT),
+      getPageSection(PageSectionKey.SOLUTION_PILLARS),
+      getPageSection(PageSectionKey.FEATURES_PREVIEW),
+      getPageSection(PageSectionKey.USE_CASES),
     ])
 
     return (
       <>
         <HeroSection data={hero} />
-        <ProblemStatement problems={problems} />
-        <SolutionPillars pillars={pillars} />
-        <FeaturesPreview features={features} />
-        <UseCases useCases={useCases} />
+        <ProblemStatement problems={problems} sectionData={problemSection} />
+        <SolutionPillars pillars={pillars} sectionData={solutionSection} />
+        <FeaturesPreview features={features} sectionData={featuresSection} />
+        <UseCases useCases={useCases} sectionData={useCasesSection} />
         <WaitlistSection />
       </>
     )

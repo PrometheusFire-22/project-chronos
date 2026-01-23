@@ -14,7 +14,7 @@ import {
   Map,
   type LucideIcon
 } from 'lucide-react'
-import type { Feature } from '@/lib/directus'
+import type { Feature, PageSection } from '@/lib/directus'
 import { renderRichText } from '@/lib/content-renderer'
 
 // Icon mapping for use case icons
@@ -36,19 +36,25 @@ const iconMap: Record<string, LucideIcon> = {
 
 interface UseCasesProps {
   useCases: Feature[]
+  sectionData?: PageSection | null
 }
 
-export function UseCases({ useCases }: UseCasesProps) {
+export function UseCases({ useCases, sectionData }: UseCasesProps) {
+  // Fallback values if CMS data is not available
+  const headline = sectionData?.headline ?? 'Trusted by Leading Investors'
+  const subheadline = sectionData?.subheadline ??
+    'From venture capital to private equity, discover how top firms use Chronos to gain a competitive edge'
+
   return (
     <section className="relative bg-slate-950 py-24 lg:py-32">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-            Trusted by Leading Investors
+            {headline}
           </h2>
           <p className="text-lg text-slate-400">
-            From venture capital to private equity, discover how top firms use Chronos to gain a competitive edge
+            {subheadline}
           </p>
         </div>
 
@@ -102,16 +108,16 @@ export function UseCases({ useCases }: UseCasesProps) {
         {/* Bottom CTA */}
         <div className="text-center mt-16 pt-12 border-t border-slate-800/50">
           <h3 className="text-2xl font-bold text-white mb-4">
-            Ready to transform your investment strategy?
+            {sectionData?.cta_text ?? 'Ready to find the edge in the Canadian liquidity reset?'}
           </h3>
           <p className="text-slate-400 mb-6 max-w-2xl mx-auto">
-            Join the waitlist to get early access to Chronos and discover hidden opportunities in private markets
+            Join the waitlist to get early access to Chronos and discover hidden opportunities in special situations
           </p>
           <a
-            href="#waitlist"
+            href={sectionData?.cta_link ?? '#waitlist'}
             className="inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-gradient-to-r from-violet-500 to-sky-500 text-white font-semibold hover:opacity-90 transition-opacity shadow-lg shadow-violet-500/25"
           >
-            Join the Waitlist
+            {sectionData?.cta_link ? 'Get Early Access' : 'Join the Waitlist'}
             <Target className="w-5 h-5" />
           </a>
         </div>

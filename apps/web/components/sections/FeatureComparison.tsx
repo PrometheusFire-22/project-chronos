@@ -1,46 +1,57 @@
 import { Check, X } from 'lucide-react'
+import type { ComparisonItem, PageSection } from '@/lib/directus'
 
-export function FeatureComparison() {
-  const features = [
+interface FeatureComparisonProps {
+  comparisonItems?: ComparisonItem[]
+  sectionData?: PageSection | null
+}
+
+export function FeatureComparison({ comparisonItems, sectionData }: FeatureComparisonProps) {
+  // Fallback values if CMS data is not available
+  const headline = sectionData?.headline ?? 'Why Choose Chronos?'
+  const subheadline = sectionData?.subheadline ??
+    'See how Chronos compares to traditional private market research and CRM tools.'
+
+  const features = comparisonItems ?? [
     {
-      category: 'Data Integration',
-      chronos: 'Unified multi-modal platform',
-      traditional: 'Multiple disconnected tools',
+      category: 'Data Visibility',
+      chronos_value: 'Unified Market Intelligence',
+      traditional_value: 'Fragmented Spreadsheets',
     },
     {
-      category: 'Relationship Discovery',
-      chronos: 'AI-powered graph analysis',
-      traditional: 'Manual research and spreadsheets',
+      category: 'Referral Mapping',
+      chronos_value: 'Automatic Path-to-Monitor',
+      traditional_value: 'Manual LinkedIn Digging',
     },
     {
-      category: 'Search Capabilities',
-      chronos: 'Vector similarity + keyword search',
-      traditional: 'Basic text search only',
+      category: 'Document Search',
+      chronos_value: 'Deep Narrative Extraction',
+      traditional_value: 'Basic Keyword Search',
     },
     {
-      category: 'Time-Series Analysis',
-      chronos: 'Built-in temporal queries',
-      traditional: 'External analytics tools required',
+      category: 'Liquidity Timing',
+      chronos_value: 'Live "Maturity Wall" Alerts',
+      traditional_value: 'Static Historical Snapshots',
     },
     {
-      category: 'Geospatial Operations',
-      chronos: 'Native location-based insights',
-      traditional: 'Geographic data in silos',
+      category: 'Location Context',
+      chronos_value: 'Neighborhood Risk Heatmaps',
+      traditional_value: 'Isolated Address Fields',
     },
     {
-      category: 'Query Performance',
-      chronos: 'Sub-second complex queries',
-      traditional: 'Minutes to hours for deep analysis',
+      category: 'Sourcing Speed',
+      chronos_value: 'Instant Syndicate Analysis',
+      traditional_value: 'Weeks of "Shoe-Leather" Research',
     },
     {
-      category: 'Data Freshness',
-      chronos: 'Real-time updates',
-      traditional: 'Batch processing delays',
+      category: 'Market Pulse',
+      chronos_value: 'Real-time Filing Signals',
+      traditional_value: 'Delayed Quarterly Updates',
     },
     {
-      category: 'Deployment',
-      chronos: 'Cloud-native SaaS',
-      traditional: 'On-premise infrastructure',
+      category: 'Accessibility',
+      chronos_value: 'Modern Cloud Experience',
+      traditional_value: 'Legacy Desktop Software',
     },
   ]
 
@@ -50,10 +61,10 @@ export function FeatureComparison() {
         {/* Section Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-            Why Choose Chronos?
+            {headline}
           </h2>
           <p className="text-lg text-slate-400">
-            See how Chronos compares to traditional private market research tools
+            {subheadline}
           </p>
         </div>
 
@@ -73,32 +84,37 @@ export function FeatureComparison() {
 
             {/* Table Rows */}
             <div className="divide-y divide-slate-800">
-              {features.map((feature, index) => (
-                <div
-                  key={index}
-                  className="grid grid-cols-3 gap-4 p-6 bg-slate-950 hover:bg-slate-900/50 transition-colors"
-                >
-                  <div className="text-white font-medium">{feature.category}</div>
-                  <div className="flex items-center gap-3">
-                    <Check className="w-5 h-5 text-emerald-400 flex-shrink-0" />
-                    <span className="text-slate-300 text-sm">{feature.chronos}</span>
+              {features.map((feature, index) => {
+                const chronosValue = 'chronos_value' in feature ? feature.chronos_value : feature.chronos
+                const traditionalValue = 'traditional_value' in feature ? feature.traditional_value : feature.traditional
+
+                return (
+                  <div
+                    key={index}
+                    className="grid grid-cols-3 gap-4 p-6 bg-slate-950 hover:bg-slate-900/50 transition-colors"
+                  >
+                    <div className="text-white font-medium">{feature.category}</div>
+                    <div className="flex items-center gap-3">
+                      <Check className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                      <span className="text-slate-300 text-sm">{chronosValue}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <X className="w-5 h-5 text-red-400 flex-shrink-0" />
+                      <span className="text-slate-500 text-sm">{traditionalValue}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <X className="w-5 h-5 text-red-400 flex-shrink-0" />
-                    <span className="text-slate-500 text-sm">{feature.traditional}</span>
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
 
           {/* Bottom CTA */}
           <div className="mt-12 text-center">
             <p className="text-slate-400 mb-6">
-              Ready to experience the future of private market intelligence?
+              {sectionData?.cta_text ?? 'Ready to find the edge in the Canadian liquidity reset?'}
             </p>
             <a
-              href="#waitlist"
+              href={sectionData?.cta_link ?? '#waitlist'}
               className="inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-gradient-to-r from-violet-500 to-sky-500 text-white font-semibold hover:opacity-90 transition-opacity"
             >
               Get Early Access

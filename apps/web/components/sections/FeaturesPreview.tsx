@@ -18,7 +18,7 @@ import {
   Route,
   type LucideIcon
 } from 'lucide-react'
-import type { Feature } from '@/lib/directus'
+import type { Feature, PageSection } from '@/lib/directus'
 import { renderRichText } from '@/lib/content-renderer'
 
 // Icon mapping for feature icons
@@ -44,9 +44,15 @@ const iconMap: Record<string, LucideIcon> = {
 
 interface FeaturesPreviewProps {
   features: Feature[]
+  sectionData?: PageSection | null
 }
 
-export function FeaturesPreview({ features }: FeaturesPreviewProps) {
+export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps) {
+  // Fallback values if CMS data is not available
+  const headline = sectionData?.headline ?? 'Built for the Special Situations Workflow'
+  const subheadline = sectionData?.subheadline ??
+    'Professional-grade tools designed to map the liquidity reset, identify forced sellers, and accelerate due diligence.'
+
   return (
     <section className="relative bg-slate-900 py-24 lg:py-32">
       {/* Background gradient accent */}
@@ -56,10 +62,10 @@ export function FeaturesPreview({ features }: FeaturesPreviewProps) {
         {/* Section Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-            Built for Modern Investors
+            {headline}
           </h2>
           <p className="text-lg text-slate-400">
-            Enterprise-grade features designed for private market intelligence and relationship discovery
+            {subheadline}
           </p>
         </div>
 
