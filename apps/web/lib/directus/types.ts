@@ -230,6 +230,144 @@ export const ComparisonItemSchema = z.object({
 export type ComparisonItem = z.infer<typeof ComparisonItemSchema>;
 
 // =============================================================================
+// Homepage Collections (CHRONOS-454/455)
+// =============================================================================
+
+export const HomepageProblemSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string(),
+  description: z.string(),
+  icon: z.string().nullable(),
+  sort_order: z.number().int(),
+  enabled: z.boolean(),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+});
+
+export type HomepageProblem = z.infer<typeof HomepageProblemSchema>;
+
+export const HomepagePillarSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string(),
+  slug: z.string(),
+  description: z.string(),
+  icon: z.string().nullable(),
+  image: z.string().nullable(),
+  sort_order: z.number().int(),
+  enabled: z.boolean(),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+});
+
+export type HomepagePillar = z.infer<typeof HomepagePillarSchema>;
+
+export const HomepageFeatureSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string(),
+  description: z.string(),
+  icon: z.string().nullable(),
+  sort_order: z.number().int(),
+  enabled: z.boolean(),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+});
+
+export type HomepageFeature = z.infer<typeof HomepageFeatureSchema>;
+
+export const HomepageUseCaseSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string(),
+  description: z.string(),
+  icon: z.string().nullable(),
+  sort_order: z.number().int(),
+  enabled: z.boolean(),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+});
+
+export type HomepageUseCase = z.infer<typeof HomepageUseCaseSchema>;
+
+// =============================================================================
+// Features Page Collections (CHRONOS-454/455)
+// =============================================================================
+
+export const FeaturesHeroSchema = z.object({
+  id: z.string().uuid(),
+  headline: z.string(),
+  subheadline: z.string().nullable(),
+  active: z.boolean(),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+});
+
+export type FeaturesHero = z.infer<typeof FeaturesHeroSchema>;
+
+export const FeaturesCapabilitySchema = z.object({
+  id: z.string().uuid(),
+  title: z.string(),
+  description: z.string(),
+  icon: z.string().nullable(),
+  image: z.string().nullable(),
+  sort_order: z.number().int(),
+  enabled: z.boolean(),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+});
+
+export type FeaturesCapability = z.infer<typeof FeaturesCapabilitySchema>;
+
+// =============================================================================
+// About Page Collections (CHRONOS-454/455)
+// =============================================================================
+
+export const AboutHeroSchema = z.object({
+  id: z.string().uuid(),
+  headline: z.string(),
+  subheadline: z.string().nullable(),
+  active: z.boolean(),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+});
+
+export type AboutHero = z.infer<typeof AboutHeroSchema>;
+
+export const AboutValueSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string(),
+  description: z.string(),
+  icon: z.string().nullable(),
+  sort_order: z.number().int(),
+  enabled: z.boolean(),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+});
+
+export type AboutValue = z.infer<typeof AboutValueSchema>;
+
+// =============================================================================
+// CTA Sections (CHRONOS-454/455)
+// =============================================================================
+
+export const CTASectionSchema = z.object({
+  id: z.string().uuid(),
+  section_key: z.string(),
+  page_name: z.string(),
+  placement: z.string(),
+  headline: z.string(),
+  subheadline: z.string().nullable(),
+  primary_cta_text: z.string(),
+  primary_cta_link: z.string(),
+  secondary_cta_text: z.string().nullable(),
+  secondary_cta_link: z.string().nullable(),
+  variant: z.enum(['inline', 'banner', 'full']),
+  enabled: z.boolean(),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+});
+
+export type CTASection = z.infer<typeof CTASectionSchema>;
+
+// =============================================================================
 // Directus API Response Wrappers
 // =============================================================================
 

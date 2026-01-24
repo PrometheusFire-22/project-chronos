@@ -20,6 +20,15 @@ import {
   LegalPageSchema,
   PageSectionSchema,
   ComparisonItemSchema,
+  HomepageProblemSchema,
+  HomepagePillarSchema,
+  HomepageFeatureSchema,
+  HomepageUseCaseSchema,
+  FeaturesHeroSchema,
+  FeaturesCapabilitySchema,
+  AboutHeroSchema,
+  AboutValueSchema,
+  CTASectionSchema,
   type HomepageHero,
   type Feature,
   type FeatureCategoryType,
@@ -30,6 +39,15 @@ import {
   type PageSection,
   type PageSectionKeyType,
   type ComparisonItem,
+  type HomepageProblem,
+  type HomepagePillar,
+  type HomepageFeature,
+  type HomepageUseCase,
+  type FeaturesHero,
+  type FeaturesCapability,
+  type AboutHero,
+  type AboutValue,
+  type CTASection,
   type DirectusSingleResponse,
   type DirectusCollectionResponse,
   type DirectusPaginatedResponse,
@@ -532,6 +550,362 @@ export async function getComparisonItems(
   );
 
   return response.data.map((item) => ComparisonItemSchema.parse(item));
+}
+
+// =============================================================================
+// Homepage Collections (CHRONOS-456)
+// =============================================================================
+
+/**
+ * Get homepage problems
+ *
+ * @example
+ * ```typescript
+ * const problems = await getHomepageProblems();
+ * // Returns 3 problem points sorted by sort_order
+ * ```
+ */
+export async function getHomepageProblems(
+  options?: FetchOptions
+): Promise<HomepageProblem[]> {
+  const query = buildQuery({
+    filter: { enabled: { _eq: true } },
+    sort: ['sort_order'],
+  });
+
+  const response = await fetchDirectus<DirectusCollectionResponse<HomepageProblem>>(
+    `/items/cms_homepage_problems${query}`,
+    {
+      revalidate: 3600, // 1 hour
+      tags: ['homepage-problems'],
+      ...options,
+    }
+  );
+
+  return response.data.map((item) => HomepageProblemSchema.parse(item));
+}
+
+/**
+ * Get homepage pillars (solution pillars)
+ *
+ * @example
+ * ```typescript
+ * const pillars = await getHomepagePillars();
+ * // Returns 4 database modality pillars
+ * ```
+ */
+export async function getHomepagePillars(
+  options?: FetchOptions
+): Promise<HomepagePillar[]> {
+  const query = buildQuery({
+    filter: { enabled: { _eq: true } },
+    sort: ['sort_order'],
+  });
+
+  const response = await fetchDirectus<DirectusCollectionResponse<HomepagePillar>>(
+    `/items/cms_homepage_pillars${query}`,
+    {
+      revalidate: 3600, // 1 hour
+      tags: ['homepage-pillars'],
+      ...options,
+    }
+  );
+
+  return response.data.map((item) => HomepagePillarSchema.parse(item));
+}
+
+/**
+ * Get a single homepage pillar by slug
+ */
+export async function getHomepagePillarBySlug(
+  slug: string,
+  options?: FetchOptions
+): Promise<HomepagePillar | null> {
+  const query = buildQuery({
+    filter: {
+      slug: { _eq: slug },
+      enabled: { _eq: true },
+    },
+    limit: 1,
+  });
+
+  const response = await fetchDirectus<DirectusCollectionResponse<HomepagePillar>>(
+    `/items/cms_homepage_pillars${query}`,
+    {
+      revalidate: 3600, // 1 hour
+      ...options,
+    }
+  );
+
+  if (response.data.length === 0) {
+    return null;
+  }
+
+  return HomepagePillarSchema.parse(response.data[0]);
+}
+
+/**
+ * Get homepage features
+ *
+ * @example
+ * ```typescript
+ * const features = await getHomepageFeatures();
+ * // Returns 3 key features
+ * ```
+ */
+export async function getHomepageFeatures(
+  options?: FetchOptions
+): Promise<HomepageFeature[]> {
+  const query = buildQuery({
+    filter: { enabled: { _eq: true } },
+    sort: ['sort_order'],
+  });
+
+  const response = await fetchDirectus<DirectusCollectionResponse<HomepageFeature>>(
+    `/items/cms_homepage_features${query}`,
+    {
+      revalidate: 3600, // 1 hour
+      tags: ['homepage-features'],
+      ...options,
+    }
+  );
+
+  return response.data.map((item) => HomepageFeatureSchema.parse(item));
+}
+
+/**
+ * Get homepage use cases
+ *
+ * @example
+ * ```typescript
+ * const useCases = await getHomepageUseCases();
+ * // Returns 3 use cases
+ * ```
+ */
+export async function getHomepageUseCases(
+  options?: FetchOptions
+): Promise<HomepageUseCase[]> {
+  const query = buildQuery({
+    filter: { enabled: { _eq: true } },
+    sort: ['sort_order'],
+  });
+
+  const response = await fetchDirectus<DirectusCollectionResponse<HomepageUseCase>>(
+    `/items/cms_homepage_use_cases${query}`,
+    {
+      revalidate: 3600, // 1 hour
+      tags: ['homepage-use-cases'],
+      ...options,
+    }
+  );
+
+  return response.data.map((item) => HomepageUseCaseSchema.parse(item));
+}
+
+// =============================================================================
+// Features Page Collections (CHRONOS-456)
+// =============================================================================
+
+/**
+ * Get features hero content (singleton)
+ *
+ * @example
+ * ```typescript
+ * const hero = await getFeaturesHero();
+ * // { headline: "...", subheadline: "...", active: true }
+ * ```
+ */
+export async function getFeaturesHero(
+  options?: FetchOptions
+): Promise<FeaturesHero | null> {
+  const query = buildQuery({
+    filter: { active: { _eq: true } },
+    limit: 1,
+  });
+
+  const response = await fetchDirectus<DirectusCollectionResponse<FeaturesHero>>(
+    `/items/cms_features_hero${query}`,
+    {
+      revalidate: 3600, // 1 hour
+      tags: ['features-hero'],
+      ...options,
+    }
+  );
+
+  if (response.data.length === 0) {
+    return null;
+  }
+
+  return FeaturesHeroSchema.parse(response.data[0]);
+}
+
+/**
+ * Get features capabilities
+ *
+ * @example
+ * ```typescript
+ * const capabilities = await getFeaturesCapabilities();
+ * // Returns 4 capability items
+ * ```
+ */
+export async function getFeaturesCapabilities(
+  options?: FetchOptions
+): Promise<FeaturesCapability[]> {
+  const query = buildQuery({
+    filter: { enabled: { _eq: true } },
+    sort: ['sort_order'],
+  });
+
+  const response = await fetchDirectus<DirectusCollectionResponse<FeaturesCapability>>(
+    `/items/cms_features_capabilities${query}`,
+    {
+      revalidate: 3600, // 1 hour
+      tags: ['features-capabilities'],
+      ...options,
+    }
+  );
+
+  return response.data.map((item) => FeaturesCapabilitySchema.parse(item));
+}
+
+// =============================================================================
+// About Page Collections (CHRONOS-456)
+// =============================================================================
+
+/**
+ * Get about hero content (singleton)
+ *
+ * @example
+ * ```typescript
+ * const hero = await getAboutHero();
+ * // { headline: "...", subheadline: "...", active: true }
+ * ```
+ */
+export async function getAboutHero(
+  options?: FetchOptions
+): Promise<AboutHero | null> {
+  const query = buildQuery({
+    filter: { active: { _eq: true } },
+    limit: 1,
+  });
+
+  const response = await fetchDirectus<DirectusCollectionResponse<AboutHero>>(
+    `/items/cms_about_hero${query}`,
+    {
+      revalidate: 3600, // 1 hour
+      tags: ['about-hero'],
+      ...options,
+    }
+  );
+
+  if (response.data.length === 0) {
+    return null;
+  }
+
+  return AboutHeroSchema.parse(response.data[0]);
+}
+
+/**
+ * Get about values
+ *
+ * @example
+ * ```typescript
+ * const values = await getAboutValues();
+ * // Returns 3 company values
+ * ```
+ */
+export async function getAboutValues(
+  options?: FetchOptions
+): Promise<AboutValue[]> {
+  const query = buildQuery({
+    filter: { enabled: { _eq: true } },
+    sort: ['sort_order'],
+  });
+
+  const response = await fetchDirectus<DirectusCollectionResponse<AboutValue>>(
+    `/items/cms_about_values${query}`,
+    {
+      revalidate: 3600, // 1 hour
+      tags: ['about-values'],
+      ...options,
+    }
+  );
+
+  return response.data.map((item) => AboutValueSchema.parse(item));
+}
+
+// =============================================================================
+// CTA Sections (CHRONOS-456)
+// =============================================================================
+
+/**
+ * Get a CTA section by key
+ *
+ * @example
+ * ```typescript
+ * const cta = await getCTASection('homepage-post-problems');
+ * // { headline: "...", primary_cta_text: "...", variant: "inline", ... }
+ * ```
+ */
+export async function getCTASection(
+  sectionKey: string,
+  options?: FetchOptions
+): Promise<CTASection | null> {
+  const query = buildQuery({
+    filter: {
+      section_key: { _eq: sectionKey },
+      enabled: { _eq: true },
+    },
+    limit: 1,
+  });
+
+  const response = await fetchDirectus<DirectusCollectionResponse<CTASection>>(
+    `/items/cms_cta_sections${query}`,
+    {
+      revalidate: 3600, // 1 hour
+      tags: [`cta-${sectionKey}`],
+      ...options,
+    }
+  );
+
+  if (response.data.length === 0) {
+    return null;
+  }
+
+  return CTASectionSchema.parse(response.data[0]);
+}
+
+/**
+ * Get all CTA sections for a specific page
+ *
+ * @example
+ * ```typescript
+ * const ctas = await getCTASectionsByPage('homepage');
+ * // Returns all CTAs for homepage
+ * ```
+ */
+export async function getCTASectionsByPage(
+  pageName: string,
+  options?: FetchOptions
+): Promise<CTASection[]> {
+  const query = buildQuery({
+    filter: {
+      page_name: { _eq: pageName },
+      enabled: { _eq: true },
+    },
+    sort: ['placement'],
+  });
+
+  const response = await fetchDirectus<DirectusCollectionResponse<CTASection>>(
+    `/items/cms_cta_sections${query}`,
+    {
+      revalidate: 3600, // 1 hour
+      tags: [`cta-sections-${pageName}`],
+      ...options,
+    }
+  );
+
+  return response.data.map((item) => CTASectionSchema.parse(item));
 }
 
 // =============================================================================
