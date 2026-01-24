@@ -9,7 +9,7 @@ import {
   Rocket,
   type LucideIcon
 } from 'lucide-react'
-import type { Feature } from '@/lib/directus'
+import type { AboutValue } from '@/lib/directus/types'
 import { renderRichText } from '@/lib/content-renderer'
 
 // Icon mapping for value icons
@@ -25,7 +25,7 @@ const iconMap: Record<string, LucideIcon> = {
 }
 
 interface AboutValuesProps {
-  values: Feature[]
+  values: AboutValue[]
 }
 
 export function AboutValues({ values }: AboutValuesProps) {

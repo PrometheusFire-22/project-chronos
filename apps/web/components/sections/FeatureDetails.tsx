@@ -19,7 +19,7 @@ import {
   Target,
   type LucideIcon
 } from 'lucide-react'
-import type { Feature } from '@/lib/directus'
+import type { FeaturesCapability } from '@/lib/directus/types'
 import { renderRichText } from '@/lib/content-renderer'
 
 // Icon mapping for feature icons
@@ -45,7 +45,7 @@ const iconMap: Record<string, LucideIcon> = {
 }
 
 interface FeatureDetailsProps {
-  features: Feature[]
+  features: FeaturesCapability[]
 }
 
 export function FeatureDetails({ features }: FeatureDetailsProps) {

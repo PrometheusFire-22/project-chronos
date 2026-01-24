@@ -18,7 +18,7 @@ import {
   Route,
   type LucideIcon
 } from 'lucide-react'
-import type { Feature, PageSection } from '@/lib/directus'
+import type { HomepageFeature, PageSection } from '@/lib/directus/types'
 import { renderRichText } from '@/lib/content-renderer'
 
 // Icon mapping for feature icons
@@ -43,7 +43,7 @@ const iconMap: Record<string, LucideIcon> = {
 }
 
 interface FeaturesPreviewProps {
-  features: Feature[]
+  features: HomepageFeature[]
   sectionData?: PageSection | null
 }
 

@@ -52,5 +52,17 @@ export {
   getPageSection,
   getPageSectionsByPage,
   getComparisonItems,
+  // New collections (CHRONOS-456)
+  getHomepageProblems,
+  getHomepagePillars,
+  getHomepagePillarBySlug,
+  getHomepageFeatures,
+  getHomepageUseCases,
+  getFeaturesHero,
+  getFeaturesCapabilities,
+  getAboutHero,
+  getAboutValues,
+  getCTASection,
+  getCTASectionsByPage,
   isDirectusError,
 } from './collections';

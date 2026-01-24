@@ -1,6 +1,15 @@
 import { Heart, Users, Target } from 'lucide-react'
+import type { AboutHero as AboutHeroType } from '@/lib/directus/types'
 
-export function AboutHero() {
+interface AboutHeroProps {
+  hero?: AboutHeroType | null
+}
+
+export function AboutHero({ hero }: AboutHeroProps) {
+  // Fallback values if CMS data is unavailable
+  const headline = hero?.headline || 'Born in the Liquidity Reset'
+  const subheadline = hero?.subheadline || 'Chronos was built in Toronto during the most dramatic private market reset since 2008. We saw opportunity where others saw chaos.'
+
   return (
     <section className="relative overflow-hidden bg-slate-950 pt-32 pb-24 lg:pt-40 lg:pb-32">
       {/* Background Gradients */}
@@ -15,18 +24,14 @@ export function AboutHero() {
             About Chronos
           </div>
 
-          {/* Headline */}
+          {/* Headline - from Directus */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-[1.1]">
-            Building the Future of{' '}
-            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-sky-300 to-violet-300">
-              Private Market Intelligence
-            </span>
+            {headline}
           </h1>
 
-          {/* Subheadline */}
+          {/* Subheadline - from Directus */}
           <p className="text-xl text-slate-400 mb-12 max-w-3xl mx-auto leading-relaxed">
-            We're on a mission to democratize access to relationship intelligence,
-            empowering investors with the insights they need to make better decisions.
+            {subheadline}
           </p>
 
           {/* Stats */}

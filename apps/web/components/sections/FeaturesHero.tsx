@@ -1,6 +1,15 @@
 import { Database, Network, TrendingUp, Globe } from 'lucide-react'
+import type { FeaturesHero as FeaturesHeroType } from '@/lib/directus/types'
 
-export function FeaturesHero() {
+interface FeaturesHeroProps {
+  hero?: FeaturesHeroType | null
+}
+
+export function FeaturesHero({ hero }: FeaturesHeroProps) {
+  // Fallback values if CMS data is unavailable
+  const headline = hero?.headline || 'Enterprise-Grade Intelligence Platform'
+  const subheadline = hero?.subheadline || 'Unified graph, vector, geospatial, and time-series capabilities built for special situations investors navigating the Canadian liquidity reset.'
+
   return (
     <section className="relative overflow-hidden bg-slate-950 pt-32 pb-24 lg:pt-40 lg:pb-32">
       {/* Background Gradients */}
@@ -15,19 +24,14 @@ export function FeaturesHero() {
             Platform Features
           </div>
 
-          {/* Headline */}
+          {/* Headline - from Directus */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-[1.1]">
-            The Most Advanced{' '}
-            <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-300 via-sky-300 to-emerald-300">
-              Multi-Model Platform
-            </span>{' '}
-            for Private Markets
+            {headline}
           </h1>
 
-          {/* Subheadline */}
+          {/* Subheadline - from Directus */}
           <p className="text-xl text-slate-400 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Chronos combines four powerful database technologies into a single unified platform,
-            giving you unprecedented insights into private market relationships and opportunities.
+            {subheadline}
           </p>
 
           {/* Four Pillars Grid */}

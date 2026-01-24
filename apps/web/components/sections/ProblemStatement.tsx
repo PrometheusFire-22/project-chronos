@@ -13,7 +13,7 @@ import {
   FileSpreadsheet,
   type LucideIcon
 } from 'lucide-react'
-import type { Feature, PageSection } from '@/lib/directus'
+import type { HomepageProblem, PageSection } from '@/lib/directus/types'
 import { renderRichText } from '@/lib/content-renderer'
 
 // Icon mapping for Directus icon field
@@ -33,7 +33,7 @@ const iconMap: Record<string, LucideIcon> = {
 }
 
 interface ProblemStatementProps {
-  problems: Feature[]
+  problems: HomepageProblem[]
   sectionData?: PageSection | null
 }
 

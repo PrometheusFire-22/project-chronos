@@ -5,10 +5,10 @@ import { FeatureDetails } from '@/components/sections/FeatureDetails'
 import { FeatureComparison } from '@/components/sections/FeatureComparison'
 import { WaitlistSection } from '@/components/sections/WaitlistSection'
 import {
-  getFeaturesByCategory,
+  getFeaturesHero,
+  getFeaturesCapabilities,
   getComparisonItems,
   getPageSection,
-  FeatureCategory,
   PageSectionKey,
   isDirectusError,
 } from '@/lib/directus'
@@ -31,17 +31,18 @@ export const dynamic = 'force-static'
 
 export default async function FeaturesPage() {
   try {
-    // Fetch all features page data from Directus in parallel
-    const [featureDetails, comparisonItems, comparisonSection] = await Promise.all([
-      getFeaturesByCategory(FeatureCategory.FEATURES_DETAIL),
+    // Fetch all features page data from Directus in parallel (CHRONOS-457)
+    const [featuresHero, capabilities, comparisonItems, comparisonSection] = await Promise.all([
+      getFeaturesHero(), // NEW: cms_features_hero singleton
+      getFeaturesCapabilities(), // NEW: cms_features_capabilities
       getComparisonItems(),
       getPageSection(PageSectionKey.FEATURE_COMPARISON),
     ])
 
     return (
       <>
-        <FeaturesHero />
-        <FeatureDetails features={featureDetails} />
+        <FeaturesHero hero={featuresHero} />
+        <FeatureDetails features={capabilities} />
         <FeatureComparison comparisonItems={comparisonItems} sectionData={comparisonSection} />
         <WaitlistSection />
       </>

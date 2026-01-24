@@ -12,7 +12,7 @@ import {
   MapPin,
   type LucideIcon
 } from 'lucide-react'
-import type { Feature, PageSection } from '@/lib/directus'
+import type { HomepagePillar, PageSection } from '@/lib/directus/types'
 import { renderRichText } from '@/lib/content-renderer'
 
 // Icon mapping for solution pillar icons
@@ -59,7 +59,7 @@ const colorMap: Record<number, { bg: string; icon: string; border: string; glow:
 }
 
 interface SolutionPillarsProps {
-  pillars: Feature[]
+  pillars: HomepagePillar[]
   sectionData?: PageSection | null
 }
 

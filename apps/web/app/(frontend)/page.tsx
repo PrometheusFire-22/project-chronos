@@ -7,9 +7,11 @@ import { UseCases } from '@/components/sections/UseCases'
 import { WaitlistSection } from '@/components/sections/WaitlistSection'
 import {
   getHomepageHero,
-  getFeaturesByCategory,
+  getHomepageProblems,
+  getHomepagePillars,
+  getHomepageFeatures,
+  getHomepageUseCases,
   getPageSection,
-  FeatureCategory,
   PageSectionKey,
   isDirectusError,
 } from '@/lib/directus'
@@ -32,7 +34,7 @@ export const dynamic = 'force-static'
 
 export default async function HomePage() {
   try {
-    // Fetch all homepage data from Directus in parallel
+    // Fetch all homepage data from Directus in parallel (CHRONOS-457)
     const [
       hero,
       problems,
@@ -45,10 +47,10 @@ export default async function HomePage() {
       useCasesSection,
     ] = await Promise.all([
       getHomepageHero(),
-      getFeaturesByCategory(FeatureCategory.PROBLEM_POINT),
-      getFeaturesByCategory(FeatureCategory.SOLUTION_PILLAR),
-      getFeaturesByCategory(FeatureCategory.KEY_FEATURE),
-      getFeaturesByCategory(FeatureCategory.USE_CASE),
+      getHomepageProblems(), // NEW: cms_homepage_problems
+      getHomepagePillars(), // NEW: cms_homepage_pillars
+      getHomepageFeatures(), // NEW: cms_homepage_features
+      getHomepageUseCases(), // NEW: cms_homepage_use_cases
       getPageSection(PageSectionKey.PROBLEM_STATEMENT),
       getPageSection(PageSectionKey.SOLUTION_PILLARS),
       getPageSection(PageSectionKey.FEATURES_PREVIEW),
