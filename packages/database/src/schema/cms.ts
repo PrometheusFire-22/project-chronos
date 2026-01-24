@@ -358,6 +358,276 @@ export const comparisonItems = pgTable(
 );
 
 /**
+ * Homepage Problems
+ *
+ * Problem points displayed on the homepage.
+ * Replaces cms_features with category='problem-point'.
+ */
+export const homepageProblems = pgTable(
+  'cms_homepage_problems',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+
+    // Content
+    title: varchar('title', { length: 255 }).notNull(),
+    description: text('description').notNull(),
+
+    // Visual
+    icon: varchar('icon', { length: 50 }), // Lucide icon name
+
+    // Display
+    sortOrder: integer('sort_order').notNull().default(0),
+    enabled: boolean('enabled').notNull().default(true),
+
+    // Audit
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    sortOrderIdx: index('cms_homepage_problems_sort_order_idx').on(table.sortOrder),
+  })
+);
+
+/**
+ * Homepage Pillars
+ *
+ * Solution pillars (multi-modal capabilities) displayed on the homepage.
+ * Replaces cms_features with category='solution-pillar'.
+ */
+export const homepagePillars = pgTable(
+  'cms_homepage_pillars',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+
+    // Core fields
+    title: varchar('title', { length: 255 }).notNull(),
+    slug: varchar('slug', { length: 255 }).notNull().unique(),
+    description: text('description').notNull(),
+
+    // Visual
+    icon: varchar('icon', { length: 50 }), // Lucide icon name
+    image: varchar('image', { length: 500 }),
+
+    // Display
+    sortOrder: integer('sort_order').notNull().default(0),
+    enabled: boolean('enabled').notNull().default(true),
+
+    // Audit
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    slugIdx: index('cms_homepage_pillars_slug_idx').on(table.slug),
+    sortOrderIdx: index('cms_homepage_pillars_sort_order_idx').on(table.sortOrder),
+  })
+);
+
+/**
+ * Homepage Features
+ *
+ * Key features preview displayed on the homepage.
+ * Replaces cms_features with category='key-feature'.
+ */
+export const homepageFeatures = pgTable(
+  'cms_homepage_features',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+
+    // Content
+    title: varchar('title', { length: 255 }).notNull(),
+    description: text('description').notNull(),
+
+    // Visual
+    icon: varchar('icon', { length: 50 }), // Lucide icon name
+
+    // Display
+    sortOrder: integer('sort_order').notNull().default(0),
+    enabled: boolean('enabled').notNull().default(true),
+
+    // Audit
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    sortOrderIdx: index('cms_homepage_features_sort_order_idx').on(table.sortOrder),
+  })
+);
+
+/**
+ * Homepage Use Cases
+ *
+ * Use case examples displayed on the homepage.
+ * Replaces cms_features with category='use-case'.
+ */
+export const homepageUseCases = pgTable(
+  'cms_homepage_use_cases',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+
+    // Content
+    title: varchar('title', { length: 255 }).notNull(),
+    description: text('description').notNull(),
+
+    // Visual
+    icon: varchar('icon', { length: 50 }), // Lucide icon name
+
+    // Display
+    sortOrder: integer('sort_order').notNull().default(0),
+    enabled: boolean('enabled').notNull().default(true),
+
+    // Audit
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    sortOrderIdx: index('cms_homepage_use_cases_sort_order_idx').on(table.sortOrder),
+  })
+);
+
+/**
+ * Features Page Hero
+ *
+ * Hero section content for the features page.
+ * Singleton - typically only one active record.
+ */
+export const featuresHero = pgTable('cms_features_hero', {
+  id: uuid('id').defaultRandom().primaryKey(),
+
+  // Content
+  headline: varchar('headline', { length: 255 }).notNull(),
+  subheadline: text('subheadline'),
+
+  // Status
+  active: boolean('active').notNull().default(false), // Only one can be active
+
+  // Audit
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+/**
+ * Features Page Capabilities
+ *
+ * Detailed capability descriptions for the features page.
+ * Replaces cms_features with category='features-detail'.
+ */
+export const featuresCapabilities = pgTable(
+  'cms_features_capabilities',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+
+    // Core fields
+    title: varchar('title', { length: 255 }).notNull(),
+    description: text('description').notNull(),
+
+    // Visual
+    icon: varchar('icon', { length: 50 }), // Lucide icon name
+    image: varchar('image', { length: 500 }),
+
+    // Display
+    sortOrder: integer('sort_order').notNull().default(0),
+    enabled: boolean('enabled').notNull().default(true),
+
+    // Audit
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    sortOrderIdx: index('cms_features_capabilities_sort_order_idx').on(table.sortOrder),
+  })
+);
+
+/**
+ * About Page Hero
+ *
+ * Hero section content for the about page.
+ * Singleton - typically only one active record.
+ */
+export const aboutHero = pgTable('cms_about_hero', {
+  id: uuid('id').defaultRandom().primaryKey(),
+
+  // Content
+  headline: varchar('headline', { length: 255 }).notNull(),
+  subheadline: text('subheadline'),
+
+  // Status
+  active: boolean('active').notNull().default(false), // Only one can be active
+
+  // Audit
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+/**
+ * About Page Values
+ *
+ * Company values or value propositions for the about page.
+ * Replaces cms_features with category='about-section'.
+ */
+export const aboutValues = pgTable(
+  'cms_about_values',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+
+    // Content
+    title: varchar('title', { length: 255 }).notNull(),
+    description: text('description').notNull(),
+
+    // Visual
+    icon: varchar('icon', { length: 50 }), // Lucide icon name
+
+    // Display
+    sortOrder: integer('sort_order').notNull().default(0),
+    enabled: boolean('enabled').notNull().default(true),
+
+    // Audit
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    sortOrderIdx: index('cms_about_values_sort_order_idx').on(table.sortOrder),
+  })
+);
+
+/**
+ * CTA Sections
+ *
+ * Call-to-action sections placed strategically throughout pages.
+ * Supports multiple variants (inline, banner, full) for different contexts.
+ */
+export const ctaSections = pgTable(
+  'cms_cta_sections',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+
+    // Identification
+    sectionKey: varchar('section_key', { length: 100 }).notNull().unique(), // e.g., 'homepage-post-problems'
+    pageName: varchar('page_name', { length: 50 }).notNull(), // e.g., 'homepage', 'features', 'about'
+    placement: varchar('placement', { length: 50 }).notNull(), // e.g., 'post-problems', 'post-capabilities'
+
+    // Content
+    headline: varchar('headline', { length: 255 }).notNull(),
+    subheadline: text('subheadline'),
+    primaryCtaText: varchar('primary_cta_text', { length: 100 }).notNull(),
+    primaryCtaLink: varchar('primary_cta_link', { length: 255 }).notNull(),
+    secondaryCtaText: varchar('secondary_cta_text', { length: 100 }),
+    secondaryCtaLink: varchar('secondary_cta_link', { length: 255 }),
+
+    // Display
+    variant: varchar('variant', { length: 20 }).notNull().default('inline'), // inline, banner, full
+    enabled: boolean('enabled').notNull().default(true),
+
+    // Audit
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    sectionKeyIdx: index('cms_cta_sections_section_key_idx').on(table.sectionKey),
+    pageNameIdx: index('cms_cta_sections_page_name_idx').on(table.pageName),
+  })
+);
+
+/**
  * Export all CMS tables for Drizzle ORM
  */
 export const cmsSchema = {
@@ -370,4 +640,13 @@ export const cmsSchema = {
   waitlistSubmissions,
   pageSections,
   comparisonItems,
+  homepageProblems,
+  homepagePillars,
+  homepageFeatures,
+  homepageUseCases,
+  featuresHero,
+  featuresCapabilities,
+  aboutHero,
+  aboutValues,
+  ctaSections,
 };

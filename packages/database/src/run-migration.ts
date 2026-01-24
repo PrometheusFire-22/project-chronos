@@ -21,7 +21,7 @@ async function runMigration() {
 
   try {
     // Read the migration SQL file
-    const migrationPath = join(__dirname, '../migrations/0002_next_kate_bishop.sql');
+    const migrationPath = join(__dirname, '../migrations/0003_fat_ricochet.sql');
     const sql = readFileSync(migrationPath, 'utf-8');
 
     console.log('📄 Executing migration SQL...');
