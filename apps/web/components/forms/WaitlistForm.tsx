@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
 import { Button } from '@chronos/ui/components/button'
+import { Turnstile } from '@marsidev/react-turnstile'
 
 // Form validation schema
 const waitlistFormSchema = z.object({
@@ -24,6 +25,7 @@ type SubmissionState = 'idle' | 'submitting' | 'success' | 'error'
 export function WaitlistForm() {
   const [submissionState, setSubmissionState] = useState<SubmissionState>('idle')
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
 
   const {
     register,
@@ -35,6 +37,12 @@ export function WaitlistForm() {
   })
 
   const onSubmit = async (data: WaitlistFormData) => {
+    // Validate CAPTCHA token
+    if (!captchaToken) {
+      setErrorMessage('Please complete the CAPTCHA verification')
+      return
+    }
+
     setSubmissionState('submitting')
     setErrorMessage('')
 
@@ -61,6 +69,7 @@ export function WaitlistForm() {
           utm_source: utmSource,
           utm_medium: utmMedium,
           utm_campaign: utmCampaign,
+          captcha_token: captchaToken,
         }),
       })
 
@@ -71,12 +80,14 @@ export function WaitlistForm() {
 
       setSubmissionState('success')
       reset()
+      setCaptchaToken(null) // Reset CAPTCHA
     } catch (error) {
       console.error('Waitlist submission error:', error)
       setSubmissionState('error')
       setErrorMessage(
         error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.'
       )
+      setCaptchaToken(null) // Reset CAPTCHA on error
     }
   }
 
@@ -209,6 +220,20 @@ export function WaitlistForm() {
             <option value="article">Article/Blog</option>
             <option value="other">Other</option>
           </select>
+        </div>
+
+        {/* Turnstile CAPTCHA */}
+        <div className="flex justify-center">
+          <Turnstile
+            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'}
+            onSuccess={(token) => setCaptchaToken(token)}
+            onError={() => setCaptchaToken(null)}
+            onExpire={() => setCaptchaToken(null)}
+            options={{
+              theme: 'dark',
+              size: 'normal',
+            }}
+          />
         </div>
 
         {/* Error Message */}

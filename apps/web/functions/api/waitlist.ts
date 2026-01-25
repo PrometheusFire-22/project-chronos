@@ -2,6 +2,7 @@
 // This replaces the Next.js API route at /app/api/waitlist/route.ts
 
 import { z } from 'zod'
+import { calculateSpamScore } from '../../utils/spam-detection'
 
 // Validation schema for waitlist submissions
 const waitlistSubmissionSchema = z.object({
@@ -15,7 +16,70 @@ const waitlistSubmissionSchema = z.object({
   utm_source: z.string().nullable(),
   utm_medium: z.string().nullable(),
   utm_campaign: z.string().nullable(),
+  captcha_token: z.string().min(1),
 })
+
+// Turnstile verification response
+interface TurnstileResponse {
+  success: boolean
+  challenge_ts?: string
+  hostname?: string
+  'error-codes'?: string[]
+  action?: string
+  cdata?: string
+  metadata?: Record<string, unknown>
+}
+
+// Verify Turnstile CAPTCHA token
+async function verifyTurnstile(
+  token: string,
+  secretKey: string,
+  ip?: string
+): Promise<TurnstileResponse> {
+  const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      secret: secretKey,
+      response: token,
+      remoteip: ip,
+    }),
+  })
+
+  return await response.json() as TurnstileResponse
+}
+
+// Store CAPTCHA verification in database
+async function storeCaptchaVerification(
+  directusUrl: string,
+  data: {
+    token: string
+    ip_address: string | null
+    user_agent: string | null
+    success: boolean
+    error_codes: string[] | null
+    challenge_ts: string | null
+    hostname: string | null
+    action: string | null
+    cdata: string | null
+    metadata: Record<string, unknown> | null
+  }
+) {
+  try {
+    await fetch(`${directusUrl}/items/captcha_verifications`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+  } catch (error) {
+    console.error('Failed to store CAPTCHA verification:', error)
+    // Don't fail the request if logging fails
+  }
+}
 
 // Email template function
 function getWaitlistConfirmationEmail(data: { firstName: string; email: string }) {
@@ -93,6 +157,7 @@ export async function onRequestPost(context: {
   env: {
     RESEND_API_KEY: string
     NEXT_PUBLIC_DIRECTUS_URL?: string
+    TURNSTILE_SECRET_KEY: string
   }
 }): Promise<Response> {
   try {
@@ -100,10 +165,88 @@ export async function onRequestPost(context: {
     const body = await context.request.json()
     const validatedData = waitlistSubmissionSchema.parse(body)
 
-    // Get Directus URL from environment or use default
+    // Get client IP and user agent
+    const clientIP = context.request.headers.get('CF-Connecting-IP') ||
+                     context.request.headers.get('X-Forwarded-For')?.split(',')[0] ||
+                     null
+    const userAgent = context.request.headers.get('User-Agent') || null
+
+    // Verify Turnstile CAPTCHA
+    const turnstileResult = await verifyTurnstile(
+      validatedData.captcha_token,
+      context.env.TURNSTILE_SECRET_KEY,
+      clientIP || undefined
+    )
+
+    // Get Directus URL
     const directusUrl = context.env.NEXT_PUBLIC_DIRECTUS_URL || 'https://admin.automatonicai.com'
 
-    // Submit to Directus
+    // Store CAPTCHA verification result
+    await storeCaptchaVerification(directusUrl, {
+      token: validatedData.captcha_token,
+      ip_address: clientIP,
+      user_agent: userAgent,
+      success: turnstileResult.success,
+      error_codes: turnstileResult['error-codes'] || null,
+      challenge_ts: turnstileResult.challenge_ts || null,
+      hostname: turnstileResult.hostname || null,
+      action: turnstileResult.action || null,
+      cdata: turnstileResult.cdata || null,
+      metadata: turnstileResult.metadata || null,
+    })
+
+    // Reject if CAPTCHA verification failed
+    if (!turnstileResult.success) {
+      console.log('CAPTCHA verification failed:', {
+        ip: clientIP,
+        errors: turnstileResult['error-codes'],
+      })
+
+      return new Response(
+        JSON.stringify({
+          error: 'CAPTCHA verification failed',
+          message: 'Please try again or contact support if the issue persists.',
+        }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      )
+    }
+
+    // Calculate spam score
+    const spamScore = calculateSpamScore({
+      first_name: validatedData.first_name,
+      last_name: validatedData.last_name,
+      email: validatedData.email,
+      company: validatedData.company,
+      role: validatedData.role,
+    })
+
+    // Auto-reject if spam score is too high
+    if (spamScore.verdict === 'spam') {
+      console.log('Rejected spam submission:', {
+        email: validatedData.email,
+        score: spamScore.total,
+        reason: spamScore.reason,
+      })
+
+      return new Response(
+        JSON.stringify({
+          error: 'Submission rejected',
+          message: 'Your submission could not be processed. Please contact us directly if you believe this is an error.',
+        }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      )
+    }
+
+    // Determine initial status based on spam score
+    const initialStatus = spamScore.verdict === 'suspicious' ? 'review' : 'pending'
+
+    // Submit to Directus with spam score
     const response = await fetch(`${directusUrl}/items/cms_waitlist_submissions`, {
       method: 'POST',
       headers: {
@@ -120,8 +263,10 @@ export async function onRequestPost(context: {
         utm_source: validatedData.utm_source,
         utm_medium: validatedData.utm_medium,
         utm_campaign: validatedData.utm_campaign,
-        status: 'pending',
+        status: initialStatus,
         email_sent: false,
+        spam_score: spamScore.total,
+        spam_factors: spamScore.factors,
       }),
     })
 
