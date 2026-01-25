@@ -42,7 +42,7 @@ services:
       CORS_ORIGIN: https://automatonicai.com,https://www.automatonicai.com
       DB_SEARCH_PATH: "public,timeseries,geospatial,metadata"
     volumes:
-      - directus-uploads:/directus/uploads
+      # - directus-uploads:/directus/uploads  # Disabled: Now using Cloudflare R2 (CHRONOS-446)
       - directus-extensions:/directus/extensions
     depends_on:
       timescaledb:
