@@ -8,23 +8,23 @@ services:
     container_name: chronos-app
     volumes:
       - .:/workspace:cached
-    # The .env file provides all necessary environment variables for the app
+    # The .env.local file provides all necessary environment variables for local development
     env_file:
-      - .env
+      - .env.local
     # This command keeps the container running for VS Code to attach to
     command: sleep infinity
     networks:
       - chronos-network
     depends_on:
-      - timescaledb
+      - postgres
 
-  timescaledb:
+  postgres:
     build:
       context: .
-      dockerfile: Dockerfile.timescaledb
+      dockerfile: Dockerfile.postgres
     container_name: chronos-db
     env_file:
-      - .env
+      - .env.local
     # THIS IS THE CRITICAL FIX:
     # This block maps our variables from the .env file (e.g., DATABASE_USER)
     # to the specific variable names the PostgreSQL image requires for initialization

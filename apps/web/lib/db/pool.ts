@@ -39,6 +39,7 @@ export const getPool = cache((): DbClient => {
         connectionString,
         maxUses: 1, // Required for Cloudflare Workers - prevents connection reuse
         max: 1,
+        ssl: false // Hyperdrive handles SSL to the origin, or the origin doesn't support it
     });
 
     return {
@@ -75,6 +76,7 @@ export const getPoolAsync = cache(async (): Promise<DbClient> => {
         connectionString,
         maxUses: 1, // Required for Cloudflare Workers - prevents connection reuse
         max: 1,
+        ssl: false // Hyperdrive handles SSL to the origin, or the origin doesn't support it
     });
 
     return {

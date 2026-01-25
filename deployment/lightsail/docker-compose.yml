@@ -1,8 +1,8 @@
 services:
-  timescaledb:
+  postgres:
     build:
       context: ../../
-      dockerfile: Dockerfile.timescaledb
+      dockerfile: Dockerfile.postgres
     container_name: chronos-db
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
@@ -28,7 +28,7 @@ services:
       - "8055:8055"
     environment:
       DB_CLIENT: pg
-      DB_HOST: timescaledb
+      DB_HOST: postgres
       DB_PORT: 5432
       DB_DATABASE: ${POSTGRES_DB}
       DB_USER: ${DIRECTUS_DB_USER}
@@ -45,7 +45,7 @@ services:
       # - directus-uploads:/directus/uploads  # Disabled: Now using Cloudflare R2 (CHRONOS-446)
       - directus-extensions:/directus/extensions
     depends_on:
-      timescaledb:
+      postgres:
         condition: service_healthy
     restart: unless-stopped
     networks:

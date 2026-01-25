@@ -9,8 +9,8 @@ import pg from 'pg';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-// Load environment variables from .env.aws
-const envPath = join(process.cwd(), '.env.aws');
+// Load environment variables from .env.production
+const envPath = join(process.cwd(), '.env.production');
 const envFile = readFileSync(envPath, 'utf-8');
 envFile.split('\n').forEach(line => {
   const match = line.match(/^([^=]+)=(.*)$/);

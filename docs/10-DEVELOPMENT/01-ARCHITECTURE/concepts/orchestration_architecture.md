@@ -63,7 +63,7 @@ Think of your DevOps setup as a recipe for building two identical kitchens: one 
 
 *   **`docker-compose.yml` (The Orchestrator):**
     *   **Purpose:** This is the master plan that defines all the services in your application (`app`, `timescaledb`) and how they connect to each other (the network).
-    *   **How it Works:** It reads the blueprints (`Dockerfile`, `Dockerfile.timescaledb`) and tells Docker how to assemble the final, running application. This file is the **core of your environment** and is used by **both** local and remote setups.
+    *   **How it Works:** It reads the blueprints (`Dockerfile`, `Dockerfile.postgres`) and tells Docker how to assemble the final, running application. This file is the **core of your environment** and is used by **both** local and remote setups.
 
 *   **`.env` (The Secrets):**
     *   **Purpose:** This file holds all your secret keys and environment-specific settings. It is **never** committed to Git.

@@ -10,7 +10,7 @@
 
 ### Current Configuration
 
-**Image:** `postgis/postgis:16-3.4-alpine` (custom build via Dockerfile.timescaledb)
+**Image:** `postgis/postgis:16-3.4-alpine` (custom build via Dockerfile.postgres)
 **Container:** `chronos-db`
 **Port:** 5432
 **Database:** `chronos_db`

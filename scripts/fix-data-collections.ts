@@ -17,7 +17,7 @@ import { createDirectus, rest, authentication, readCollections, updateCollection
 import pg from 'pg';
 import * as dotenv from 'dotenv';
 
-dotenv.config({ path: '.env.aws' });
+dotenv.config({ path: '.env.production' });
 
 const DIRECTUS_URL = process.env.DIRECTUS_URL || 'https://admin.automatonicai.com';
 const ADMIN_EMAIL = process.env.DIRECTUS_ADMIN_EMAIL!;

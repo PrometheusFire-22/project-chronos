@@ -37,14 +37,19 @@ env/
 ENV/
 ..venv/
 
-# Environment Variables
+# Environment Variables (NEVER commit these!)
 .env
 .env.local
+.env.production
 .env.*.local
+
+# Deprecated env files (can be deleted after migration)
 .env.vercel
 .env.production.vercel
 .env.mcp
 .env.aws
+.env.api.local
+.env.api.production
 dotenv
 
 # Sentry CLI configuration (contains auth tokens)

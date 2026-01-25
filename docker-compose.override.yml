@@ -20,7 +20,7 @@ services:
     networks:
       - chronos-network
     depends_on:
-      - timescaledb
+      - postgres
     volumes:
       - metabase-data:/metabase-data
 
@@ -31,7 +31,7 @@ services:
     image: dpage/pgadmin4:latest
     container_name: chronos-pgadmin
     env_file:
-      - .env
+      - .env.local
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
@@ -40,7 +40,7 @@ services:
     networks:
       - chronos-network
     depends_on:
-      - timescaledb
+      - postgres
     volumes:
       - pgadmin-data:/var/lib/pgadmin
 
@@ -85,7 +85,7 @@ services:
       - directus-uploads:/directus/uploads
       - directus-extensions:/directus/extensions
     depends_on:
-      timescaledb:
+      postgres:
         condition: service_healthy
     networks:
       - chronos-network

@@ -70,7 +70,7 @@ This tells me how the services are defined, configured, and interact with each o
 
     Dockerfile (the one for the main app)
 
-    Dockerfile.timescaledb
+    Dockerfile.postgres
 
     Makefile
 

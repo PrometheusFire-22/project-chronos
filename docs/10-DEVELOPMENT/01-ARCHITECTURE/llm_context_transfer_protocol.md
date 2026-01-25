@@ -56,7 +56,7 @@ After the master prompt, provide the full contents of the following files in fiv
     1.  `docker-compose.yml`
     2.  `docker-compose.override.yml`
     3.  `Dockerfile` (main application)
-    4.  `Dockerfile.timescaledb`
+    4.  `Dockerfile.postgres`
     5.  `Makefile`
     6.  `.github/workflows/ci.yml`
 
