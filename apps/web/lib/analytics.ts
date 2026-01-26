@@ -1,4 +1,4 @@
-import { getPoolAsync } from './db/pool';
+import { cache } from 'react';
 
 export interface TimeseriesPoint {
     time: string;
@@ -15,55 +15,56 @@ export interface AnalyticsFilter {
     bucketInterval?: string; // '1 day', '1 week', '1 month'
 }
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.automatonicai.com';
+const IS_SERVER = typeof window === 'undefined';
+
+// Helper to determine the correct base URL
+function getBaseUrl() {
+    // If running on server (Next.js SSR), use the direct API URL
+    // If running on client, use the proxy
+    if (IS_SERVER) {
+        return API_BASE_URL;
+    }
+    return '/api-proxy';
+}
+
 /**
- * Fetches bucketed timeseries data using TimescaleDB's native time_bucket function.
- * Uses a dynamic parameter builder to avoid indexing errors.
+ * Fetches bucketed timeseries data from the Python API.
  */
 export async function getTimeseriesData(filter: AnalyticsFilter): Promise<TimeseriesPoint[]> {
     const { seriesIds, startDate, endDate, geographies, bucketInterval = '1 day' } = filter;
 
     if (seriesIds.length === 0) return [];
 
-    const params: any[] = [bucketInterval, seriesIds];
-    let paramCount = 2;
+    const params = new URLSearchParams();
+    params.append('series_ids', seriesIds.join(','));
+    params.append('interval', bucketInterval);
 
-    let whereClauses = ['eo.series_id = ANY($2)'];
-
-    if (startDate) {
-        paramCount++;
-        whereClauses.push(`eo.observation_date >= $${paramCount}::date`);
-        params.push(startDate);
-    }
-
-    if (endDate) {
-        paramCount++;
-        whereClauses.push(`eo.observation_date <= $${paramCount}::date`);
-        params.push(endDate);
-    }
-
-    if (geographies && geographies.length > 0) {
-        paramCount++;
-        whereClauses.push(`sm.geography = ANY($${paramCount})`);
-        params.push(geographies);
-    }
-
-    const query = `
-    SELECT
-      time_bucket($1, eo.observation_date) AS time,
-      eo.series_id,
-      AVG(eo.value)::float AS value,
-      sm.series_name
-    FROM timeseries.economic_observations eo
-    JOIN metadata.series_metadata sm ON eo.series_id = sm.series_id
-    WHERE ${whereClauses.join(' AND ')}
-    GROUP BY time, eo.series_id, sm.series_name
-    ORDER BY time ASC;
-  `;
+    if (startDate) params.append('start', startDate);
+    if (endDate) params.append('end', endDate);
+    if (geographies && geographies.length > 0) params.append('geos', geographies.join(','));
 
     try {
-        const pool = await getPoolAsync();
-        const result = await pool.query(query, params);
-        return result.rows;
+        const baseUrl = getBaseUrl();
+        // Use /api/economic/timeseries if direct, or /economic/timeseries if via proxy which rewrites to /api
+        // Wait, the proxy rewrites /api-proxy/:path* -> $API_URL/api/:path*
+        // So client call: /api-proxy/economic/timeseries -> API/api/economic/timeseries.
+        // Server call: API/api/economic/timeseries.
+
+        const path = IS_SERVER ? '/api/economic/timeseries' : '/economic/timeseries';
+        const url = `${baseUrl}${path}?${params.toString()}`;
+
+        const res = await fetch(url, {
+             next: { revalidate: 3600 } // Cache for 1 hour
+        });
+
+        if (!res.ok) {
+            throw new Error(`API Error: ${res.status} ${res.statusText}`);
+        }
+
+        const data = await res.json();
+        return data;
+
     } catch (error: any) {
         console.error('Error fetching timeseries data:', error);
         throw new Error(`Failed to fetch analytics data: ${error.message || String(error)}`);
@@ -74,17 +75,18 @@ export async function getTimeseriesData(filter: AnalyticsFilter): Promise<Timese
  * Fetches metadata for all active series to populate filters.
  */
 export async function getActiveSeries() {
-    const query = `
-    SELECT series_id, series_name, geography, units, frequency
-    FROM metadata.series_metadata
-    WHERE is_active = TRUE
-    ORDER BY series_name ASC;
-  `;
-
     try {
-        const pool = await getPoolAsync();
-        const result = await pool.query(query);
-        return result.rows;
+        const baseUrl = getBaseUrl();
+        const path = IS_SERVER ? '/api/economic/series' : '/economic/series';
+        const url = `${baseUrl}${path}`;
+
+        const res = await fetch(url, {
+             next: { revalidate: 86400 } // Cache for 24 hours
+        });
+
+        if (!res.ok) throw new Error(`API Error: ${res.status}`);
+
+        return await res.json();
     } catch (error) {
         console.error('Error fetching series metadata:', error);
         return [];
@@ -95,16 +97,18 @@ export async function getActiveSeries() {
  * Fetches all unique geographies for filtering.
  */
 export async function getGeographies() {
-    const query = `
-    SELECT DISTINCT geography
-    FROM metadata.series_metadata
-    WHERE is_active = TRUE AND geography IS NOT NULL
-    ORDER BY geography ASC;
-  `;
     try {
-        const pool = await getPoolAsync();
-        const result = await pool.query(query);
-        return result.rows.map((r: any) => r.geography);
+        const baseUrl = getBaseUrl();
+        const path = IS_SERVER ? '/api/economic/geographies' : '/economic/geographies';
+        const url = `${baseUrl}${path}`;
+
+        const res = await fetch(url, {
+             next: { revalidate: 86400 }
+        });
+
+        if (!res.ok) throw new Error(`API Error: ${res.status}`);
+
+        return await res.json();
     } catch (error) {
         console.error('Error fetching geographies:', error);
         return [];
@@ -113,21 +117,11 @@ export async function getGeographies() {
 
 /**
  * Fetches related series using Apache AGE (Graph) capabilities.
+ * NOTE: This is not yet fully implemented in the Python API, so we return empty for now
+ * or we could add an endpoint for it.
  */
 export async function getRelatedSeries(seriesId: number) {
-    try {
-        const pool = await getPoolAsync();
-        await pool.query('SET search_path = "public", "ag_catalog";');
-        const query = `
-    SELECT * FROM cypher('economic_graph', $$
-      MATCH (s:Series {id: $id})-[r:RELATES_TO]->(related:Series)
-      RETURN related.id, related.name, r.type
-    $$, $params) as (id agtype, name agtype, type agtype);
-  `;
-        const result = await pool.query(query, [JSON.stringify({ id: seriesId })]);
-        return result.rows;
-    } catch (error) {
-        console.error('Error fetching graph relationships:', error);
-        return [];
-    }
+    // TODO: Implement /api/graph/related endpoint
+    console.warn("Graph API not yet implemented in Python service");
+    return [];
 }

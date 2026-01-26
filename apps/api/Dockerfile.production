@@ -25,13 +25,13 @@ RUN curl -sSL https://install.python-poetry.org | python3 -
 # Copy dependency files
 COPY apps/chronos-api/pyproject.toml apps/chronos-api/poetry.lock* ./
 
-# Install dependencies
+# Install dependencies needed for the project
 RUN poetry install --no-root --only main
 
-# Copy application code
-COPY apps/chronos-api/src .
+# Copy application code preserving structure (src/chronos)
+COPY apps/chronos-api/src ./src
 
-# Install application
+# Install the project itself (now finds src/chronos correctly)
 RUN poetry install --only main
 
 # ==========================================
@@ -41,7 +41,7 @@ FROM python:3.11-slim-bookworm AS runner
 
 WORKDIR /app
 
-# Install runtime dependencies required by some packages (e.g. pg_config)
+# Install runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq5 \
     && rm -rf /var/lib/apt/lists/*
@@ -50,11 +50,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --from=builder /app/.venv /app/.venv
 ENV PATH="/app/.venv/bin:$PATH"
 
-# Copy application code
-COPY . .
+# Copy source code to match builder structure (needed for editable install)
+COPY apps/chronos-api/src /app/src
 
-# Expose port
-EXPOSE 8000
+# Copy main entry point
+# Copy main entry point
+COPY apps/chronos-api/main.py /app/main.py
 
-# Start command
-CMD ["uvicorn", "chronos.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Copy application data (GeoJSON etc)
+COPY apps/api/data /app/data
+
+# Set python path to find the package
+ENV PYTHONPATH=/app/src
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
