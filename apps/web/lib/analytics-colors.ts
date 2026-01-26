@@ -17,7 +17,7 @@ export function assignSeriesColors(series: SeriesMetadata[]): Record<number, str
 
     sortedSeries.forEach((meta) => {
         let color = '';
-        const geo = meta.geography.toUpperCase();
+        const geo = (meta.geography || "").toUpperCase();
 
         if (geo === 'CANADA' || geo === 'CA') {
             if (!usedColors.has(CANADA_RED)) {

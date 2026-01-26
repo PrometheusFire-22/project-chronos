@@ -125,8 +125,9 @@ export default function FilterSidebar({
                 </div>
                 <div className="flex flex-wrap gap-2">
                     {geographies.map(geo => {
-                        const isCanada = geo.toUpperCase() === 'CANADA' || geo.toUpperCase() === 'CA';
-                        const isUS = geo.toUpperCase().includes('UNITED STATES') || geo.toUpperCase() === 'US';
+                        const geoUpper = (geo || "").toUpperCase();
+                        const isCanada = geoUpper === 'CANADA' || geoUpper === 'CA';
+                        const isUS = geoUpper.includes('UNITED STATES') || geoUpper === 'US';
                         const isSelected = selectedGeos.includes(geo);
 
                         let colorClasses = 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-500 hover:border-slate-400';
@@ -163,8 +164,9 @@ export default function FilterSidebar({
 
                 <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                     {filteredCatalog.map(series => {
-                        const isCanada = series.geography.toUpperCase() === 'CANADA' || series.geography.toUpperCase() === 'CA';
-                        const isUS = series.geography.toUpperCase().includes('UNITED STATES') || series.geography.toUpperCase() === 'US';
+                        const geoUpper = (series.geography || "").toUpperCase();
+                        const isCanada = geoUpper === 'CANADA' || geoUpper === 'CA';
+                        const isUS = geoUpper.includes('UNITED STATES') || geoUpper === 'US';
                         const geoColorClass = isCanada ? 'text-red-400' : isUS ? 'text-blue-400' : 'text-slate-400';
                         const activeGeoColorClass = isCanada ? 'text-red-500' : isUS ? 'text-blue-500' : 'text-blue-500';
                         const orbitColor = isCanada ? '#f87171' : isUS ? '#60a5fa' : '#3b82f6';

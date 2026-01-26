@@ -9,6 +9,8 @@ import './tooltip.css';
 import { Card } from '@chronos/ui/components/card';
 import { Loader2 } from 'lucide-react';
 import { getMetricConfig, formatMetricValue } from '@/lib/metrics/config';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.automatonicai.com';
+
 // Fix Leaflet marker icons in Next.js
 import L from 'leaflet';
 // @ts-ignore
@@ -127,7 +129,7 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
 
     // Load Great Lakes once on mount
     useEffect(() => {
-        fetch('/api-proxy/geo/lakes')
+        fetch(`${API_BASE_URL}/api/geo/lakes`)
             .then(res => res.json())
             .then(data => setLakesData(data))
             .catch(err => console.error('Failed to load Great Lakes:', err));
@@ -144,13 +146,12 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                 const normalizedMetric = metric.toLowerCase();
 
                 // 1. Fetch Static Geometry from API
-                const apiUrl = '/api-proxy';
-                const geoRes = await fetch(`${apiUrl}/geo/choropleth?metric=${encodeURIComponent(normalizedMetric)}&mode=boundaries`);
+                const geoRes = await fetch(`${API_BASE_URL}/api/geo/choropleth?metric=${encodeURIComponent(normalizedMetric)}&mode=boundaries`);
                 if (!geoRes.ok) throw new Error(`Failed to load map boundaries: ${geoRes.statusText}`);
                 const geoJson = await geoRes.json();
 
                 // 2. Fetch Live Economic Data
-                const dataRes = await fetch(`${apiUrl}/geo/choropleth?metric=${encodeURIComponent(normalizedMetric)}&mode=data`);
+                const dataRes = await fetch(`${API_BASE_URL}/api/geo/choropleth?metric=${encodeURIComponent(normalizedMetric)}&mode=data`);
 
 
                 let combinedGeoJson = geoJson;

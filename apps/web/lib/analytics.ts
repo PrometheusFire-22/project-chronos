@@ -20,12 +20,9 @@ const IS_SERVER = typeof window === 'undefined';
 
 // Helper to determine the correct base URL
 function getBaseUrl() {
-    // If running on server (Next.js SSR), use the direct API URL
-    // If running on client, use the proxy
-    if (IS_SERVER) {
-        return API_BASE_URL;
-    }
-    return '/api-proxy';
+    // We now use the direct API URL even on the client, as CORS is correctly configured.
+    // This avoids issues with Cloudflare Pages rewrites/proxying.
+    return API_BASE_URL;
 }
 
 /**

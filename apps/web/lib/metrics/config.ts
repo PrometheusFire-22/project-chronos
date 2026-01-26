@@ -52,11 +52,11 @@ export const METRIC_REGISTRY: Record<string, MetricConfig> = {
  * @returns Metric configuration
  */
 export function getMetricConfig(key: string): MetricConfig {
-  const normalized = key.toLowerCase().trim();
+  const normalized = (key || "").toLowerCase().trim();
 
   // Return registered metric if found
-  if (METRIC_REGISTRY[normalized]) {
-    return METRIC_REGISTRY[normalized];
+  if (!normalized || METRIC_REGISTRY[normalized]) {
+    return METRIC_REGISTRY[normalized] || METRIC_REGISTRY.unemployment;
   }
 
   // Intelligent fallback for unknown metrics
