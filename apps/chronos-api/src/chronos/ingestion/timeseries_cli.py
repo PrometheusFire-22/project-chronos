@@ -27,7 +27,7 @@ from chronos.ingestion.valet import ValetPlugin
 
 # Load environment
 # Load environment (look in project root)
-env_path = Path(__file__).parent.parent.parent.parent / ".env"
+env_path = Path(__file__).parent.parent.parent.parent.parent / ".env"
 load_dotenv(env_path)
 
 # Database configuration
@@ -219,9 +219,9 @@ def main():
 
     start_time = datetime.now(UTC)
 
-    # Locate catalog (go up 4 levels: file -> ingestion -> chronos -> src -> project root)
+    # Locate catalog (go up 5 levels: file -> ingestion -> chronos -> src -> chronos-api -> apps -> project root)
     catalog_path = (
-        Path(__file__).parent.parent.parent.parent
+        Path(__file__).parent.parent.parent.parent.parent
         / "database"
         / "seeds"
         / "time-series_catalog.csv"
