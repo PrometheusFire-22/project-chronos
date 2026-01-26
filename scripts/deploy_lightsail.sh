@@ -3,11 +3,24 @@
 # Deploy the container version we just pushed (v2)
 # We must inject the secrets here because Lightsail containers don't inherit .env files automatically
 
+# Handle environment variables
+if [ -f .env.production ]; then
+    echo "Loading variables from .env.production..."
+    export $(grep -v '^#' .env.production | xargs)
+fi
+
 # Ensure required environment variables are set
 REQUIRED_VARS=(DATABASE_HOST DATABASE_PORT DATABASE_NAME DATABASE_USER DATABASE_PASSWORD DIRECTUS_URL DIRECTUS_TOKEN FRED_API_KEY)
+
+# Map DIRECTUS_KEY to DIRECTUS_TOKEN if found in .env files
+if [ -z "$DIRECTUS_TOKEN" ] && [ -n "$DIRECTUS_KEY" ]; then
+    export DIRECTUS_TOKEN="$DIRECTUS_KEY"
+fi
+
 for VAR in "${REQUIRED_VARS[@]}"; do
     if [ -z "${!VAR}" ]; then
         echo "Error: Environment variable $VAR is not set."
+        echo "Please ensure it is exported or present in .env.production"
         exit 1
     fi
 done
