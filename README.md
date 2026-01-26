@@ -20,8 +20,15 @@ Follow these steps to set up and run the local development environment:
     cd project-chronos
     ```
 
-2.  **Install dependencies:**
+2.  **Install dependencies (Poetry):**
     ```bash
+    # Install Poetry (if not already installed)
+    curl -sSL https://install.python-poetry.org | python3 -
+
+    # Install Python dependencies
+    poetry install
+
+    # Install Node.js dependencies (for apps/web)
     pnpm install
     ```
 

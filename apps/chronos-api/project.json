@@ -1,0 +1,44 @@
+{
+  "name": "chronos-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/chronos-api/src",
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run uvicorn main:app --reload",
+        "cwd": "apps/chronos-api"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry build",
+        "cwd": "apps/chronos-api"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run ruff check .",
+        "cwd": "apps/chronos-api"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run pytest",
+        "cwd": "apps/chronos-api"
+      }
+    },
+    "install": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry install",
+        "cwd": "apps/chronos-api"
+      }
+    }
+  },
+  "tags": ["type:api", "scope:backend", "lang:python"]
+}

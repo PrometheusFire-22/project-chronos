@@ -1,61 +1,60 @@
 # apps/api/Dockerfile.production
 
 # ==========================================
-# Stage 1: Builder
+# Phase 1: Builder
 # ==========================================
-FROM node:20-alpine AS builder
+FROM python:3.11-slim-bookworm AS builder
 
 WORKDIR /app
 
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy manifest files
-COPY package.json pnpm-lock.yaml* ./
+# Install Poetry
+ENV POETRY_HOME="/opt/poetry" \
+    POETRY_VIRTUALENVS_IN_PROJECT=true \
+    POETRY_NO_INTERACTION=1 \
+    POETRY_VERSION=1.7.1
+ENV PATH="$POETRY_HOME/bin:$PATH"
+
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
+# Copy dependency files
+COPY apps/chronos-api/pyproject.toml apps/chronos-api/poetry.lock* ./
 
 # Install dependencies
-RUN pnpm install
+RUN poetry install --no-root --only main
 
-# Copy source code and config
-COPY tsconfig.json .
+# Copy application code
+COPY apps/chronos-api/src .
 
-COPY src ./src
-COPY data ./data
-
-# Remove extends from tsconfig.json as parent is not available
-RUN sed -i '/"extends":/d' tsconfig.json
-
-# Build the application
-RUN pnpm run build
+# Install application
+RUN poetry install --only main
 
 # ==========================================
-# Stage 2: Runner
+# Phase 2: Runner
 # ==========================================
-FROM node:20-alpine AS runner
+FROM python:3.11-slim-bookworm AS runner
 
 WORKDIR /app
 
-# Install pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# Install runtime dependencies required by some packages (e.g. pg_config)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libpq5 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy package.json for production install
-COPY package.json pnpm-lock.yaml* ./
+# Copy virtual environment from builder
+COPY --from=builder /app/.venv /app/.venv
+ENV PATH="/app/.venv/bin:$PATH"
 
-# Install ONLY production dependencies
-RUN pnpm install --prod
-
-# Copy built artifacts from builder
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/data ./data
-COPY --from=builder /app/data ./data
-
-# Create a non-root user
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 hono
-USER hono
+# Copy application code
+COPY . .
 
 # Expose port
-EXPOSE 3005
+EXPOSE 8000
 
 # Start command
-CMD ["node", "dist/index.js"]
+CMD ["uvicorn", "chronos.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

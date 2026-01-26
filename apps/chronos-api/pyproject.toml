@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "chronos-api"
+version = "0.1.0"
+description = "Chronos Intelligence API (FastAPI + Graph + Vector)"
+authors = ["PrometheusFire-22"]
+readme = "README.md"
+packages = [{include = "chronos", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.109.0"
+uvicorn = {extras = ["standard"], version = "^0.27.0"}
+sqlalchemy = "^2.0.25"
+psycopg2-binary = "^2.9.9"
+pydantic = "^2.5.3"
+pydantic-settings = "^2.1.0"
+python-dotenv = "^1.0.0"
+requests = "^2.31.0"
+# Future "Brain" dependencies (commented out for now to start light)
+# llama-index = "^0.9.0"
+# docling = "^1.0.0"
+# pgvector = "^0.2.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.4"
+ruff = "^0.1.0"
+black = "^24.0.0"
+mypy = "^1.8.0"
+httpx = "^0.26.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests",
+]
