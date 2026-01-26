@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo, useRef } from 'react';
-import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON, useMap, Pane } from 'react-leaflet';
 import { scaleQuantile, scaleSequential } from 'd3-scale';
 import { interpolateYlOrRd } from 'd3-scale-chromatic';
 import 'leaflet/dist/leaflet.css';
@@ -432,21 +432,23 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                     />
                 )}
 
-                {/* Great Lakes water bodies - Rendered LAST to overlay/mask state polygons */}
-                {lakesData && (
-                    <GeoJSON
-                        key="great-lakes"
-                        data={lakesData}
-                        style={() => ({
-                            fillColor: '#020617', // Match map background for "cutout" effect
-                            fillOpacity: 1,       // Fully opaque to hide underlying state data
-                            weight: 1.5,
-                            opacity: 1,
-                            color: '#1e293b'      // Subtle border for definition
-                        })}
-                        interactive={false} // Ensure it doesn't capture clicks
-                    />
-                )}
+                {/* Great Lakes water bodies - Rendered in a custom pane with higher z-index */}
+                <Pane name="lakesPane" style={{ zIndex: 600 }}>
+                    {lakesData && (
+                        <GeoJSON
+                            key="great-lakes"
+                            data={lakesData}
+                            style={() => ({
+                                fillColor: '#020617', // Match map background for "cutout" effect
+                                fillOpacity: 1,       // Fully opaque to hide underlying state data
+                                weight: 1.5,
+                                opacity: 1,
+                                color: '#1e293b'      // Subtle border for definition
+                            })}
+                            interactive={false} // Ensure it doesn't capture clicks
+                        />
+                    )}
+                </Pane>
                 <MapController />
             </MapContainer>
         </Card>
