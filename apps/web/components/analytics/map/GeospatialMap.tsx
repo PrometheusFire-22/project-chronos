@@ -441,9 +441,9 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                             style={() => ({
                                 fillColor: '#020617', // Match map background for "cutout" effect
                                 fillOpacity: 1,       // Fully opaque to hide underlying state data
-                                weight: 1.5,
-                                opacity: 1,
-                                color: '#1e293b'      // Subtle border for definition
+                                weight: 0,            // No border for seamless rendering
+                                opacity: 0,           // No border opacity
+                                color: '#020617'      // Match background (border won't show anyway)
                             })}
                             interactive={false} // Ensure it doesn't capture clicks
                         />

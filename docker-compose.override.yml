@@ -68,7 +68,7 @@ services:
       - ./deployment/lightsail/.env
     environment:
       DB_CLIENT: pg
-      DB_HOST: 16.52.210.100
+      DB_HOST: postgres
       DB_PORT: 5432
       DB_DATABASE: ${POSTGRES_DB}
       DB_USER: ${DIRECTUS_DB_USER}

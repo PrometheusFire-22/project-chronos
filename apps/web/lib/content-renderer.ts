@@ -7,7 +7,7 @@ import { marked } from 'marked'
  * Note: This runs during Next.js static generation (SSR), so we use
  * a simple sanitization approach instead of DOMPurify to avoid issues.
  */
-export function renderRichText(content: string): string {
+export async function renderRichText(content: string): Promise<string> {
   if (!content) return ''
 
   // Check if content is already HTML (contains HTML tags)
@@ -20,11 +20,10 @@ export function renderRichText(content: string): string {
 
   if (hasMarkdownSyntax && !hasHtmlTags) {
     // Pure markdown - convert to HTML
-    html = marked(content, {
-      async: false,
+    html = await marked.parse(content, {
       gfm: true,
       breaks: true
-    }) as string
+    })
   } else if (hasHtmlTags && hasMarkdownSyntax) {
     // Mixed content - has HTML tags but also markdown
     // This happens when markdown editor wraps markdown in <p> tags
@@ -37,11 +36,10 @@ export function renderRichText(content: string): string {
       .replace(/&rarr;/g, '→')
       .trim()
 
-    html = marked(cleanedContent, {
-      async: false,
+    html = await marked.parse(cleanedContent, {
       gfm: true,
       breaks: true
-    }) as string
+    })
   } else {
     // Pure HTML - use as is
     html = content

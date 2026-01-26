@@ -214,7 +214,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 prose-ul:text-zinc-300
                 prose-ol:text-zinc-300
                 prose-li:marker:text-primary"
-              dangerouslySetInnerHTML={{ __html: renderRichText(post.content) }}
+              dangerouslySetInnerHTML={{ __html: await renderRichText(post.content) }}
             />
 
             {/* Tags */}

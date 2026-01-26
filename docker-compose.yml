@@ -1,22 +1,56 @@
 # Note: The 'version' tag is obsolete in modern Docker Compose and has been removed.
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: chronos-app
-    volumes:
-      - .:/workspace:cached
-    # The .env.local file provides all necessary environment variables for local development
+  directus:
+    image: directus/directus:10.10.4
+    container_name: directus
+    restart: always
+    ports:
+      - "8055:8055"
     env_file:
       - .env.local
-    # This command keeps the container running for VS Code to attach to
-    command: sleep infinity
-    networks:
-      - chronos-network
+    environment:
+      - KEY=${DIRECTUS_KEY}
+      - SECRET=${DIRECTUS_SECRET}
+      - DB_CLIENT=pg
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=${POSTGRES_DB}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - ADMIN_EMAIL=${DIRECTUS_ADMIN_EMAIL}
+      - ADMIN_PASSWORD=${DIRECTUS_ADMIN_PASSWORD}
+      - PUBLIC_URL=${DIRECTUS_URL}
+      - STORAGE_LOCATIONS=r2
+      - STORAGE_R2_DRIVER=s3
+      - STORAGE_R2_KEY=${STORAGE_R2_KEY}
+      - STORAGE_R2_SECRET=${STORAGE_R2_SECRET}
+      - STORAGE_R2_BUCKET=${STORAGE_R2_BUCKET}
+      - STORAGE_R2_REGION=${STORAGE_R2_REGION}
+      - STORAGE_R2_ENDPOINT=${STORAGE_R2_ENDPOINT}
+      - CORS_ENABLED=true
+      - CORS_ORIGIN=true
     depends_on:
       - postgres
+    networks:
+      - chronos-network
+
+  api:
+    build:
+      context: apps/api
+      dockerfile: Dockerfile.production
+    container_name: chronos-api
+    restart: always
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      - PORT=3005
+      - NODE_ENV=production
+    ports:
+      - "3005:3005"
+    depends_on:
+      - postgres
+    networks:
+      - chronos-network
 
   postgres:
     build:
@@ -30,25 +64,66 @@ services:
     # to the specific variable names the PostgreSQL image requires for initialization
     # (e.g., POSTGRES_USER).
     environment:
-      - POSTGRES_USER=${DATABASE_USER}
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
-      - "${DATABASE_PORT}:5432"
+      - "${DATABASE_PORT:-5432}:5432"
     volumes:
       - timescale-data:/var/lib/postgresql/data
       - ./pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf:ro
     healthcheck:
-      test:
-        ["CMD-SHELL", "pg_isready -U $${DATABASE_USER} -d $${DATABASE_NAME}"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
       - chronos-network
 
+  twenty-redis:
+    image: redis:7-alpine
+    container_name: twenty-redis
+    restart: always
+    networks:
+      - chronos-network
+
+  twenty:
+    image: twentycrm/twenty:latest
+    container_name: twenty
+    restart: always
+    ports:
+      - "3020:3000"
+    env_file:
+      - .env.local
+    environment:
+      - PG_DATABASE_URL=postgresql://twenty_user:${TWENTY_DB_PASSWORD}@postgres:5432/chronos?options=-c%20search_path%3Dtwenty
+      - SERVER_URL=https://crm.automatonicai.com
+      - FRONT_BASE_URL=https://crm.automatonicai.com
+      - ACCESS_TOKEN_SECRET=${TWENTY_ACCESS_TOKEN_SECRET}
+      - REFRESH_TOKEN_SECRET=${TWENTY_REFRESH_TOKEN_SECRET}
+      - LOGIN_TOKEN_SECRET=${TWENTY_LOGIN_TOKEN_SECRET}
+      - FILE_TOKEN_SECRET=${TWENTY_FILE_TOKEN_SECRET}
+      - APP_SECRET=${TWENTY_APP_SECRET}
+      - STORAGE_TYPE=local
+      - STORAGE_LOCAL_PATH=/app/storage
+      - REDIS_URL=redis://twenty-redis:6379
+      - EMAIL_FROM_ADDRESS=crm@automatonicai.com
+      - EMAIL_FROM_NAME=Chronos CRM
+    volumes:
+      - twenty_storage:/app/storage
+      - twenty_server_local_maps:/app/server/.local-maps
+    depends_on:
+      - postgres
+      - twenty-redis
+    networks:
+      - chronos-network
+
 volumes:
   timescale-data:
+    driver: local
+  twenty_storage:
+    driver: local
+  twenty_server_local_maps:
     driver: local
 
 networks:
