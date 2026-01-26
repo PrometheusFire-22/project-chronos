@@ -422,21 +422,6 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                     url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
                 />
 
-                {/* Great Lakes water bodies */}
-                {lakesData && (
-                    <GeoJSON
-                        key="great-lakes"
-                        data={lakesData}
-                        style={() => ({
-                            fillColor: '#3b82f6',
-                            fillOpacity: 0.4,
-                            weight: 1,
-                            opacity: 0.8,
-                            color: '#1e40af'
-                        })}
-                    />
-                )}
-
                 {/* State/Province boundaries with data */}
                 {geoData && (
                     <GeoJSON
@@ -444,6 +429,22 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                         data={geoData}
                         style={style}
                         onEachFeature={onEachFeature}
+                    />
+                )}
+
+                {/* Great Lakes water bodies - Rendered LAST to overlay/mask state polygons */}
+                {lakesData && (
+                    <GeoJSON
+                        key="great-lakes"
+                        data={lakesData}
+                        style={() => ({
+                            fillColor: '#020617', // Match map background for "cutout" effect
+                            fillOpacity: 1,       // Fully opaque to hide underlying state data
+                            weight: 1.5,
+                            opacity: 1,
+                            color: '#1e293b'      // Subtle border for definition
+                        })}
+                        interactive={false} // Ensure it doesn't capture clicks
                     />
                 )}
                 <MapController />
