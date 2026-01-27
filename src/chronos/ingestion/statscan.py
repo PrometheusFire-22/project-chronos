@@ -3,7 +3,6 @@ Statistics Canada WDS API plugin
 """
 
 import time
-from datetime import UTC, datetime
 from typing import Any
 
 import requests
@@ -32,14 +31,9 @@ class StatsCanPlugin(DataSourcePlugin):
         vector_num = series_id.lstrip("Vv")
 
         endpoint = f"{self.BASE_URL}/getDataFromVectorsAndLatestNPeriods"
-        
+
         # Request a large number of latest periods to cover historical data
-        payload = [
-            {
-                "vectorId": int(vector_num),
-                "latestN": 1000
-            }
-        ]
+        payload = [{"vectorId": int(vector_num), "latestN": 1000}]
 
         for attempt in range(max_retries):
             try:
