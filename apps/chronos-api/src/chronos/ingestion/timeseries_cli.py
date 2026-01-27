@@ -44,9 +44,6 @@ PLUGINS = {
     "Valet": ValetPlugin(),
     "StatsCan": StatsCanPlugin(),
     # Add future plugins here:
-    # "BOE": BOEPlugin(os.getenv("BOE_API_KEY")),
-    # "ECB": ECBPlugin(),
-    # "BOJ": BOJPlugin(os.getenv("BOJ_API_KEY")),
 }
 
 

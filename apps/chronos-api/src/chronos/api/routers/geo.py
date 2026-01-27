@@ -37,14 +37,14 @@ async def get_choropleth(
         if mode == "boundaries":
             boundaries_query = text(
                 """
-                SELECT 
-                    "NAME" as name, 
+                SELECT
+                    "NAME" as name,
                     'US' as country,
                     ST_AsGeoJSON(ST_SimplifyPreserveTopology(geometry, 0.005), 6)::json as geometry
                 FROM geospatial.us_states
                 UNION ALL
-                SELECT 
-                    "PRENAME" as name, 
+                SELECT
+                    "PRENAME" as name,
                     'CA' as country,
                     ST_AsGeoJSON(ST_SimplifyPreserveTopology(geometry, 0.01), 6)::json as geometry
                 FROM geospatial.ca_provinces
@@ -129,7 +129,7 @@ async def get_choropleth(
                     AND (CAST(:date AS DATE) IS NULL OR observation_date <= CAST(:date AS DATE))
                     ORDER BY geography, observation_date DESC
                 )
-                SELECT 
+                SELECT
                     region_data.name as region_name,
                     region_data.country as country_code,
                     ST_AsGeoJSON(ST_SimplifyPreserveTopology(region_data.geometry, 0.01), 6)::json as geometry,
@@ -203,9 +203,13 @@ async def get_lakes():
         # Robustly determine path. Assume Docker /app structure or local dev
         possible_paths = [
             "/app/data/great_lakes.geojson",  # Production Docker
-            os.path.join(os.getcwd(), "apps", "api", "data", "great_lakes.geojson"),  # Monorepo Root -> Node API
+            os.path.join(
+                os.getcwd(), "apps", "api", "data", "great_lakes.geojson"
+            ),  # Monorepo Root -> Node API
             os.path.join(os.getcwd(), "data", "great_lakes.geojson"),  # Root fallback
-            os.path.join(os.getcwd(), "../api/data/great_lakes.geojson"), # Relative from chronos-api
+            os.path.join(
+                os.getcwd(), "../api/data/great_lakes.geojson"
+            ),  # Relative from chronos-api
         ]
 
         final_path = None
