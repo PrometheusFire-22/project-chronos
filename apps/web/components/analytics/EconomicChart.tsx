@@ -141,7 +141,12 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
                         fontSize={10}
                         tickLine={false}
                         axisLine={false}
-                        tickFormatter={(value) => value > 1000 ? `${(value / 1000).toFixed(1)}k` : value}
+                        tickFormatter={(value) => {
+                            if (value >= 1000000000) return `${(value / 1000000000).toFixed(1)}B`;
+                            if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
+                            if (value >= 1000) return `${(value / 1000).toFixed(0)}k`;
+                            return value;
+                        }}
                         width={40}
                     />
 
@@ -153,7 +158,12 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
                             fontSize={10}
                             tickLine={false}
                             axisLine={false}
-                            tickFormatter={(value) => value > 1000 ? `${(value / 1000).toFixed(1)}k` : value.toFixed(1)}
+                            tickFormatter={(value) => {
+                                if (value >= 1000000000) return `${(value / 1000000000).toFixed(1)}B`;
+                                if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
+                                if (value >= 1000) return `${(value / 1000).toFixed(0)}k`;
+                                return value.toFixed(1);
+                            }}
                             width={40}
                         />
                     )}
@@ -168,9 +178,8 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
                             let formattedValue = value;
                             if (typeof value === 'number') {
                                 if (value === 0) formattedValue = "0";
-                                else if (Math.abs(value) < 0.01) formattedValue = value.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 6 });
-                                else if (Math.abs(value) < 1) formattedValue = value.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 4 });
-                                else formattedValue = value.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 2 });
+                                else if (Math.abs(value) < 1) formattedValue = value.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 6 });
+                                else formattedValue = value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                             }
 
                             return [formattedValue, displayName];

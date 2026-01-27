@@ -1,4 +1,15 @@
-export const DASHBOARD_COLORS = ['#34d399', '#fbbf24', '#a78bfa', '#2dd4bf', '#f472b6'];
+export const DASHBOARD_COLORS = [
+    '#34d399', // Emerald
+    '#fbbf24', // Amber
+    '#a78bfa', // Violet
+    '#2dd4bf', // Teal
+    '#f472b6', // Pink
+    '#60a5fa', // Blue (fallback if not used)
+    '#f87171', // Red (fallback)
+    '#fb923c', // Orange
+    '#c084fc', // Purple
+    '#38bdf8', // Sky
+];
 export const US_BLUE = '#60a5fa';
 export const CANADA_RED = '#f87171';
 

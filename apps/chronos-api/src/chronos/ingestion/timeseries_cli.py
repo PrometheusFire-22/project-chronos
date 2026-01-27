@@ -14,6 +14,7 @@ import csv
 import os
 import sys
 import time
+import urllib.parse
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -26,17 +27,41 @@ from chronos.ingestion.statscan import StatsCanPlugin
 from chronos.ingestion.valet import ValetPlugin
 
 # Load environment
-# Load environment (look in project root)
-env_path = Path(__file__).parent.parent.parent.parent.parent.parent / ".env.local"
-load_dotenv(env_path)
+load_dotenv()
+# Repo root (project-chronos)
+repo_root = Path(__file__).resolve().parents[5]
+load_dotenv(repo_root / ".env.local")
+load_dotenv(repo_root / ".env")
+load_dotenv(repo_root / "apps" / "api" / ".env")
 
 # Database configuration
-DB_CONFIG = {
-    "host": os.getenv("DATABASE_HOST", "chronos-db"),
-    "database": os.getenv("DATABASE_NAME", "chronos_db"),
-    "user": os.getenv("DATABASE_USER", "prometheus"),
-    "password": os.getenv("DATABASE_PASSWORD"),
-}
+db_url = os.getenv("DATABASE_URL")
+if db_url:
+    try:
+        result = urllib.parse.urlparse(db_url)
+        DB_CONFIG = {
+            "host": result.hostname,
+            "database": result.path.lstrip("/"),
+            "user": result.username,
+            "password": result.password,
+            "port": result.port or 5432,
+        }
+    except Exception as e:
+        print(f"Error parsing DATABASE_URL: {e}")
+        # Fallback
+        DB_CONFIG = {
+            "host": os.getenv("DATABASE_HOST", "chronos-db"),
+            "database": os.getenv("DATABASE_NAME", "chronos_db"),
+            "user": os.getenv("DATABASE_USER", "prometheus"),
+            "password": os.getenv("DATABASE_PASSWORD"),
+        }
+else:
+    DB_CONFIG = {
+        "host": os.getenv("DATABASE_HOST", "chronos-db"),
+        "database": os.getenv("DATABASE_NAME", "chronos_db"),
+        "user": os.getenv("DATABASE_USER", "prometheus"),
+        "password": os.getenv("DATABASE_PASSWORD"),
+    }
 
 # Initialize plugins
 PLUGINS = {
@@ -166,7 +191,7 @@ def insert_observations(conn, series_id: str, observations: list, source_id: int
                     VALUES (%s, %s, %s, %s)
                     ON CONFLICT (series_id, observation_date)
                     DO UPDATE SET value = EXCLUDED.value
-                """,
+                    """,
                     batch,
                 )
                 inserted += len(batch)

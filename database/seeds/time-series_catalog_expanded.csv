@@ -202,3 +202,7 @@ WYSTHPI,FRED,Active,All-Transactions House Price Index in Wyoming,Macro,State,Wy
 v2064894,StatsCan,Active,Unemployment Rate - Yukon,Macro,Provincial,Yukon,Monthly,Employment,Unemployment Rate
 v2065083,StatsCan,Active,Unemployment Rate - Northwest Territories,Macro,Provincial,Northwest Territories,Monthly,Employment,Unemployment Rate
 v2065272,StatsCan,Active,Unemployment Rate - Nunavut,Macro,Provincial,Nunavut,Monthly,Employment,Unemployment Rate
+DEXCAUS,FRED,Active,Canada / US FX Rate,FX,International,Canada,Daily,Exchange Rate,CAD
+DEXMXUS,FRED,Active,Mexico / US FX Rate,FX,International,Mexico,Daily,Exchange Rate,MXN
+DFF,FRED,Active,Federal Funds Effective Rate (Daily),Macro,National,United States,Daily,Monetary Policy,Interest Rates
+EXHOSLUSM495N,FRED,Active,Existing Home Sales,Macro,National,United States,Monthly,Housing,Sales

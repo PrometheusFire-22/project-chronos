@@ -83,7 +83,7 @@ export default function ActiveIndicatorCard({
                     {series.series_name}
                 </h4>
 
-                <div className="flex items-center gap-6">
+                <div className="flex items-start gap-6">
                     <div className="flex flex-col gap-1.5">
                         <span className="text-[10px] font-black tracking-widest uppercase text-slate-400">Frequency</span>
                         <div className="flex items-center gap-1.5 h-4">
