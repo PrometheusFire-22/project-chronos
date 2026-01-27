@@ -50,26 +50,58 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
             return {
                 ...meta,
                 key,
-                max,
+                max: max || 0.1, // Prevent division by zero
                 color: assignments[meta.series_id]
             };
         });
 
-        const sortedByMax = [...config].sort((a, b) => b.max - a.max);
-
-        // SCALE AWARENESS: Lowered to 3x for high sensitivity
-        // Only use dual axis if the scales are vastly different
-        const useDual = config.length > 1 && sortedByMax[0].max / (sortedByMax[sortedByMax.length - 1].max || 1) > 3;
-
-        if (!useDual) {
-            return config.map(c => ({ ...c, yAxisId: 'left' }));
+        // 1. Sort by max value (descending)
+        const sorted = [...config].sort((a, b) => b.max - a.max);
+        
+        // 2. If only 1 series, or very similar scales (max/min < 3x), use single axis
+        const globalMax = sorted[0].max;
+        const globalMin = sorted[sorted.length - 1].max;
+        
+        if (sorted.length < 2 || (globalMax / globalMin) < 3) {
+             return config.map(c => ({ ...c, yAxisId: 'left' }));
         }
 
-        const bigMax = sortedByMax[0].max;
-        // Map to right axis if it's less than 33% of the dominant series scale
+        // 3. Smart Split Algorithm: Find the split point that minimizes "scale crushing"
+        // We test splitting the sorted array at every index. 
+        // Group A (Left) = [0...i], Group B (Right) = [i+1...n]
+        // Score = (MaxA/MinA) + (MaxB/MinB). Lower is better.
+        let bestSplitIndex = 0;
+        let bestScore = Infinity;
+
+        for (let i = 0; i < sorted.length - 1; i++) {
+            const groupA = sorted.slice(0, i + 1);
+            const groupB = sorted.slice(i + 1);
+
+            const maxA = groupA[0].max;
+            const minA = groupA[groupA.length - 1].max;
+            const ratioA = maxA / minA;
+
+            const maxB = groupB[0].max;
+            const minB = groupB[groupB.length - 1].max;
+            const ratioB = maxB / minB;
+
+            const score = ratioA + ratioB;
+
+            if (score < bestScore) {
+                bestScore = score;
+                bestSplitIndex = i;
+            }
+        }
+
+        // 4. Assign axes based on the best split
+        // The "larger" values (Group A) go to Left, "smaller" (Group B) to Right
+        // But if the "Right" group is still wildly disparate, we might lose the smallest one, 
+        // but this is the mathematically optimal 2-axis split.
+        const leftKeys = new Set(sorted.slice(0, bestSplitIndex + 1).map(s => s.key));
+        
         return config.map(c => ({
             ...c,
-            yAxisId: c.max < (bigMax * 0.33) ? 'right' : 'left'
+            yAxisId: leftKeys.has(c.key) ? 'left' : 'right'
         }));
     }, [data, seriesMetadata]);
 

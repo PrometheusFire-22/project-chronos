@@ -4,6 +4,7 @@ import { assignSeriesColors } from '@/lib/analytics-colors';
 import EconomicChart from '@/components/analytics/EconomicChart';
 import FilterSidebar from '@/components/analytics/FilterSidebar';
 import ActiveIndicatorCard from '@/components/analytics/ActiveIndicatorCard';
+import GeospatialMapWrapper from '@/components/analytics/map/GeospatialMapWrapper';
 
 export const dynamic = 'force-dynamic';
 // Using Node.js runtime for database operations with Cloudflare Hyperdrive
@@ -164,6 +165,25 @@ export default async function EconomicAnalyticsPage({ searchParams }: PageProps)
                                     data={chartData}
                                     seriesMetadata={activeMetadata}
                                 />
+                            </div>
+                        </div>
+
+                        {/* Regional Analytics Map */}
+                        <div className="relative group">
+                            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
+                            <div className="relative bg-slate-900 rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
+                                <div className="p-4 border-b border-white/10 flex items-center justify-between">
+                                    <h3 className="text-sm font-bold tracking-tight text-white flex items-center gap-2">
+                                        <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                                        Regional Intensity Map
+                                    </h3>
+                                    <div className="flex items-center gap-4 text-[10px] text-slate-500 uppercase font-black tracking-widest">
+                                        <span>North America Vector Data</span>
+                                    </div>
+                                </div>
+                                <div className="h-[500px]">
+                                    <GeospatialMapWrapper metric="unemployment" />
+                                </div>
                             </div>
                         </div>
 

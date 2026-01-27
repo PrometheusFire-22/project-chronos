@@ -37,16 +37,19 @@ async def get_choropleth(
         if mode == "boundaries":
             boundaries_query = text(
                 """
-                SELECT
-                    name,
-                    country_code as country,
-                    ST_AsGeoJSON(
-                        ST_MakeValid(geometry),
-                        6
-                    )::json as geometry
-                FROM geospatial.ne_boundaries
+                SELECT 
+                    "NAME" as name, 
+                    'US' as country,
+                    ST_AsGeoJSON(ST_SimplifyPreserveTopology(geometry, 0.005), 6)::json as geometry
+                FROM geospatial.us_states
+                UNION ALL
+                SELECT 
+                    "PRENAME" as name, 
+                    'CA' as country,
+                    ST_AsGeoJSON(ST_SimplifyPreserveTopology(geometry, 0.01), 6)::json as geometry
+                FROM geospatial.ca_provinces
                 ORDER BY name
-            """
+                """
             )
             res = db.execute(boundaries_query).mappings().all()
 
@@ -98,15 +101,19 @@ async def get_choropleth(
                     ORDER BY geography, observation_date DESC
                 )
                 SELECT
-                    b.name,
-                    b.country_code as country,
+                    region_data.name,
+                    region_data.country,
                     lm.value,
                     lm.units,
                     lm.metric_type as metric,
                     lm.observation_date as date
-                FROM geospatial.ne_boundaries b
+                FROM (
+                    SELECT "NAME" as name, 'US' as country FROM geospatial.us_states
+                    UNION ALL
+                    SELECT "PRENAME" as name, 'CA' as country FROM geospatial.ca_provinces
+                ) as region_data
                 LEFT JOIN latest_metrics lm
-                    ON b.name = lm.geography
+                    ON region_data.name = lm.geography
             """
         else:  # Default 'geo'
             query_sql = """
@@ -122,20 +129,21 @@ async def get_choropleth(
                     AND (CAST(:date AS DATE) IS NULL OR observation_date <= CAST(:date AS DATE))
                     ORDER BY geography, observation_date DESC
                 )
-                SELECT
-                    b.name as region_name,
-                    b.country_code,
-                    ST_AsGeoJSON(
-                        ST_MakeValid(b.geometry),
-                        6
-                    )::json as geometry,
+                SELECT 
+                    region_data.name as region_name,
+                    region_data.country as country_code,
+                    ST_AsGeoJSON(ST_SimplifyPreserveTopology(region_data.geometry, 0.01), 6)::json as geometry,
                     lm.value as metric_value,
                     lm.units,
                     lm.metric_type,
                     lm.observation_date
-                FROM geospatial.ne_boundaries b
+                FROM (
+                    SELECT "NAME" as name, 'US' as country, geometry FROM geospatial.us_states
+                    UNION ALL
+                    SELECT "PRENAME" as name, 'CA' as country, geometry FROM geospatial.ca_provinces
+                ) as region_data
                 LEFT JOIN latest_metrics lm
-                    ON b.name = lm.geography
+                    ON region_data.name = lm.geography
                 ORDER BY lm.value DESC NULLS LAST
             """
 
@@ -195,10 +203,9 @@ async def get_lakes():
         # Robustly determine path. Assume Docker /app structure or local dev
         possible_paths = [
             "/app/data/great_lakes.geojson",  # Production Docker
-            os.path.join(
-                os.getcwd(), "apps", "api", "data", "great_lakes.geojson"
-            ),  # Local Monorepo
-            os.path.join(os.getcwd(), "data", "great_lakes.geojson"),  # Fallback
+            os.path.join(os.getcwd(), "apps", "api", "data", "great_lakes.geojson"),  # Monorepo Root -> Node API
+            os.path.join(os.getcwd(), "data", "great_lakes.geojson"),  # Root fallback
+            os.path.join(os.getcwd(), "../api/data/great_lakes.geojson"), # Relative from chronos-api
         ]
 
         final_path = None

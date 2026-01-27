@@ -1,0 +1,204 @@
+series_id,source,status,series_name,asset_class,geography_type,geography_name,frequency,category,subcategory
+GDP,FRED,Active,Gross Domestic Product,Macro,National,United States,Quarterly,Growth,GDP
+GDPC1,FRED,Active,Real Gross Domestic Product,Macro,National,United States,Quarterly,Growth,GDP
+INDPRO,FRED,Active,Industrial Production Index,Macro,National,United States,Monthly,Production,Manufacturing
+RSXFS,FRED,Active,Retail Sales,Macro,National,United States,Monthly,Consumption,Retail
+HOUST,FRED,Active,Housing Starts,Macro,National,United States,Monthly,Housing,Construction
+EXHOSLUSM495S,FRED,Active,Existing Home Sales,Macro,National,United States,Monthly,Housing,Sales
+UNRATE,FRED,Active,Unemployment Rate,Macro,National,United States,Monthly,Employment,Unemployment
+PAYEMS,FRED,Active,All Employees: Total Nonfarm,Macro,National,United States,Monthly,Employment,Payrolls
+CIVPART,FRED,Active,Labor Force Participation Rate,Macro,National,United States,Monthly,Employment,Labor Force
+U6RATE,FRED,Active,Total Unemployed Plus Marginally Attached,Macro,National,United States,Monthly,Employment,Unemployment
+CPIAUCSL,FRED,Active,Consumer Price Index: All Items,Macro,National,United States,Monthly,Inflation,CPI
+CPILFESL,FRED,Active,CPI: All Items Less Food & Energy,Macro,National,United States,Monthly,Inflation,CPI
+PCEPI,FRED,Active,Personal Consumption Expenditures Price Index,Macro,National,United States,Monthly,Inflation,PCE
+PCEPILFE,FRED,Active,PCE Less Food & Energy,Macro,National,United States,Monthly,Inflation,PCE
+PPIACO,FRED,Active,Producer Price Index: All Commodities,Macro,National,United States,Monthly,Inflation,PPI
+UMCSENT,FRED,Active,University of Michigan Consumer Sentiment,Macro,National,United States,Monthly,Sentiment,Consumer
+MICH,FRED,Active,University of Michigan Consumer Expectations,Macro,National,United States,Monthly,Sentiment,Consumer
+NAPM,FRED,Active,ISM Manufacturing PMI,Macro,National,United States,Monthly,Activity,Manufacturing
+NAPMNOI,FRED,Active,ISM Non-Manufacturing PMI,Macro,National,United States,Monthly,Activity,Services
+FEDFUNDS,FRED,Active,Federal Funds Effective Rate,Macro,National,United States,Monthly,Monetary Policy,Interest Rates
+SP500,FRED,Active,S&P 500 Index,Financial Markets,National,United States,Daily,Equities,Indices
+NASDAQCOM,FRED,Active,NASDAQ Composite Index,Financial Markets,National,United States,Daily,Equities,Indices
+DJIA,FRED,Active,Dow Jones Industrial Average,Financial Markets,National,United States,Daily,Equities,Indices
+VIXCLS,FRED,Active,CBOE Volatility Index: VIX,Financial Markets,National,United States,Daily,Volatility,Market Volatility
+DGS2,FRED,Active,2-Year Treasury Constant Maturity Rate,Financial Markets,National,United States,Daily,Interest Rates,Treasury Rates
+DGS5,FRED,Active,5-Year Treasury Constant Maturity Rate,Financial Markets,National,United States,Daily,Interest Rates,Treasury Rates
+DGS10,FRED,Active,10-Year Treasury Constant Maturity Rate,Financial Markets,National,United States,Daily,Interest Rates,Treasury Rates
+DGS30,FRED,Active,30-Year Treasury Constant Maturity Rate,Financial Markets,National,United States,Daily,Interest Rates,Treasury Rates
+T10Y2Y,FRED,Active,10-Year Treasury Minus 2-Year Treasury,Financial Markets,National,United States,Daily,Spreads,Yield Curve
+BAMLC0A0CM,FRED,Active,ICE BofA US Corporate Index Yield,Financial Markets,National,United States,Daily,Credit,Corporate Bonds
+BAMLH0A0HYM2,FRED,Active,ICE BofA US High Yield Index Spread,Financial Markets,National,United States,Daily,Credit,High Yield
+TEDRATE,FRED,Active,TED Spread,Financial Markets,National,United States,Daily,Spreads,Interest Rate Spreads
+DFEDTARU,FRED,Active,Federal Funds Target Range - Upper Limit,Financial Markets,National,United States,Daily,Monetary Policy,Policy Rates
+DFEDTARL,FRED,Active,Federal Funds Target Range - Lower Limit,Financial Markets,National,United States,Daily,Monetary Policy,Policy Rates
+STLFSI3,FRED,Active,St. Louis Fed Financial Stress Index,Financial Markets,National,United States,Weekly,Financial Stress,Market Indices
+V41690973,Valet,Active,Consumer Price Index: All Items,Macro,National,Canada,Monthly,Inflation,CPI
+V41690914,Valet,Active,CPI: All Items Excluding Food and Energy,Macro,National,Canada,Monthly,Inflation,CPI
+V41690973,Valet,Active,CPI: All Items (Duplicate),Macro,National,Canada,Monthly,Inflation,CPI
+V41693271,Valet,Active,CPI: Food,Macro,National,Canada,Monthly,Inflation,CPI
+V41693240,Valet,Active,CPI: Energy,Macro,National,Canada,Monthly,Inflation,CPI
+V62305752,Valet,Active,Real Gross Domestic Product,Macro,National,Canada,Quarterly,Growth,GDP
+V62305753,Valet,Active,Nominal Gross Domestic Product,Macro,National,Canada,Quarterly,Growth,GDP
+V2062815,Valet,Active,Real GDP at Market Prices,Macro,National,Canada,Quarterly,Growth,GDP
+V2091072,Valet,Active,Unemployment Rate,Macro,National,Canada,Monthly,Employment,Unemployment
+V2091073,Valet,Active,Employment,Macro,National,Canada,Monthly,Employment,Total Employment
+V2091074,Valet,Active,Labour Force,Macro,National,Canada,Monthly,Employment,Labor Force
+V2091075,Valet,Active,Participation Rate,Macro,National,Canada,Monthly,Employment,Labor Force
+V735,Valet,Active,Housing Starts: All Areas,Macro,National,Canada,Monthly,Housing,Construction
+V1992067,Valet,Active,Retail Trade,Macro,National,Canada,Monthly,Consumption,Retail
+V62305723,Valet,Active,Exports of Goods and Services,Macro,National,Canada,Monthly,Trade,Exports
+V62305724,Valet,Active,Imports of Goods and Services,Macro,National,Canada,Monthly,Trade,Imports
+V62305725,Valet,Active,Trade Balance,Macro,National,Canada,Monthly,Trade,Balance
+V122530,Valet,Active,Bank of Canada Policy Interest Rate,Macro,National,Canada,Irregular,Monetary Policy,Policy Rates
+V122531,Valet,Active,Overnight Rate Target,Macro,National,Canada,Daily,Monetary Policy,Policy Rates
+V39079,Valet,Active,Bank of Canada Balance Sheet,Macro,National,Canada,Weekly,Monetary Policy,Balance Sheet
+V80691311,Valet,Active,Industrial Product Price Index,Macro,National,Canada,Monthly,Inflation,PPI
+V41692930,Valet,Active,Raw Materials Price Index,Macro,National,Canada,Monthly,Inflation,Commodity Prices
+V52367348,Valet,Active,Business Confidence Index,Macro,National,Canada,Quarterly,Sentiment,Business
+V80245347,Valet,Active,Consumer Confidence Index,Macro,National,Canada,Monthly,Sentiment,Consumer
+V122620,Valet,Active,Manufacturing Sales,Macro,National,Canada,Monthly,Production,Manufacturing
+FXUSDCAD,Valet,Active,US Dollar to Canadian Dollar Exchange Rate,Foreign Exchange,National,Canada,Daily,Currency,Exchange Rates
+FXEURCAD,Valet,Active,Euro to Canadian Dollar Exchange Rate,Foreign Exchange,National,Canada,Daily,Currency,Exchange Rates
+FXGBPCAD,Valet,Active,UK Pound to Canadian Dollar Exchange Rate,Foreign Exchange,National,Canada,Daily,Currency,Exchange Rates
+FXJPYCAD,Valet,Active,Japanese Yen to Canadian Dollar Exchange Rate,Foreign Exchange,National,Canada,Daily,Currency,Exchange Rates
+FXCADMXN,Valet,Active,Canadian Dollar to Mexican Peso Exchange Rate,Foreign Exchange,National,Canada,Daily,Currency,Exchange Rates
+DCOILWTICO,FRED,Active,Crude Oil Prices: West Texas Intermediate,Commodities,Global,World,Daily,Energy,Crude Oil
+DCOILBRENTEU,FRED,Active,Crude Oil Prices: Brent - Europe,Commodities,Global,World,Daily,Energy,Crude Oil
+DHHNGSP,FRED,Active,Henry Hub Natural Gas Spot Price,Commodities,Global,World,Daily,Energy,Natural Gas
+GOLDAMGBD228NLBM,FRED,Active,Gold Fixing Price: London Bullion Market,Commodities,Global,World,Daily,Metals,Precious Metals
+PCOPPUSDM,FRED,Active,Global Price of Copper,Commodities,Global,World,Monthly,Metals,Industrial Metals
+DEXUSEU,FRED,Active,US Dollar to Euro Exchange Rate,Foreign Exchange,Global,World,Daily,Currency,Major Pairs
+DEXUSUK,FRED,Active,US Dollar to UK Pound Exchange Rate,Foreign Exchange,Global,World,Daily,Currency,Major Pairs
+DEXJPUS,FRED,Active,Japanese Yen to US Dollar Exchange Rate,Foreign Exchange,Global,World,Daily,Currency,Major Pairs
+DEXCHUS,FRED,Active,Chinese Yuan to US Dollar Exchange Rate,Foreign Exchange,Global,World,Daily,Currency,Major Pairs
+DEXSZUS,FRED,Active,Swiss Franc to US Dollar Exchange Rate,Foreign Exchange,Global,World,Daily,Currency,Major Pairs
+CANGDPASQ,FRED,Active,Real Gross Domestic Product (FRED Source),Macro,National,Canada,Quarterly,Growth,GDP
+CANURAMS,FRED,Active,Unemployment Rate (FRED Source),Macro,National,Canada,Monthly,Employment,Unemployment
+CANCPIALLMINMEI,FRED,Active,Consumer Price Index: All Items (FRED Source),Macro,National,Canada,Monthly,Inflation,CPI
+v2063004,StatsCan,Active,Unemployment Rate - Newfoundland and Labrador,Macro,Provincial,Newfoundland and Labrador,Monthly,Employment,Unemployment Rate
+v2063193,StatsCan,Active,Unemployment Rate - Prince Edward Island,Macro,Provincial,Prince Edward Island,Monthly,Employment,Unemployment Rate
+v2063382,StatsCan,Active,Unemployment Rate - Nova Scotia,Macro,Provincial,Nova Scotia,Monthly,Employment,Unemployment Rate
+v2063571,StatsCan,Active,Unemployment Rate - New Brunswick,Macro,Provincial,New Brunswick,Monthly,Employment,Unemployment Rate
+v2063760,StatsCan,Active,Unemployment Rate - Québec,Macro,Provincial,Québec,Monthly,Employment,Unemployment Rate
+v2063949,StatsCan,Active,Unemployment Rate - Ontario,Macro,Provincial,Ontario,Monthly,Employment,Unemployment Rate
+v2064138,StatsCan,Active,Unemployment Rate - Manitoba,Macro,Provincial,Manitoba,Monthly,Employment,Unemployment Rate
+v2064327,StatsCan,Active,Unemployment Rate - Saskatchewan,Macro,Provincial,Saskatchewan,Monthly,Employment,Unemployment Rate
+v2064516,StatsCan,Active,Unemployment Rate - Alberta,Macro,Provincial,Alberta,Monthly,Employment,Unemployment Rate
+v2064705,StatsCan,Active,Unemployment Rate - British Columbia,Macro,Provincial,British Columbia,Monthly,Employment,Unemployment Rate
+v111955448,StatsCan,Active,New Housing Price Index - Newfoundland and Labrador,Macro,Provincial,Newfoundland and Labrador,Monthly,Housing,New Housing Price Index
+v111955454,StatsCan,Active,New Housing Price Index - Prince Edward Island,Macro,Provincial,Prince Edward Island,Monthly,Housing,New Housing Price Index
+v111955460,StatsCan,Active,New Housing Price Index - Nova Scotia,Macro,Provincial,Nova Scotia,Monthly,Housing,New Housing Price Index
+v111955466,StatsCan,Active,New Housing Price Index - New Brunswick,Macro,Provincial,New Brunswick,Monthly,Housing,New Housing Price Index
+v111955472,StatsCan,Active,New Housing Price Index - Québec,Macro,Provincial,Québec,Monthly,Housing,New Housing Price Index
+v111955490,StatsCan,Active,New Housing Price Index - Ontario,Macro,Provincial,Ontario,Monthly,Housing,New Housing Price Index
+v111955526,StatsCan,Active,New Housing Price Index - Manitoba,Macro,Provincial,Manitoba,Monthly,Housing,New Housing Price Index
+v111955532,StatsCan,Active,New Housing Price Index - Saskatchewan,Macro,Provincial,Saskatchewan,Monthly,Housing,New Housing Price Index
+v111955541,StatsCan,Active,New Housing Price Index - Alberta,Macro,Provincial,Alberta,Monthly,Housing,New Housing Price Index
+v111955550,StatsCan,Active,New Housing Price Index - British Columbia,Macro,Provincial,British Columbia,Monthly,Housing,New Housing Price Index
+ALUR,FRED,Active,Unemployment Rate in Alabama,Macro,State,Alabama,Monthly,Employment,Unemployment Rate
+ALSTHPI,FRED,Active,All-Transactions House Price Index in Alabama,Macro,State,Alabama,Quarterly,Housing,House Price Index
+AKUR,FRED,Active,Unemployment Rate in Alaska,Macro,State,Alaska,Monthly,Employment,Unemployment Rate
+AKSTHPI,FRED,Active,All-Transactions House Price Index in Alaska,Macro,State,Alaska,Quarterly,Housing,House Price Index
+AZUR,FRED,Active,Unemployment Rate in Arizona,Macro,State,Arizona,Monthly,Employment,Unemployment Rate
+AZSTHPI,FRED,Active,All-Transactions House Price Index in Arizona,Macro,State,Arizona,Quarterly,Housing,House Price Index
+ARUR,FRED,Active,Unemployment Rate in Arkansas,Macro,State,Arkansas,Monthly,Employment,Unemployment Rate
+ARSTHPI,FRED,Active,All-Transactions House Price Index in Arkansas,Macro,State,Arkansas,Quarterly,Housing,House Price Index
+CAUR,FRED,Active,Unemployment Rate in California,Macro,State,California,Monthly,Employment,Unemployment Rate
+CASTHPI,FRED,Active,All-Transactions House Price Index in California,Macro,State,California,Quarterly,Housing,House Price Index
+COUR,FRED,Active,Unemployment Rate in Colorado,Macro,State,Colorado,Monthly,Employment,Unemployment Rate
+COSTHPI,FRED,Active,All-Transactions House Price Index in Colorado,Macro,State,Colorado,Quarterly,Housing,House Price Index
+CTUR,FRED,Active,Unemployment Rate in Connecticut,Macro,State,Connecticut,Monthly,Employment,Unemployment Rate
+CTSTHPI,FRED,Active,All-Transactions House Price Index in Connecticut,Macro,State,Connecticut,Quarterly,Housing,House Price Index
+DEUR,FRED,Active,Unemployment Rate in Delaware,Macro,State,Delaware,Monthly,Employment,Unemployment Rate
+DESTHPI,FRED,Active,All-Transactions House Price Index in Delaware,Macro,State,Delaware,Quarterly,Housing,House Price Index
+DCUR,FRED,Active,Unemployment Rate in District of Columbia,Macro,State,District of Columbia,Monthly,Employment,Unemployment Rate
+DCSTHPI,FRED,Active,All-Transactions House Price Index in District of Columbia,Macro,State,District of Columbia,Quarterly,Housing,House Price Index
+FLUR,FRED,Active,Unemployment Rate in Florida,Macro,State,Florida,Monthly,Employment,Unemployment Rate
+FLSTHPI,FRED,Active,All-Transactions House Price Index in Florida,Macro,State,Florida,Quarterly,Housing,House Price Index
+GAUR,FRED,Active,Unemployment Rate in Georgia,Macro,State,Georgia,Monthly,Employment,Unemployment Rate
+GASTHPI,FRED,Active,All-Transactions House Price Index in Georgia,Macro,State,Georgia,Quarterly,Housing,House Price Index
+HIUR,FRED,Active,Unemployment Rate in Hawaii,Macro,State,Hawaii,Monthly,Employment,Unemployment Rate
+HISTHPI,FRED,Active,All-Transactions House Price Index in Hawaii,Macro,State,Hawaii,Quarterly,Housing,House Price Index
+IDUR,FRED,Active,Unemployment Rate in Idaho,Macro,State,Idaho,Monthly,Employment,Unemployment Rate
+IDSTHPI,FRED,Active,All-Transactions House Price Index in Idaho,Macro,State,Idaho,Quarterly,Housing,House Price Index
+ILUR,FRED,Active,Unemployment Rate in Illinois,Macro,State,Illinois,Monthly,Employment,Unemployment Rate
+ILSTHPI,FRED,Active,All-Transactions House Price Index in Illinois,Macro,State,Illinois,Quarterly,Housing,House Price Index
+INUR,FRED,Active,Unemployment Rate in Indiana,Macro,State,Indiana,Monthly,Employment,Unemployment Rate
+INSTHPI,FRED,Active,All-Transactions House Price Index in Indiana,Macro,State,Indiana,Quarterly,Housing,House Price Index
+IAUR,FRED,Active,Unemployment Rate in Iowa,Macro,State,Iowa,Monthly,Employment,Unemployment Rate
+IASTHPI,FRED,Active,All-Transactions House Price Index in Iowa,Macro,State,Iowa,Quarterly,Housing,House Price Index
+KSUR,FRED,Active,Unemployment Rate in Kansas,Macro,State,Kansas,Monthly,Employment,Unemployment Rate
+KSSTHPI,FRED,Active,All-Transactions House Price Index in Kansas,Macro,State,Kansas,Quarterly,Housing,House Price Index
+KYUR,FRED,Active,Unemployment Rate in Kentucky,Macro,State,Kentucky,Monthly,Employment,Unemployment Rate
+KYSTHPI,FRED,Active,All-Transactions House Price Index in Kentucky,Macro,State,Kentucky,Quarterly,Housing,House Price Index
+LAUR,FRED,Active,Unemployment Rate in Louisiana,Macro,State,Louisiana,Monthly,Employment,Unemployment Rate
+LASTHPI,FRED,Active,All-Transactions House Price Index in Louisiana,Macro,State,Louisiana,Quarterly,Housing,House Price Index
+MEUR,FRED,Active,Unemployment Rate in Maine,Macro,State,Maine,Monthly,Employment,Unemployment Rate
+MESTHPI,FRED,Active,All-Transactions House Price Index in Maine,Macro,State,Maine,Quarterly,Housing,House Price Index
+MDUR,FRED,Active,Unemployment Rate in Maryland,Macro,State,Maryland,Monthly,Employment,Unemployment Rate
+MDSTHPI,FRED,Active,All-Transactions House Price Index in Maryland,Macro,State,Maryland,Quarterly,Housing,House Price Index
+MAUR,FRED,Active,Unemployment Rate in Massachusetts,Macro,State,Massachusetts,Monthly,Employment,Unemployment Rate
+MASTHPI,FRED,Active,All-Transactions House Price Index in Massachusetts,Macro,State,Massachusetts,Quarterly,Housing,House Price Index
+MIUR,FRED,Active,Unemployment Rate in Michigan,Macro,State,Michigan,Monthly,Employment,Unemployment Rate
+MISTHPI,FRED,Active,All-Transactions House Price Index in Michigan,Macro,State,Michigan,Quarterly,Housing,House Price Index
+MNUR,FRED,Active,Unemployment Rate in Minnesota,Macro,State,Minnesota,Monthly,Employment,Unemployment Rate
+MNSTHPI,FRED,Active,All-Transactions House Price Index in Minnesota,Macro,State,Minnesota,Quarterly,Housing,House Price Index
+MSUR,FRED,Active,Unemployment Rate in Mississippi,Macro,State,Mississippi,Monthly,Employment,Unemployment Rate
+MSSTHPI,FRED,Active,All-Transactions House Price Index in Mississippi,Macro,State,Mississippi,Quarterly,Housing,House Price Index
+MOUR,FRED,Active,Unemployment Rate in Missouri,Macro,State,Missouri,Monthly,Employment,Unemployment Rate
+MOSTHPI,FRED,Active,All-Transactions House Price Index in Missouri,Macro,State,Missouri,Quarterly,Housing,House Price Index
+MTUR,FRED,Active,Unemployment Rate in Montana,Macro,State,Montana,Monthly,Employment,Unemployment Rate
+MTSTHPI,FRED,Active,All-Transactions House Price Index in Montana,Macro,State,Montana,Quarterly,Housing,House Price Index
+NEUR,FRED,Active,Unemployment Rate in Nebraska,Macro,State,Nebraska,Monthly,Employment,Unemployment Rate
+NESTHPI,FRED,Active,All-Transactions House Price Index in Nebraska,Macro,State,Nebraska,Quarterly,Housing,House Price Index
+NVUR,FRED,Active,Unemployment Rate in Nevada,Macro,State,Nevada,Monthly,Employment,Unemployment Rate
+NVSTHPI,FRED,Active,All-Transactions House Price Index in Nevada,Macro,State,Nevada,Quarterly,Housing,House Price Index
+NHUR,FRED,Active,Unemployment Rate in New Hampshire,Macro,State,New Hampshire,Monthly,Employment,Unemployment Rate
+NHSTHPI,FRED,Active,All-Transactions House Price Index in New Hampshire,Macro,State,New Hampshire,Quarterly,Housing,House Price Index
+NJUR,FRED,Active,Unemployment Rate in New Jersey,Macro,State,New Jersey,Monthly,Employment,Unemployment Rate
+NJSTHPI,FRED,Active,All-Transactions House Price Index in New Jersey,Macro,State,New Jersey,Quarterly,Housing,House Price Index
+NMUR,FRED,Active,Unemployment Rate in New Mexico,Macro,State,New Mexico,Monthly,Employment,Unemployment Rate
+NMSTHPI,FRED,Active,All-Transactions House Price Index in New Mexico,Macro,State,New Mexico,Quarterly,Housing,House Price Index
+NYUR,FRED,Active,Unemployment Rate in New York,Macro,State,New York,Monthly,Employment,Unemployment Rate
+NYSTHPI,FRED,Active,All-Transactions House Price Index in New York,Macro,State,New York,Quarterly,Housing,House Price Index
+NCUR,FRED,Active,Unemployment Rate in North Carolina,Macro,State,North Carolina,Monthly,Employment,Unemployment Rate
+NCSTHPI,FRED,Active,All-Transactions House Price Index in North Carolina,Macro,State,North Carolina,Quarterly,Housing,House Price Index
+NDUR,FRED,Active,Unemployment Rate in North Dakota,Macro,State,North Dakota,Monthly,Employment,Unemployment Rate
+NDSTHPI,FRED,Active,All-Transactions House Price Index in North Dakota,Macro,State,North Dakota,Quarterly,Housing,House Price Index
+OHUR,FRED,Active,Unemployment Rate in Ohio,Macro,State,Ohio,Monthly,Employment,Unemployment Rate
+OHSTHPI,FRED,Active,All-Transactions House Price Index in Ohio,Macro,State,Ohio,Quarterly,Housing,House Price Index
+OKUR,FRED,Active,Unemployment Rate in Oklahoma,Macro,State,Oklahoma,Monthly,Employment,Unemployment Rate
+OKSTHPI,FRED,Active,All-Transactions House Price Index in Oklahoma,Macro,State,Oklahoma,Quarterly,Housing,House Price Index
+ORUR,FRED,Active,Unemployment Rate in Oregon,Macro,State,Oregon,Monthly,Employment,Unemployment Rate
+ORSTHPI,FRED,Active,All-Transactions House Price Index in Oregon,Macro,State,Oregon,Quarterly,Housing,House Price Index
+PAUR,FRED,Active,Unemployment Rate in Pennsylvania,Macro,State,Pennsylvania,Monthly,Employment,Unemployment Rate
+PASTHPI,FRED,Active,All-Transactions House Price Index in Pennsylvania,Macro,State,Pennsylvania,Quarterly,Housing,House Price Index
+RIUR,FRED,Active,Unemployment Rate in Rhode Island,Macro,State,Rhode Island,Monthly,Employment,Unemployment Rate
+RISTHPI,FRED,Active,All-Transactions House Price Index in Rhode Island,Macro,State,Rhode Island,Quarterly,Housing,House Price Index
+SCUR,FRED,Active,Unemployment Rate in South Carolina,Macro,State,South Carolina,Monthly,Employment,Unemployment Rate
+SCSTHPI,FRED,Active,All-Transactions House Price Index in South Carolina,Macro,State,South Carolina,Quarterly,Housing,House Price Index
+SDUR,FRED,Active,Unemployment Rate in South Dakota,Macro,State,South Dakota,Monthly,Employment,Unemployment Rate
+SDSTHPI,FRED,Active,All-Transactions House Price Index in South Dakota,Macro,State,South Dakota,Quarterly,Housing,House Price Index
+TNUR,FRED,Active,Unemployment Rate in Tennessee,Macro,State,Tennessee,Monthly,Employment,Unemployment Rate
+TNSTHPI,FRED,Active,All-Transactions House Price Index in Tennessee,Macro,State,Tennessee,Quarterly,Housing,House Price Index
+TXUR,FRED,Active,Unemployment Rate in Texas,Macro,State,Texas,Monthly,Employment,Unemployment Rate
+TXSTHPI,FRED,Active,All-Transactions House Price Index in Texas,Macro,State,Texas,Quarterly,Housing,House Price Index
+UTUR,FRED,Active,Unemployment Rate in Utah,Macro,State,Utah,Monthly,Employment,Unemployment Rate
+UTSTHPI,FRED,Active,All-Transactions House Price Index in Utah,Macro,State,Utah,Quarterly,Housing,House Price Index
+VTUR,FRED,Active,Unemployment Rate in Vermont,Macro,State,Vermont,Monthly,Employment,Unemployment Rate
+VTSTHPI,FRED,Active,All-Transactions House Price Index in Vermont,Macro,State,Vermont,Quarterly,Housing,House Price Index
+VAUR,FRED,Active,Unemployment Rate in Virginia,Macro,State,Virginia,Monthly,Employment,Unemployment Rate
+VASTHPI,FRED,Active,All-Transactions House Price Index in Virginia,Macro,State,Virginia,Quarterly,Housing,House Price Index
+WAUR,FRED,Active,Unemployment Rate in Washington,Macro,State,Washington,Monthly,Employment,Unemployment Rate
+WASTHPI,FRED,Active,All-Transactions House Price Index in Washington,Macro,State,Washington,Quarterly,Housing,House Price Index
+WVUR,FRED,Active,Unemployment Rate in West Virginia,Macro,State,West Virginia,Monthly,Employment,Unemployment Rate
+WVSTHPI,FRED,Active,All-Transactions House Price Index in West Virginia,Macro,State,West Virginia,Quarterly,Housing,House Price Index
+WIUR,FRED,Active,Unemployment Rate in Wisconsin,Macro,State,Wisconsin,Monthly,Employment,Unemployment Rate
+WISTHPI,FRED,Active,All-Transactions House Price Index in Wisconsin,Macro,State,Wisconsin,Quarterly,Housing,House Price Index
+WYUR,FRED,Active,Unemployment Rate in Wyoming,Macro,State,Wyoming,Monthly,Employment,Unemployment Rate
+WYSTHPI,FRED,Active,All-Transactions House Price Index in Wyoming,Macro,State,Wyoming,Quarterly,Housing,House Price Index
+v2064894,StatsCan,Active,Unemployment Rate - Yukon,Macro,Provincial,Yukon,Monthly,Employment,Unemployment Rate
+v2065083,StatsCan,Active,Unemployment Rate - Northwest Territories,Macro,Provincial,Northwest Territories,Monthly,Employment,Unemployment Rate
+v2065272,StatsCan,Active,Unemployment Rate - Nunavut,Macro,Provincial,Nunavut,Monthly,Employment,Unemployment Rate

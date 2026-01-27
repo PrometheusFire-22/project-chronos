@@ -31,17 +31,13 @@ class StatsCanPlugin(DataSourcePlugin):
         # Vector IDs in StatsCan API are numeric, strip both 'V' and 'v'
         vector_num = series_id.lstrip("Vv")
 
-        endpoint = f"{self.BASE_URL}/getBulkVectorDataByRange"
-
-        # Default range: last 15 years to current
-        end_date = datetime.now(UTC).strftime("%Y-%m-%d")
-        start_date = "2010-01-01"
-
+        endpoint = f"{self.BASE_URL}/getDataFromVectorsAndLatestNPeriods"
+        
+        # Request a large number of latest periods to cover historical data
         payload = [
             {
                 "vectorId": int(vector_num),
-                "startDataPointReleaseDate": start_date,
-                "endDataPointReleaseDate": end_date,
+                "latestN": 1000
             }
         ]
 
@@ -52,7 +48,7 @@ class StatsCanPlugin(DataSourcePlugin):
 
                 headers = {"Content-Type": "application/json", "Accept": "application/json"}
 
-                print(f"    → Requesting vector {vector_num} from {start_date} to {end_date}")
+                print(f"    → Requesting vector {vector_num} (latest 1000 periods)")
                 response = requests.post(endpoint, json=payload, headers=headers, timeout=30)
 
                 if response.status_code != 200:

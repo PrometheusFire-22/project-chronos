@@ -27,8 +27,10 @@ from chronos.ingestion.valet import ValetPlugin
 
 # Load environment
 # Load environment (look in project root)
-env_path = Path(__file__).parent.parent.parent.parent / ".env"
-load_dotenv(env_path)
+root_dir = Path(__file__).parent.parent.parent.parent
+load_dotenv(root_dir / ".env")
+load_dotenv(root_dir / ".env.local")
+load_dotenv(root_dir / ".env.production")
 
 # Database configuration
 DB_CONFIG = {
@@ -211,6 +213,7 @@ def main():
     parser.add_argument(
         "--geography", help="Filter by geography name (e.g., Canada, United States)"
     )
+    parser.add_argument("--catalog", help="Path to custom time-series catalog CSV")
     args = parser.parse_args()
 
     print("\n" + "=" * 60)
@@ -219,13 +222,17 @@ def main():
 
     start_time = datetime.now(UTC)
 
-    # Locate catalog (go up 4 levels: file -> ingestion -> chronos -> src -> project root)
-    catalog_path = (
-        Path(__file__).parent.parent.parent.parent
-        / "database"
-        / "seeds"
-        / "time-series_catalog.csv"
-    )
+    # Locate catalog
+    if args.catalog:
+        catalog_path = Path(args.catalog)
+    else:
+        # Default catalog (go up 4 levels: file -> ingestion -> chronos -> src -> project root)
+        catalog_path = (
+            Path(__file__).parent.parent.parent.parent
+            / "database"
+            / "seeds"
+            / "time-series_catalog.csv"
+        )
 
     if not catalog_path.exists():
         print(f"❌ Catalog not found: {catalog_path}")

@@ -27,7 +27,7 @@ from chronos.ingestion.valet import ValetPlugin
 
 # Load environment
 # Load environment (look in project root)
-env_path = Path(__file__).parent.parent.parent.parent.parent / ".env"
+env_path = Path(__file__).parent.parent.parent.parent.parent.parent / ".env.local"
 load_dotenv(env_path)
 
 # Database configuration
@@ -82,6 +82,7 @@ def ensure_data_source(conn, plugin):
 
     if result:
         source_id = result[0]
+        conn.commit()  # Ensure transaction is closed
         print(f"✅ {source_name} already exists (ID: {source_id})\n")
     else:
         # Insert new source (let source_id auto-generate)
@@ -211,6 +212,10 @@ def main():
     parser.add_argument(
         "--geography", help="Filter by geography name (e.g., Canada, United States)"
     )
+    parser.add_argument("--category", help="Filter by category (e.g., Housing, Growth)")
+    parser.add_argument(
+        "--geo-type", help="Filter by geography type (e.g., National, State, Province)"
+    )
     args = parser.parse_args()
 
     print("\n" + "=" * 60)
@@ -219,12 +224,12 @@ def main():
 
     start_time = datetime.now(UTC)
 
-    # Locate catalog (go up 5 levels: file -> ingestion -> chronos -> src -> chronos-api -> apps -> project root)
+    # Locate catalog (go up 6 levels: file -> ingestion -> chronos -> src -> chronos-api -> apps -> project root)
     catalog_path = (
-        Path(__file__).parent.parent.parent.parent.parent
+        Path(__file__).parent.parent.parent.parent.parent.parent
         / "database"
         / "seeds"
-        / "time-series_catalog.csv"
+        / "time-series_catalog_expanded.csv"
     )
 
     if not catalog_path.exists():
@@ -242,6 +247,10 @@ def main():
         if args.geography and s["geography_name"] != args.geography:
             continue
         if args.series and s["series_id"] not in args.series:
+            continue
+        if args.category and s["category"] != args.category:
+            continue
+        if args.geo_type and s["geography_type"] != args.geo_type:
             continue
         series_list.append(s)
 

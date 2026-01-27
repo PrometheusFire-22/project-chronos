@@ -2,7 +2,6 @@
 Statistics Canada WDS API plugin
 """
 
-import time
 from datetime import UTC, datetime
 from typing import Any
 
@@ -37,28 +36,19 @@ class StatsCanPlugin(DataSourcePlugin):
         end_date = datetime.now(UTC).strftime("%Y-%m-%d")
         start_date = "2010-01-01"
 
-        payload = [
-            {
-                "vectorId": int(vector_num),
-                "startDataPointReleaseDate": start_date,
-                "endDataPointReleaseDate": end_date,
-            }
-        ]
+        payload = {
+            "vectorIds": [int(vector_num)],
+            "startDataPointReleaseDate": start_date + "T00:00",
+            "endDataPointReleaseDate": end_date + "T00:00",
+        }
 
+        # headers = {"Content-Type": "application/json", "Accept": "application/json"}
+        # print(f"    → Requesting vector {vector_num} from {start_date} to {end_date}")
+
+        max_retries = 3
         for attempt in range(max_retries):
             try:
-                if attempt > 0:
-                    time.sleep(5)
-
-                headers = {"Content-Type": "application/json", "Accept": "application/json"}
-
-                print(f"    → Requesting vector {vector_num} from {start_date} to {end_date}")
-                response = requests.post(endpoint, json=payload, headers=headers, timeout=30)
-
-                if response.status_code != 200:
-                    print(f"    → Response status: {response.status_code}")
-                    print(f"    → Response body: {response.text[:300]}")
-
+                response = requests.post(endpoint, json=payload, timeout=30)
                 response.raise_for_status()
 
                 results = response.json()
@@ -71,19 +61,19 @@ class StatsCanPlugin(DataSourcePlugin):
 
                 valid_obs = []
                 for pt in vector_data:
-                    ref_period = pt.get("refPer")  # format varies: YYYY-MM-DD or YYYY-MM
-                    value = pt.get("value")
+                    val_str = str(pt.get("value", ""))
+                    ref_date = pt.get("refPer", "")
 
-                    if ref_period and value is not None:
-                        # Normalize date
-                        date_str = ref_period
-                        if len(date_str) == 7:  # YYYY-MM
-                            date_str += "-01"
+                    # Skip empty or invalid
+                    if val_str == "" or val_str is None:
+                        continue
 
-                        valid_obs.append({"date": date_str, "value": str(value)})
-
-                # Sort by date
-                valid_obs.sort(key=lambda x: x["date"])
+                    try:
+                        # Try parsing value
+                        val = float(val_str)
+                        valid_obs.append({"date": ref_date, "value": val})
+                    except ValueError:
+                        continue
 
                 return valid_obs
 

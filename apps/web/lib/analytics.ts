@@ -1,4 +1,4 @@
-import { cache } from 'react';
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            import { cache } from 'react';
 
 export interface TimeseriesPoint {
     time: string;
@@ -74,8 +74,8 @@ export async function getTimeseriesData(filter: AnalyticsFilter): Promise<Timese
 export async function getActiveSeries() {
     try {
         const baseUrl = getBaseUrl();
-        const path = IS_SERVER ? '/api/economic/series' : '/economic/series';
-        const url = `${baseUrl}${path}`;
+        // Always use the full path to avoid routing confusion
+        const url = `${baseUrl}/api/economic/series`;
 
         const res = await fetch(url, {
              next: { revalidate: 86400 } // Cache for 24 hours
@@ -96,9 +96,7 @@ export async function getActiveSeries() {
 export async function getGeographies() {
     try {
         const baseUrl = getBaseUrl();
-        const path = IS_SERVER ? '/api/economic/geographies' : '/economic/geographies';
-        const url = `${baseUrl}${path}`;
-
+        const url = `${baseUrl}/api/economic/geographies`;
         const res = await fetch(url, {
              next: { revalidate: 86400 }
         });
