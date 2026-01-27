@@ -22,7 +22,9 @@ class StatsCanPlugin(DataSourcePlugin):
     def get_source_name(self) -> str:
         return "Statistics Canada"
 
-    def fetch_observations(self, series_id: str, max_retries: int = 3) -> list[dict[str, Any]]:
+    def fetch_observations(
+        self, series_id: str, start_date: str | None = None, max_retries: int = 3
+    ) -> list[dict[str, Any]]:
         """
         Fetch observations from StatsCan WDS API
         series_id is the vector ID (e.g., 'V12345' or 'v12345')
@@ -32,9 +34,10 @@ class StatsCanPlugin(DataSourcePlugin):
 
         endpoint = f"{self.BASE_URL}/getBulkVectorDataByRange"
 
-        # Default range: last 15 years to current
+        # Default range: last 15 years to current if no start_date provided
         end_date = datetime.now(UTC).strftime("%Y-%m-%d")
-        start_date = "2010-01-01"
+        if not start_date:
+            start_date = "2010-01-01"
 
         payload = {
             "vectorIds": [int(vector_num)],

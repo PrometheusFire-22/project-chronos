@@ -21,9 +21,13 @@ class ValetPlugin(DataSourcePlugin):
     def get_source_name(self) -> str:
         return "Bank of Canada Valet API"
 
-    def fetch_observations(self, series_id: str, max_retries: int = 3) -> list[dict[str, Any]]:
+    def fetch_observations(
+        self, series_id: str, start_date: str | None = None, max_retries: int = 3
+    ) -> list[dict[str, Any]]:
         """Fetch observations from Valet API"""
         url = f"{self.BASE_URL}/{series_id}/json"
+        if start_date:
+            url += f"?start_date={start_date}"
 
         for attempt in range(max_retries):
             try:
