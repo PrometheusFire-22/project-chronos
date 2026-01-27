@@ -57,17 +57,17 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
 
         // 1. Sort by max value (descending)
         const sorted = [...config].sort((a, b) => b.max - a.max);
-        
+
         // 2. If only 1 series, or very similar scales (max/min < 3x), use single axis
         const globalMax = sorted[0].max;
         const globalMin = sorted[sorted.length - 1].max;
-        
+
         if (sorted.length < 2 || (globalMax / globalMin) < 3) {
              return config.map(c => ({ ...c, yAxisId: 'left' }));
         }
 
         // 3. Smart Split Algorithm: Find the split point that minimizes "scale crushing"
-        // We test splitting the sorted array at every index. 
+        // We test splitting the sorted array at every index.
         // Group A (Left) = [0...i], Group B (Right) = [i+1...n]
         // Score = (MaxA/MinA) + (MaxB/MinB). Lower is better.
         let bestSplitIndex = 0;
@@ -95,10 +95,10 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
 
         // 4. Assign axes based on the best split
         // The "larger" values (Group A) go to Left, "smaller" (Group B) to Right
-        // But if the "Right" group is still wildly disparate, we might lose the smallest one, 
+        // But if the "Right" group is still wildly disparate, we might lose the smallest one,
         // but this is the mathematically optimal 2-axis split.
         const leftKeys = new Set(sorted.slice(0, bestSplitIndex + 1).map(s => s.key));
-        
+
         return config.map(c => ({
             ...c,
             yAxisId: leftKeys.has(c.key) ? 'left' : 'right'
@@ -164,10 +164,16 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
                             // Find the metadata using the s_{id} key from name (passed as dataKey)
                             const config = seriesConfig.find(s => s.key === props.dataKey);
                             const displayName = config ? `${config.series_name} (${config.geography})` : name;
-                            return [
-                                typeof value === 'number' ? value.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) : value,
-                                displayName
-                            ];
+
+                            let formattedValue = value;
+                            if (typeof value === 'number') {
+                                if (value === 0) formattedValue = "0";
+                                else if (Math.abs(value) < 0.01) formattedValue = value.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 6 });
+                                else if (Math.abs(value) < 1) formattedValue = value.toLocaleString(undefined, { minimumFractionDigits: 3, maximumFractionDigits: 4 });
+                                else formattedValue = value.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 2 });
+                            }
+
+                            return [formattedValue, displayName];
                         }}
                         contentStyle={{
                             backgroundColor: 'rgba(15, 23, 42, 0.95)',

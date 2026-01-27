@@ -216,6 +216,7 @@ def main():
     parser.add_argument(
         "--geo-type", help="Filter by geography type (e.g., National, State, Province)"
     )
+    parser.add_argument("--start-date", help="Start date for fetching observations (YYYY-MM-DD)")
     args = parser.parse_args()
 
     print("\n" + "=" * 60)
@@ -292,7 +293,7 @@ def main():
             actual_source_id = source_id_map[source]
 
             # Fetch observations
-            observations = plugin.fetch_observations(series_id)
+            observations = plugin.fetch_observations(series_id, start_date=args.start_date)
             time.sleep(1)  # Rate limiting between series
 
             if not observations:

@@ -26,13 +26,17 @@ class FREDPlugin(DataSourcePlugin):
     def get_source_name(self) -> str:
         return "Federal Reserve Economic Data"
 
-    def fetch_observations(self, series_id: str, max_retries: int = 3) -> list[dict[str, Any]]:
+    def fetch_observations(
+        self, series_id: str, start_date: str | None = None, max_retries: int = 3
+    ) -> list[dict[str, Any]]:
         """Fetch observations from FRED API"""
         params = {
             "series_id": series_id,
             "api_key": self.api_key,
             "file_type": "json",
         }
+        if start_date:
+            params["observation_start"] = start_date
 
         for attempt in range(max_retries):
             try:

@@ -16,10 +16,11 @@ async def get_series(db: Session = Depends(get_db)):
     try:
         query = text(
             """
-            SELECT series_id, series_name, geography, units, frequency
-            FROM metadata.series_metadata
-            WHERE is_active = TRUE
-            ORDER BY series_name ASC;
+            SELECT sm.series_id, sm.series_name, sm.geography, sm.units, sm.frequency, ds.source_name
+            FROM metadata.series_metadata sm
+            JOIN metadata.data_sources ds ON sm.source_id = ds.source_id
+            WHERE sm.is_active = TRUE
+            ORDER BY sm.series_name ASC;
         """
         )
         result = db.execute(query).mappings().all()

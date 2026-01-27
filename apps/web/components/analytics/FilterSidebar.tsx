@@ -10,6 +10,7 @@ interface SeriesMetadata {
     geography: string;
     units: string;
     frequency: string;
+    source_name: string;
 }
 
 interface FilterSidebarProps {
@@ -190,6 +191,9 @@ export default function FilterSidebar({
                                     <span className={`text-sm font-bold leading-tight transition-all group-hover:scale-[1.01] origin-left ${isSelected ? 'text-slate-900 dark:text-white' : 'text-slate-600 dark:text-slate-400'}`}>
                                         {series.series_name}
                                     </span>
+                                    <div className="flex gap-2 items-center mt-1">
+                                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 uppercase tracking-wider">{series.source_name}</span>
+                                    </div>
                                 </div>
                             </button>
                         );

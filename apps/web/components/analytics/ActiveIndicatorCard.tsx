@@ -84,21 +84,23 @@ export default function ActiveIndicatorCard({
                 </h4>
 
                 <div className="flex items-center gap-6">
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-1.5">
                         <span className="text-[10px] font-black tracking-widest uppercase text-slate-400">Frequency</span>
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1.5 h-4">
                             <Activity className="w-3 h-3 transition-transform group-hover:rotate-12" style={{ color: chartColor }} />
-                            <span className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wide">
+                            <span className="text-xs font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wide">
                                 {series.frequency}
                             </span>
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-1.5">
                         <span className="text-[10px] font-black tracking-widest uppercase text-slate-400">Unit</span>
-                        <span className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wide">
-                            {series.units}
-                        </span>
+                        <div className="flex items-center gap-1.5 h-4">
+                            <span className="text-xs font-bold text-slate-600 dark:text-slate-200 uppercase tracking-wide">
+                                {series.units}
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
