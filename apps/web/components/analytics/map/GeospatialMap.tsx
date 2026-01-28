@@ -434,6 +434,7 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                 )}
 
                 {/* Great Lakes water bodies - Rendered in a custom pane with higher z-index */}
+                {/* Using simplified GeoJSON (95% reduction) to prevent rendering artifacts */}
                 <Pane name="lakesPane" style={{ zIndex: 600 }}>
                     {lakesData && (
                         <GeoJSON
@@ -442,11 +443,13 @@ export default function GeospatialMap({ metric = 'Unemployment', date }: Geospat
                             style={() => ({
                                 fillColor: '#020617', // Match map background for "cutout" effect
                                 fillOpacity: 1,       // Fully opaque to hide underlying state data
-                                weight: 1.5,
+                                weight: 2,            // Slightly thicker border for cleaner definition
                                 opacity: 1,
-                                color: '#1e293b'      // Subtle border for definition
+                                color: '#0f172a',     // Darker border to match background better
+                                dashArray: '0'        // Solid line (no dashes)
                             })}
-                            interactive={false} // Ensure it doesn't capture clicks
+                            interactive={false}
+                            bubblingMouseEvents={false}
                         />
                     )}
                 </Pane>
