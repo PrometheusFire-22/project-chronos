@@ -1,0 +1,16 @@
+series_id,unit_type,scalar_factor,display_units,notes
+v111955448,INDEX,1.0,Index 2016=100,New Housing Price Index - Newfoundland and Labrador
+v111955454,INDEX,1.0,Index 2016=100,New Housing Price Index - Prince Edward Island
+v111955460,INDEX,1.0,Index 2016=100,New Housing Price Index - Nova Scotia
+v111955466,INDEX,1.0,Index 2016=100,New Housing Price Index - New Brunswick
+v111955472,INDEX,1.0,Index 2016=100,New Housing Price Index - Québec
+v111955490,INDEX,1.0,Index 2016=100,New Housing Price Index - Ontario
+v111955526,INDEX,1.0,Index 2016=100,New Housing Price Index - Manitoba
+v111955532,INDEX,1.0,Index 2016=100,New Housing Price Index - Saskatchewan
+v111955541,INDEX,1.0,Index 2016=100,New Housing Price Index - Alberta
+v111955550,INDEX,1.0,Index 2016=100,New Housing Price Index - British Columbia
+ALUR,PERCENTAGE,1.0,% (percentage points),Unemployment Rate in Alabama
+v2064894,PERCENTAGE,1.0,% (percentage points),Unemployment Rate - Yukon
+v2065083,PERCENTAGE,1.0,% (percentage points),Unemployment Rate - Northwest Territories
+v2065272,PERCENTAGE,1.0,% (percentage points),Unemployment Rate - Nunavut
+EXHOSLUSM495N,COUNT,1000000.0,Millions of Units,Existing Home Sales
