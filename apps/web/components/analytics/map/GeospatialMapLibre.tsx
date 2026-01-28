@@ -195,8 +195,11 @@ export default function GeospatialMapLibre({
 
       // Setup map event handlers
       map.current.on('load', () => {
+        console.log('🎉 [MAP INIT] Load event fired!');
         addDebug('[MapLibre] Map loaded successfully ✓');
+        console.log('🔧 [MAP INIT] Calling setMapReady(true)...');
         setMapReady(true);
+        console.log('✅ [MAP INIT] setMapReady(true) called');
       });
 
       map.current.on('error', (e) => {
