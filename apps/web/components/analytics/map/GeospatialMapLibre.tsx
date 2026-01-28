@@ -49,6 +49,7 @@ export default function GeospatialMapLibre({
 
   // State
   const [loading, setLoading] = useState(true);
+  const [mapReady, setMapReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [stats, setStats] = useState<Stats | null>(null);
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
@@ -135,63 +136,82 @@ export default function GeospatialMapLibre({
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
-    // Create map with Carto dark basemap
-    map.current = new maplibregl.Map({
-      container: mapContainer.current,
-      style: {
-        version: 8,
-        sources: {
-          'carto-dark': {
-            type: 'raster',
-            tiles: [
-              'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-              'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-              'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
-            ],
-            tileSize: 256,
-            attribution: '© OpenStreetMap contributors, © CARTO'
-          }
+    try {
+      console.log('[MapLibre] Initializing map...');
+
+      // Create map with Carto dark basemap
+      map.current = new maplibregl.Map({
+        container: mapContainer.current,
+        style: {
+          version: 8,
+          sources: {
+            'carto-dark': {
+              type: 'raster',
+              tiles: [
+                'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
+              ],
+              tileSize: 256,
+              attribution: '© OpenStreetMap contributors, © CARTO'
+            }
+          },
+          layers: [
+            {
+              id: 'carto-dark-layer',
+              type: 'raster',
+              source: 'carto-dark'
+            }
+          ]
         },
-        layers: [
-          {
-            id: 'carto-dark-layer',
-            type: 'raster',
-            source: 'carto-dark'
-          }
-        ]
-      },
-      center: [-95, 48],
-      zoom: 4.5,
-      minZoom: 2.5,
-      maxZoom: 8,
-      maxBounds: [[-170, 15], [-50, 80]] // Constrain to North America
-    });
+        center: [-95, 48],
+        zoom: 4.5,
+        minZoom: 2.5,
+        maxZoom: 8,
+        maxBounds: [[-170, 15], [-50, 80]] // Constrain to North America
+      });
 
-    // Create popup instance
-    popup.current = new maplibregl.Popup({
-      closeButton: false,
-      closeOnClick: false,
-      className: 'maplibre-popup-custom'
-    });
+      // Create popup instance
+      popup.current = new maplibregl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+        className: 'maplibre-popup-custom'
+      });
 
-    // Setup map event handlers
-    map.current.on('load', () => {
-      setLoading(false);
-    });
+      // Setup map event handlers
+      map.current.on('load', () => {
+        console.log('[MapLibre] Map loaded successfully');
+        setMapReady(true);
+      });
 
-    // Cleanup
-    return () => {
-      map.current?.remove();
-      map.current = null;
-    };
+      map.current.on('error', (e) => {
+        console.error('[MapLibre] Map error:', e);
+        setError(`Map initialization failed: ${e.error?.message || 'Unknown error'}`);
+        setLoading(false);
+      });
+
+      // Cleanup
+      return () => {
+        console.log('[MapLibre] Cleaning up map...');
+        map.current?.remove();
+        map.current = null;
+      };
+    } catch (err) {
+      console.error('[MapLibre] Failed to initialize map:', err);
+      setError(`Failed to initialize map: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
   }, []);
 
   // Load and update data
   useEffect(() => {
-    if (!map.current) return;
+    if (!map.current || !mapReady) {
+      console.log('[MapLibre] Waiting for map to be ready...', { hasMap: !!map.current, mapReady });
+      return;
+    }
 
     const loadData = async () => {
       try {
+        console.log('[MapLibre] Starting data load for metric:', metric);
         setLoading(true);
         setError(null);
 
@@ -209,6 +229,11 @@ export default function GeospatialMapLibre({
         const boundaries = await boundariesRes.json();
         const dataResponse = await dataRes.json();
         const dataPoints: RegionData[] = dataResponse.data || [];
+
+        console.log('[MapLibre] Data fetched:', {
+          boundaryFeatures: boundaries.features?.length,
+          dataPoints: dataPoints.length
+        });
 
         // Calculate statistics with z-score based outlier detection
         const values: number[] = [];
@@ -250,7 +275,7 @@ export default function GeospatialMapLibre({
         const sortedValues = [...values].sort((a, b) => a - b);
         const hasOutliers = sortedValues[sortedValues.length - 1] > outlierThreshold;
 
-        setStats({
+        const calculatedStats = {
           min: sortedValues[0] || 0,
           max: sortedValues[sortedValues.length - 1] || 10,
           cappedMax: Math.max(...cappedValues),
@@ -262,7 +287,10 @@ export default function GeospatialMapLibre({
           usMax: usValues.length > 0 ? Math.max(...usValues) : undefined,
           caMin: caValues.length > 0 ? Math.min(...caValues) : undefined,
           caMax: caValues.length > 0 ? Math.max(...caValues) : undefined
-        });
+        };
+
+        console.log('[MapLibre] Stats calculated:', calculatedStats);
+        setStats(calculatedStats);
 
         // Merge data into boundaries
         const dataMap = new Map(dataPoints.map(d => [d.name, d]));
@@ -286,18 +314,24 @@ export default function GeospatialMapLibre({
         // Store boundaries in state for later color updates
         setBoundariesData(boundaries);
 
+        console.log('[MapLibre] Adding layers to map...');
+
         // Remove existing source and layers if they exist
         if (map.current!.getLayer('regions-fill')) {
+          console.log('[MapLibre] Removing existing regions-fill layer');
           map.current!.removeLayer('regions-fill');
         }
         if (map.current!.getLayer('regions-line')) {
+          console.log('[MapLibre] Removing existing regions-line layer');
           map.current!.removeLayer('regions-line');
         }
         if (map.current!.getSource('regions')) {
+          console.log('[MapLibre] Removing existing regions source');
           map.current!.removeSource('regions');
         }
 
         // Add source
+        console.log('[MapLibre] Adding regions source with', boundaries.features.length, 'features');
         map.current!.addSource('regions', {
           type: 'geojson',
           data: boundaries
@@ -390,17 +424,18 @@ export default function GeospatialMapLibre({
           popup.current!.remove();
         });
 
+        console.log('[MapLibre] Data load complete, map should now be visible');
         setLoading(false);
 
       } catch (err: any) {
-        console.error('Map Error:', err);
+        console.error('[MapLibre] Data load error:', err);
         setError(err.message);
         setLoading(false);
       }
     };
 
     loadData();
-  }, [metric, date]);
+  }, [metric, date, mapReady]);
 
   // Update colors when stats/scale changes
   useEffect(() => {
