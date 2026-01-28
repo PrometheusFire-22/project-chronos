@@ -119,6 +119,15 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
         return <div className="w-full h-[500px] md:h-[550px] bg-slate-100 dark:bg-slate-900/50 animate-pulse rounded-2xl" />;
     }
 
+    // Don't render chart if there's no valid data to prevent white line artifact on empty hover
+    if (data.length === 0 || seriesConfig.length === 0) {
+        return (
+            <div className="w-full h-[500px] md:h-[550px] p-4 md:p-6 bg-white dark:bg-slate-950 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 transition-all flex items-center justify-center">
+                <p className="text-slate-500 dark:text-slate-400">No data available for selected series</p>
+            </div>
+        );
+    }
+
     return (
         <div className="w-full h-[500px] md:h-[550px] p-4 md:p-6 bg-white dark:bg-slate-950 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 transition-all">
             <ResponsiveContainer width="100%" height="100%">
@@ -171,6 +180,9 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
                     <Tooltip
                         labelFormatter={(value) => new Date(value).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
                         formatter={(value, name, props) => {
+                            // Skip rendering if value is null/undefined (prevents white line on empty data)
+                            if (value == null) return [null, null];
+
                             // Find the metadata using the s_{id} key from name (passed as dataKey)
                             const config = seriesConfig.find(s => s.key === props.dataKey);
                             const displayName = config ? `${config.series_name} (${config.geography})` : name;
@@ -192,6 +204,7 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
                             color: '#f8fafc'
                         }}
                         itemStyle={{ fontSize: '12px', padding: '2px 0' }}
+                        isAnimationActive={false}
                     />
 
                     <Legend
@@ -219,6 +232,7 @@ export default function EconomicChart({ data, seriesMetadata }: EconomicChartPro
                             connectNulls={true}
                             activeDot={{ r: 6, stroke: '#fff', strokeWidth: 2 }}
                             animationDuration={1500}
+                            isAnimationActive={false}
                         />
                     ))}
                 </LineChart>
