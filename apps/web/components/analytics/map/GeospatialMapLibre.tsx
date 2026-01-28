@@ -1,0 +1,470 @@
+'use client';
+
+import { useEffect, useRef, useState, useMemo } from 'react';
+import maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
+import { scaleQuantile } from 'd3-scale';
+import { Card } from '@chronos/ui/components/card';
+import { Loader2 } from 'lucide-react';
+import { getMetricConfig, formatMetricValue } from '@/lib/metrics/config';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.automatonicai.com';
+
+interface GeospatialMapLibreProps {
+  metric?: string;
+  date?: string;
+}
+
+interface RegionData {
+  name: string;
+  country: string;
+  value: number | null;
+  units?: string;
+  metric?: string;
+  date?: string;
+}
+
+interface Stats {
+  min: number;
+  max: number;
+  p95: number;
+  usMin?: number;
+  usMax?: number;
+  caMin?: number;
+  caMax?: number;
+}
+
+export default function GeospatialMapLibre({
+  metric = 'unemployment',
+  date
+}: GeospatialMapLibreProps) {
+  // Refs
+  const mapContainer = useRef<HTMLDivElement>(null);
+  const map = useRef<maplibregl.Map | null>(null);
+  const popup = useRef<maplibregl.Popup | null>(null);
+
+  // State
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
+  const [boundariesData, setBoundariesData] = useState<any>(null);
+
+  // Compute color scale
+  const colorScale = useMemo(() => {
+    if (!stats) return null;
+
+    const isHPI = metric.toLowerCase().includes('house') || metric.toLowerCase().includes('hpi');
+    const effectiveMax = stats.p95;
+
+    if (isHPI) {
+      // Blues for HPI
+      return scaleQuantile<string>()
+        .domain([stats.min, effectiveMax])
+        .range([
+          '#eff6ff', // Very light blue
+          '#bfdbfe', // Light blue
+          '#60a5fa', // Medium blue
+          '#2563eb', // Dark blue
+          '#1e40af', // Deeper blue
+          '#1e3a8a'  // Darkest blue
+        ]);
+    } else {
+      // Yellow-Orange-Red for unemployment
+      return scaleQuantile<string>()
+        .domain([stats.min, effectiveMax])
+        .range([
+          '#fef3c7', // Very light yellow
+          '#fcd34d', // Light yellow
+          '#fb923c', // Orange
+          '#f97316', // Dark orange
+          '#dc2626', // Red
+          '#991b1b'  // Dark red
+        ]);
+    }
+  }, [stats, metric]);
+
+  // Get country-specific color scale (for HPI)
+  const getColorForValue = useMemo(() => {
+    return (value: number | null, country: string): string => {
+      if (value === null || !colorScale) return 'transparent';
+
+      const isHPI = metric.toLowerCase().includes('house') || metric.toLowerCase().includes('hpi');
+
+      if (isHPI && stats) {
+        // Use country-specific scales for HPI
+        if (country === 'US' && stats.usMin !== undefined && stats.usMax !== undefined) {
+          const usScale = scaleQuantile<string>()
+            .domain([stats.usMin, stats.usMax])
+            .range([
+              '#eff6ff', '#bfdbfe', '#60a5fa',
+              '#2563eb', '#1e40af', '#1e3a8a'
+            ]);
+          return usScale(value);
+        } else if (country === 'CA' && stats.caMin !== undefined && stats.caMax !== undefined) {
+          const caScale = scaleQuantile<string>()
+            .domain([stats.caMin, stats.caMax])
+            .range([
+              '#eff6ff', '#bfdbfe', '#60a5fa',
+              '#2563eb', '#1e40af', '#1e3a8a'
+            ]);
+          return caScale(value);
+        }
+      }
+
+      return colorScale(value);
+    };
+  }, [colorScale, stats, metric]);
+
+  // Initialize map
+  useEffect(() => {
+    if (!mapContainer.current || map.current) return;
+
+    // Create map with Carto dark basemap
+    map.current = new maplibregl.Map({
+      container: mapContainer.current,
+      style: {
+        version: 8,
+        sources: {
+          'carto-dark': {
+            type: 'raster',
+            tiles: [
+              'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+              'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+              'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
+            ],
+            tileSize: 256,
+            attribution: '© OpenStreetMap contributors, © CARTO'
+          }
+        },
+        layers: [
+          {
+            id: 'carto-dark-layer',
+            type: 'raster',
+            source: 'carto-dark'
+          }
+        ]
+      },
+      center: [-95, 48],
+      zoom: 4.5,
+      minZoom: 2.5,
+      maxZoom: 8,
+      maxBounds: [[-170, 15], [-50, 80]] // Constrain to North America
+    });
+
+    // Create popup instance
+    popup.current = new maplibregl.Popup({
+      closeButton: false,
+      closeOnClick: false,
+      className: 'maplibre-popup-custom'
+    });
+
+    // Setup map event handlers
+    map.current.on('load', () => {
+      setLoading(false);
+    });
+
+    // Cleanup
+    return () => {
+      map.current?.remove();
+      map.current = null;
+    };
+  }, []);
+
+  // Load and update data
+  useEffect(() => {
+    if (!map.current) return;
+
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const normalizedMetric = metric.toLowerCase();
+
+        // Fetch boundaries and data in parallel
+        const [boundariesRes, dataRes] = await Promise.all([
+          fetch(`${API_BASE_URL}/api/geo/choropleth?metric=${encodeURIComponent(normalizedMetric)}&mode=boundaries`),
+          fetch(`${API_BASE_URL}/api/geo/choropleth?metric=${encodeURIComponent(normalizedMetric)}&mode=data`)
+        ]);
+
+        if (!boundariesRes.ok) throw new Error('Failed to load boundaries');
+        if (!dataRes.ok) throw new Error('Failed to load metric data');
+
+        const boundaries = await boundariesRes.json();
+        const dataResponse = await dataRes.json();
+        const dataPoints: RegionData[] = dataResponse.data || [];
+
+        // Calculate statistics
+        const values: number[] = [];
+        const usValues: number[] = [];
+        const caValues: number[] = [];
+
+        dataPoints.forEach(d => {
+          const val = d.value;
+          if (val !== null && !isNaN(val)) {
+            values.push(val);
+            if (d.country === 'US') usValues.push(val);
+            else if (d.country === 'CA') caValues.push(val);
+          }
+        });
+
+        values.sort((a, b) => a - b);
+        const p95Index = Math.floor(values.length * 0.95);
+
+        setStats({
+          min: values[0] || 0,
+          max: values[values.length - 1] || 10,
+          p95: values[p95Index] || values[values.length - 1] || 10,
+          usMin: usValues.length > 0 ? Math.min(...usValues) : undefined,
+          usMax: usValues.length > 0 ? Math.max(...usValues) : undefined,
+          caMin: caValues.length > 0 ? Math.min(...caValues) : undefined,
+          caMax: caValues.length > 0 ? Math.max(...caValues) : undefined
+        });
+
+        // Merge data into boundaries
+        const dataMap = new Map(dataPoints.map(d => [d.name, d]));
+
+        boundaries.features = boundaries.features.map((feature: any) => {
+          const regionName = feature.properties.name;
+          const data = dataMap.get(regionName);
+
+          return {
+            ...feature,
+            properties: {
+              ...feature.properties,
+              value: data?.value ?? null,
+              units: data?.units,
+              metric: data?.metric || normalizedMetric,
+              date: data?.date
+            }
+          };
+        });
+
+        // Store boundaries in state for later color updates
+        setBoundariesData(boundaries);
+
+        // Remove existing source and layers if they exist
+        if (map.current!.getLayer('regions-fill')) {
+          map.current!.removeLayer('regions-fill');
+        }
+        if (map.current!.getLayer('regions-line')) {
+          map.current!.removeLayer('regions-line');
+        }
+        if (map.current!.getSource('regions')) {
+          map.current!.removeSource('regions');
+        }
+
+        // Add source
+        map.current!.addSource('regions', {
+          type: 'geojson',
+          data: boundaries
+        });
+
+        // Add fill layer (will be styled after stats are computed)
+        map.current!.addLayer({
+          id: 'regions-fill',
+          type: 'fill',
+          source: 'regions',
+          paint: {
+            'fill-color': 'transparent', // Will be updated below
+            'fill-opacity': 0.8
+          }
+        });
+
+        // Add border layer
+        map.current!.addLayer({
+          id: 'regions-line',
+          type: 'line',
+          source: 'regions',
+          paint: {
+            'line-color': '#0f172a',
+            'line-width': 0.5
+          }
+        });
+
+        // Setup hover interactions
+        let hoveredFeatureId: string | number | undefined = undefined;
+
+        map.current!.on('mousemove', 'regions-fill', (e) => {
+          if (e.features && e.features.length > 0) {
+            const feature = e.features[0];
+            const props = feature.properties;
+
+            // Change cursor
+            map.current!.getCanvas().style.cursor = 'pointer';
+
+            // Update hover state
+            if (hoveredFeatureId !== undefined) {
+              map.current!.setFeatureState(
+                { source: 'regions', id: hoveredFeatureId },
+                { hover: false }
+              );
+            }
+            hoveredFeatureId = feature.id;
+            map.current!.setFeatureState(
+              { source: 'regions', id: hoveredFeatureId },
+              { hover: true }
+            );
+
+            // Show tooltip
+            const config = getMetricConfig(props.metric || normalizedMetric);
+            const displayValue = formatMetricValue(props.value, config);
+
+            const tooltipHTML = `
+              <div class="backdrop-blur-xl bg-slate-900/90 border border-white/10 rounded-lg p-2 shadow-2xl">
+                <div class="text-sm font-bold text-white mb-1">${props.name}</div>
+                <div class="text-[8px] text-slate-500 uppercase tracking-widest font-bold mb-0.5">${config.displayName}</div>
+                <div class="flex items-center justify-between gap-2">
+                  <div class="text-lg font-bold text-orange-400">${displayValue}</div>
+                  <div class="flex items-center gap-0.5">
+                    <svg class="w-1.5 h-1.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                    <span class="text-[7px] text-slate-500 uppercase tracking-wider font-semibold">${config.frequency}</span>
+                  </div>
+                </div>
+              </div>
+            `;
+
+            popup.current!
+              .setLngLat(e.lngLat)
+              .setHTML(tooltipHTML)
+              .addTo(map.current!);
+          }
+        });
+
+        map.current!.on('mouseleave', 'regions-fill', () => {
+          map.current!.getCanvas().style.cursor = '';
+
+          if (hoveredFeatureId !== undefined) {
+            map.current!.setFeatureState(
+              { source: 'regions', id: hoveredFeatureId },
+              { hover: false }
+            );
+          }
+          hoveredFeatureId = undefined;
+
+          popup.current!.remove();
+        });
+
+        setLoading(false);
+
+      } catch (err: any) {
+        console.error('Map Error:', err);
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, [metric, date]);
+
+  // Update colors when stats/scale changes
+  useEffect(() => {
+    if (!map.current || !map.current.getLayer('regions-fill') || !stats || !colorScale || !boundariesData) return;
+
+    const source = map.current.getSource('regions') as maplibregl.GeoJSONSource;
+    if (!source) return;
+
+    // Pre-compute colors for each feature
+    const updatedBoundaries = {
+      ...boundariesData,
+      features: boundariesData.features.map((feature: any, index: number) => {
+        const value = feature.properties.value;
+        const country = feature.properties.country;
+        const color = getColorForValue(value, country);
+
+        return {
+          ...feature,
+          id: index,
+          properties: {
+            ...feature.properties,
+            color
+          }
+        };
+      })
+    };
+
+    // Update the source with colored features
+    source.setData(updatedBoundaries);
+
+    // Update layer to use the pre-computed colors
+    map.current.setPaintProperty('regions-fill', 'fill-color', [
+      'get',
+      'color'
+    ]);
+
+  }, [stats, colorScale, getColorForValue, boundariesData]);
+
+  if (error) {
+    return (
+      <Card className="h-[600px] flex items-center justify-center bg-slate-900/50 border-red-500/20">
+        <div className="text-red-400">Failed to load map: {error}</div>
+      </Card>
+    );
+  }
+
+  const isHPI = metric.toLowerCase().includes('house') || metric.toLowerCase().includes('hpi');
+  const gradientClass = isHPI
+    ? 'bg-gradient-to-r from-blue-50 via-blue-400 to-blue-900'
+    : 'bg-gradient-to-r from-yellow-100 via-orange-400 to-red-900';
+
+  return (
+    <Card className="h-[600px] w-full overflow-hidden relative border-0 ring-1 ring-white/10 shadow-2xl bg-slate-950">
+      {loading && (
+        <div className="absolute inset-0 z-[1000] flex flex-col items-center justify-center bg-slate-950/90 backdrop-blur-sm">
+          <Loader2 className="animate-spin h-8 w-8 text-blue-500 mb-2" />
+          <div className="text-sm text-slate-400">Loading geospatial data...</div>
+        </div>
+      )}
+
+      {/* Legend */}
+      {stats && (
+        <div className="absolute bottom-6 right-6 z-[500] bg-slate-900/90 backdrop-blur border border-slate-700 p-3 rounded-lg shadow-2xl flex flex-col gap-1 w-48">
+          <div className="flex justify-between text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">
+            <span>Low</span>
+            <span>High</span>
+          </div>
+          <div className={`h-2 w-full rounded-full ${gradientClass}`} />
+          <div className="flex justify-between text-xs text-white font-mono mt-1">
+            <span>{stats.min.toFixed(1)}</span>
+            <span>{stats.p95.toFixed(1)}</span>
+          </div>
+          {stats.p95 < stats.max && (
+            <div className="text-[8px] text-orange-400 text-center mt-0.5">
+              ⚠ Outliers: {stats.max.toFixed(1)}
+            </div>
+          )}
+          <div className="text-[9px] text-slate-500 text-center mt-1 uppercase tracking-widest">
+            {metric}
+          </div>
+          {(stats.usMax !== undefined && stats.caMax !== undefined) && (
+            <div className="text-[7px] text-slate-600 text-center mt-1 border-t border-slate-700 pt-1">
+              US: {stats.usMin?.toFixed(0)}-{stats.usMax?.toFixed(0)} | CA: {stats.caMin?.toFixed(0)}-{stats.caMax?.toFixed(0)}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Map container */}
+      <div
+        ref={mapContainer}
+        className="absolute inset-0"
+        style={{ background: '#020617' }}
+      />
+
+      {/* Add custom CSS for popup */}
+      <style jsx global>{`
+        .maplibre-popup-custom .maplibre-popup-content {
+          background: transparent !important;
+          padding: 0 !important;
+          box-shadow: none !important;
+        }
+        .maplibre-popup-custom .maplibre-popup-tip {
+          display: none !important;
+        }
+      `}</style>
+    </Card>
+  );
+}
