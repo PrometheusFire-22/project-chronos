@@ -27,7 +27,11 @@ interface RegionData {
 interface Stats {
   min: number;
   max: number;
-  p95: number;
+  cappedMax: number; // Max value after z-score outlier capping
+  mean: number;
+  stdDev: number;
+  outlierThreshold: number; // The z-score threshold used (2.5σ)
+  hasOutliers: boolean;
   usMin?: number;
   usMax?: number;
   caMin?: number;
@@ -50,12 +54,12 @@ export default function GeospatialMapLibre({
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
   const [boundariesData, setBoundariesData] = useState<any>(null);
 
-  // Compute color scale
+  // Compute color scale with z-score based capping
   const colorScale = useMemo(() => {
     if (!stats) return null;
 
     const isHPI = metric.toLowerCase().includes('house') || metric.toLowerCase().includes('hpi');
-    const effectiveMax = stats.p95;
+    const effectiveMax = stats.cappedMax;
 
     if (isHPI) {
       // Blues for HPI
@@ -84,14 +88,14 @@ export default function GeospatialMapLibre({
     }
   }, [stats, metric]);
 
-  // Get country-specific color scale (for HPI)
+  // Get color for value with z-score based outlier capping
   const getColorForValue = useMemo(() => {
     return (value: number | null, country: string): string => {
-      if (value === null || !colorScale) return 'transparent';
+      if (value === null || !colorScale || !stats) return 'transparent';
 
       const isHPI = metric.toLowerCase().includes('house') || metric.toLowerCase().includes('hpi');
 
-      if (isHPI && stats) {
+      if (isHPI) {
         // Use country-specific scales for HPI
         if (country === 'US' && stats.usMin !== undefined && stats.usMax !== undefined) {
           const usScale = scaleQuantile<string>()
@@ -112,7 +116,18 @@ export default function GeospatialMapLibre({
         }
       }
 
-      return colorScale(value);
+      // Apply z-score based capping for coloring only
+      const Z_THRESHOLD = 2.5;
+      const zScore = (value - stats.mean) / stats.stdDev;
+      let cappedValue = value;
+
+      if (Math.abs(zScore) > Z_THRESHOLD) {
+        cappedValue = value > stats.mean
+          ? stats.outlierThreshold
+          : stats.mean - (Z_THRESHOLD * stats.stdDev);
+      }
+
+      return colorScale(cappedValue);
     };
   }, [colorScale, stats, metric]);
 
@@ -195,7 +210,7 @@ export default function GeospatialMapLibre({
         const dataResponse = await dataRes.json();
         const dataPoints: RegionData[] = dataResponse.data || [];
 
-        // Calculate statistics
+        // Calculate statistics with z-score based outlier detection
         const values: number[] = [];
         const usValues: number[] = [];
         const caValues: number[] = [];
@@ -209,13 +224,40 @@ export default function GeospatialMapLibre({
           }
         });
 
-        values.sort((a, b) => a - b);
-        const p95Index = Math.floor(values.length * 0.95);
+        if (values.length === 0) {
+          throw new Error('No valid data points');
+        }
+
+        // Calculate mean and standard deviation
+        const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
+        const variance = values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length;
+        const stdDev = Math.sqrt(variance);
+
+        // Z-score threshold: 2.5 standard deviations
+        const Z_THRESHOLD = 2.5;
+        const outlierThreshold = mean + (Z_THRESHOLD * stdDev);
+
+        // Identify outliers and calculate capped max
+        const cappedValues = values.map(val => {
+          const zScore = Math.abs((val - mean) / stdDev);
+          if (zScore > Z_THRESHOLD) {
+            // Cap extreme outliers at the threshold
+            return val > mean ? outlierThreshold : mean - (Z_THRESHOLD * stdDev);
+          }
+          return val;
+        });
+
+        const sortedValues = [...values].sort((a, b) => a - b);
+        const hasOutliers = sortedValues[sortedValues.length - 1] > outlierThreshold;
 
         setStats({
-          min: values[0] || 0,
-          max: values[values.length - 1] || 10,
-          p95: values[p95Index] || values[values.length - 1] || 10,
+          min: sortedValues[0] || 0,
+          max: sortedValues[sortedValues.length - 1] || 10,
+          cappedMax: Math.max(...cappedValues),
+          mean,
+          stdDev,
+          outlierThreshold,
+          hasOutliers,
           usMin: usValues.length > 0 ? Math.min(...usValues) : undefined,
           usMax: usValues.length > 0 ? Math.max(...usValues) : undefined,
           caMin: caValues.length > 0 ? Math.min(...caValues) : undefined,
@@ -429,11 +471,11 @@ export default function GeospatialMapLibre({
           <div className={`h-2 w-full rounded-full ${gradientClass}`} />
           <div className="flex justify-between text-xs text-white font-mono mt-1">
             <span>{stats.min.toFixed(1)}</span>
-            <span>{stats.p95.toFixed(1)}</span>
+            <span>{stats.cappedMax.toFixed(1)}</span>
           </div>
-          {stats.p95 < stats.max && (
+          {stats.hasOutliers && (
             <div className="text-[8px] text-orange-400 text-center mt-0.5">
-              ⚠ Outliers: {stats.max.toFixed(1)}
+              ⚠ Extreme outliers capped at 2.5σ (max: {stats.max.toFixed(1)})
             </div>
           )}
           <div className="text-[9px] text-slate-500 text-center mt-1 uppercase tracking-widest">
