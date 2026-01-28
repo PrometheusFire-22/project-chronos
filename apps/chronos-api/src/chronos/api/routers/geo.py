@@ -1,6 +1,4 @@
-import json
 import logging
-import os
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import text
@@ -191,41 +189,3 @@ async def get_choropleth(
     except Exception as e:
         logger.error(f"Geospatial Query Error: {str(e)}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e)) from e
-
-
-@router.get("/lakes")
-async def get_lakes():
-    """
-    Returns GeoJSON for Great Lakes water bodies.
-    Reads from local file.
-    """
-    try:
-        # Robustly determine path. Assume Docker /app structure or local dev
-        possible_paths = [
-            "/app/data/great_lakes.geojson",  # Production Docker
-            os.path.join(
-                os.getcwd(), "apps", "api", "data", "great_lakes.geojson"
-            ),  # Monorepo Root -> Node API
-            os.path.join(os.getcwd(), "data", "great_lakes.geojson"),  # Root fallback
-            os.path.join(
-                os.getcwd(), "../api/data/great_lakes.geojson"
-            ),  # Relative from chronos-api
-        ]
-
-        final_path = None
-        for p in possible_paths:
-            if os.path.exists(p):
-                final_path = p
-                break
-
-        if not final_path:
-            logger.error(f"[GEO] Great Lakes file not found in: {possible_paths}")
-            raise FileNotFoundError("great_lakes.geojson not found")
-
-        with open(final_path) as f:
-            data = json.load(f)
-            return data
-
-    except Exception as e:
-        logger.error(f"[GEO] Error loading Great Lakes: {str(e)}")
-        raise HTTPException(status_code=500, detail="Failed to load Great Lakes data") from e
