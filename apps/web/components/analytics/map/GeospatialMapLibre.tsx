@@ -48,20 +48,17 @@ export default function GeospatialMapLibre({
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const popup = useRef<maplibregl.Popup | null>(null);
+  const mapReady = useRef(false);
 
   // State
   const [loading, setLoading] = useState(true);
-  const [mapReady, setMapReady] = useState(false);
+  const [dataEffectTrigger, setDataEffectTrigger] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [stats, setStats] = useState<Stats | null>(null);
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
   const [boundariesData, setBoundariesData] = useState<any>(null);
   const [debugInfo, setDebugInfo] = useState<string[]>([]);
 
-  // Debug mapReady changes
-  useEffect(() => {
-    console.log('🔔 [STATE CHANGE] mapReady changed to:', mapReady);
-  }, [mapReady]);
 
   // Compute color scale with z-score based capping
   const colorScale = useMemo(() => {
@@ -215,9 +212,10 @@ export default function GeospatialMapLibre({
       map.current.on('load', () => {
         console.log('🎉 [MAP INIT] Load event fired!');
         addDebug('[MapLibre] Map loaded successfully ✓');
-        console.log('🔧 [MAP INIT] Calling setMapReady(true)...');
-        setMapReady(true);
-        console.log('✅ [MAP INIT] setMapReady(true) called');
+        console.log('🔧 [MAP INIT] Setting mapReady.current = true and triggering data effect...');
+        mapReady.current = true;
+        setDataEffectTrigger(prev => prev + 1); // Trigger data effect to run
+        console.log('✅ [MAP INIT] mapReady set and data effect triggered');
       });
 
       map.current.on('error', (e) => {
@@ -262,10 +260,10 @@ export default function GeospatialMapLibre({
 
   // Load and update data
   useEffect(() => {
-    console.log('🔍 [DATA EFFECT] Triggered!', { hasMap: !!map.current, mapReady, metric });
+    console.log('🔍 [DATA EFFECT] Triggered!', { hasMap: !!map.current, mapReady: mapReady.current, metric });
 
-    if (!map.current || !mapReady) {
-      console.warn('⏸️ [DATA EFFECT] Waiting for map to be ready...', { hasMap: !!map.current, mapReady });
+    if (!map.current || !mapReady.current) {
+      console.warn('⏸️ [DATA EFFECT] Waiting for map to be ready...', { hasMap: !!map.current, mapReady: mapReady.current });
       return;
     }
 
@@ -519,7 +517,7 @@ export default function GeospatialMapLibre({
     }).catch((err) => {
       console.error('❌ [DATA EFFECT] loadData() promise rejected:', err);
     });
-  }, [metric, date, mapReady]);
+  }, [metric, date, dataEffectTrigger]);
 
   // Update colors when stats/scale changes
   useEffect(() => {
