@@ -212,10 +212,14 @@ export default function GeospatialMapLibre({
       map.current.on('load', () => {
         console.log('🎉 [MAP INIT] Load event fired!');
         addDebug('[MapLibre] Map loaded successfully ✓');
-        console.log('🔧 [MAP INIT] Setting mapReady.current = true and triggering data effect...');
-        mapReady.current = true;
-        setDataEffectTrigger(prev => prev + 1); // Trigger data effect to run
-        console.log('✅ [MAP INIT] mapReady set and data effect triggered');
+        console.log('🔧 [MAP INIT] Scheduling data load with setTimeout...');
+        // Add small delay to ensure React state has fully initialized
+        setTimeout(() => {
+          console.log('⏰ [MAP INIT] Timeout fired, triggering data load...');
+          mapReady.current = true;
+          setDataEffectTrigger(prev => prev + 1);
+          console.log('✅ [MAP INIT] Data effect triggered');
+        }, 500);
       });
 
       map.current.on('error', (e) => {
