@@ -139,6 +139,17 @@ export default function GeospatialMapLibre({
     try {
       console.log('[MapLibre] Initializing map...');
 
+      // Check container dimensions
+      const containerRect = mapContainer.current.getBoundingClientRect();
+      console.log('[MapLibre] Container dimensions:', {
+        width: containerRect.width,
+        height: containerRect.height
+      });
+
+      if (containerRect.height === 0 || containerRect.width === 0) {
+        throw new Error('Map container has zero dimensions');
+      }
+
       // Create map with Carto dark basemap
       map.current = new maplibregl.Map({
         container: mapContainer.current,
@@ -188,6 +199,21 @@ export default function GeospatialMapLibre({
         console.error('[MapLibre] Map error:', e);
         setError(`Map initialization failed: ${e.error?.message || 'Unknown error'}`);
         setLoading(false);
+      });
+
+      // Listen for tile loading events
+      map.current.on('sourcedataloading', (e) => {
+        console.log('[MapLibre] Source data loading:', e.sourceId);
+      });
+
+      map.current.on('sourcedata', (e) => {
+        if (e.isSourceLoaded) {
+          console.log('[MapLibre] Source loaded:', e.sourceId);
+        }
+      });
+
+      map.current.on('styleimagemissing', (e) => {
+        console.warn('[MapLibre] Style image missing:', e.id);
       });
 
       // Cleanup
@@ -425,6 +451,10 @@ export default function GeospatialMapLibre({
         });
 
         console.log('[MapLibre] Data load complete, map should now be visible');
+
+        // Force map to resize (fixes timing issues)
+        map.current!.resize();
+
         setLoading(false);
 
       } catch (err: any) {
