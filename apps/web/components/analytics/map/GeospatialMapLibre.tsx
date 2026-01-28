@@ -42,6 +42,8 @@ export default function GeospatialMapLibre({
   metric = 'unemployment',
   date
 }: GeospatialMapLibreProps) {
+  console.log('🔄 [COMPONENT] GeospatialMapLibre rendering with metric:', metric);
+
   // Refs
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
@@ -55,6 +57,11 @@ export default function GeospatialMapLibre({
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
   const [boundariesData, setBoundariesData] = useState<any>(null);
   const [debugInfo, setDebugInfo] = useState<string[]>([]);
+
+  // Debug mapReady changes
+  useEffect(() => {
+    console.log('🔔 [STATE CHANGE] mapReady changed to:', mapReady);
+  }, [mapReady]);
 
   // Compute color scale with z-score based capping
   const colorScale = useMemo(() => {
@@ -135,7 +142,18 @@ export default function GeospatialMapLibre({
 
   // Initialize map
   useEffect(() => {
-    if (!mapContainer.current || map.current) return;
+    console.log('🏗️ [MAP INIT EFFECT] Triggered!', {
+      hasContainer: !!mapContainer.current,
+      hasMap: !!map.current
+    });
+
+    if (!mapContainer.current || map.current) {
+      console.log('⏭️ [MAP INIT EFFECT] Skipping - container or map issue', {
+        hasContainer: !!mapContainer.current,
+        hasMap: !!map.current
+      });
+      return;
+    }
 
     const addDebug = (msg: string) => {
       console.log(msg);
@@ -229,7 +247,7 @@ export default function GeospatialMapLibre({
 
       // Cleanup
       return () => {
-        console.log('[MapLibre] Cleaning up map...');
+        console.log('🧹 [MAP INIT EFFECT] Cleanup running - removing map');
         map.current?.remove();
         map.current = null;
       };
