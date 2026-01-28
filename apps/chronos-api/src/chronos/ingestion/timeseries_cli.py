@@ -125,19 +125,30 @@ def ensure_data_source(conn, plugin):
 
 
 def insert_series_metadata(conn, source_id: int, series_id: str, series_data: dict):
-    """Insert or update series metadata"""
+    """Insert or update series metadata including unit metadata"""
     cursor = conn.cursor()
 
     query = """
     INSERT INTO metadata.series_metadata (
         source_id, source_series_id, series_name,
-        frequency, category, geography
-    ) VALUES (%s, %s, %s, %s, %s, %s)
+        frequency, category, geography,
+        unit_type, scalar_factor, display_units
+    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
     ON CONFLICT (source_id, source_series_id)
     DO UPDATE SET
         series_name = EXCLUDED.series_name,
+        unit_type = EXCLUDED.unit_type,
+        scalar_factor = EXCLUDED.scalar_factor,
+        display_units = EXCLUDED.display_units,
         last_updated = NOW();
     """
+
+    # Parse scalar_factor from catalog (may be string)
+    scalar_factor = series_data.get("scalar_factor", 1.0)
+    try:
+        scalar_factor = float(scalar_factor)
+    except (ValueError, TypeError):
+        scalar_factor = 1.0
 
     cursor.execute(
         query,
@@ -148,6 +159,9 @@ def insert_series_metadata(conn, source_id: int, series_id: str, series_data: di
             series_data.get("frequency", "Unknown"),
             series_data.get("category", "Unknown"),
             series_data.get("geography_name", "Unknown"),
+            series_data.get("unit_type", "OTHER"),
+            scalar_factor,
+            series_data.get("display_units", "Unknown"),
         ),
     )
 
@@ -155,8 +169,10 @@ def insert_series_metadata(conn, source_id: int, series_id: str, series_data: di
     cursor.close()
 
 
-def insert_observations(conn, series_id: str, observations: list, source_id: int):
-    """Insert observations with batch processing"""
+def insert_observations(
+    conn, series_id: str, observations: list, source_id: int, scalar_factor: float = 1.0
+):
+    """Insert observations with batch processing and scalar transformation"""
     cursor = conn.cursor()
 
     # Get internal series_id
@@ -181,7 +197,12 @@ def insert_observations(conn, series_id: str, observations: list, source_id: int
 
     for obs in observations:
         try:
-            batch.append((internal_series_id, obs["date"], float(obs["value"]), "good"))
+            # CRITICAL: Apply scalar transformation at ingestion time
+            # This stores absolute "true" values in the database
+            raw_value = float(obs["value"])
+            transformed_value = raw_value * scalar_factor
+
+            batch.append((internal_series_id, obs["date"], transformed_value, "good"))
 
             if len(batch) >= 100:
                 cursor.executemany(
@@ -325,13 +346,22 @@ def main():
 
             print(f"    ✅ Fetched {len(observations)} observations")
 
-            # Insert metadata
+            # Insert metadata (includes unit_type, scalar_factor, display_units)
             insert_series_metadata(conn, actual_source_id, series_id, series)
 
-            # Insert observations
-            inserted, skipped = insert_observations(conn, series_id, observations, actual_source_id)
+            # Get scalar_factor from catalog for transformation
+            scalar_factor = float(series.get("scalar_factor", 1.0))
+            unit_type = series.get("unit_type", "OTHER")
 
-            print(f"    ✅ Inserted {inserted} observations (skipped {skipped})")
+            # Insert observations with scalar transformation
+            inserted, skipped = insert_observations(
+                conn, series_id, observations, actual_source_id, scalar_factor
+            )
+
+            print(
+                f"    ✅ Inserted {inserted} observations (scalar: ×{scalar_factor}, type: {unit_type})"
+            )
+            print(f"       Skipped: {skipped}")
 
             total_observations += inserted
             successful += 1

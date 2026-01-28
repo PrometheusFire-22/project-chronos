@@ -68,7 +68,10 @@
       "Bash(node scripts/verify-directus-content.cjs:*)",
       "mcp__postgres__query",
       "mcp__atlassian__createJiraIssue",
-      "mcp__atlassian__editJiraIssue"
+      "mcp__atlassian__editJiraIssue",
+      "mcp__atlassian__getAccessibleAtlassianResources",
+      "mcp__atlassian__searchJiraIssuesUsingJql",
+      "mcp__atlassian__getVisibleJiraProjects"
     ],
     "deny": [],
     "ask": []
