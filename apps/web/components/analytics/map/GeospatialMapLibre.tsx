@@ -54,6 +54,7 @@ export default function GeospatialMapLibre({
   const [stats, setStats] = useState<Stats | null>(null);
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
   const [boundariesData, setBoundariesData] = useState<any>(null);
+  const [debugInfo, setDebugInfo] = useState<string[]>([]);
 
   // Compute color scale with z-score based capping
   const colorScale = useMemo(() => {
@@ -136,42 +137,44 @@ export default function GeospatialMapLibre({
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
+    const addDebug = (msg: string) => {
+      console.log(msg);
+      setDebugInfo(prev => [...prev, msg]);
+    };
+
     try {
-      console.log('[MapLibre] Initializing map...');
+      addDebug('[MapLibre] Initializing map...');
+
+      // Check WebGL support
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) {
+        throw new Error('WebGL is not supported in this browser');
+      }
+      addDebug('[MapLibre] WebGL is supported ✓');
 
       // Check container dimensions
       const containerRect = mapContainer.current.getBoundingClientRect();
-      console.log('[MapLibre] Container dimensions:', {
-        width: containerRect.width,
-        height: containerRect.height
-      });
+      addDebug(`[MapLibre] Container dimensions: ${containerRect.width}x${containerRect.height}`);
 
       if (containerRect.height === 0 || containerRect.width === 0) {
         throw new Error('Map container has zero dimensions');
       }
 
-      // Create map with Carto dark basemap
+      // Create map with simple dark background (no basemap tiles for now)
+      addDebug('[MapLibre] Creating map instance...');
       map.current = new maplibregl.Map({
         container: mapContainer.current,
         style: {
           version: 8,
-          sources: {
-            'carto-dark': {
-              type: 'raster',
-              tiles: [
-                'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-                'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-                'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
-              ],
-              tileSize: 256,
-              attribution: '© OpenStreetMap contributors, © CARTO'
-            }
-          },
+          sources: {},
           layers: [
             {
-              id: 'carto-dark-layer',
-              type: 'raster',
-              source: 'carto-dark'
+              id: 'background',
+              type: 'background',
+              paint: {
+                'background-color': '#0f172a' // Dark slate background
+              }
             }
           ]
         },
@@ -181,6 +184,7 @@ export default function GeospatialMapLibre({
         maxZoom: 8,
         maxBounds: [[-170, 15], [-50, 80]] // Constrain to North America
       });
+      addDebug('[MapLibre] Map instance created ✓');
 
       // Create popup instance
       popup.current = new maplibregl.Popup({
@@ -191,13 +195,15 @@ export default function GeospatialMapLibre({
 
       // Setup map event handlers
       map.current.on('load', () => {
-        console.log('[MapLibre] Map loaded successfully');
+        addDebug('[MapLibre] Map loaded successfully ✓');
         setMapReady(true);
       });
 
       map.current.on('error', (e) => {
-        console.error('[MapLibre] Map error:', e);
-        setError(`Map initialization failed: ${e.error?.message || 'Unknown error'}`);
+        const errorMsg = `Map error: ${e.error?.message || 'Unknown error'}`;
+        console.error('[MapLibre]', errorMsg, e);
+        addDebug(`[MapLibre] ❌ ${errorMsg}`);
+        setError(errorMsg);
         setLoading(false);
       });
 
@@ -216,6 +222,8 @@ export default function GeospatialMapLibre({
         console.warn('[MapLibre] Style image missing:', e.id);
       });
 
+      addDebug('[MapLibre] Setup complete, waiting for load event...');
+
       // Cleanup
       return () => {
         console.log('[MapLibre] Cleaning up map...');
@@ -223,8 +231,11 @@ export default function GeospatialMapLibre({
         map.current = null;
       };
     } catch (err) {
-      console.error('[MapLibre] Failed to initialize map:', err);
-      setError(`Failed to initialize map: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      const errorMsg = `Failed to initialize: ${err instanceof Error ? err.message : String(err)}`;
+      console.error('[MapLibre]', errorMsg, err);
+      addDebug(`[MapLibre] ❌ ${errorMsg}`);
+      setError(errorMsg);
+      setLoading(false);
     }
   }, []);
 
@@ -506,8 +517,17 @@ export default function GeospatialMapLibre({
 
   if (error) {
     return (
-      <Card className="h-[600px] flex items-center justify-center bg-slate-900/50 border-red-500/20">
-        <div className="text-red-400">Failed to load map: {error}</div>
+      <Card className="h-[600px] flex flex-col items-center justify-center bg-slate-900/50 border-red-500/20 p-8">
+        <div className="text-red-400 text-lg font-bold mb-4">Failed to load map</div>
+        <div className="text-red-300 text-sm mb-6">{error}</div>
+        {debugInfo.length > 0 && (
+          <div className="text-xs text-slate-400 font-mono max-w-2xl">
+            <div className="font-bold mb-2">Debug Info:</div>
+            {debugInfo.map((msg, i) => (
+              <div key={i} className="mb-1">{msg}</div>
+            ))}
+          </div>
+        )}
       </Card>
     );
   }
@@ -523,6 +543,13 @@ export default function GeospatialMapLibre({
         <div className="absolute inset-0 z-[1000] flex flex-col items-center justify-center bg-slate-950/90 backdrop-blur-sm">
           <Loader2 className="animate-spin h-8 w-8 text-blue-500 mb-2" />
           <div className="text-sm text-slate-400">Loading geospatial data...</div>
+          {debugInfo.length > 0 && (
+            <div className="mt-4 text-xs text-green-400 font-mono max-w-md">
+              {debugInfo.map((msg, i) => (
+                <div key={i}>{msg}</div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
