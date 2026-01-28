@@ -241,24 +241,34 @@ export default function GeospatialMapLibre({
 
   // Load and update data
   useEffect(() => {
+    console.log('🔍 [DATA EFFECT] Triggered!', { hasMap: !!map.current, mapReady, metric });
+
     if (!map.current || !mapReady) {
-      console.log('[MapLibre] Waiting for map to be ready...', { hasMap: !!map.current, mapReady });
+      console.warn('⏸️ [DATA EFFECT] Waiting for map to be ready...', { hasMap: !!map.current, mapReady });
       return;
     }
 
+    console.log('🚀 [DATA EFFECT] Map is ready, starting loadData()...');
+
     const loadData = async () => {
       try {
-        console.log('[MapLibre] Starting data load for metric:', metric);
+        console.log('📊 [DATA LOAD] Starting data load for metric:', metric);
         setLoading(true);
         setError(null);
 
         const normalizedMetric = metric.toLowerCase();
+        console.log('📡 [DATA LOAD] Fetching from API:', API_BASE_URL);
 
         // Fetch boundaries and data in parallel
         const [boundariesRes, dataRes] = await Promise.all([
           fetch(`${API_BASE_URL}/api/geo/choropleth?metric=${encodeURIComponent(normalizedMetric)}&mode=boundaries`),
           fetch(`${API_BASE_URL}/api/geo/choropleth?metric=${encodeURIComponent(normalizedMetric)}&mode=data`)
         ]);
+
+        console.log('✅ [DATA LOAD] API responses received', {
+          boundariesOk: boundariesRes.ok,
+          dataOk: dataRes.ok
+        });
 
         if (!boundariesRes.ok) throw new Error('Failed to load boundaries');
         if (!dataRes.ok) throw new Error('Failed to load metric data');
@@ -267,7 +277,7 @@ export default function GeospatialMapLibre({
         const dataResponse = await dataRes.json();
         const dataPoints: RegionData[] = dataResponse.data || [];
 
-        console.log('[MapLibre] Data fetched:', {
+        console.log('✅ [DATA LOAD] Data parsed:', {
           boundaryFeatures: boundaries.features?.length,
           dataPoints: dataPoints.length
         });
@@ -326,8 +336,10 @@ export default function GeospatialMapLibre({
           caMax: caValues.length > 0 ? Math.max(...caValues) : undefined
         };
 
-        console.log('[MapLibre] Stats calculated:', calculatedStats);
+        console.log('📊 [DATA LOAD] Stats calculated:', calculatedStats);
+        console.log('💾 [DATA LOAD] Calling setStats()...');
         setStats(calculatedStats);
+        console.log('✅ [DATA LOAD] setStats() completed');
 
         // Merge data into boundaries
         const dataMap = new Map(dataPoints.map(d => [d.name, d]));
@@ -349,9 +361,10 @@ export default function GeospatialMapLibre({
         });
 
         // Store boundaries in state for later color updates
+        console.log('💾 [DATA LOAD] Storing boundaries data...');
         setBoundariesData(boundaries);
 
-        console.log('[MapLibre] Adding layers to map...');
+        console.log('🗺️ [DATA LOAD] Adding layers to map...');
 
         // Remove existing source and layers if they exist
         if (map.current!.getLayer('regions-fill')) {
@@ -461,21 +474,30 @@ export default function GeospatialMapLibre({
           popup.current!.remove();
         });
 
-        console.log('[MapLibre] Data load complete, map should now be visible');
+        console.log('🎉 [DATA LOAD] Data load complete, map should now be visible');
 
         // Force map to resize (fixes timing issues)
         map.current!.resize();
+        console.log('📐 [DATA LOAD] Map resized');
 
+        console.log('🏁 [DATA LOAD] Calling setLoading(false)...');
         setLoading(false);
+        console.log('✅ [DATA LOAD] setLoading(false) completed');
 
       } catch (err: any) {
-        console.error('[MapLibre] Data load error:', err);
+        console.error('❌ [DATA LOAD] Data load error:', err);
+        console.error('❌ [DATA LOAD] Error stack:', err.stack);
         setError(err.message);
         setLoading(false);
       }
     };
 
-    loadData();
+    console.log('🔄 [DATA EFFECT] Calling loadData()...');
+    loadData().then(() => {
+      console.log('✅ [DATA EFFECT] loadData() promise resolved');
+    }).catch((err) => {
+      console.error('❌ [DATA EFFECT] loadData() promise rejected:', err);
+    });
   }, [metric, date, mapReady]);
 
   // Update colors when stats/scale changes
