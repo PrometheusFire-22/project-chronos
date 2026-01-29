@@ -421,12 +421,17 @@ export default function GeospatialMapLibre({
         setBoundariesData(boundaries);
 
         // Remove existing source and layers if they exist
-        // Remove existing source and layers if they exist
+        if (map.current!.getLayer('regions-labels-layer')) {
+          map.current!.removeLayer('regions-labels-layer');
+        }
         if (map.current!.getLayer('regions-fill')) {
           map.current!.removeLayer('regions-fill');
         }
         if (map.current!.getLayer('regions-line')) {
           map.current!.removeLayer('regions-line');
+        }
+        if (map.current!.getSource('regions-labels')) {
+          map.current!.removeSource('regions-labels');
         }
         if (map.current!.getSource('regions')) {
           map.current!.removeSource('regions');
@@ -516,8 +521,6 @@ export default function GeospatialMapLibre({
 
         // Add fill layer (colors will be set by color update effect)
         // Lower opacity (0.65) so placenames below are more readable
-        // Add fill layer (colors will be set by color update effect)
-        // Lower opacity (0.65) so placenames below are more readable
         map.current!.addLayer({
           id: 'regions-fill',
           type: 'fill',
@@ -546,7 +549,7 @@ export default function GeospatialMapLibre({
           source: 'regions-labels', // Use the polylabel centroids source
           layout: {
             'text-field': ['get', 'name'],
-            'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+            'text-font': ['Noto Sans Medium', 'Noto Sans Regular'],
             'text-size': 10, // Smaller, more demure
             'text-transform': 'uppercase',
             'text-letter-spacing': 0.05,
@@ -763,7 +766,6 @@ export default function GeospatialMapLibre({
       {loading && (
         <div className="absolute inset-0 z-[1000] flex flex-col items-center justify-center bg-slate-950/90 backdrop-blur-sm">
           <Loader2 className="animate-spin h-8 w-8 text-blue-500 mb-2" />
-          <div className="text-sm text-slate-400">Loading geospatial data...</div>
           <div className="text-sm text-slate-400">Loading geospatial data...</div>
         </div>
       )}
