@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState, useMemo } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { Protocol } from 'pmtiles';
+import type { PMTiles } from 'pmtiles';
+import polylabel from '@mapbox/polylabel';
 import { scaleQuantile } from 'd3-scale';
 import { Card } from '@chronos/ui/components/card';
 import { Loader2 } from 'lucide-react';
@@ -47,7 +50,7 @@ export default function GeospatialMapLibre({
   // Refs
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
-  const popup = useRef<maplibregl.Popup | null>(null);
+  // Popups are created on-demand for each click (allows multiple comparison tooltips)
   const mapReady = useRef(false);
 
   // State
@@ -97,7 +100,8 @@ export default function GeospatialMapLibre({
   // Get color for value with z-score based outlier capping
   const getColorForValue = useMemo(() => {
     return (value: number | null, country: string): string => {
-      if (value === null || !colorScale || !stats) return 'transparent';
+      // Show regions without data in a light gray instead of transparent
+      if (value === null || !colorScale || !stats) return '#1e293b'; // slate-800
 
       const isHPI = metric.toLowerCase().includes('house') || metric.toLowerCase().includes('hpi');
 
@@ -176,42 +180,33 @@ export default function GeospatialMapLibre({
         throw new Error('Map container has zero dimensions');
       }
 
-      // Create map with simple dark background (no basemap tiles for now)
-      addDebug('[MapLibre] Creating map instance...');
+      // Using Stadia Maps (Stamen) - FREE vector tiles with proper layer control
+      // This lets us put water ABOVE the choropleth so Great Lakes are visible
+      addDebug('[MapLibre] Creating map instance with Stadia Maps...');
+
       map.current = new maplibregl.Map({
         container: mapContainer.current,
-        style: {
-          version: 8,
-          sources: {},
-          layers: [
-            {
-              id: 'background',
-              type: 'background',
-              paint: {
-                'background-color': '#0f172a' // Dark slate background
-              }
-            }
-          ]
-        },
+        style: 'https://tiles.stadiamaps.com/styles/stamen_toner_background.json',
         center: [-95, 48],
         zoom: 4.5,
         minZoom: 2.5,
         maxZoom: 8,
-        maxBounds: [[-170, 15], [-50, 80]] // Constrain to North America
+        maxBounds: [[-170, 15], [-50, 80]],
+        attributionControl: false // Remove attribution control
       });
       addDebug('[MapLibre] Map instance created ✓');
 
-      // Create popup instance
-      popup.current = new maplibregl.Popup({
-        closeButton: false,
-        closeOnClick: false,
-        className: 'maplibre-popup-custom'
-      });
+      // Popup will be created on-demand for each click (allows multiple popups)
 
       // Setup map event handlers
       map.current.on('load', () => {
         console.log('🎉 [MAP INIT] Load event fired!');
         addDebug('[MapLibre] Map loaded successfully ✓');
+
+        // Log all available layers for debugging
+        const layers = map.current!.getStyle().layers;
+        console.log('🗺️ [MAP INIT] Available basemap layers:', layers.map((l: any) => l.id));
+
         console.log('🔧 [MAP INIT] Scheduling data load with setTimeout...');
         // Add small delay to ensure React state has fully initialized
         setTimeout(() => {
@@ -250,8 +245,11 @@ export default function GeospatialMapLibre({
       // Cleanup
       return () => {
         console.log('🧹 [MAP INIT EFFECT] Cleanup running - removing map');
-        map.current?.remove();
-        map.current = null;
+        if (map.current) {
+          map.current.remove();
+          map.current = null;
+        }
+        mapReady.current = false;
       };
     } catch (err) {
       const errorMsg = `Failed to initialize: ${err instanceof Error ? err.message : String(err)}`;
@@ -304,6 +302,13 @@ export default function GeospatialMapLibre({
           boundaryFeatures: boundaries.features?.length,
           dataPoints: dataPoints.length
         });
+
+        // Log data distribution by country
+        const countryCount = dataPoints.reduce((acc, d) => {
+          acc[d.country] = (acc[d.country] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>);
+        console.log('📊 [DATA LOAD] Data by country:', countryCount);
 
         // Calculate statistics with z-score based outlier detection
         const values: number[] = [];
@@ -385,6 +390,19 @@ export default function GeospatialMapLibre({
 
         // Store boundaries in state for later color updates
         console.log('💾 [DATA LOAD] Storing boundaries data...');
+
+        // Log boundaries by country
+        const boundariesByCountry = boundaries.features.reduce((acc: Record<string, number>, f: any) => {
+          const country = f.properties.country || 'unknown';
+          acc[country] = (acc[country] || 0) + 1;
+          return acc;
+        }, {});
+        console.log('🗺️ [DATA LOAD] Boundaries by country:', boundariesByCountry);
+
+        // Log features with and without data
+        const featuresWithData = boundaries.features.filter((f: any) => f.properties.value !== null).length;
+        console.log('📊 [DATA LOAD] Features with data:', featuresWithData, '/', boundaries.features.length);
+
         setBoundariesData(boundaries);
 
         console.log('🗺️ [DATA LOAD] Adding layers to map...');
@@ -403,23 +421,104 @@ export default function GeospatialMapLibre({
           map.current!.removeSource('regions');
         }
 
+        // Add IDs to features (required for setFeatureState in hover interactions)
+        const boundariesWithIds = {
+          ...boundaries,
+          features: boundaries.features.map((feature: any, index: number) => ({
+            ...feature,
+            id: index
+          }))
+        };
+
         // Add source
-        console.log('[MapLibre] Adding regions source with', boundaries.features.length, 'features');
+        console.log('[MapLibre] Adding regions source with', boundariesWithIds.features.length, 'features');
         map.current!.addSource('regions', {
           type: 'geojson',
-          data: boundaries
+          data: boundariesWithIds,
+          generateId: false // Use our explicit IDs
         });
 
-        // Add fill layer (will be styled after stats are computed)
+        // Create deduplicated centroids using polylabel (pole of inaccessibility)
+        // This gives the best visual center for complex shapes like Michigan
+        const labelCentroids: { [key: string]: { name: string; coords: [number, number]; value: any } } = {};
+
+        boundariesWithIds.features.forEach((feature: any) => {
+          const name = feature.properties.name;
+          if (!labelCentroids[name]) {
+            let bestCenter: [number, number] | null = null;
+
+            try {
+              if (feature.geometry.type === 'Polygon') {
+                // Use polylabel to find the pole of inaccessibility
+                bestCenter = polylabel(feature.geometry.coordinates, 1.0);
+              } else if (feature.geometry.type === 'MultiPolygon') {
+                // For MultiPolygon, find the largest polygon and use its pole
+                let largestPolygon = feature.geometry.coordinates[0];
+                let largestArea = 0;
+
+                feature.geometry.coordinates.forEach((polygon: any) => {
+                  // Simple area approximation
+                  const area = polygon[0].length;
+                  if (area > largestArea) {
+                    largestArea = area;
+                    largestPolygon = polygon;
+                  }
+                });
+
+                bestCenter = polylabel(largestPolygon, 1.0);
+              }
+
+              if (bestCenter) {
+                labelCentroids[name] = {
+                  name,
+                  coords: bestCenter,
+                  value: feature.properties.value
+                };
+              }
+            } catch (e) {
+              console.warn('[MapLibre] Could not calculate polylabel for', name, e);
+            }
+          }
+        });
+
+        // Create GeoJSON for label centroids
+        const labelFeatures = Object.values(labelCentroids).map((centroid, index) => ({
+          type: 'Feature',
+          id: index,
+          geometry: {
+            type: 'Point',
+            coordinates: centroid.coords
+          },
+          properties: {
+            name: centroid.name,
+            value: centroid.value
+          }
+        }));
+
+        console.log('[MapLibre] Created', labelFeatures.length, 'deduplicated label centroids');
+
+        // Add label source
+        map.current!.addSource('regions-labels', {
+          type: 'geojson',
+          data: {
+            type: 'FeatureCollection',
+            features: labelFeatures
+          }
+        });
+
+        // Add fill layer (colors will be set by color update effect)
+        // Lower opacity (0.65) so placenames below are more readable
+        console.log('[MapLibre] Adding fill layer');
         map.current!.addLayer({
           id: 'regions-fill',
           type: 'fill',
           source: 'regions',
           paint: {
-            'fill-color': 'transparent', // Will be updated below
-            'fill-opacity': 0.8
+            'fill-color': 'transparent', // Will be updated by color effect
+            'fill-opacity': 0.65 // Reduced from 0.8 for better label visibility
           }
         });
+        console.log('[MapLibre] Fill layer added successfully');
 
         // Add border layer
         map.current!.addLayer({
@@ -432,19 +531,97 @@ export default function GeospatialMapLibre({
           }
         });
 
-        // Setup hover interactions
+        // Add STATE/PROVINCE NAME LABELS from deduplicated polylabel centroids
+        console.log('[MapLibre] Adding state/province name labels with polylabel placement');
+        map.current!.addLayer({
+          id: 'regions-labels-layer',
+          type: 'symbol',
+          source: 'regions-labels', // Use the polylabel centroids source
+          layout: {
+            'text-field': ['get', 'name'],
+            'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+            'text-size': 10, // Smaller, more demure
+            'text-transform': 'uppercase',
+            'text-letter-spacing': 0.05,
+            'text-max-width': 8,
+            'text-allow-overlap': false // Don't overlap labels
+          },
+          paint: {
+            'text-color': '#94a3b8', // Subtle slate-400 for better readability
+            'text-opacity': 0.8 // Sharp, no halo for crisp rendering
+          }
+        });
+        console.log('[MapLibre] State/province labels added');
+
+        // CRITICAL: Add water layer ON TOP to show Great Lakes properly
+        // The state boundaries extend over water (administrative boundaries),
+        // so we need to render water above the choropleth
+        console.log('[MapLibre] Adding water overlay layer to show Great Lakes');
+
+        // Check if basemap has water layers we can move on top
+        const style = map.current!.getStyle();
+        const waterLayers = style.layers.filter((l: any) =>
+          l.id && (l.id.includes('water') || l.id.includes('ocean') || l.id.includes('lake') || l.id.includes('river'))
+        );
+
+        console.log('[MapLibre] Found water layers:', waterLayers.map((l: any) => l.id));
+
+        // Move all water layers above the choropleth
+        waterLayers.forEach((layer: any) => {
+          try {
+            map.current!.moveLayer(layer.id);
+            console.log('[MapLibre] Moved water layer to top:', layer.id);
+          } catch (e) {
+            console.log('[MapLibre] Could not move layer:', layer.id, e);
+          }
+        });
+
+        // Move place name/label layers to the very top so they're readable
+        const labelLayers = style.layers.filter((l: any) =>
+          l.id && (
+            l.id.includes('label') ||
+            l.id.includes('place') ||
+            l.id.includes('text') ||
+            l.id.includes('city') ||
+            l.id.includes('state') ||
+            l.type === 'symbol'
+          )
+        );
+
+        console.log('[MapLibre] Found label layers:', labelLayers.map((l: any) => l.id));
+
+        // Move all label layers to absolute top
+        labelLayers.forEach((layer: any) => {
+          try {
+            map.current!.moveLayer(layer.id);
+            console.log('[MapLibre] Moved label layer to top:', layer.id);
+          } catch (e) {
+            console.log('[MapLibre] Could not move label layer:', layer.id, e);
+          }
+        });
+
+        // CRITICAL: Move our custom state/province labels to the VERY TOP
+        if (map.current!.getLayer('regions-labels-layer')) {
+          try {
+            map.current!.moveLayer('regions-labels-layer');
+            console.log('[MapLibre] Moved regions-labels-layer to absolute top');
+          } catch (e) {
+            console.log('[MapLibre] Could not move regions-labels-layer:', e);
+          }
+        }
+
+        // Setup click interactions for pinned tooltips
         let hoveredFeatureId: string | number | undefined = undefined;
 
+        // Hover effect - just change cursor
         map.current!.on('mousemove', 'regions-fill', (e) => {
+          map.current!.getCanvas().style.cursor = 'pointer';
+
           if (e.features && e.features.length > 0) {
             const feature = e.features[0];
-            const props = feature.properties;
-
-            // Change cursor
-            map.current!.getCanvas().style.cursor = 'pointer';
 
             // Update hover state
-            if (hoveredFeatureId !== undefined) {
+            if (hoveredFeatureId !== undefined && hoveredFeatureId !== feature.id) {
               map.current!.setFeatureState(
                 { source: 'regions', id: hoveredFeatureId },
                 { hover: false }
@@ -455,13 +632,32 @@ export default function GeospatialMapLibre({
               { source: 'regions', id: hoveredFeatureId },
               { hover: true }
             );
+          }
+        });
 
-            // Show tooltip
+        map.current!.on('mouseleave', 'regions-fill', () => {
+          map.current!.getCanvas().style.cursor = '';
+
+          if (hoveredFeatureId !== undefined) {
+            map.current!.setFeatureState(
+              { source: 'regions', id: hoveredFeatureId },
+              { hover: false }
+            );
+          }
+          hoveredFeatureId = undefined;
+        });
+
+        // Click to create pinned tooltip (allows multiple tooltips for comparison)
+        map.current!.on('click', 'regions-fill', (e) => {
+          if (e.features && e.features.length > 0) {
+            const feature = e.features[0];
+            const props = feature.properties;
+
             const config = getMetricConfig(props.metric || normalizedMetric);
             const displayValue = formatMetricValue(props.value, config);
 
             const tooltipHTML = `
-              <div class="backdrop-blur-xl bg-slate-900/90 border border-white/10 rounded-lg p-2 shadow-2xl">
+              <div class="bg-slate-900/95 border border-white/10 rounded-lg p-3 shadow-2xl">
                 <div class="text-sm font-bold text-white mb-1">${props.name}</div>
                 <div class="text-[8px] text-slate-500 uppercase tracking-widest font-bold mb-0.5">${config.displayName}</div>
                 <div class="flex items-center justify-between gap-2">
@@ -476,32 +672,27 @@ export default function GeospatialMapLibre({
               </div>
             `;
 
-            popup.current!
+            // Create new popup for each click (allows multiple popups)
+            new maplibregl.Popup({
+              closeButton: true,
+              closeOnClick: false,
+              className: 'maplibre-popup-custom'
+            })
               .setLngLat(e.lngLat)
               .setHTML(tooltipHTML)
               .addTo(map.current!);
           }
         });
 
-        map.current!.on('mouseleave', 'regions-fill', () => {
-          map.current!.getCanvas().style.cursor = '';
-
-          if (hoveredFeatureId !== undefined) {
-            map.current!.setFeatureState(
-              { source: 'regions', id: hoveredFeatureId },
-              { hover: false }
-            );
-          }
-          hoveredFeatureId = undefined;
-
-          popup.current!.remove();
-        });
-
         console.log('🎉 [DATA LOAD] Data load complete, map should now be visible');
 
-        // Force map to resize (fixes timing issues)
-        map.current!.resize();
-        console.log('📐 [DATA LOAD] Map resized');
+        // Force map to resize (fixes timing issues) - use setTimeout to ensure DOM is ready
+        setTimeout(() => {
+          if (map.current) {
+            map.current.resize();
+            console.log('📐 [DATA LOAD] Map resized');
+          }
+        }, 100);
 
         console.log('🏁 [DATA LOAD] Calling setLoading(false)...');
         setLoading(false);
@@ -525,7 +716,18 @@ export default function GeospatialMapLibre({
 
   // Update colors when stats/scale changes
   useEffect(() => {
-    if (!map.current || !map.current.getLayer('regions-fill') || !stats || !colorScale || !boundariesData) return;
+    console.log('🎨 [COLOR UPDATE] Effect triggered!', {
+      hasMap: !!map.current,
+      hasLayer: map.current ? !!map.current.getLayer('regions-fill') : false,
+      hasStats: !!stats,
+      hasColorScale: !!colorScale,
+      hasBoundariesData: !!boundariesData
+    });
+
+    if (!map.current || !map.current.getLayer('regions-fill') || !stats || !colorScale || !boundariesData) {
+      console.log('⏸️ [COLOR UPDATE] Skipping - missing dependencies');
+      return;
+    }
 
     const source = map.current.getSource('regions') as maplibregl.GeoJSONSource;
     if (!source) return;
@@ -538,6 +740,15 @@ export default function GeospatialMapLibre({
         const country = feature.properties.country;
         const color = getColorForValue(value, country);
 
+        // Log first few colors to debug
+        if (index < 5) {
+          console.log(`🎨 [COLOR UPDATE] Feature ${index} (${feature.properties.name}):`, {
+            value,
+            country,
+            color
+          });
+        }
+
         return {
           ...feature,
           id: index,
@@ -549,14 +760,52 @@ export default function GeospatialMapLibre({
       })
     };
 
+    console.log('🎨 [COLOR UPDATE] Sample of computed colors:',
+      updatedBoundaries.features.slice(0, 3).map((f: any) => ({
+        name: f.properties.name,
+        value: f.properties.value,
+        color: f.properties.color
+      }))
+    );
+
     // Update the source with colored features
+    console.log('🎨 [COLOR UPDATE] Updating source with colored features');
     source.setData(updatedBoundaries);
 
     // Update layer to use the pre-computed colors
+    console.log('🎨 [COLOR UPDATE] Setting fill-color paint property');
     map.current.setPaintProperty('regions-fill', 'fill-color', [
       'get',
       'color'
     ]);
+    console.log('✅ [COLOR UPDATE] Colors applied successfully!');
+
+    // Add water layer ON TOP of choropleth to show Great Lakes
+    // Check if the style has a water layer we can reference
+    if (map.current.getStyle().layers) {
+      const waterLayerExists = map.current.getStyle().layers.some((l: any) => l.id === 'water-overlay');
+
+      if (!waterLayerExists) {
+        console.log('🌊 [COLOR UPDATE] Adding water overlay layer on top');
+
+        // Try to find the water layer from the basemap
+        const basemapWaterLayer = map.current.getStyle().layers.find((l: any) =>
+          l.id && (l.id.includes('water') || l.id.includes('ocean') || l.id.includes('lake'))
+        );
+
+        if (basemapWaterLayer) {
+          console.log('🌊 [COLOR UPDATE] Found basemap water layer:', basemapWaterLayer.id);
+          // The water layer should already be visible if it's from the basemap
+          // Move it above the choropleth
+          try {
+            map.current.moveLayer(basemapWaterLayer.id, 'regions-line');
+            console.log('🌊 [COLOR UPDATE] Moved water layer above choropleth');
+          } catch (e) {
+            console.log('🌊 [COLOR UPDATE] Could not move water layer:', e);
+          }
+        }
+      }
+    }
 
   }, [stats, colorScale, getColorForValue, boundariesData]);
 
@@ -583,7 +832,7 @@ export default function GeospatialMapLibre({
     : 'bg-gradient-to-r from-yellow-100 via-orange-400 to-red-900';
 
   return (
-    <Card className="h-[600px] w-full overflow-hidden relative border-0 ring-1 ring-white/10 shadow-2xl bg-slate-950">
+    <Card className="h-[600px] w-full overflow-hidden relative border-0 ring-1 ring-white/10 shadow-2xl bg-slate-950" style={{ position: 'relative', height: '600px' }}>
       {loading && (
         <div className="absolute inset-0 z-[1000] flex flex-col items-center justify-center bg-slate-950/90 backdrop-blur-sm">
           <Loader2 className="animate-spin h-8 w-8 text-blue-500 mb-2" />
@@ -629,18 +878,58 @@ export default function GeospatialMapLibre({
       {/* Map container */}
       <div
         ref={mapContainer}
-        className="absolute inset-0"
-        style={{ background: '#020617' }}
+        className="absolute inset-0 z-0"
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          width: '100%',
+          height: '100%',
+          background: '#020617'
+        }}
       />
 
-      {/* Add custom CSS for popup */}
+      {/* Add custom CSS for popup and hide attribution */}
       <style jsx global>{`
-        .maplibre-popup-custom .maplibre-popup-content {
+        /* Remove white outline but keep the blue card */
+        .maplibregl-popup-content,
+        .maplibregl-popup-content-wrapper,
+        .maplibre-popup-custom .maplibre-popup-content,
+        .maplibre-popup-custom .maplibre-popup-content-wrapper {
           background: transparent !important;
           padding: 0 !important;
           box-shadow: none !important;
         }
+
+        .maplibregl-popup-tip,
         .maplibre-popup-custom .maplibre-popup-tip {
+          display: none !important;
+        }
+
+        /* Small, proportional close button */
+        .maplibregl-popup-close-button,
+        .maplibre-popup-custom .maplibre-popup-close-button {
+          font-size: 16px !important;
+          font-weight: normal !important;
+          color: #94a3b8 !important;
+          padding: 2px 6px !important;
+          right: 4px !important;
+          top: 4px !important;
+          background: transparent !important;
+          border-radius: 2px !important;
+          line-height: 1 !important;
+        }
+        .maplibregl-popup-close-button:hover,
+        .maplibre-popup-custom .maplibre-popup-close-button:hover {
+          background-color: rgba(148, 163, 184, 0.2) !important;
+          color: #e2e8f0 !important;
+        }
+
+        /* Hide MapLibre attribution */
+        .maplibregl-ctrl-attrib,
+        .maplibregl-ctrl-bottom-right {
           display: none !important;
         }
       `}</style>

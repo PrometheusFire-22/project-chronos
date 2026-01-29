@@ -5,6 +5,8 @@ const nextConfig = {
   nx: {},
   transpilePackages: ['@chronos/ui'],
 
+  // Disable React Strict Mode to prevent WebGL context loss in MapLibre
+  reactStrictMode: false,
 
   // Disable image optimization for static export
   images: {
