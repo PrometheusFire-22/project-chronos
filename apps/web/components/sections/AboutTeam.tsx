@@ -10,7 +10,7 @@ export function AboutTeam() {
             Meet the Team
           </h2>
           <p className="text-lg text-slate-400">
-            We're a passionate team of engineers, designers, and domain experts building the future of private market intelligence
+            We&apos;re a passionate team of engineers, designers, and domain experts building the future of private market intelligence
           </p>
         </div>
 
@@ -65,9 +65,9 @@ export function AboutTeam() {
               Join Our Team
             </h3>
             <p className="text-slate-400 mb-6">
-              We're always looking for talented individuals who are passionate about
-              transforming private market intelligence. If you're excited about building
-              the future with us, we'd love to hear from you.
+              We&apos;re always looking for talented individuals who are passionate about
+              transforming private market intelligence. If you&apos;re excited about building
+              the future with us, we&apos;d love to hear from you.
             </p>
             <a
               href="mailto:careers@chronos.ai"
