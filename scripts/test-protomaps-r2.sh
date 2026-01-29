@@ -133,3 +133,23 @@ echo "   - Cloudflare cache status: HIT (after first load)"
 echo "4. Monitor R2 analytics for cache hit ratio (target > 95%)"
 echo ""
 echo "Documentation: data/tiles/CACHING.md"
+
+# Test 11: CORS headers present
+echo -n "Test 11: CORS headers (PMTiles)... "
+CORS_ORIGIN=$(curl -sI "${TILES_URL}/tiles/protomaps-north-america.pmtiles" | grep -i "access-control-allow-origin" | tr -d '\r')
+if echo "$CORS_ORIGIN" | grep -q "*"; then
+    echo -e "${GREEN}✓ PASS${NC} (wildcard)"
+else
+    echo -e "${RED}✗ FAIL${NC} (CORS blocked)"
+    exit 1
+fi
+
+# Test 12: CORS headers (fonts)
+echo -n "Test 12: CORS headers (fonts)... "
+CORS_ORIGIN=$(curl -sI "${TILES_URL}/fonts/Noto%20Sans%20Regular/0-255.pbf" | grep -i "access-control-allow-origin" | tr -d '\r')
+if echo "$CORS_ORIGIN" | grep -q "*"; then
+    echo -e "${GREEN}✓ PASS${NC} (wildcard)"
+else
+    echo -e "${RED}✗ FAIL${NC} (CORS blocked)"
+    exit 1
+fi
