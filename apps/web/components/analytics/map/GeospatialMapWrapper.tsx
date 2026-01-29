@@ -5,7 +5,7 @@ import React from 'react';
 
 // Dynamically import the map to avoid SSR issues with Leaflet
 const GeospatialMap = dynamic(
-    () => import('./GeospatialMap'),
+    () => import('./GeospatialMapLibre'),
     {
         ssr: false,
         loading: () => (
