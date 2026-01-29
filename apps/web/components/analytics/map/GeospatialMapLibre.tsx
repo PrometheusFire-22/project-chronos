@@ -175,10 +175,16 @@ export default function GeospatialMapLibre({
 
       // Using Stadia Maps (Stamen) - FREE vector tiles with proper layer control
       // This lets us put water ABOVE the choropleth so Great Lakes are visible
+      // Register PMTiles protocol for efficient tile loading
+      const protocol = new Protocol();
+      maplibregl.addProtocol('pmtiles', protocol.tile);
+
       map.current = new maplibregl.Map({
         container: mapContainer.current,
         style: {
           version: 8,
+          glyphs: 'https://demotiles.maplibre.org/fonts/{fontstack}/{range}.pbf',
+          sprite: 'https://demotiles.maplibre.org/styles/osm-bright-gl-style/sprite',
           sources: {
             'carto-dark': {
               type: 'raster',
@@ -234,6 +240,7 @@ export default function GeospatialMapLibre({
           map.current.remove();
           map.current = null;
         }
+        maplibregl.removeProtocol('pmtiles'); // Clean up protocol
         mapReady.current = false;
       };
     } catch (err) {
