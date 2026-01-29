@@ -94,6 +94,10 @@ v2064138,StatsCan,Active,Unemployment Rate - Manitoba,Macro,Provincial,Manitoba,
 v2064327,StatsCan,Active,Unemployment Rate - Saskatchewan,Macro,Provincial,Saskatchewan,Monthly,Employment,Unemployment Rate
 v2064516,StatsCan,Active,Unemployment Rate - Alberta,Macro,Provincial,Alberta,Monthly,Employment,Unemployment Rate
 v2064705,StatsCan,Active,Unemployment Rate - British Columbia,Macro,Provincial,British Columbia,Monthly,Employment,Unemployment Rate
+# CANADA TERRITORIAL DATA (3 series)
+v2064894,StatsCan,Active,Unemployment Rate - Yukon,Macro,Territory,Yukon,Monthly,Employment,Unemployment Rate
+v2065083,StatsCan,Active,Unemployment Rate - Northwest Territories,Macro,Territory,Northwest Territories,Monthly,Employment,Unemployment Rate
+v2065272,StatsCan,Active,Unemployment Rate - Nunavut,Macro,Territory,Nunavut,Monthly,Employment,Unemployment Rate
 v111955448,StatsCan,Active,New Housing Price Index - Newfoundland and Labrador,Macro,Provincial,Newfoundland and Labrador,Monthly,Housing,New Housing Price Index
 v111955454,StatsCan,Active,New Housing Price Index - Prince Edward Island,Macro,Provincial,Prince Edward Island,Monthly,Housing,New Housing Price Index
 v111955460,StatsCan,Active,New Housing Price Index - Nova Scotia,Macro,Provincial,Nova Scotia,Monthly,Housing,New Housing Price Index
