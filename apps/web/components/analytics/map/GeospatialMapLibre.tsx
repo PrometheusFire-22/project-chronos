@@ -184,7 +184,7 @@ export default function GeospatialMapLibre({
         container: mapContainer.current,
         style: {
           version: 8,
-          glyphs: 'https://demotiles.maplibre.org/fonts/{fontstack}/{range}.pbf',
+          glyphs: `${R2_TILES_URL}/fonts/{fontstack}/{range}.pbf`,
           sprite: 'https://demotiles.maplibre.org/styles/osm-bright-gl-style/sprite',
           sources: {
             'protomaps': {
