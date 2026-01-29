@@ -91,6 +91,10 @@ database/backups/
 # GIS Data
 gis_data/raw/
 
+# Map Tiles (large binary files - deploy to R2, don't commit)
+data/tiles/*.pmtiles
+!data/tiles/.gitkeep
+
 # Jupyter
 .ipynb_checkpoints/
 
