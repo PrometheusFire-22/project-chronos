@@ -177,7 +177,31 @@ export default function GeospatialMapLibre({
       // This lets us put water ABOVE the choropleth so Great Lakes are visible
       map.current = new maplibregl.Map({
         container: mapContainer.current,
-        style: 'https://tiles.stadiamaps.com/styles/stamen_toner_background.json',
+        style: {
+          version: 8,
+          sources: {
+            'carto-dark': {
+              type: 'raster',
+              tiles: [
+                'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+                'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
+              ],
+              tileSize: 256,
+              attribution: '&copy; CartoDB'
+            }
+          },
+          layers: [
+            {
+              id: 'carto-dark-layer',
+              type: 'raster',
+              source: 'carto-dark',
+              paint: {
+                'raster-opacity': 1
+              }
+            }
+          ]
+        },
         center: [-95, 48],
         zoom: 4.5,
         minZoom: 2.5,
