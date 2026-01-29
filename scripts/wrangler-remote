@@ -1,0 +1,6 @@
+#!/bin/bash
+# Wrapper script to run wrangler with OAuth (unsets API token env var)
+# Usage: ./scripts/wrangler-remote <wrangler commands>
+
+unset CLOUDFLARE_API_TOKEN
+exec pnpx wrangler "$@"

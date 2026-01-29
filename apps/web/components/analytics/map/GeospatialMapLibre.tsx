@@ -12,6 +12,7 @@ import { Loader2 } from 'lucide-react';
 import { getMetricConfig, formatMetricValue } from '@/lib/metrics/config';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.automatonicai.com';
+const R2_TILES_URL = process.env.NEXT_PUBLIC_R2_TILES_URL || 'https://tiles.automatonicai.com';
 
 interface GeospatialMapLibreProps {
   metric?: string;
@@ -186,26 +187,89 @@ export default function GeospatialMapLibre({
           glyphs: 'https://demotiles.maplibre.org/fonts/{fontstack}/{range}.pbf',
           sprite: 'https://demotiles.maplibre.org/styles/osm-bright-gl-style/sprite',
           sources: {
-            'carto-dark': {
-              type: 'raster',
-              tiles: [
-                'https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-                'https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
-                'https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
-              ],
-              tileSize: 256,
-              attribution: '&copy; CartoDB'
+            'protomaps': {
+              type: 'vector',
+              url: `pmtiles://${R2_TILES_URL}/tiles/protomaps-north-america.pmtiles`,
+              attribution: '© <a href="https://openstreetmap.org">OpenStreetMap</a> © <a href="https://protomaps.com">Protomaps</a>'
             }
           },
           layers: [
+            // Background layer
             {
-              id: 'carto-dark-layer',
-              type: 'raster',
-              source: 'carto-dark',
+              id: 'background',
+              type: 'background',
               paint: {
-                'raster-opacity': 1
+                'background-color': '#020617' // slate-950
+              }
+            },
+            // Landuse layer
+            {
+              id: 'landuse',
+              type: 'fill',
+              source: 'protomaps',
+              'source-layer': 'landuse',
+              filter: ['in', ['get', 'pmap:kind'], ['literal', ['park', 'cemetery', 'hospital', 'school', 'forest', 'wood']]],
+              paint: {
+                'fill-color': '#0f172a', // slate-900
+                'fill-opacity': 0.4
+              }
+            },
+            // Water bodies layer
+            {
+              id: 'water',
+              type: 'fill',
+              source: 'protomaps',
+              'source-layer': 'water',
+              paint: {
+                'fill-color': '#1e293b' // slate-800
+              }
+            },
+            // Roads layer
+            {
+              id: 'roads',
+              type: 'line',
+              source: 'protomaps',
+              'source-layer': 'roads',
+              filter: ['in', ['get', 'pmap:kind'], ['literal', ['highway', 'major_road', 'medium_road']]],
+              paint: {
+                'line-color': '#334155', // slate-700
+                'line-width': [
+                  'interpolate',
+                  ['linear'],
+                  ['zoom'],
+                  3, 0.5,
+                  8, 1.5
+                ]
+              }
+            },
+            // Boundaries layer
+            {
+              id: 'boundaries',
+              type: 'line',
+              source: 'protomaps',
+              'source-layer': 'boundaries',
+              filter: ['==', ['get', 'pmap:kind'], 'country'],
+              paint: {
+                'line-color': '#475569', // slate-600
+                'line-width': 1,
+                'line-dasharray': [3, 2]
+              }
+            },
+            // State/province boundaries
+            {
+              id: 'state-boundaries',
+              type: 'line',
+              source: 'protomaps',
+              'source-layer': 'boundaries',
+              filter: ['==', ['get', 'pmap:kind'], 'region'],
+              paint: {
+                'line-color': '#475569', // slate-600
+                'line-width': 0.5,
+                'line-dasharray': [2, 2],
+                'line-opacity': 0.5
               }
             }
+            // Choropleth layers will be added dynamically on data load
           ]
         },
         center: [-95, 48],
@@ -495,41 +559,34 @@ export default function GeospatialMapLibre({
           }
         });
 
-        console.log('[MapLibre] Adding water overlay layer to show Great Lakes');
+        console.log('[MapLibre] Configuring Protomaps layer ordering for proper choropleth visibility');
 
-        // Check if basemap has water layers we can move on top
-        const style = map.current!.getStyle();
-        const waterLayers = style.layers.filter((l: any) =>
-          l.id && (l.id.includes('water') || l.id.includes('ocean') || l.id.includes('lake') || l.id.includes('river'))
-        );
-
-        // Move all water layers above the choropleth
-        waterLayers.forEach((layer: any) => {
-          try {
-            map.current!.moveLayer(layer.id);
-          } catch (e) {
-            console.warn('[MapLibre] Could not move layer:', layer.id, e);
+        // Move water layer above choropleth so Great Lakes are visible
+        // Protomaps vector tiles give us direct control over layer ordering
+        try {
+          if (map.current!.getLayer('water')) {
+            map.current!.moveLayer('water'); // Move to top
           }
-        });
+        } catch (e) {
+          console.warn('[MapLibre] Could not move water layer:', e);
+        }
 
-        // Move place name/label layers to the very top so they're readable
-        const labelLayers = style.layers.filter((l: any) =>
-          l.id && (
-            l.id.includes('label') ||
-            l.id.includes('place') ||
-            l.id.includes('text') ||
-            l.id.includes('city') ||
-            l.id.includes('state') ||
+        // Add Protomaps place labels if available in the vector tiles
+        const style = map.current!.getStyle();
+        const protomapsLabelLayers = style.layers.filter((l: any) =>
+          l.source === 'protomaps' && (
+            l['source-layer'] === 'places' ||
+            l['source-layer'] === 'poi_labels' ||
             l.type === 'symbol'
           )
         );
 
-        // Move all label layers to absolute top
-        labelLayers.forEach((layer: any) => {
+        // Ensure all Protomaps labels render on top
+        protomapsLabelLayers.forEach((layer: any) => {
           try {
             map.current!.moveLayer(layer.id);
           } catch (e) {
-            console.warn('[MapLibre] Could not move label layer:', layer.id, e);
+            console.warn('[MapLibre] Could not move Protomaps label layer:', layer.id, e);
           }
         });
 
@@ -674,29 +731,14 @@ export default function GeospatialMapLibre({
       'color'
     ]);
 
-    // Add water layer ON TOP of choropleth to show Great Lakes
-    // Check if the style has a water layer we can reference
-    if (map.current.getStyle().layers) {
-      const waterLayerExists = map.current.getStyle().layers.some((l: any) => l.id === 'water-overlay');
-
-      if (!waterLayerExists) {
-      if (!waterLayerExists) {
-        // Try to find the water layer from the basemap
-        const basemapWaterLayer = map.current.getStyle().layers.find((l: any) =>
-          l.id && (l.id.includes('water') || l.id.includes('ocean') || l.id.includes('lake'))
-        );
-
-        if (basemapWaterLayer) {
-          // The water layer should already be visible if it's from the basemap
-          // Move it above the choropleth
-          try {
-            map.current.moveLayer(basemapWaterLayer.id, 'regions-line');
-          } catch (e) {
-            console.warn('🌊 [COLOR UPDATE] Could not move water layer:', e);
-          }
-        }
+    // Ensure water layer stays above choropleth for Great Lakes visibility
+    // Protomaps vector tiles include a 'water' layer
+    try {
+      if (map.current.getLayer('water')) {
+        map.current.moveLayer('water'); // Move to top
       }
-      }
+    } catch (e) {
+      console.warn('🌊 [COLOR UPDATE] Could not move water layer:', e);
     }
 
   }, [stats, colorScale, getColorForValue, boundariesData]);
