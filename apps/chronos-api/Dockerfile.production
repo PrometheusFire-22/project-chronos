@@ -27,6 +27,9 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 # Copy application code
 COPY . .
 
+# Add src directory to Python path
+ENV PYTHONPATH="/app/src:${PYTHONPATH}"
+
 # Create non-root user
 RUN useradd -m -u 1000 chronos && chown -R chronos:chronos /app
 USER chronos
