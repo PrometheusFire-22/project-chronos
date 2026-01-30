@@ -33,6 +33,40 @@ const nextConfig = {
     return process.env.CF_PAGES_COMMIT_SHA || 'development'
   },
 
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plausible.io https://api.automatonicai.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://admin.automatonicai.com https://api.automatonicai.com https://o4510559645925376.ingest.us.sentry.io; frame-ancestors 'none'; base-uri 'self'; form-action 'self';",
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()',
+          },
+        ],
+      },
+    ]
+  },
+
   async rewrites() {
     // Use environment variable for API URL (supports local + production)
     // FALLBACK: Hardcoding production URL to ensure Cloudflare Pages works if ENV is missing
