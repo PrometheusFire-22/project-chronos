@@ -27,6 +27,7 @@ class StatsCanPlugin(DataSourcePlugin):
         246: ("Millions", "Millions", "COUNT"),
         247: ("Billions", "Billions", "CURRENCY"),
         249: ("Ratio", "Ratio", "RATE"),
+        347: ("Index 2016=100", "Index 2016=100", "INDEX"),  # New Housing Price Index
     }
 
     # Frequency codes
