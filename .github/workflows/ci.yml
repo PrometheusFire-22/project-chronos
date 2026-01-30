@@ -14,6 +14,7 @@ permissions:
 env:
   PYTHON_VERSION: "3.11"
   COMPOSE_PROJECT_NAME: chronos-ci
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
 jobs:
   lint:
@@ -134,3 +135,43 @@ jobs:
         # is torn down and cleaned up even if the pytest step fails.
         if: always()
         run: docker compose down -v
+
+# ==============================================================================
+  #  🎨 FRONTEND TESTS
+  # ==============================================================================
+  # This job runs Vitest tests for the frontend (Next.js app).
+  # ==============================================================================
+  frontend-tests:
+    name: 🎨 Frontend Tests (Vitest)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📂 Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0  # For NX affected
+
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9.1.0
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: 📥 Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 🧪 Run Vitest tests
+        run: pnpm --filter @chronos/web test -- --run --coverage
+
+      - name: 📊 Upload coverage to artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: apps/web/coverage/
+          retention-days: 7

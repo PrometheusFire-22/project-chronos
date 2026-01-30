@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "neverConnectToCloud": true,
+  "nxCloudId": "693a3a62afa88f57bc137da7",
   "plugins": [
     {
       "plugin": "@nx/next/plugin",

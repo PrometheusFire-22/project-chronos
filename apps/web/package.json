@@ -8,7 +8,10 @@
     "build": "next build",
     "pages:build": "opennextjs-cloudflare build --config ../../wrangler.toml && mv .open-next/worker.js .open-next/_worker.js && cp -r .open-next/assets/* .open-next/ && node -e \"require('fs').writeFileSync('.open-next/_routes.json', JSON.stringify({version:1,include:['/*'],exclude:['/_next/*','/favicon.ico','/favicons/*','/logos/*','/illustrations/*','/robots.txt','/sitemap.xml','/BUILD_ID']},null,2))\"",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
     "@chronos/ui": "workspace:*",
@@ -51,6 +54,9 @@
   "devDependencies": {
     "@opennextjs/cloudflare": "^1.14.8",
     "@tailwindcss/typography": "^0.5.19",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/d3-interpolate": "^3.0.4",
     "@types/d3-scale": "^4.0.9",
     "@types/d3-scale-chromatic": "^3.1.0",
@@ -59,13 +65,17 @@
     "@types/pg": "^8.11.10",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "@vitest/ui": "^4.0.18",
     "autoprefixer": "10.4.13",
     "esbuild": "^0.25.0",
     "eslint": "^8.57.1",
     "eslint-config-next": "^15.5.11",
+    "jsdom": "^27.4.0",
     "postcss": "8.5.6",
     "tailwindcss": "3.4.3",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "~5.9.3"
+    "typescript": "~5.9.3",
+    "vitest": "^4.0.18"
   }
 }
