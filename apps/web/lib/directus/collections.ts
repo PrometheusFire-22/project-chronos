@@ -29,6 +29,7 @@ import {
   AboutHeroSchema,
   AboutValueSchema,
   CTASectionSchema,
+  DirectusPageSchema,
   type HomepageHero,
   type Feature,
   type FeatureCategoryType,
@@ -48,6 +49,7 @@ import {
   type AboutHero,
   type AboutValue,
   type CTASection,
+  type DirectusPage,
   type DirectusSingleResponse,
   type DirectusCollectionResponse,
   type DirectusPaginatedResponse,
@@ -906,6 +908,123 @@ export async function getCTASectionsByPage(
   );
 
   return response.data.map((item) => CTASectionSchema.parse(item));
+}
+
+// =============================================================================
+// CMS Pages (CHRONOS-459) - Generic Page System
+// =============================================================================
+
+/**
+ * Get a page by slug from the generic cms_pages collection
+ *
+ * @example
+ * ```typescript
+ * const solutionsPage = await getPageBySlug('solutions');
+ * // { slug: "solutions", title: "...", content_blocks: [...] }
+ * ```
+ */
+export async function getPageBySlug(
+  slug: string,
+  options?: FetchOptions
+): Promise<DirectusPage | null> {
+  const query = buildQuery({
+    filter: {
+      slug: { _eq: slug },
+      status: { _eq: 'published' }
+    },
+    limit: 1
+  });
+
+  try {
+    const response = await fetchDirectus<DirectusCollectionResponse<DirectusPage>>(
+      `/items/cms_pages${query}`,
+      {
+        revalidate: 60, // 1 minute for rapid updates
+        tags: [`cms-page-${slug}`],
+        ...options,
+      }
+    );
+
+    if (response.data.length === 0) {
+      return null;
+    }
+
+    return DirectusPageSchema.parse(response.data[0]);
+  } catch (error) {
+    console.error(`[Directus] Error fetching page with slug "${slug}":`, error);
+    return null;
+  }
+}
+
+/**
+ * Get all published pages from cms_pages
+ *
+ * @example
+ * ```typescript
+ * const allPages = await getAllPages();
+ * ```
+ */
+export async function getAllPages(
+  options?: FetchOptions
+): Promise<DirectusPage[]> {
+  const query = buildQuery({
+    filter: {
+      status: { _eq: 'published' }
+    },
+    sort: ['created_at']
+  });
+
+  try {
+    const response = await fetchDirectus<DirectusCollectionResponse<DirectusPage>>(
+      `/items/cms_pages${query}`,
+      {
+        revalidate: 300, // 5 minutes
+        tags: ['cms-pages'],
+        ...options,
+      }
+    );
+
+    return response.data.map((page) => DirectusPageSchema.parse(page));
+  } catch (error) {
+    console.error('[Directus] Error fetching all pages:', error);
+    return [];
+  }
+}
+
+/**
+ * Get all published page slugs (useful for static generation)
+ *
+ * @example
+ * ```typescript
+ * const slugs = await getAllPageSlugs();
+ * // ['solutions', 'pricing', ...]
+ * ```
+ */
+export async function getAllPageSlugs(
+  options?: FetchOptions
+): Promise<string[]> {
+  const query = buildQuery({
+    filter: {
+      status: { _eq: 'published' }
+    },
+    fields: ['slug']
+  });
+
+  try {
+    const response = await fetchDirectus<DirectusCollectionResponse<{ slug: string }>>(
+      `/items/cms_pages${query}`,
+      {
+        revalidate: 300, // 5 minutes
+        tags: ['cms-pages'],
+        ...options,
+      }
+    );
+
+    return response.data.map(page => page.slug);
+  } catch (error) {
+    console.error('[Directus] Error fetching page slugs:', error);
+    return [];
+  }
 }
 
 // =============================================================================
