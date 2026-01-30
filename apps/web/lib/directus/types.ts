@@ -368,6 +368,73 @@ export const CTASectionSchema = z.object({
 export type CTASection = z.infer<typeof CTASectionSchema>;
 
 // =============================================================================
+// CMS Pages (CHRONOS-459) - Generic Page System
+// =============================================================================
+
+/**
+ * Generic content block - can be any type of block
+ */
+export const ContentBlockSchema = z.object({
+  type: z.string(),
+  id: z.string(),
+}).passthrough(); // Allow additional properties
+
+export type ContentBlock = z.infer<typeof ContentBlockSchema>;
+
+/**
+ * Hero block for page headers
+ */
+export const HeroBlockSchema = z.object({
+  type: z.literal('hero'),
+  id: z.string(),
+  badge_text: z.string().optional(),
+  headline: z.string(),
+  subheadline: z.string(),
+  cta_primary_text: z.string().optional(),
+  cta_primary_link: z.string().optional(),
+  cta_secondary_text: z.string().optional(),
+  cta_secondary_link: z.string().optional(),
+  background_gradient: z.boolean().optional(),
+});
+
+export type HeroBlock = z.infer<typeof HeroBlockSchema>;
+
+/**
+ * Features grid block
+ */
+export const FeaturesGridBlockSchema = z.object({
+  type: z.literal('features_grid'),
+  id: z.string(),
+  features: z.array(z.object({
+    icon: z.string(),
+    icon_color: z.string(),
+    title: z.string(),
+    description: z.string(),
+  })),
+});
+
+export type FeaturesGridBlock = z.infer<typeof FeaturesGridBlockSchema>;
+
+/**
+ * Generic CMS Page with flexible content blocks
+ */
+export const DirectusPageSchema = z.object({
+  id: z.string().uuid(),
+  slug: z.string(),
+  title: z.string(),
+  meta_title: z.string().nullable(),
+  meta_description: z.string().nullable(),
+  og_image: z.string().nullable(),
+  status: z.enum(['draft', 'published']),
+  content_blocks: z.array(ContentBlockSchema),
+  published_at: z.string().datetime().nullable(),
+  created_at: z.string().datetime(),
+  updated_at: z.string().datetime(),
+});
+
+export type DirectusPage = z.infer<typeof DirectusPageSchema>;
+
+// =============================================================================
 // Directus API Response Wrappers
 // =============================================================================
 
