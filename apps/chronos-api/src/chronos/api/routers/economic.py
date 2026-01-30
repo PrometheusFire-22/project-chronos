@@ -16,7 +16,7 @@ async def get_series(db: Session = Depends(get_db)):
     try:
         query = text(
             """
-            SELECT sm.series_id, sm.series_name, sm.geography, sm.units, sm.frequency, ds.source_name
+            SELECT sm.series_id, sm.series_name, sm.geography, sm.units, sm.unit_type, sm.display_units, sm.frequency, ds.source_name
             FROM metadata.series_metadata sm
             JOIN metadata.data_sources ds ON sm.source_id = ds.source_id
             WHERE sm.is_active = TRUE
@@ -92,11 +92,14 @@ async def get_timeseries(
               time_bucket(:bucket_interval, eo.observation_date) AS time,
               eo.series_id,
               CAST(AVG(eo.value) AS FLOAT) AS value,
-              sm.series_name
+              sm.series_name,
+              sm.units,
+              sm.unit_type,
+              sm.display_units
             FROM timeseries.economic_observations eo
             JOIN metadata.series_metadata sm ON eo.series_id = sm.series_id
             WHERE {" AND ".join(where_clauses)}
-            GROUP BY time, eo.series_id, sm.series_name
+            GROUP BY time, eo.series_id, sm.series_name, sm.units, sm.unit_type, sm.display_units
             ORDER BY time ASC;
         """
 
@@ -113,6 +116,9 @@ async def get_timeseries(
                 "series_id": row["series_id"],
                 "value": row["value"],
                 "series_name": row["series_name"],
+                "units": row["units"],
+                "unit_type": row["unit_type"],
+                "display_units": row["display_units"],
             }
             for row in result
         ]

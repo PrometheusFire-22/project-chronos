@@ -35,20 +35,51 @@ services:
     networks:
       - chronos-network
 
-  api:
+  # Legacy Node.js API (deprecated - being replaced by fastapi)
+  # api:
+  #   build:
+  #     context: apps/api
+  #     dockerfile: Dockerfile.production
+  #   container_name: chronos-api-legacy
+  #   restart: always
+  #   environment:
+  #     - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+  #     - PORT=3005
+  #     - NODE_ENV=production
+  #   ports:
+  #     - "3005:3005"
+  #   depends_on:
+  #     - postgres
+  #   networks:
+  #     - chronos-network
+
+  # FastAPI (new production API)
+  fastapi:
     build:
-      context: apps/api
+      context: apps/chronos-api
       dockerfile: Dockerfile.production
-    container_name: chronos-api
+    container_name: chronos-fastapi
     restart: always
+    env_file:
+      - .env.local
     environment:
-      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
-      - PORT=3005
-      - NODE_ENV=production
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=${POSTGRES_DB}
+      - DATABASE_USER=${POSTGRES_USER}
+      - DATABASE_PASSWORD=${POSTGRES_PASSWORD}
+      - ENVIRONMENT=production
     ports:
-      - "3005:3005"
+      - "8000:8000"
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     networks:
       - chronos-network
 
