@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@chronos/ui": "workspace:*",
+    "@directus/sdk": "^20.3.0",
     "@hookform/resolvers": "^3.9.1",
     "@mapbox/polylabel": "^1.0.2",
     "@marsidev/react-turnstile": "^1.4.1",

@@ -1,0 +1,136 @@
+'use client';
+
+import React from 'react';
+import { ArrowRight, ShieldAlert, BarChart2, Zap, LucideIcon } from 'lucide-react';
+import type { ContentBlock, HeroBlock, FeaturesGridBlock } from '@/lib/directus';
+
+// Map icon names to Lucide components
+const iconMap: Record<string, LucideIcon> = {
+  'shield-alert': ShieldAlert,
+  'bar-chart-2': BarChart2,
+  'zap': Zap,
+  'arrow-right': ArrowRight,
+};
+
+// Map color names to Tailwind classes
+const colorMap: Record<string, { bg: string; text: string; border: string }> = {
+  blue: {
+    bg: 'bg-blue-500/10',
+    text: 'text-blue-500',
+    border: 'border-blue-500/50'
+  },
+  violet: {
+    bg: 'bg-violet-500/10',
+    text: 'text-violet-500',
+    border: 'border-violet-500/50'
+  },
+  emerald: {
+    bg: 'bg-emerald-500/10',
+    text: 'text-emerald-500',
+    border: 'border-emerald-500/50'
+  },
+  orange: {
+    bg: 'bg-orange-500/10',
+    text: 'text-orange-500',
+    border: 'border-orange-500/50'
+  },
+};
+
+interface ContentBlockRendererProps {
+  blocks: ContentBlock[];
+}
+
+export function ContentBlockRenderer({ blocks }: ContentBlockRendererProps) {
+  return (
+    <>
+      {blocks.map((block) => {
+        switch (block.type) {
+          case 'hero':
+            return <HeroBlockComponent key={block.id} block={block as HeroBlock} />;
+          case 'features_grid':
+            return <FeaturesGridBlockComponent key={block.id} block={block as FeaturesGridBlock} />;
+          default:
+            console.warn(`[CMS] Unknown block type: ${block.type}`);
+            return null;
+        }
+      })}
+    </>
+  );
+}
+
+function HeroBlockComponent({ block }: { block: HeroBlock }) {
+  return (
+    <div className="relative overflow-hidden pt-24 pb-16 lg:pt-32 lg:pb-24">
+      {block.background_gradient && (
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
+      )}
+
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="max-w-4xl mx-auto text-center">
+          {block.badge_text && (
+            <span className="inline-block px-3 py-1 mb-6 text-xs font-bold tracking-widest text-blue-500 uppercase bg-blue-500/10 rounded-full border border-blue-500/20">
+              {block.badge_text}
+            </span>
+          )}
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-8 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 dark:from-white dark:via-slate-200 dark:to-slate-400">
+            {block.headline}
+          </h1>
+          <p className="text-xl text-slate-600 dark:text-slate-400 leading-relaxed mb-10 max-w-2xl mx-auto">
+            {block.subheadline}
+          </p>
+          {(block.cta_primary_text || block.cta_secondary_text) && (
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              {block.cta_primary_text && block.cta_primary_link && (
+                <a
+                  href={block.cta_primary_link}
+                  className="inline-flex items-center px-8 py-4 text-base font-bold text-white transition-all bg-blue-600 rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40"
+                >
+                  {block.cta_primary_text}
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </a>
+              )}
+              {block.cta_secondary_text && block.cta_secondary_link && (
+                <a
+                  href={block.cta_secondary_link}
+                  className="inline-flex items-center px-8 py-4 text-base font-bold text-slate-900 dark:text-white transition-all bg-transparent border-2 border-slate-300 dark:border-slate-600 rounded-xl hover:border-blue-500 dark:hover:border-blue-500"
+                >
+                  {block.cta_secondary_text}
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function FeaturesGridBlockComponent({ block }: { block: FeaturesGridBlock }) {
+  return (
+    <div className="py-24 bg-white dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800">
+      <div className="container mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          {block.features.map((feature, index) => {
+            const Icon = iconMap[feature.icon] || ShieldAlert;
+            const colors = colorMap[feature.icon_color] || colorMap.blue;
+
+            return (
+              <div
+                key={index}
+                className={`group p-8 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:${colors.border} transition-all duration-300`}
+              >
+                <div className={`w-14 h-14 rounded-xl ${colors.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
+                  <Icon className={`w-7 h-7 ${colors.text}`} />
+                </div>
+                <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
+                <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                  {feature.description}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
