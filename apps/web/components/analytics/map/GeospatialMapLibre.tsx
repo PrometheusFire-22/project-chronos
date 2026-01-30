@@ -751,7 +751,6 @@ export default function GeospatialMapLibre({
       <Card className="h-[600px] flex flex-col items-center justify-center bg-slate-900/50 border-red-500/20 p-8">
         <div className="text-red-400 text-lg font-bold mb-4">Failed to load map</div>
         <div className="text-red-300 text-sm mb-6">{error}</div>
-        <div className="text-red-300 text-sm mb-6">{error}</div>
       </Card>
     );
   }
