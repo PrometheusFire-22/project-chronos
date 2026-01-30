@@ -103,18 +103,32 @@ def ensure_data_source(conn, plugin):
     return source_id
 
 
-def insert_series_metadata(conn, source_id: int, series_id: str, series_data: dict):
-    """Insert or update series metadata"""
+def insert_series_metadata(conn, source_id: int, series_id: str, series_data: dict, plugin=None):
+    """Insert or update series metadata with enhanced metadata from API"""
     cursor = conn.cursor()
+
+    # Fetch additional metadata from API if plugin supports it
+    api_metadata = {}
+    if plugin and hasattr(plugin, "fetch_metadata"):
+        try:
+            api_metadata = plugin.fetch_metadata(series_id)
+        except Exception as e:
+            print(f"    ⚠️  Could not fetch metadata from API: {e}")
 
     query = """
     INSERT INTO metadata.series_metadata (
         source_id, source_series_id, series_name,
-        frequency, category, geography
-    ) VALUES (%s, %s, %s, %s, %s, %s)
+        frequency, category, geography,
+        units, unit_type, display_units, seasonal_adjustment, series_description
+    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     ON CONFLICT (source_id, source_series_id)
     DO UPDATE SET
         series_name = EXCLUDED.series_name,
+        units = EXCLUDED.units,
+        unit_type = EXCLUDED.unit_type,
+        display_units = EXCLUDED.display_units,
+        seasonal_adjustment = EXCLUDED.seasonal_adjustment,
+        series_description = EXCLUDED.series_description,
         last_updated = NOW();
     """
 
@@ -124,9 +138,14 @@ def insert_series_metadata(conn, source_id: int, series_id: str, series_data: di
             source_id,
             series_id,
             series_data.get("series_name", "Unknown"),
-            series_data.get("frequency", "Unknown"),
+            api_metadata.get("frequency") or series_data.get("frequency", "Unknown"),
             series_data.get("category", "Unknown"),
             series_data.get("geography_name", "Unknown"),
+            api_metadata.get("units"),
+            api_metadata.get("unit_type", "OTHER"),
+            api_metadata.get("display_units"),
+            api_metadata.get("seasonal_adjustment"),
+            api_metadata.get("notes"),
         ),
     )
 
@@ -214,6 +233,9 @@ def main():
         "--geography", help="Filter by geography name (e.g., Canada, United States)"
     )
     parser.add_argument("--catalog", help="Path to custom time-series catalog CSV")
+    parser.add_argument(
+        "--category", help="Filter by category (e.g., Growth, Employment, Inflation)"
+    )
     args = parser.parse_args()
 
     print("\n" + "=" * 60)
@@ -247,6 +269,8 @@ def main():
         if args.source and s["source"] != args.source:
             continue
         if args.geography and s["geography_name"] != args.geography:
+            continue
+        if args.category and s["category"] != args.category and s["asset_class"] != args.category:
             continue
         if args.series and s["series_id"] not in args.series:
             continue
@@ -300,8 +324,8 @@ def main():
 
             print(f"    ✅ Fetched {len(observations)} observations")
 
-            # Insert metadata
-            insert_series_metadata(conn, actual_source_id, series_id, series)
+            # Insert metadata with API metadata enrichment
+            insert_series_metadata(conn, actual_source_id, series_id, series, plugin)
 
             # Insert observations
             inserted, skipped = insert_observations(conn, series_id, observations, actual_source_id)
