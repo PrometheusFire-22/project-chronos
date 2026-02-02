@@ -17,6 +17,7 @@ class DocumentRaw(Base):
     source_url = Column(Text, nullable=True)
     doc_type = Column(Text, nullable=True)
     docling_data = Column(JSONB, nullable=True)
+    markdown_content = Column(Text, nullable=True)  # NEW: Full markdown with emojis ✅🚀📊
 
 
 class DocumentChunk(Base):

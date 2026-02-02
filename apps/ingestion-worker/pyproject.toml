@@ -37,6 +37,7 @@ pydantic-settings = "^2.0.0"
 # NOTE: Modal is NOT a runtime dependency!
 # Modal CLI is in root pyproject.toml for deployment only
 # This service calls Modal functions remotely
+pgvector = "^0.4.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.0"

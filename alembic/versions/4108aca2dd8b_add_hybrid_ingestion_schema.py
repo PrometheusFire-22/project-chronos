@@ -51,7 +51,7 @@ def upgrade() -> None:
     )
 
     # 2. document_chunks table (The Vector Store)
-    # Note: We use sa.text for existing types like vector to avoid dependency issues if library missing in env
+    # Note: Vector column added manually via ALTER TABLE to avoid dependency issues
     op.create_table(
         "document_chunks",
         sa.Column("id", sa.UUID(), nullable=False),
@@ -59,9 +59,6 @@ def upgrade() -> None:
         sa.Column("chunk_index", sa.Integer(), nullable=False),
         sa.Column("text_content", sa.Text(), nullable=False),
         sa.Column("metadata", sa.JSON(), nullable=True),
-        sa.Column(
-            "embedding", sa.NullType(), nullable=True
-        ),  # Placeholder for custom type definition below
         sa.ForeignKeyConstraint(
             ["document_id"], ["ingestion.documents_raw.id"], ondelete="CASCADE"
         ),
