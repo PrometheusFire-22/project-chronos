@@ -59,6 +59,31 @@ services:
   # ------------------------------------------------------------------------------
   #  Directus: Headless CMS 🐰
   # ------------------------------------------------------------------------------
+  ingestion-worker:
+    build:
+      context: ./apps/ingestion-worker
+      dockerfile: Dockerfile
+    container_name: chronos-ingestion-worker
+    ports:
+      - "8002:8000"
+    environment:
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=chronos
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DIRECTUS_URL=http://directus:8055
+      - DIRECTUS_TOKEN=${DIRECTUS_KEY}
+    networks:
+      - chronos-network
+    depends_on:
+      - postgres
+      - directus
+    restart: unless-stopped
+    volumes:
+      - ./apps/ingestion-worker:/app
+
   directus:
     image: directus/directus:latest
     container_name: chronos-directus

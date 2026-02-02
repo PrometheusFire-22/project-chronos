@@ -1,4 +1,6 @@
+import sys
 from logging.config import fileConfig
+from pathlib import Path
 
 from sqlalchemy import engine_from_config, pool
 
@@ -19,9 +21,33 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-from chronos.database.models import Base
+# Add apps to path so we can import models
+project_root = Path(__file__).parent.parent
+chronos_api_path = project_root / "apps" / "chronos-api" / "src"
+ingestion_worker_path = project_root / "apps" / "ingestion-worker"
 
-target_metadata = Base.metadata
+sys.path.insert(0, str(chronos_api_path))
+sys.path.insert(0, str(ingestion_worker_path))
+
+try:
+    from chronos.database.models import Base as ChronosBase
+except ImportError:
+    ChronosBase = None
+
+try:
+    from models import Base as IngestionBase
+except ImportError:
+    IngestionBase = None
+
+# Combine metadata from both apps
+if ChronosBase and IngestionBase:
+    target_metadata = [ChronosBase.metadata, IngestionBase.metadata]
+elif IngestionBase:
+    target_metadata = IngestionBase.metadata
+elif ChronosBase:
+    target_metadata = ChronosBase.metadata
+else:
+    target_metadata = None
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
