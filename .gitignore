@@ -190,3 +190,5 @@ deployment/**/.env
 
 # OpenNext build output
 .open-next
+/docs/10-DEVELOPMENT/02-INFRASTRUCTURE/pgbackrest_secrets.md
+mcp-config.json
