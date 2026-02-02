@@ -106,14 +106,17 @@ def process_document(pdf_bytes: bytes, file_id: str, source_url: str = None) -> 
         converter = DocumentConverter()
 
         # Process document (GPU-accelerated OCR and layout detection)
-        results = list(converter.convert(tmp_path))
+        result = converter.convert(tmp_path)
 
-        if not results:
-            raise ValueError(f"No conversion result for file_id={file_id}")
-
-        # Extract document
-        result = results[0]
-        doc = result.document
+        # Docling returns ConversionResult with .document attribute
+        if hasattr(result, "document"):
+            doc = result.document
+        else:
+            # Handle if result is iterable (generator/list)
+            results = list(result) if not isinstance(result, list) else result
+            if not results:
+                raise ValueError(f"No conversion result for file_id={file_id}")
+            doc = results[0].document
 
         # Export to formats
         doc_json = doc.export_to_dict()

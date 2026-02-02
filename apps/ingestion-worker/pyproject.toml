@@ -1,22 +1,46 @@
 [tool.poetry]
 name = "ingestion-worker"
 version = "0.1.0"
-description = "Financial document ingestion worker using Docling and LlamaIndex"
+description = "Financial document ingestion worker with Modal GPU integration"
 authors = ["Prometheus <prometheus@automatonicai.com>"]
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+
+# FastAPI Service (runs locally or on AWS)
 fastapi = "^0.109.0"
 uvicorn = {extras = ["standard"], version = "^0.27.0"}
-docling = "^1.0.0"  # Assuming 1.x version for 2026 context
-llama-index = "^0.10.0"
-llama-index-vector-stores-postgres = "^0.1.0"
+python-multipart = "^0.0.9"  # For file uploads
+httpx = "^0.27.0"  # For Directus API calls
+
+# Database (connects to AWS PostgreSQL)
+sqlalchemy = "^2.0.0"
 psycopg2-binary = "^2.9.9"
 
-python-multipart = "^0.0.9" # For file uploads
-httpx = "^0.27.0"
-sqlalchemy = "^2.0.0"
-openai = "^1.0.0" # For embeddings if needed by LlamaIndex defaults
+# LlamaIndex (lightweight - chunking & embeddings, runs locally/AWS)
+llama-index-core = "^0.10.0"
+llama-index-embeddings-openai = "^0.1.0"
+
+# OpenAI (embeddings only - lightweight API calls)
+openai = "^1.0.0"
+
+# Utilities
+python-dotenv = "^1.0.0"
+pydantic = "^2.0.0"
+pydantic-settings = "^2.0.0"
+
+# NOTE: Docling is NOT included here!
+# Docling runs on Modal GPU with dependencies defined in Modal image
+# See: modal_functions/docling_processor.py
+
+# NOTE: Modal is NOT a runtime dependency!
+# Modal CLI is in root pyproject.toml for deployment only
+# This service calls Modal functions remotely
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-asyncio = "^0.21.0"
 
 [build-system]
 requires = ["poetry-core"]
