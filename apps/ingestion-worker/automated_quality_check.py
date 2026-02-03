@@ -12,8 +12,13 @@ from pathlib import Path
 # Add parent to path
 sys.path.insert(0, str(Path(__file__).parent))
 
-from models import DocumentChunk, DocumentRaw
-from services.database import get_db
+# Load environment variables from .env file
+from dotenv import load_dotenv
+
+load_dotenv(Path(__file__).parent / ".env")
+
+from models import DocumentChunk, DocumentRaw  # noqa: E402
+from services.database import get_db  # noqa: E402
 
 # Configuration
 DOCUMENT_ID = "c2a4e408-eab2-4f7f-a0ab-afb3c920ebc2"
@@ -61,7 +66,10 @@ def export_data():
                 f.write(f"{chunk.text_content}\n\n")
         print(f"   📦 Chunks   → {chunks_file}")
 
-        return md_file, json_file, doc
+        # Access markdown_content before session closes
+        markdown_content = doc.markdown_content
+
+        return md_file, json_file, markdown_content
 
 
 def convert_to_pdf(md_file):
@@ -107,7 +115,7 @@ def convert_to_pdf(md_file):
         return None
 
 
-def analyze_quality(json_file, doc):
+def analyze_quality(json_file, markdown_content):
     """Programmatic quality analysis"""
     print("\n" + "=" * 70)
     print("🔍 STEP 3: AUTOMATED QUALITY CHECKS")
@@ -117,13 +125,15 @@ def analyze_quality(json_file, doc):
         doc_json = json.load(f)
 
     # Check 1: Page count
-    pages = doc_json.get("pages", [])
-    print(f"✓ Page Count: {len(pages)} pages extracted")
+    # Docling stores pages as dict with string keys '1', '2', '3', etc.
+    pages_dict = doc_json.get("pages", {})
+    page_count = len(pages_dict) if isinstance(pages_dict, dict) else 0
+    print(f"✓ Page Count: {page_count} pages extracted")
 
-    # Check 2: Content completeness
-    total_text_blocks = sum(len(page.get("text", [])) for page in pages)
-    total_tables = sum(len(page.get("tables", [])) for page in pages)
-    total_images = sum(len(page.get("images", [])) for page in pages)
+    # Check 2: Content completeness (Docling-specific structure)
+    total_text_blocks = len(doc_json.get("texts", []))
+    total_tables = len(doc_json.get("tables", []))
+    total_images = len(doc_json.get("pictures", []))
 
     print("✓ Content Breakdown:")
     print(f"   - Text blocks: {total_text_blocks}")
@@ -131,15 +141,15 @@ def analyze_quality(json_file, doc):
     print(f"   - Images: {total_images}")
 
     # Check 3: Markdown size
-    md_length = len(doc.markdown_content)
-    expected_min = len(pages) * 100  # Expect at least 100 chars/page
+    md_length = len(markdown_content)
+    expected_min = page_count * 100  # Expect at least 100 chars/page
     if md_length < expected_min:
         print(f"⚠️  Warning: Markdown seems short ({md_length} chars)")
     else:
         print(f"✓ Markdown length: {md_length:,} characters")
 
     # Check 4: JSON structure integrity
-    required_keys = ["pages"]
+    required_keys = ["pages", "texts"]
     missing_keys = [k for k in required_keys if k not in doc_json]
     if missing_keys:
         print(f"❌ Missing JSON keys: {missing_keys}")
@@ -147,7 +157,7 @@ def analyze_quality(json_file, doc):
         print("✓ JSON structure complete")
 
     return {
-        "page_count": len(pages),
+        "page_count": page_count,
         "text_blocks": total_text_blocks,
         "tables": total_tables,
         "images": total_images,
@@ -215,13 +225,13 @@ def main():
     result = export_data()
     if not result:
         sys.exit(1)
-    md_file, json_file, doc = result
+    md_file, json_file, markdown_content = result
 
     # Step 2: Convert to PDF
     pdf_file = convert_to_pdf(md_file)
 
     # Step 3: Analyze quality
-    stats = analyze_quality(json_file, doc)
+    stats = analyze_quality(json_file, markdown_content)
 
     # Step 4: Generate report
     generate_report(stats, md_file, pdf_file)

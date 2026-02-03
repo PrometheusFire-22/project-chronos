@@ -1,0 +1,31 @@
+RAG PIPELINE QUALITY ASSESSMENT
+======================================================================
+
+Document Statistics:
+  Pages extracted: 10
+  Text blocks: 21
+  Tables detected: 9
+  Images found: 0
+  Markdown length: 24,471 chars
+
+Output Files:
+  Markdown: /home/prometheus/coding/finance/project-chronos/apps/ingestion-worker/quality_review/test-service-list.md
+  PDF: /home/prometheus/coding/finance/project-chronos/apps/ingestion-worker/quality_review/test-service-list.pdf
+  Report: /home/prometheus/coding/finance/project-chronos/apps/ingestion-worker/quality_review/quality_report.txt
+
+Manual Review Steps:
+1. Open PgAdmin4 → Connect to database
+2. Query: SELECT * FROM ingestion.documents_raw
+3. Find document: c2a4e408-eab2-4f7f-a0ab-afb3c920ebc2
+4. Click JSONB column → View in tree mode
+5. Open test-service-list.md in Typora
+6. Compare test-service-list.pdf with original PDF
+
+Quality Checklist:
+[ ] Content complete (all pages present)
+[ ] No hallucinations (no invented content)
+[ ] Formatting preserved (headers, lists)
+[ ] Tables intact (if applicable)
+[ ] Special characters correct
+
+Overall Status: PASS ✅

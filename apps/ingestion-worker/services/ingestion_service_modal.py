@@ -17,7 +17,7 @@ Environment Variables:
 import logging
 import os
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 # Modal
@@ -30,6 +30,9 @@ from models import DocumentChunk, DocumentRaw
 
 # Database
 from services.database import get_db
+
+# Utilities
+from utils.markdown_postprocessor import postprocess_markdown
 
 logger = logging.getLogger(__name__)
 
@@ -88,11 +91,21 @@ class IngestionService:
         )
 
     def _init_local_docling(self):
-        """Initialize local Docling converter (CPU fallback)."""
+        """Initialize local Docling converter (CPU fallback) with advanced configuration."""
+        from docling.datamodel.base_models import InputFormat
+        from docling.datamodel.pipeline_options import PipelineOptions, TableFormerMode
         from docling.document_converter import DocumentConverter
 
-        self.converter = DocumentConverter()
-        logger.info("✅ Local Docling converter initialized (CPU)")
+        # Configure advanced table extraction (same as Modal GPU)
+        pipeline_options = PipelineOptions()
+        pipeline_options.table_structure_options = TableFormerMode.ACCURATE
+        pipeline_options.do_ocr = True
+        pipeline_options.do_table_structure = True
+
+        self.converter = DocumentConverter(
+            allowed_formats=[InputFormat.PDF], pipeline_options=pipeline_options
+        )
+        logger.info("✅ Local Docling converter initialized (CPU) with ACCURATE table mode")
 
     def process_document(self, file_path: Path, file_id: str, source_url: str = None):
         """
@@ -117,7 +130,7 @@ class IngestionService:
             ValueError: If conversion fails
         """
         logger.info(f"Processing document: {file_path} (Modal GPU: {self.use_modal})")
-        start_time = datetime.now()
+        start_time = datetime.now(timezone.utc)
 
         # ================================================================
         # STEP 1: Document Conversion (Docling)
@@ -137,7 +150,9 @@ class IngestionService:
                     raise ValueError(f"Modal processing failed: {result['error']}")
 
                 doc_json = result["doc_json"]
-                markdown_content = result["markdown"]
+                raw_markdown = result["markdown"]
+                # Post-process markdown for better quality
+                markdown_content = postprocess_markdown(raw_markdown, doc_json)
                 processing_time = result["processing_time"]
 
                 logger.info(
@@ -155,7 +170,7 @@ class IngestionService:
         else:
             # Process locally on CPU
             logger.info(f"Processing {file_path.name} on local CPU...")
-            cpu_start = datetime.now()
+            cpu_start = datetime.now(timezone.utc)
 
             conv_results = list(self.converter.convert(file_path))
             if not conv_results:
@@ -164,10 +179,16 @@ class IngestionService:
             result = conv_results[0]
             doc = result.document
             doc_json = doc.export_to_dict()
-            markdown_content = doc.export_to_markdown()
+            raw_markdown = doc.export_to_markdown()
 
-            cpu_time = (datetime.now() - cpu_start).total_seconds()
+            # Post-process markdown for better quality
+            markdown_content = postprocess_markdown(raw_markdown, doc_json)
+
+            cpu_time = (datetime.now(timezone.utc) - cpu_start).total_seconds()
             logger.info(f"✅ Local CPU processed {file_path.name} in {cpu_time:.2f}s")
+            logger.info(
+                f"   Markdown post-processed: {len(raw_markdown)} → {len(markdown_content)} chars"
+            )
 
         # ================================================================
         # STEP 2: Save Raw Document to Database
@@ -182,10 +203,12 @@ class IngestionService:
                 source_url=source_url or str(file_path),
                 doc_type="pdf",  # Simplified for now
                 docling_data=doc_json,
+                markdown_content=markdown_content,  # Save post-processed markdown
             )
             db.add(raw_entry)
             db.flush()  # Ensure ID is available
             logger.info(f"📄 Saved raw document: {doc_uuid}")
+            logger.info(f"   Markdown: {len(markdown_content):,} chars saved to database")
 
             # ============================================================
             # STEP 3: Chunking with LlamaIndex
@@ -211,7 +234,7 @@ class IngestionService:
             # ============================================================
 
             chunk_objs = []
-            for i, (text, embedding) in enumerate(zip(text_chunks, embeddings)):
+            for i, (text, embedding) in enumerate(zip(text_chunks, embeddings, strict=True)):
                 chunk_obj = DocumentChunk(
                     id=uuid.uuid4(),
                     document_id=doc_uuid,
@@ -225,7 +248,7 @@ class IngestionService:
             db.add_all(chunk_objs)
             db.commit()
 
-            total_time = (datetime.now() - start_time).total_seconds()
+            total_time = (datetime.now(timezone.utc) - start_time).total_seconds()
             logger.info(
                 f"✅ Saved {len(chunk_objs)} chunks for document {doc_uuid} "
                 f"(total time: {total_time:.2f}s)"

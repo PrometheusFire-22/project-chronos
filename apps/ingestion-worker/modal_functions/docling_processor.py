@@ -24,6 +24,7 @@ Usage:
     result = fn.remote(pdf_bytes, "file-123")
 """
 
+import re
 import tempfile
 import time
 from pathlib import Path
@@ -50,6 +51,37 @@ image = (
 
 # Create Modal app
 app = modal.App("chronos-docling", image=image)
+
+# ==================================================================
+# Markdown Post-Processing
+# ==================================================================
+
+
+def postprocess_markdown(markdown: str) -> str:
+    """
+    Post-process markdown to improve quality.
+
+    Improvements:
+    1. Better line breaks in contact information
+    2. Spacing between headers and body text
+    3. Table cell formatting for readability
+    """
+    # Add line breaks after headers
+    markdown = re.sub(r"^(#{1,6}\s+.+)$", r"\1\n", markdown, flags=re.MULTILINE)
+
+    # Add line breaks before/after tables
+    markdown = re.sub(r"([^\n])\n(\|)", r"\1\n\n\2", markdown)
+    markdown = re.sub(r"(\|[^\n]+)\n([^|\n])", r"\1\n\n\2", markdown)
+
+    # Improve contact info formatting: add line breaks before Direct: and E-mail:
+    markdown = re.sub(r"\s+(Direct:)", r"\n\1", markdown)
+    markdown = re.sub(r"\s+(E-mail:)", r"\n\1", markdown)
+
+    # Add line break after email when followed by a name
+    markdown = re.sub(r"(@\S+)\s+([A-Z][a-z]+ [A-Z])", r"\1\n\n\2", markdown)
+
+    return markdown
+
 
 # ==================================================================
 # GPU Function: Document Processing
@@ -102,8 +134,25 @@ def process_document(pdf_bytes: bytes, file_id: str, source_url: str = None) -> 
         tmp_path = Path(tmp.name)
 
     try:
-        # Initialize Docling converter
-        converter = DocumentConverter()
+        # Import Docling configuration options
+        from docling.datamodel.base_models import InputFormat
+        from docling.datamodel.pipeline_options import PipelineOptions, TableFormerMode
+
+        # Configure advanced table extraction settings
+        pipeline_options = PipelineOptions()
+
+        # Use ACCURATE mode for better table structure detection
+        # (vs FAST which is the default but less accurate)
+        pipeline_options.table_structure_options = TableFormerMode.ACCURATE
+
+        # Enable advanced OCR and layout analysis
+        pipeline_options.do_ocr = True  # Ensure OCR is enabled
+        pipeline_options.do_table_structure = True  # Enable table structure recognition
+
+        # Initialize Docling converter with advanced configuration
+        converter = DocumentConverter(
+            allowed_formats=[InputFormat.PDF], pipeline_options=pipeline_options
+        )
 
         # Process document (GPU-accelerated OCR and layout detection)
         result = converter.convert(tmp_path)
@@ -120,13 +169,26 @@ def process_document(pdf_bytes: bytes, file_id: str, source_url: str = None) -> 
 
         # Export to formats
         doc_json = doc.export_to_dict()
-        markdown_content = doc.export_to_markdown()
+        raw_markdown = doc.export_to_markdown()
+
+        # Post-process markdown for better quality
+        markdown_content = postprocess_markdown(raw_markdown)
 
         # Calculate processing time
         processing_time = time.time() - start_time
 
         # Extract metadata
         page_count = len(doc_json.get("pages", []))
+        table_count = len(doc_json.get("tables", []))
+        text_block_count = len(doc_json.get("texts", []))
+
+        # Log quality metrics for monitoring
+        print(f"📊 Quality Metrics for {file_id}:")
+        print(f"   Pages: {page_count}, Tables: {table_count}, Text blocks: {text_block_count}")
+        print(f"   Markdown length: {len(markdown_content):,} chars (raw: {len(raw_markdown):,})")
+        print(
+            f"   Line breaks added: {markdown_content.count(chr(10)) - raw_markdown.count(chr(10))}"
+        )
 
         return {
             "doc_json": doc_json,

@@ -68,7 +68,13 @@
       "Bash(node scripts/verify-directus-content.cjs:*)",
       "mcp__postgres__query",
       "mcp__atlassian__createJiraIssue",
-      "mcp__atlassian__editJiraIssue"
+      "mcp__atlassian__editJiraIssue",
+      "Bash(poetry run jira:*)",
+      "mcp__atlassian__searchJiraIssuesUsingJql",
+      "WebFetch(domain:automatonicai.atlassian.net)",
+      "mcp__atlassian__transitionJiraIssue",
+      "mcp__atlassian__addCommentToJiraIssue",
+      "Bash(poetry run python:*)"
     ],
     "deny": [],
     "ask": []
@@ -84,6 +90,7 @@
     "twenty-crm",
     "atlassian",
     "cloudflare",
-    "resend"
+    "resend",
+    "docling"
   ]
 }
