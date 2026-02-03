@@ -29,10 +29,12 @@ We need production-ready authentication for our SaaS RAG platform to:
 ### Rationale
 
 **Cost savings:**
-- NextAuth.js: ~$15/month (Resend for email)
-- Clerk: $25/month base + usage
-- **Annual savings: $120+**
-- ROI: 2-3 days extra setup pays for itself in 1 month
+- NextAuth.js: **$0/month** (FOSS, self-hosted)
+- Email service: **$0/month** (already using Resend free tier)
+- Clerk alternative: $25/month base + usage
+- **Total incremental cost: $0/month**
+- **Annual savings vs Clerk: $300+**
+- ROI: 2-3 days extra setup pays for itself immediately
 
 **Strategic benefits:**
 - No vendor lock-in (own auth logic)
@@ -54,7 +56,7 @@ We need production-ready authentication for our SaaS RAG platform to:
 // NextAuth.js with PostgreSQL + Email verification
 - Providers: Email (magic links), Google OAuth
 - Database: Prisma adapter → PostgreSQL
-- Email: Resend API (~$10-15/month)
+- Email: Resend API (already configured, free tier 3k emails/month)
 - UI: Custom (Shadcn UI components)
 ```
 
@@ -82,11 +84,12 @@ interface User {
 
 ### Positive
 
-- ✅ **$120+/year savings** (Clerk avoided)
+- ✅ **$300+/year savings** (Clerk avoided, $0 incremental cost)
+- ✅ **Resend already configured** (no additional email setup needed)
 - ✅ Full control over auth logic
 - ✅ No vendor lock-in
 - ✅ Next.js native integration
-- ✅ Can self-host if needed (future flexibility)
+- ✅ Self-hosted (complete ownership)
 - ✅ Learn auth internals (team skill building)
 
 ### Negative
@@ -98,15 +101,15 @@ interface User {
 
 ### Neutral
 
-- Resend dependency (email service) - acceptable, standard practice
+- Resend dependency (email service) - already in use, no additional dependency
 - More code to maintain - offset by owning the logic
 
 ## Alternatives Considered
 
-### Clerk (Rejected - Cost)
-- **Pros:** Fastest setup, beautiful UI, production-ready
-- **Cons:** $300+/year cost, vendor lock-in
-- **Decision:** Not worth $300/year premium for 1 day saved setup
+### Clerk (Rejected - Unnecessary Cost)
+- **Pros:** Fastest setup (1 day), beautiful pre-built UI, production-ready
+- **Cons:** $300+/year cost, vendor lock-in, email service included but redundant (already have Resend)
+- **Decision:** Not worth $300/year for 1 day saved setup when we have $0 cost FOSS alternative with existing email infrastructure
 
 ### Supabase Auth (Rejected - Complexity)
 - **Pros:** Free tier 50k MAU, email verification built-in
@@ -122,11 +125,17 @@ interface User {
 
 Track these metrics to validate decision:
 - Setup time (target: <3 days)
-- Email delivery rate (target: >95%)
+- Email delivery rate (target: >95% via Resend)
 - Auth error rate (target: <1%)
-- Monthly cost (target: <$20)
+- Monthly cost (actual: $0, Resend free tier: 3k emails/month)
 
-If any of these fail, reconsider Clerk or Supabase.
+**Resend free tier monitoring:**
+- Current tier: Free (3k emails/month)
+- If volume exceeds 3k/month:
+  - Option 1: Resend paid ($20/month for 100k emails) - still cheaper than Clerk
+  - Option 2: AWS SES (~$1/month for 10k emails) - more setup work
+
+**Cost threshold to reconsider Clerk:** If total monthly cost exceeds $25/month (unlikely for years).
 
 ## References
 
