@@ -31,9 +31,9 @@ jobs:
       - name: Install linting tools
         run: pip install black ruff
       - name: Check code formatting (Black)
-        run: black --check --line-length 100 src/ tests/
+        run: black --check --line-length 100 apps/chronos-api/src/ apps/ingestion-worker/ tests/
       - name: Lint with Ruff
-        run: ruff check src/ tests/
+        run: ruff check apps/chronos-api/src/ apps/ingestion-worker/ tests/
 
 # ==============================================================================
   #  🔬 TEST JOB

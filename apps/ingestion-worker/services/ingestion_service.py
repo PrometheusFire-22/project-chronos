@@ -24,7 +24,7 @@ class IngestionService:
 
         # Initialize Modal function lookup
         try:
-            self.modal_fn = modal.Function.lookup("chronos-docling", "process_document")
+            self.modal_fn = modal.Function.from_name("chronos-docling", "process_document")
             logger.info("✅ Modal GPU function connected: chronos-docling.process_document")
         except Exception as e:
             logger.error(f"❌ Failed to connect to Modal GPU function: {e}")
