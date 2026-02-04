@@ -14,6 +14,7 @@ export const auth = betterAuth({
   logger: {
       level: "debug",
   },
+  trustedOrigins: ["https://automatonicai.com", "http://localhost:3000"],
   emailAndPassword: {
     enabled: true,
     async sendResetPassword({ user, url }: { user: any; url: string }) {
