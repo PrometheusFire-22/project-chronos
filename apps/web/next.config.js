@@ -8,6 +8,9 @@ const nextConfig = {
   // Disable React Strict Mode to prevent WebGL context loss in MapLibre
   reactStrictMode: false,
 
+  // Fix Better Auth 404 errors (https://github.com/better-auth/better-auth/issues/6671)
+  trailingSlash: false,
+
   // Disable image optimization for static export
   images: {
     unoptimized: true,
@@ -86,9 +89,10 @@ const plugins = [
 ];
 
 // Initialize OpenNext for Cloudflare development (only in dev mode, not during builds)
-import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare';
-if (process.env.NODE_ENV === 'development') {
-  initOpenNextCloudflareForDev();
-}
+// DISABLED: Temporarily commented out to allow local auth development without Cloudflare setup
+// import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare';
+// if (process.env.NODE_ENV === 'development') {
+//   initOpenNextCloudflareForDev();
+// }
 
 export default composePlugins(...plugins)(nextConfig);

@@ -3,9 +3,11 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, ChevronDown } from 'lucide-react'
+import { Menu, X, ChevronDown, User, LogOut } from 'lucide-react'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { Button } from '@chronos/ui/components/button'
+import { useSession, signOut } from '@/lib/auth-client'
+import { useRouter } from 'next/navigation'
 
 const NAV_LINKS = [
   { href: '/features', label: 'Features' },
@@ -25,6 +27,14 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+
+  const { data: session, isPending } = useSession()
+  const router = useRouter()
+
+  const handleSignOut = async () => {
+      await signOut()
+      router.push('/')
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -107,9 +117,58 @@ export function Header() {
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center gap-4">
           <ThemeToggle />
-          <Button variant="default" className="font-semibold shadow-lg shadow-primary/20">
-            Get Started
-          </Button>
+          {isPending ? (
+             <div className="h-10 w-24 bg-muted/20 animate-pulse rounded-md" />
+          ) : session ? (
+             <div className="relative group">
+                <button
+                    className="flex items-center gap-2 p-1 pr-3 rounded-full border border-border bg-background hover:bg-muted/50 transition-colors"
+                >
+                    <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold uppercase text-xs">
+                        {session.user.name?.[0] || 'U'}
+                    </div>
+                    <span className="text-sm font-medium">{session.user.name?.split(' ')[0]}</span>
+                    <ChevronDown size={14} className="text-muted-foreground" />
+                </button>
+
+                {/* User Dropdown */}
+                <div className="absolute right-0 top-full mt-2 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right">
+                    <div className="bg-card/90 backdrop-blur-xl border border-border/50 rounded-xl shadow-xl overflow-hidden p-2">
+                        <div className="px-3 py-2 border-b border-border/50 mb-2">
+                            <p className="text-sm font-medium truncate">{session.user.name}</p>
+                            <p className="text-xs text-muted-foreground truncate">{session.user.email}</p>
+                        </div>
+                        <Link
+                            href="/dashboard"
+                            className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary rounded-lg transition-colors mb-1"
+                        >
+                            <User size={16} />
+                            Dashboard
+                        </Link>
+                        <button
+                            onClick={handleSignOut}
+                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+                        >
+                            <LogOut size={16} />
+                            Sign Out
+                        </button>
+                    </div>
+                </div>
+             </div>
+          ) : (
+            <>
+                <Link href="/sign-in">
+                    <Button variant="ghost" className="font-medium text-muted-foreground hover:text-foreground">
+                        Sign In
+                    </Button>
+                </Link>
+                <Link href="/sign-up">
+                    <Button variant="default" className="font-semibold shadow-lg shadow-primary/20">
+                        Get Started
+                    </Button>
+                </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Toggle */}
@@ -163,8 +222,37 @@ export function Header() {
                   )}
                 </div>
               ))}
-              <div className="pt-4 border-t border-border">
-                  <Button className="w-full font-semibold">Get Started</Button>
+              <div className="pt-4 border-t border-border space-y-3">
+                  {session ? (
+                      <div className="space-y-3">
+                          <div className="flex items-center gap-3 px-2">
+                              <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold uppercase">
+                                  {session.user.name?.[0] || 'U'}
+                              </div>
+                              <div className="flex flex-col">
+                                  <span className="font-medium">{session.user.name}</span>
+                                  <span className="text-xs text-muted-foreground">{session.user.email}</span>
+                              </div>
+                          </div>
+                          <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
+                             <Button variant="outline" className="w-full justify-start gap-2">
+                                <User size={16} /> Dashboard
+                             </Button>
+                          </Link>
+                          <Button variant="destructive" className="w-full justify-start gap-2" onClick={handleSignOut}>
+                             <LogOut size={16} /> Sign Out
+                          </Button>
+                      </div>
+                  ) : (
+                      <div className="grid grid-cols-2 gap-3">
+                           <Link href="/sign-in" onClick={() => setIsMobileMenuOpen(false)}>
+                               <Button variant="outline" className="w-full">Sign In</Button>
+                           </Link>
+                           <Link href="/sign-up" onClick={() => setIsMobileMenuOpen(false)}>
+                               <Button className="w-full">Get Started</Button>
+                           </Link>
+                      </div>
+                  )}
               </div>
             </div>
           </motion.div>
