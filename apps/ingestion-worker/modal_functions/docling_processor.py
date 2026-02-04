@@ -32,6 +32,148 @@ from pathlib import Path
 import modal
 
 # ==================================================================
+# Custom JSON to Markdown Renderer
+# ==================================================================
+
+
+def format_contact_info(text: str) -> str:
+    """
+    Format contact information with proper line breaks.
+
+    Fixes merged contact blocks by adding <br/> tags before Direct: and E-mail:.
+    """
+    if not text:
+        return text
+
+    # Add line break before "Direct:"
+    text = re.sub(r"\s+(Direct:)", r"\n\1", text)
+
+    # Add line break before "E-mail:" or "Email:"
+    text = re.sub(r"\s+(E-mail:|Email:)", r"\n\1", text)
+
+    # Add line break after email when followed by a name
+    text = re.sub(r"(@\S+)\s+([A-Z][a-z]+ [A-Z])", r"\1\n\n\2", text)
+
+    return text
+
+
+def render_table(table: dict) -> str:
+    """
+    Render a table from Docling JSON to markdown.
+
+    Handles standard tables, merged cells, and contact info formatting.
+    """
+    data = table.get("data", {})
+    num_rows = data.get("num_rows", 0)
+    num_cols = data.get("num_cols", 0)
+    cells = data.get("table_cells", [])
+
+    if not cells:
+        return ""
+
+    # Build grid
+    grid = [["" for _ in range(num_cols)] for _ in range(num_rows)]
+
+    # Fill grid with cell data
+    for cell in cells:
+        text = cell.get("text", "")
+        row = cell.get("start_row_offset_idx", 0) or cell.get("end_row_offset_idx", 0) - 1
+        col = cell.get("start_col_offset_idx", 0) or cell.get("end_col_offset_idx", 0) - 1
+
+        # Format contact info
+        text = format_contact_info(text)
+
+        # Handle merged cells - put content in first cell
+        if row < num_rows and col < num_cols:
+            grid[row][col] = text
+
+    # Convert grid to markdown
+    lines = []
+
+    for i, row in enumerate(grid):
+        # Replace internal newlines with <br/> for markdown tables
+        cleaned_row = [cell.replace("\n", "<br/>") for cell in row]
+        lines.append("| " + " | ".join(cleaned_row) + " |")
+
+        # Add header separator after first row
+        if i == 0:
+            lines.append("|" + "|".join(["---" for _ in range(num_cols)]) + "|")
+
+    return "\n".join(lines)
+
+
+def render_text_block(text_obj: dict) -> str:
+    """Render a text block from Docling JSON."""
+    text = text_obj.get("text", "")
+    label = text_obj.get("label", "")
+
+    # Apply formatting based on label
+    if label == "title":  # noqa: SIM116
+        return f"# {text}\n"
+    elif label == "section_header":
+        return f"## {text}\n"
+    elif label == "paragraph":
+        return f"{text}\n"
+    else:
+        return f"{text}\n"
+
+
+def json_to_markdown(docling_json: dict) -> str:
+    """
+    Convert Docling JSON to clean markdown.
+
+    Returns properly formatted markdown with:
+    - Tables with contact info formatting
+    - Document structure preserved
+    - Fixed merged contact blocks
+    """
+    output = []
+
+    # Get document name
+    name = docling_json.get("name", "")
+    if name:
+        output.append(f"# {name}\n")
+
+    # Process body content in order
+    body = docling_json.get("body", {})
+
+    # Method 1: Process in document order using children
+    if body and "children" in body:
+        for child_ref in body["children"]:
+            ref = child_ref.get("$ref", "")
+
+            if "/texts/" in ref:
+                idx = int(ref.split("/texts/")[-1])
+                texts = docling_json.get("texts", [])
+                if idx < len(texts):
+                    output.append(render_text_block(texts[idx]))
+                    output.append("")
+
+            elif "/tables/" in ref:
+                idx = int(ref.split("/tables/")[-1])
+                tables = docling_json.get("tables", [])
+                if idx < len(tables):
+                    output.append(render_table(tables[idx]))
+                    output.append("")
+
+    # Method 2: Fallback - render all texts then all tables
+    else:
+        for text_obj in docling_json.get("texts", []):
+            output.append(render_text_block(text_obj))
+            output.append("")
+
+        for table in docling_json.get("tables", []):
+            output.append(render_table(table))
+            output.append("")
+
+    # Join and clean up
+    markdown = "\n".join(output)
+    markdown = re.sub(r"\n{3,}", "\n\n", markdown)
+
+    return markdown.strip() + "\n"
+
+
+# ==================================================================
 # Modal Image Configuration
 # ==================================================================
 
@@ -43,7 +185,7 @@ image = (
         "libglib2.0-0",  # GTK dependency
     )
     .pip_install(
-        "docling>=1.0.0",  # IBM Docling for document processing
+        "docling>=2.0.0",  # Use Docling 2.x with working API
         "torch",  # PyTorch for ML models
         "torchvision",  # Vision models
     )
@@ -51,37 +193,6 @@ image = (
 
 # Create Modal app
 app = modal.App("chronos-docling", image=image)
-
-# ==================================================================
-# Markdown Post-Processing
-# ==================================================================
-
-
-def postprocess_markdown(markdown: str) -> str:
-    """
-    Post-process markdown to improve quality.
-
-    Improvements:
-    1. Better line breaks in contact information
-    2. Spacing between headers and body text
-    3. Table cell formatting for readability
-    """
-    # Add line breaks after headers
-    markdown = re.sub(r"^(#{1,6}\s+.+)$", r"\1\n", markdown, flags=re.MULTILINE)
-
-    # Add line breaks before/after tables
-    markdown = re.sub(r"([^\n])\n(\|)", r"\1\n\n\2", markdown)
-    markdown = re.sub(r"(\|[^\n]+)\n([^|\n])", r"\1\n\n\2", markdown)
-
-    # Improve contact info formatting: add line breaks before Direct: and E-mail:
-    markdown = re.sub(r"\s+(Direct:)", r"\n\1", markdown)
-    markdown = re.sub(r"\s+(E-mail:)", r"\n\1", markdown)
-
-    # Add line break after email when followed by a name
-    markdown = re.sub(r"(@\S+)\s+([A-Z][a-z]+ [A-Z])", r"\1\n\n\2", markdown)
-
-    return markdown
-
 
 # ==================================================================
 # GPU Function: Document Processing
@@ -134,61 +245,26 @@ def process_document(pdf_bytes: bytes, file_id: str, source_url: str = None) -> 
         tmp_path = Path(tmp.name)
 
     try:
-        # Import Docling configuration options
-        from docling.datamodel.base_models import InputFormat
-        from docling.datamodel.pipeline_options import PipelineOptions, TableFormerMode
-
-        # Configure advanced table extraction settings
-        pipeline_options = PipelineOptions()
-
-        # Use ACCURATE mode for better table structure detection
-        # (vs FAST which is the default but less accurate)
-        pipeline_options.table_structure_options = TableFormerMode.ACCURATE
-
-        # Enable advanced OCR and layout analysis
-        pipeline_options.do_ocr = True  # Ensure OCR is enabled
-        pipeline_options.do_table_structure = True  # Enable table structure recognition
-
-        # Initialize Docling converter with advanced configuration
-        converter = DocumentConverter(
-            allowed_formats=[InputFormat.PDF], pipeline_options=pipeline_options
-        )
+        # Initialize Docling converter (Docling 2.x API)
+        converter = DocumentConverter()
 
         # Process document (GPU-accelerated OCR and layout detection)
+        # Docling 2.x returns ConversionResult directly
         result = converter.convert(tmp_path)
-
-        # Docling returns ConversionResult with .document attribute
-        if hasattr(result, "document"):
-            doc = result.document
-        else:
-            # Handle if result is iterable (generator/list)
-            results = list(result) if not isinstance(result, list) else result
-            if not results:
-                raise ValueError(f"No conversion result for file_id={file_id}")
-            doc = results[0].document
+        doc = result.document
 
         # Export to formats
         doc_json = doc.export_to_dict()
-        raw_markdown = doc.export_to_markdown()
 
-        # Post-process markdown for better quality
-        markdown_content = postprocess_markdown(raw_markdown)
+        # Use custom renderer instead of Docling's markdown export
+        # This fixes merged contact blocks and provides better formatting
+        markdown_content = json_to_markdown(doc_json)
 
         # Calculate processing time
         processing_time = time.time() - start_time
 
         # Extract metadata
         page_count = len(doc_json.get("pages", []))
-        table_count = len(doc_json.get("tables", []))
-        text_block_count = len(doc_json.get("texts", []))
-
-        # Log quality metrics for monitoring
-        print(f"📊 Quality Metrics for {file_id}:")
-        print(f"   Pages: {page_count}, Tables: {table_count}, Text blocks: {text_block_count}")
-        print(f"   Markdown length: {len(markdown_content):,} chars (raw: {len(raw_markdown):,})")
-        print(
-            f"   Line breaks added: {markdown_content.count(chr(10)) - raw_markdown.count(chr(10))}"
-        )
 
         return {
             "doc_json": doc_json,

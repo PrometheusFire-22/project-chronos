@@ -17,7 +17,7 @@ Environment Variables:
 import logging
 import os
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 # Modal
@@ -32,7 +32,7 @@ from models import DocumentChunk, DocumentRaw
 from services.database import get_db
 
 # Utilities
-from utils.markdown_postprocessor import postprocess_markdown
+from utils.json_to_markdown import json_to_markdown
 
 logger = logging.getLogger(__name__)
 
@@ -93,17 +93,24 @@ class IngestionService:
     def _init_local_docling(self):
         """Initialize local Docling converter (CPU fallback) with advanced configuration."""
         from docling.datamodel.base_models import InputFormat
-        from docling.datamodel.pipeline_options import PipelineOptions, TableFormerMode
-        from docling.document_converter import DocumentConverter
+        from docling.datamodel.pipeline_options import (
+            PdfPipelineOptions,
+            TableFormerMode,
+            TableStructureOptions,
+        )
+        from docling.document_converter import DocumentConverter, PdfFormatOption
 
         # Configure advanced table extraction (same as Modal GPU)
-        pipeline_options = PipelineOptions()
-        pipeline_options.table_structure_options = TableFormerMode.ACCURATE
-        pipeline_options.do_ocr = True
+        pipeline_options = PdfPipelineOptions()
         pipeline_options.do_table_structure = True
+        pipeline_options.table_structure_options = TableStructureOptions(
+            mode=TableFormerMode.ACCURATE  # vs FAST (default)
+        )
+        pipeline_options.do_ocr = True
 
+        # Initialize DocumentConverter with format-specific options (Docling 2.x API)
         self.converter = DocumentConverter(
-            allowed_formats=[InputFormat.PDF], pipeline_options=pipeline_options
+            format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)}
         )
         logger.info("✅ Local Docling converter initialized (CPU) with ACCURATE table mode")
 
@@ -130,7 +137,7 @@ class IngestionService:
             ValueError: If conversion fails
         """
         logger.info(f"Processing document: {file_path} (Modal GPU: {self.use_modal})")
-        start_time = datetime.now(timezone.utc)
+        start_time = datetime.now(UTC)
 
         # ================================================================
         # STEP 1: Document Conversion (Docling)
@@ -150,15 +157,15 @@ class IngestionService:
                     raise ValueError(f"Modal processing failed: {result['error']}")
 
                 doc_json = result["doc_json"]
-                raw_markdown = result["markdown"]
-                # Post-process markdown for better quality
-                markdown_content = postprocess_markdown(raw_markdown, doc_json)
+                # Modal already uses custom JSON→MD renderer, no post-processing needed
+                markdown_content = result["markdown"]
                 processing_time = result["processing_time"]
 
                 logger.info(
                     f"✅ Modal GPU processed {file_path.name} in {processing_time:.2f}s "
                     f"({result['page_count']} pages, cost: ~${processing_time / 3600 * 1.10:.4f})"
                 )
+                logger.info(f"   Markdown: {len(markdown_content):,} chars (custom renderer)")
 
             except Exception as e:
                 logger.error(f"Modal GPU failed: {e}")
@@ -170,7 +177,7 @@ class IngestionService:
         else:
             # Process locally on CPU
             logger.info(f"Processing {file_path.name} on local CPU...")
-            cpu_start = datetime.now(timezone.utc)
+            cpu_start = datetime.now(UTC)
 
             conv_results = list(self.converter.convert(file_path))
             if not conv_results:
@@ -179,16 +186,13 @@ class IngestionService:
             result = conv_results[0]
             doc = result.document
             doc_json = doc.export_to_dict()
-            raw_markdown = doc.export_to_markdown()
 
-            # Post-process markdown for better quality
-            markdown_content = postprocess_markdown(raw_markdown, doc_json)
+            # Use custom JSON→MD renderer (same as Modal)
+            markdown_content = json_to_markdown(doc_json)
 
-            cpu_time = (datetime.now(timezone.utc) - cpu_start).total_seconds()
+            cpu_time = (datetime.now(UTC) - cpu_start).total_seconds()
             logger.info(f"✅ Local CPU processed {file_path.name} in {cpu_time:.2f}s")
-            logger.info(
-                f"   Markdown post-processed: {len(raw_markdown)} → {len(markdown_content)} chars"
-            )
+            logger.info(f"   Markdown: {len(markdown_content):,} chars (custom renderer)")
 
         # ================================================================
         # STEP 2: Save Raw Document to Database
@@ -248,7 +252,7 @@ class IngestionService:
             db.add_all(chunk_objs)
             db.commit()
 
-            total_time = (datetime.now(timezone.utc) - start_time).total_seconds()
+            total_time = (datetime.now(UTC) - start_time).total_seconds()
             logger.info(
                 f"✅ Saved {len(chunk_objs)} chunks for document {doc_uuid} "
                 f"(total time: {total_time:.2f}s)"
