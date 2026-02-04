@@ -6,8 +6,7 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { Loader2 } from "lucide-react"
 import { authClient } from "@/lib/auth-client"
-import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Input, Label } from "@chronos/ui"
-import { cn } from "@/lib/utils"
+import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Input, Label, cn } from "@chronos/ui"
 
 export default function SignUpPage() {
     const router = useRouter()
