@@ -14,6 +14,29 @@ export const auth = betterAuth({
   logger: {
       level: "debug",
   },
+  emailAndPassword: {
+    enabled: true,
+    async sendResetPassword({ user, url }: { user: any; url: string }) {
+        const { Resend } = await import("resend");
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        await resend.emails.send({
+            from: "Chronos <onboarding@resend.dev>",
+            to: user.email,
+            subject: "Reset your password",
+            html: `<a href="${url}">Reset your password</a>`,
+        });
+    },
+    async sendVerificationEmail({ user, url }: { user: any; url: string }) {
+        const { Resend } = await import("resend");
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        await resend.emails.send({
+            from: "Chronos <onboarding@resend.dev>",
+            to: user.email,
+            subject: "Verify your email",
+            html: `<a href="${url}">Verify your email</a>`,
+        });
+    },
+  },
   user: {
     modelName: "user",
     fields: {
@@ -46,9 +69,6 @@ export const auth = betterAuth({
       createdAt: "created_at",
       updatedAt: "updated_at"
     }
-  },
-  emailAndPassword: {
-    enabled: true,
   },
 });
 console.log("Auth initialized with baseURL:", process.env.BETTER_AUTH_URL || "http://localhost:3000");
