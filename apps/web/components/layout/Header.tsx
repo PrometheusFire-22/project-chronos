@@ -225,15 +225,21 @@ export function Header() {
               <div className="pt-4 border-t border-border space-y-3">
                   {session ? (
                       <div className="space-y-3">
-                          <div className="flex items-center gap-3 px-2">
-                              <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold uppercase">
-                                  {session.user.name?.[0] || 'U'}
-                              </div>
-                              <div className="flex flex-col">
-                                  <span className="font-medium">{session.user.name}</span>
-                                  <span className="text-xs text-muted-foreground">{session.user.email}</span>
-                              </div>
-                          </div>
+                        <Link href="/dashboard" className="w-full" onClick={() => setIsMobileMenuOpen(false)}>
+                          <span className="relative z-10 flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center border border-white/10">
+                              {session.user.image ? (
+                                   <img src={session.user.image} alt={session.user.name} className="w-full h-full rounded-full object-cover" />
+                              ) : (
+                                  <User className="w-4 h-4 text-purple-400" />
+                              )}
+                            </div>
+                            <div className="text-left">
+                                <p className="text-sm font-medium text-gray-200">{session.user.name}</p>
+                                <p className="text-xs text-gray-500 truncate max-w-[100px]">{session.user.email}</p>
+                            </div>
+                          </span>
+                        </Link>
                           <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
                              <Button variant="outline" className="w-full justify-start gap-2">
                                 <User size={16} /> Dashboard
