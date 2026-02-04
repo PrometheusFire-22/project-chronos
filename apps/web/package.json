@@ -22,6 +22,7 @@
     "@radix-ui/react-slot": "^1.1.1",
     "@react-email/render": "^0.0.12",
     "@sentry/nextjs": "^10.32.1",
+    "better-auth": "^1.4.18",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "d3-interpolate": "^3.0.1",
@@ -53,6 +54,7 @@
     "node": ">=20.0.0"
   },
   "devDependencies": {
+    "@better-auth/cli": "^1.4.18",
     "@opennextjs/cloudflare": "^1.14.8",
     "@tailwindcss/typography": "^0.5.19",
     "@testing-library/jest-dom": "^6.9.1",
