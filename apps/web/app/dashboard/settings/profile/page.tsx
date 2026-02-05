@@ -1,15 +1,42 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useSession } from '@/lib/auth-client';
-import { User, Mail, ShieldCheck, ShieldAlert } from 'lucide-react';
-import { cn } from '@chronos/ui';
+import { authClient } from '@/lib/auth-client';
+import { User, ShieldCheck, ShieldAlert, Loader2 } from 'lucide-react';
 import { Button } from '@chronos/ui/components/button';
 
 export default function ProfilePage() {
   const { data: session } = useSession();
   const user = session?.user;
 
+  const [name, setName] = useState('');
+  const [saveState, setSaveState] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
+
+  useEffect(() => {
+    if (user?.name) setName(user.name);
+  }, [user?.name]);
+
   if (!user) return null;
+
+  const isDirty = name !== (user.name ?? '');
+
+  async function handleSave() {
+    setSaveState('saving');
+    try {
+      await authClient.updateUser({ name });
+      setSaveState('success');
+      setTimeout(() => setSaveState('idle'), 2000);
+    } catch {
+      setSaveState('error');
+      setTimeout(() => setSaveState('idle'), 3000);
+    }
+  }
+
+  function handleCancel() {
+    setName(user.name ?? '');
+    setSaveState('idle');
+  }
 
   return (
     <div className="space-y-8">
@@ -47,9 +74,10 @@ export default function ProfilePage() {
               <label className="text-sm font-medium text-gray-400">Full Name</label>
               <input
                 type="text"
-                defaultValue={user.name}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 outline-none transition-all"
-                placeholder="Geoff Bevans"
+                placeholder="Your name"
               />
             </div>
             <div className="space-y-2 text-white">
@@ -59,30 +87,51 @@ export default function ProfilePage() {
                   type="email"
                   defaultValue={user.email}
                   disabled
-                   className="w-full bg-black/20 border border-white/5 rounded-xl px-4 py-2.5 text-gray-400 cursor-not-allowed outline-none"
+                  className="w-full bg-black/20 border border-white/5 rounded-xl px-4 py-2.5 text-gray-400 cursor-not-allowed outline-none"
                 />
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                   {user.emailVerified ? (
+                  {user.emailVerified ? (
                     <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full border border-emerald-400/20">
                       <ShieldCheck className="w-3 h-3" />
                       Verified
                     </span>
-                   ) : (
+                  ) : (
                     <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/20">
                       <ShieldAlert className="w-3 h-3" />
                       Unverified
                     </span>
-                   )}
+                  )}
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="p-4 bg-white/[0.02] border-t border-white/10 flex justify-end gap-3">
-          <Button variant="ghost" className="text-gray-400 hover:text-white">Cancel</Button>
-          <Button className="bg-purple-600 hover:bg-purple-500 text-white shadow-[0_0_20px_rgba(168,85,247,0.4)]">
-            Save Changes
+        <div className="p-4 bg-white/[0.02] border-t border-white/10 flex items-center justify-end gap-3">
+          {saveState === 'success' && (
+            <span className="text-sm text-emerald-400">Saved successfully!</span>
+          )}
+          {saveState === 'error' && (
+            <span className="text-sm text-red-400">Failed to save. Try again.</span>
+          )}
+          <Button
+            variant="ghost"
+            className="text-gray-400 hover:text-white"
+            onClick={handleCancel}
+            disabled={!isDirty || saveState === 'saving'}
+          >
+            Cancel
+          </Button>
+          <Button
+            className="bg-purple-600 hover:bg-purple-500 text-white shadow-[0_0_20px_rgba(168,85,247,0.4)]"
+            onClick={handleSave}
+            disabled={!isDirty || saveState === 'saving'}
+          >
+            {saveState === 'saving' ? (
+              <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...</>
+            ) : (
+              'Save Changes'
+            )}
           </Button>
         </div>
       </div>

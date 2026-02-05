@@ -1,14 +1,85 @@
 'use client';
 
-import { CreditCard, Zap, Check } from 'lucide-react';
+import { CreditCard, Zap, Check, FileText } from 'lucide-react';
 import { Button } from '@chronos/ui/components/button';
+import { useUsage } from '@/hooks/useUsage';
+
+function UsageBar({ label, value, limit, color, icon: Icon }: {
+  label: string;
+  value: number;
+  limit: number;
+  color: string;
+  icon: typeof FileText;
+}) {
+  const pct = Math.min((value / limit) * 100, 100);
+  return (
+    <div className="p-4 rounded-xl bg-black/20 border border-white/5">
+      <div className="flex justify-between items-start mb-2">
+        <span className="text-sm text-gray-400">{label}</span>
+        <Icon className={`w-4 h-4 ${color}`} />
+      </div>
+      <div className="flex items-baseline gap-2">
+        <span className="text-2xl font-bold text-white">{value}</span>
+        <span className="text-sm text-gray-500">/ {limit}</span>
+      </div>
+      <div className="w-full h-1.5 bg-white/10 rounded-full mt-3 overflow-hidden">
+        <div
+          className={`h-full ${color.replace('text-', 'bg-')} transition-all duration-500`}
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+    </div>
+  );
+}
 
 export default function BillingPage() {
+  const { usage, isLoading } = useUsage();
+
   return (
     <div className="space-y-8">
       <div>
         <h2 className="text-2xl font-bold text-white">Billing & Plans</h2>
         <p className="text-gray-400 mt-1">Manage your subscription and billing details.</p>
+      </div>
+
+      {/* Usage Section */}
+      <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+            <Zap className="w-5 h-5 text-yellow-400" />
+            Current Usage
+          </h3>
+          <span className="text-xs text-gray-500">Monthly Cycle</span>
+        </div>
+        {isLoading ? (
+          <div className="flex items-center justify-center py-8">
+            <div className="w-6 h-6 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <UsageBar
+              label="PDF Uploads"
+              value={usage?.pdfUploadCount ?? 0}
+              limit={usage?.pdfUploadLimit ?? 3}
+              color="text-indigo-500"
+              icon={FileText}
+            />
+            <UsageBar
+              label="Total Pages"
+              value={usage?.totalPageCount ?? 0}
+              limit={usage?.totalPageLimit ?? 120}
+              color="text-purple-500"
+              icon={FileText}
+            />
+            <UsageBar
+              label="Queries"
+              value={usage?.queryCount ?? 0}
+              limit={usage?.queryLimit ?? 5}
+              color="text-cyan-500"
+              icon={Zap}
+            />
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

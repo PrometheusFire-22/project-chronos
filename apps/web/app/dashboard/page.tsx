@@ -9,20 +9,12 @@ import { Button } from '@chronos/ui/components/button'
 import { cn } from '@chronos/ui'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
-
-interface UserUsage {
-    pdfUploadCount: number;
-    pdfUploadLimit: number;
-    totalPageCount: number;
-    totalPageLimit: number;
-    queryCount: number;
-    queryLimit: number;
-}
+import { useUsage } from '@/hooks/useUsage'
 
 export default function DashboardPage() {
   const { data: session, isPending } = useSession()
   const router = useRouter()
-  const [usage, setUsage] = useState<UserUsage | null>(null);
+  const { usage } = useUsage();
   const [verificationState, setVerificationState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   useEffect(() => {
@@ -30,19 +22,6 @@ export default function DashboardPage() {
       router.push('/sign-in')
     }
   }, [session, isPending, router])
-
-  useEffect(() => {
-      async function fetchUsage() {
-          if (session?.user) {
-              const res = await fetch('/api/user/usage');
-              if (res.ok) {
-                  const data = await res.json();
-                  setUsage(data);
-              }
-          }
-      }
-      fetchUsage();
-  }, [session]);
 
   if (isPending || !session) {
     return (
