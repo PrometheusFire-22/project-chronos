@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, ChevronDown, User, LogOut } from 'lucide-react'
+import { Menu, X, ChevronDown, User, LogOut, Settings } from 'lucide-react'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { Button } from '@chronos/ui/components/button'
 import { useSession, signOut } from '@/lib/auth-client'
@@ -145,6 +145,13 @@ export function Header() {
                             <User size={16} />
                             Dashboard
                         </Link>
+                        <Link
+                            href="/dashboard/settings/profile"
+                            className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary rounded-lg transition-colors mb-1"
+                        >
+                            <Settings size={16} />
+                            Settings
+                        </Link>
                         <button
                             onClick={handleSignOut}
                             className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
@@ -243,6 +250,11 @@ export function Header() {
                           <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
                              <Button variant="outline" className="w-full justify-start gap-2">
                                 <User size={16} /> Dashboard
+                             </Button>
+                          </Link>
+                          <Link href="/dashboard/settings/profile" onClick={() => setIsMobileMenuOpen(false)}>
+                             <Button variant="outline" className="w-full justify-start gap-2">
+                                <Settings size={16} /> Settings
                              </Button>
                           </Link>
                           <Button variant="destructive" className="w-full justify-start gap-2" onClick={handleSignOut}>
