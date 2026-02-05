@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { User, Shield, Zap, FileText, Settings, CreditCard } from 'lucide-react'
 import { Button } from '@chronos/ui/components/button'
-import cn from '@chronos/ui'
+import { cn } from '@chronos/ui'
 
 export default function DashboardPage() {
   const { data: session, isPending } = useSession()
