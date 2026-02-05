@@ -89,7 +89,7 @@ export const docsPages = pgTable(
     content: text('content').notNull(),
 
     // Hierarchy
-    parentId: uuid('parent_id').references(() => docsPages.id, {
+    parentId: uuid('parent_id').references((): any => docsPages.id, {
       onDelete: 'set null',
     }),
     sortOrder: integer('sort_order').notNull().default(0),

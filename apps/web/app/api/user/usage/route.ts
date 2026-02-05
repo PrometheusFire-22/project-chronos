@@ -1,17 +1,11 @@
 import { NextResponse } from 'next/server';
-import { db } from '@chronos/database';
-import { userUsage } from '@chronos/database/src/schema/auth';
-import { eq } from 'drizzle-orm';
+import { db, eq } from '@chronos/database';
+import { userUsage } from '@chronos/database';
 import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
-
-export const runtime = 'edge';
 
 export async function GET(req: Request) {
   try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+    const session = await auth.api.getSession({ headers: req.headers });
 
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
