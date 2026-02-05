@@ -6,6 +6,7 @@
  */
 
 export * from './cms';
+export * from './auth';
 
 // Future schema exports:
 // export * from './app';        // Application data (deals, companies, investors)

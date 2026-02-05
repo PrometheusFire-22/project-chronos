@@ -1,4 +1,7 @@
 import { defineConfig } from 'drizzle-kit';
+import * as dotenv from 'dotenv';
+
+dotenv.config({ path: '../../.env' }); // Load from root .env
 
 export default defineConfig({
   // Schema files location
@@ -14,9 +17,9 @@ export default defineConfig({
   dbCredentials: {
     host: process.env.DB_HOST || 'localhost',
     port: parseInt(process.env.DB_PORT || '5432'),
-    user: process.env.DB_USER || 'chronos',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'chronos',
+    user: process.env.DATABASE_USER || 'chronos',
+    password: process.env.DATABASE_PASSWORD || '',
+    database: process.env.DATABASE_NAME || 'chronos',
     ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
   },
 
@@ -27,5 +30,5 @@ export default defineConfig({
   // Table prefix for Drizzle-managed tables
   // This helps distinguish Drizzle tables from Alembic-managed data warehouse tables
   // We'll use 'cms_' prefix for all CMS-related content tables
-  tablesFilter: ['cms_*', 'app_*'],
+  tablesFilter: ['cms_*', 'app_*', 'auth_*'],
 });

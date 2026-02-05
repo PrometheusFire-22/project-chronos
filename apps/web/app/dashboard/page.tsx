@@ -1,25 +1,45 @@
 'use client'
 
-export const runtime = 'edge'
-export const dynamic = 'force-dynamic'
-
 import { motion } from 'framer-motion'
 import { useSession } from '@/lib/auth-client'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { User, Shield, Zap, FileText, Settings, CreditCard } from 'lucide-react'
 import { Button } from '@chronos/ui/components/button'
 import { cn } from '@chronos/ui'
 
+interface UserUsage {
+    pdfUploadCount: number;
+    pdfUploadLimit: number;
+    totalPageCount: number;
+    totalPageLimit: number;
+    queryCount: number;
+    queryLimit: number;
+}
+
 export default function DashboardPage() {
   const { data: session, isPending } = useSession()
   const router = useRouter()
+  const [usage, setUsage] = useState<UserUsage | null>(null);
 
   useEffect(() => {
     if (!isPending && !session) {
       router.push('/sign-in')
     }
   }, [session, isPending, router])
+
+  useEffect(() => {
+      async function fetchUsage() {
+          if (session?.user) {
+              const res = await fetch('/api/user/usage');
+              if (res.ok) {
+                  const data = await res.json();
+                  setUsage(data);
+              }
+          }
+      }
+      fetchUsage();
+  }, [session]);
 
   if (isPending || !session) {
     return (
@@ -144,33 +164,59 @@ export default function DashboardPage() {
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    {/* PDF Uploads */}
                                     <div className="p-4 rounded-xl bg-black/20 border border-white/5">
                                         <div className="flex justify-between items-start mb-2">
                                             <span className="text-sm text-gray-400">PDF Uploads</span>
                                             <FileText className="w-4 h-4 text-indigo-400" />
                                         </div>
                                         <div className="flex items-baseline gap-2">
-                                            <span className="text-2xl font-bold">0</span>
-                                            <span className="text-sm text-gray-500">/ 5</span>
+                                            <span className="text-2xl font-bold">{usage?.pdfUploadCount ?? 0}</span>
+                                            <span className="text-sm text-gray-500">/ {usage?.pdfUploadLimit ?? 3}</span>
                                         </div>
                                         {/* Progress Bar */}
                                         <div className="w-full h-1.5 bg-white/10 rounded-full mt-3 overflow-hidden">
-                                            <div className="h-full bg-indigo-500 w-[0%]" />
+                                            <div
+                                                className="h-full bg-indigo-500 transition-all duration-500"
+                                                style={{ width: `${Math.min(((usage?.pdfUploadCount ?? 0) / (usage?.pdfUploadLimit ?? 3)) * 100, 100)}%` }}
+                                            />
                                         </div>
                                     </div>
 
+                                    {/* Pages (Token Proxy) */}
+                                    <div className="p-4 rounded-xl bg-black/20 border border-white/5">
+                                        <div className="flex justify-between items-start mb-2">
+                                            <span className="text-sm text-gray-400">Total Pages</span>
+                                            <FileText className="w-4 h-4 text-purple-400" />
+                                        </div>
+                                        <div className="flex items-baseline gap-2">
+                                            <span className="text-2xl font-bold">{usage?.totalPageCount ?? 0}</span>
+                                            <span className="text-sm text-gray-500">/ {usage?.totalPageLimit ?? 120}</span>
+                                        </div>
+                                        <div className="w-full h-1.5 bg-white/10 rounded-full mt-3 overflow-hidden">
+                                            <div
+                                                className="h-full bg-purple-500 transition-all duration-500"
+                                                style={{ width: `${Math.min(((usage?.totalPageCount ?? 0) / (usage?.totalPageLimit ?? 120)) * 100, 100)}%` }}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Queries */}
                                     <div className="p-4 rounded-xl bg-black/20 border border-white/5">
                                         <div className="flex justify-between items-start mb-2">
                                             <span className="text-sm text-gray-400">Queries</span>
                                             <Zap className="w-4 h-4 text-cyan-400" />
                                         </div>
                                         <div className="flex items-baseline gap-2">
-                                            <span className="text-2xl font-bold">0</span>
-                                            <span className="text-sm text-gray-500">/ 50</span>
+                                            <span className="text-2xl font-bold">{usage?.queryCount ?? 0}</span>
+                                            <span className="text-sm text-gray-500">/ {usage?.queryLimit ?? 5}</span>
                                         </div>
                                          {/* Progress Bar */}
                                          <div className="w-full h-1.5 bg-white/10 rounded-full mt-3 overflow-hidden">
-                                            <div className="h-full bg-cyan-500 w-[0%]" />
+                                            <div
+                                                className="h-full bg-cyan-500 transition-all duration-500"
+                                                style={{ width: `${Math.min(((usage?.queryCount ?? 0) / (usage?.queryLimit ?? 5)) * 100, 100)}%` }}
+                                            />
                                         </div>
                                     </div>
                                 </div>
