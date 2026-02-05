@@ -24,8 +24,15 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     async sendResetPassword({ user, url }: { user: any; url: string }) {
+        console.log("Attempting to send password reset email to:", user.email);
         const { Resend } = await import("resend");
-        const { getPasswordResetEmail } = await import("@/utils/emails/password-reset-email");
+        const { getPasswordResetEmail } = await import("../utils/emails/password-reset-email");
+
+        if (!process.env.RESEND_API_KEY) {
+          console.error("RESEND_API_KEY is not defined");
+          throw new Error("Email configuration missing");
+        }
+
         const resend = new Resend(process.env.RESEND_API_KEY);
 
         const emailContent = getPasswordResetEmail({
@@ -33,17 +40,30 @@ export const auth = betterAuth({
           resetUrl: url,
         });
 
-        await resend.emails.send({
-            from: "Chronos <updates@automatonicai.com>",
-            to: user.email,
-            subject: emailContent.subject,
-            html: emailContent.html,
-            text: emailContent.text,
-        });
+        try {
+          const result = await resend.emails.send({
+              from: "Chronos <updates@automatonicai.com>",
+              to: user.email,
+              subject: emailContent.subject,
+              html: emailContent.html,
+              text: emailContent.text,
+          });
+          console.log("Resend API response:", result);
+        } catch (err: any) {
+          console.error("Resend send error:", err);
+          throw err;
+        }
     },
     async sendVerificationEmail({ user, url }: { user: any; url: string }) {
+        console.log("Attempting to send verification email to:", user.email);
         const { Resend } = await import("resend");
-        const { getVerificationEmail } = await import("@/utils/emails/verification-email");
+        const { getVerificationEmail } = await import("../utils/emails/verification-email");
+
+        if (!process.env.RESEND_API_KEY) {
+          console.error("RESEND_API_KEY is not defined");
+          throw new Error("Email configuration missing");
+        }
+
         const resend = new Resend(process.env.RESEND_API_KEY);
 
         const emailContent = getVerificationEmail({
@@ -51,13 +71,19 @@ export const auth = betterAuth({
           verificationUrl: url,
         });
 
-        await resend.emails.send({
-            from: "Chronos <updates@automatonicai.com>",
-            to: user.email,
-            subject: emailContent.subject,
-            html: emailContent.html,
-            text: emailContent.text,
-        });
+        try {
+          const result = await resend.emails.send({
+              from: "Chronos <updates@automatonicai.com>",
+              to: user.email,
+              subject: emailContent.subject,
+              html: emailContent.html,
+              text: emailContent.text,
+          });
+          console.log("Resend API response:", result);
+        } catch (err: any) {
+          console.error("Resend send error:", err);
+          throw err;
+        }
     },
   },
   user: {

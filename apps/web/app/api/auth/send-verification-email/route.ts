@@ -18,15 +18,21 @@ export async function POST(request: Request) {
     }
 
     // Use Better Auth's built-in sendVerificationEmail method
+    // Pass headers for proper context
     await auth.api.sendVerificationEmail({
       body: { email },
+      headers: request.headers
     });
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error sending verification email:', error);
     return NextResponse.json(
-      { error: 'Failed to send verification email' },
+      {
+        error: 'Failed to send verification email',
+        details: error?.message || 'Unknown error',
+        stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined
+      },
       { status: 500 }
     );
   }
