@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react'
 import { User, Shield, Zap, FileText, Settings, CreditCard } from 'lucide-react'
 import { Button } from '@chronos/ui/components/button'
 import { cn } from '@chronos/ui'
+import { Header } from '@/components/layout/Header'
+import { Footer } from '@/components/layout/Footer'
 
 interface UserUsage {
     pdfUploadCount: number;
@@ -71,7 +73,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-black text-white relative overflow-hidden selection:bg-purple-500/30">
+    <>
+      <Header />
+      <div className="min-h-screen w-full bg-black text-white relative overflow-hidden selection:bg-purple-500/30">
         {/* Background Gradients */}
         <div className="fixed inset-0 z-0">
           <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-900/20 rounded-full blur-[120px]" />
@@ -79,7 +83,7 @@ export default function DashboardPage() {
           <div className="absolute top-[20%] left-[50%] transform -translate-x-1/2 w-[60%] h-[60%] bg-blue-900/10 rounded-full blur-[120px]" />
         </div>
 
-        <div className="relative z-10 container mx-auto px-4 py-24 max-w-6xl">
+        <div className="relative z-10 container mx-auto px-4 py-16 max-w-6xl">
             <motion.div
                 initial="hidden"
                 animate="visible"
@@ -237,5 +241,7 @@ export default function DashboardPage() {
             </motion.div>
         </div>
     </div>
+    <Footer />
+    </>
   )
 }
