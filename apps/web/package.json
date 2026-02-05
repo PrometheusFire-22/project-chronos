@@ -20,6 +20,7 @@
     "@hookform/resolvers": "^3.9.1",
     "@mapbox/polylabel": "^1.0.2",
     "@marsidev/react-turnstile": "^1.4.1",
+    "@neondatabase/serverless": "^1.0.2",
     "@radix-ui/react-slot": "^1.1.1",
     "@react-email/render": "^0.0.12",
     "@sentry/nextjs": "^10.32.1",
