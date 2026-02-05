@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Loader2 } from "lucide-react"
@@ -10,6 +10,8 @@ import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, Car
 
 export default function SignInPage() {
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const callbackUrl = searchParams.get("callbackUrl") || "/dashboard"
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [loading, setLoading] = useState(false)
@@ -26,7 +28,7 @@ export default function SignInPage() {
                 password,
                 fetchOptions: {
                     onSuccess: () => {
-                        router.push("/")
+                        router.push(callbackUrl)
                     },
                     onError: (ctx) => {
                         setError(ctx.error.message)
