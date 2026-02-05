@@ -23,6 +23,7 @@ export default function DashboardPage() {
   const { data: session, isPending } = useSession()
   const router = useRouter()
   const [usage, setUsage] = useState<UserUsage | null>(null);
+  const [verificationState, setVerificationState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   useEffect(() => {
     if (!isPending && !session) {
@@ -140,6 +141,62 @@ export default function DashboardPage() {
                                         {user.emailVerified ? "Verified" : "Unverified"}
                                     </span>
                                 </div>
+
+                                {/* Resend Verification Button */}
+                                {!user.emailVerified && (
+                                    <button
+                                        onClick={async () => {
+                                            setVerificationState('loading');
+                                            try {
+                                                const response = await fetch('/api/auth/send-verification-email', {
+                                                    method: 'POST',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify({ email: user.email }),
+                                                });
+
+                                                if (response.ok) {
+                                                    setVerificationState('success');
+                                                    setTimeout(() => setVerificationState('idle'), 5000);
+                                                } else {
+                                                    setVerificationState('error');
+                                                    setTimeout(() => setVerificationState('idle'), 3000);
+                                                }
+                                            } catch (error) {
+                                                setVerificationState('error');
+                                                setTimeout(() => setVerificationState('idle'), 3000);
+                                            }
+                                        }}
+                                        disabled={verificationState === 'loading' || verificationState === 'success'}
+                                        className={cn(
+                                            "w-full p-3 rounded-lg border text-sm font-medium transition-all duration-300",
+                                            verificationState === 'success'
+                                                ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-300 cursor-default"
+                                                : verificationState === 'error'
+                                                ? "bg-red-500/20 border-red-500/30 text-red-300"
+                                                : "bg-white/5 border-white/10 text-gray-300 hover:bg-white/10 hover:border-white/20"
+                                        )}
+                                    >
+                                        {verificationState === 'loading' && (
+                                            <span className="flex items-center justify-center gap-2">
+                                                <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                </svg>
+                                                Sending...
+                                            </span>
+                                        )}
+                                        {verificationState === 'success' && (
+                                            <span className="flex items-center justify-center gap-2">
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                Email Sent!
+                                            </span>
+                                        )}
+                                        {verificationState === 'error' && "Failed to send"}
+                                        {verificationState === 'idle' && "Resend Verification Email"}
+                                    </button>
+                                )}
                                 <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5">
                                     <div className="flex items-center gap-3">
                                          <CreditCard className="w-4 h-4 text-purple-400" />

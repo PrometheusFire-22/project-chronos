@@ -25,22 +25,38 @@ export const auth = betterAuth({
     enabled: true,
     async sendResetPassword({ user, url }: { user: any; url: string }) {
         const { Resend } = await import("resend");
+        const { getPasswordResetEmail } = await import("@/utils/emails/password-reset-email");
         const resend = new Resend(process.env.RESEND_API_KEY);
+
+        const emailContent = getPasswordResetEmail({
+          userName: user.name || user.email.split('@')[0],
+          resetUrl: url,
+        });
+
         await resend.emails.send({
             from: "Chronos <updates@automatonicai.com>",
             to: user.email,
-            subject: "Reset your password",
-            html: `<a href="${url}">Reset your password</a>`,
+            subject: emailContent.subject,
+            html: emailContent.html,
+            text: emailContent.text,
         });
     },
     async sendVerificationEmail({ user, url }: { user: any; url: string }) {
         const { Resend } = await import("resend");
+        const { getVerificationEmail } = await import("@/utils/emails/verification-email");
         const resend = new Resend(process.env.RESEND_API_KEY);
+
+        const emailContent = getVerificationEmail({
+          userName: user.name || user.email.split('@')[0],
+          verificationUrl: url,
+        });
+
         await resend.emails.send({
             from: "Chronos <updates@automatonicai.com>",
             to: user.email,
-            subject: "Verify your email",
-            html: `<a href="${url}">Verify your email</a>`,
+            subject: emailContent.subject,
+            html: emailContent.html,
+            text: emailContent.text,
         });
     },
   },
