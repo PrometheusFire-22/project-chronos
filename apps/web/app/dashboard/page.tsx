@@ -1,6 +1,7 @@
+'use client'
+
 export const runtime = 'edge'
 export const dynamic = 'force-dynamic'
-'use client'
 
 import { motion } from 'framer-motion'
 import { useSession } from '@/lib/auth-client'
