@@ -59,7 +59,7 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plausible.io https://api.automatonicai.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://admin.automatonicai.com https://api.automatonicai.com https://o4510559645925376.ingest.us.sentry.io https://tiles.automatonicai.com https://demotiles.maplibre.org; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self';",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://plausible.io https://api.automatonicai.com https://static.cloudflareinsights.com https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://admin.automatonicai.com https://api.automatonicai.com https://o4510559645925376.ingest.us.sentry.io https://tiles.automatonicai.com https://demotiles.maplibre.org https://challenges.cloudflare.com; worker-src 'self' blob:; frame-src 'self' https://challenges.cloudflare.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';",
           },
           {
             key: 'Permissions-Policy',
