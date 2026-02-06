@@ -1,0 +1,12 @@
+# Cloudflare Workers development environment variables
+# Copy this to .dev.vars and fill in your values
+
+# Database connection (for local dev without Hyperdrive)
+DATABASE_URL="postgresql://username:password@host:5432/database"
+
+# Better Auth
+BETTER_AUTH_SECRET="your-secret-key-here"
+BETTER_AUTH_URL="http://localhost:3000"
+
+# Resend API for emails
+RESEND_API_KEY="your-resend-api-key"
