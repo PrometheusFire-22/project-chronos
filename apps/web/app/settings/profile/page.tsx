@@ -29,14 +29,24 @@ export default function ProfilePage() {
   async function handleSave() {
     setSaveState('saving');
     try {
-      await authClient.updateUser({
+      const response = await fetch('/api/user/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           firstName,
           lastName,
           name: `${firstName} ${lastName}`.trim()
-      } as any);
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update profile');
+      }
+
       setSaveState('success');
       setTimeout(() => setSaveState('idle'), 2000);
-    } catch {
+    } catch (error) {
+      console.error('Save error:', error);
       setSaveState('error');
       setTimeout(() => setSaveState('idle'), 3000);
     }

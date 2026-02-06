@@ -34,6 +34,10 @@ export const auth = betterAuth({
     "https://automatonicai.com",
     "http://localhost:3000",
   ],
+  advanced: {
+    cookiePrefix: "chronos",
+    useSecureCookies: process.env.NODE_ENV === "production",
+  },
   emailAndPassword: {
     enabled: true,
     async sendResetPassword({ user, url }: { user: any; url: string }) {
