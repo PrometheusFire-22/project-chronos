@@ -25,7 +25,7 @@ export const auth = betterAuth({
   databaseType: "pg",
   schema: "auth",
   secret: process.env.BETTER_AUTH_SECRET!,
-  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+  baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://automatonicai.com",
   basePath: "/api/auth",
   logger: {
     level: "debug",
@@ -104,6 +104,8 @@ export const auth = betterAuth({
   },
   session: {
     modelName: "session",
+    expiresIn: 60 * 60 * 24 * 7, // 7 days
+    updateAge: 60 * 60 * 24, // Update session every 24 hours
     fields: {
       userId: "user_id",
       expiresAt: "expires_at",
@@ -129,6 +131,6 @@ export const auth = betterAuth({
   },
 });
 
-console.log("Auth initialized with baseURL:", process.env.BETTER_AUTH_URL || "http://localhost:3000");
+console.log("Auth initialized with baseURL:", process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://automatonicai.com");
 
 export type Auth = typeof auth;

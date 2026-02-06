@@ -36,17 +36,17 @@ const FOOTER_LINKS = {
 
 export function Footer() {
   return (
-    <footer className="bg-slate-950 text-slate-200 border-t border-slate-800">
+    <footer className="bg-black text-white border-t border-white/10">
       <div className="container mx-auto px-4 py-12 md:py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* Brand Column */}
           <div className="col-span-2 lg:col-span-1 flex flex-col gap-4">
             <Link href="/" className="flex items-center gap-2 font-bold text-xl text-white">
               {/* Footer is always dark theme, so we force the 'dark mode' logo style (white text) */}
-              <img 
-                src="/logos/final/logo-wordmark-full.svg" 
-                alt="Automatonic AI" 
-                className="h-10 w-auto brightness-0 invert" 
+              <img
+                src="/logos/final/logo-wordmark-full.svg"
+                alt="Automatonic AI"
+                className="h-10 w-auto brightness-0 invert"
               />
             </Link>
             <p className="text-slate-400 text-sm leading-relaxed">
