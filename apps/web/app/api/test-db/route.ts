@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { Pool } from '@neondatabase/serverless';
+import { neon } from '@neondatabase/serverless';
 
 export async function GET() {
   try {
@@ -12,24 +12,25 @@ export async function GET() {
       }, { status: 500 });
     }
 
-    const pool = new Pool({ connectionString });
+    // Use neon HTTP driver - works over HTTPS, not WebSockets
+    const sql = neon(connectionString);
 
-    const result = await pool.query('SELECT current_database(), current_schema(), COUNT(*) as user_count FROM auth.user');
-
-    await pool.end();
+    const result = await sql`SELECT current_database() as db, current_schema() as schema, COUNT(*) as user_count FROM auth.user`;
 
     return NextResponse.json({
       success: true,
-      database: result.rows[0].current_database,
-      schema: result.rows[0].current_schema,
-      users: result.rows[0].user_count,
+      database: result[0].db,
+      schema: result[0].schema,
+      users: result[0].user_count,
+      driver: 'neon-http',
       connectionString: connectionString.replace(/:[^:@]+@/, ':****@') // hide password
     });
   } catch (error: any) {
     return NextResponse.json({
       error: error.message,
-      stack: error.stack,
-      code: error.code
+      stack: error.stack?.split('\n').slice(0, 5),
+      code: error.code,
+      driver: 'neon-http'
     }, { status: 500 });
   }
 }
