@@ -1,14 +1,11 @@
 import { betterAuth } from "better-auth";
-import { Pool } from "pg";
+import { Pool } from "@neondatabase/serverless";
 
 /**
- * Better Auth configuration using standard pg Pool.
+ * Better Auth configuration using Neon Serverless Pool.
  *
- * This runs on Node.js runtime (not edge) because standard PostgreSQL
- * connections require the Node.js 'net' module which isn't available on edge.
- *
- * The API route is configured with `export const runtime = 'nodejs'` to ensure
- * it runs in Node.js environment.
+ * @neondatabase/serverless is edge-compatible and works on Cloudflare Pages
+ * while still connecting to standard PostgreSQL databases.
  */
 
 if (!process.env.DATABASE_URL) {
@@ -17,7 +14,6 @@ if (!process.env.DATABASE_URL) {
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  options: "-c search_path=auth,public",
 });
 
 export const auth = betterAuth({
