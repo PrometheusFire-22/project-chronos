@@ -6,11 +6,11 @@ export const authClient = createAuthClient({
 
 export interface CustomUser {
     id: string;
+    name: string;
     email: string;
     emailVerified: boolean;
-    name: string;
-    firstName: string;
-    lastName: string;
+    firstName?: string | null;
+    lastName?: string | null;
     image?: string | null;
     createdAt: Date;
     updatedAt: Date;

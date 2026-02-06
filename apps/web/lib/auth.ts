@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@chronos/database";
-import * as authSchema from "./auth-schema";
+import * as authSchema from "@chronos/database/schema/auth";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {

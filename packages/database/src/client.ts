@@ -5,31 +5,15 @@
  * - Connection pooling
  * - SSL/TLS connections
  * - Environment-based configuration
- * - Cloudflare Hyperdrive compatibility (future)
  */
 
 import postgres from 'postgres';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 
-/**
- * Database configuration from environment variables
- */
-const config = {
-  host: process.env.DATABASE_HOST || 'localhost',
-  port: parseInt(process.env.DATABASE_PORT || '5432'),
-  user: process.env.DATABASE_USER || 'chronos',
-  password: process.env.DATABASE_PASSWORD || '',
-  database: process.env.DATABASE_NAME || 'chronos',
-
-  // SSL configuration
-  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : undefined,
-
-  // Connection pool settings
-  max: parseInt(process.env.DB_POOL_MAX || '10'),
-  idle_timeout: parseInt(process.env.DB_IDLE_TIMEOUT || '30'),
-  connect_timeout: parseInt(process.env.DB_CONNECT_TIMEOUT || '10'),
-};
+if (!process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL environment variable is required');
+}
 
 /**
  * PostgreSQL client instance using postgres.js
@@ -39,32 +23,13 @@ const config = {
  * - Prepared statement caching
  * - Type-safe queries via Drizzle ORM
  */
-export const queryClient = process.env.DATABASE_URL
-  ? postgres(process.env.DATABASE_URL, {
-      max: config.max,
-      idle_timeout: config.idle_timeout,
-      connect_timeout: config.connect_timeout,
-      prepare: true,
-      debug: process.env.NODE_ENV === 'development',
-      ssl: config.ssl,
-    })
-  : postgres({
-      host: config.host,
-      port: config.port,
-      username: config.user,
-      password: config.password,
-      database: config.database,
-      ssl: config.ssl,
-      max: config.max,
-      idle_timeout: config.idle_timeout,
-      connect_timeout: config.connect_timeout,
-
-      // Prepare SQL statements for reuse
-      prepare: true,
-
-      // Debug mode in development
-      debug: process.env.NODE_ENV === 'development',
-    });
+export const sql = postgres(process.env.DATABASE_URL, {
+  max: parseInt(process.env.DB_POOL_MAX || '10'),
+  idle_timeout: parseInt(process.env.DB_IDLE_TIMEOUT || '30'),
+  connect_timeout: parseInt(process.env.DB_CONNECT_TIMEOUT || '10'),
+  prepare: true,
+  debug: process.env.NODE_ENV === 'development',
+});
 
 /**
  * Drizzle ORM instance
@@ -72,14 +37,14 @@ export const queryClient = process.env.DATABASE_URL
  * Type-safe database queries with full TypeScript support.
  * Import schema from ./schema/index.ts for typed queries.
  */
-export const db: PostgresJsDatabase = drizzle(queryClient);
+export const db: PostgresJsDatabase = drizzle(sql);
 
 /**
  * Close database connection
  * Use this for graceful shutdown
  */
 export async function closeDatabase(): Promise<void> {
-  await queryClient.end();
+  await sql.end();
 }
 
 /**
@@ -88,7 +53,7 @@ export async function closeDatabase(): Promise<void> {
  */
 export async function testConnection(): Promise<boolean> {
   try {
-    await queryClient`SELECT 1`;
+    await sql`SELECT 1`;
     return true;
   } catch (error) {
     console.error('Database connection failed:', error);
