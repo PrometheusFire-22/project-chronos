@@ -74,7 +74,19 @@
       "WebFetch(domain:automatonicai.atlassian.net)",
       "mcp__atlassian__transitionJiraIssue",
       "mcp__atlassian__addCommentToJiraIssue",
-      "Bash(poetry run python:*)"
+      "Bash(poetry run python:*)",
+      "mcp__filesystem__list_allowed_directories",
+      "mcp__nx__nx_workspace",
+      "mcp__filesystem__directory_tree",
+      "mcp__filesystem__read_text_file",
+      "mcp__filesystem__list_directory",
+      "mcp__atlassian__getAccessibleAtlassianResources",
+      "Bash(git -C /home/prometheus/coding/finance/project-chronos log --oneline --all --graph -20)",
+      "Bash(git -C /home/prometheus/coding/finance/project-chronos branch -a)",
+      "mcp__atlassian__getJiraIssue",
+      "Bash(git -C /home/prometheus/coding/finance/project-chronos diff HEAD -- apps/web/lib/auth.ts)",
+      "Bash(git -C /home/prometheus/coding/finance/project-chronos status)",
+      "Bash(git -C /home/prometheus/coding/finance/project-chronos stash list)"
     ],
     "deny": [],
     "ask": []

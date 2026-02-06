@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ChevronDown, User, LogOut, Settings } from 'lucide-react'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { Button } from '@chronos/ui/components/button'
-import { useSession, signOut } from '@/lib/auth-client'
+import { useSession, signOut, CustomUser } from '@/lib/auth-client'
 import { useRouter } from 'next/navigation'
 
 const NAV_LINKS = [
@@ -29,6 +29,7 @@ export function Header() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
 
   const { data: session, isPending } = useSession()
+  const user = session?.user as unknown as CustomUser | undefined
   const router = useRouter()
 
   const handleSignOut = async () => {
@@ -120,14 +121,14 @@ export function Header() {
           {isPending ? (
              <div className="h-10 w-24 bg-muted/20 animate-pulse rounded-md" />
           ) : session ? (
-             <div className="relative group">
+                     <div className="relative group">
                 <button
                     className="flex items-center gap-2 p-1 pr-3 rounded-full border border-border bg-background hover:bg-muted/50 transition-colors"
                 >
                     <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold uppercase text-xs">
-                        {session.user.name?.[0] || 'U'}
+                        {user?.firstName?.[0] || 'U'}{user?.lastName?.[0] || ''}
                     </div>
-                    <span className="text-sm font-medium">{session.user.name?.split(' ')[0]}</span>
+                    <span className="text-sm font-medium">{user?.firstName}</span>
                     <ChevronDown size={14} className="text-muted-foreground" />
                 </button>
 
@@ -135,18 +136,19 @@ export function Header() {
                 <div className="absolute right-0 top-full mt-2 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right">
                     <div className="bg-card/90 backdrop-blur-xl border border-border/50 rounded-xl shadow-xl overflow-hidden p-2">
                         <div className="px-3 py-2 border-b border-border/50 mb-2">
-                            <p className="text-sm font-medium truncate">{session.user.name}</p>
-                            <p className="text-xs text-muted-foreground truncate">{session.user.email}</p>
+                            <p className="text-sm font-medium truncate">{user?.firstName} {user?.lastName}</p>
+                            <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
                         </div>
                         <Link
-                            href="/dashboard"
+                            href="/settings/overview"
                             className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary rounded-lg transition-colors mb-1"
+
                         >
                             <User size={16} />
                             Dashboard
                         </Link>
                         <Link
-                            href="/dashboard/settings/profile"
+                            href="/settings/profile"
                             className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary rounded-lg transition-colors mb-1"
                         >
                             <Settings size={16} />
@@ -232,27 +234,27 @@ export function Header() {
               <div className="pt-4 border-t border-border space-y-3">
                   {session ? (
                       <div className="space-y-3">
-                        <Link href="/dashboard" className="w-full" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Link href="/settings/overview" className="w-full" onClick={() => setIsMobileMenuOpen(false)}>
                           <span className="relative z-10 flex items-center gap-2">
                             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center border border-white/10">
-                              {session.user.image ? (
-                                   <img src={session.user.image} alt={session.user.name} className="w-full h-full rounded-full object-cover" />
+                              {user?.image ? (
+                                   <img src={user.image} alt={user.firstName || 'User'} className="w-full h-full rounded-full object-cover" />
                               ) : (
                                   <User className="w-4 h-4 text-purple-400" />
                               )}
                             </div>
                             <div className="text-left">
-                                <p className="text-sm font-medium text-gray-200">{session.user.name}</p>
-                                <p className="text-xs text-gray-500 truncate max-w-[100px]">{session.user.email}</p>
+                                <p className="text-sm font-medium text-gray-200">{user?.firstName} {user?.lastName}</p>
+                                <p className="text-xs text-gray-500 truncate max-w-[100px]">{user?.email}</p>
                             </div>
                           </span>
                         </Link>
-                          <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
+                          <Link href="/settings/overview" onClick={() => setIsMobileMenuOpen(false)}>
                              <Button variant="outline" className="w-full justify-start gap-2">
                                 <User size={16} /> Dashboard
                              </Button>
                           </Link>
-                          <Link href="/dashboard/settings/profile" onClick={() => setIsMobileMenuOpen(false)}>
+                          <Link href="/settings/profile" onClick={() => setIsMobileMenuOpen(false)}>
                              <Button variant="outline" className="w-full justify-start gap-2">
                                 <Settings size={16} /> Settings
                              </Button>

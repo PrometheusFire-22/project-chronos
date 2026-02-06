@@ -3,22 +3,27 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@chronos/ui';
-import { User, Shield, CreditCard } from 'lucide-react';
+import { LayoutDashboard, User, Shield, CreditCard } from 'lucide-react';
 
 const settingsLinks = [
   {
+    name: 'Overview',
+    href: '/settings/overview',
+    icon: LayoutDashboard,
+  },
+  {
     name: 'Profile',
-    href: '/dashboard/settings/profile',
+    href: '/settings/profile',
     icon: User,
   },
   {
     name: 'Security',
-    href: '/dashboard/settings/security',
+    href: '/settings/security',
     icon: Shield,
   },
   {
     name: 'Billing',
-    href: '/dashboard/settings/billing',
+    href: '/settings/billing',
     icon: CreditCard,
   },
 ];

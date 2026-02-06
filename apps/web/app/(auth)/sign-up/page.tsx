@@ -43,7 +43,7 @@ export default function SignUpPage() {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="w-full max-w-md relative">
              {/* Background Ambience */}
              <div className="absolute top-0 right-1/2 translate-x-1/2 w-[1000px] h-[500px] bg-accent/20 blur-[120px] rounded-full pointer-events-none opacity-20" />
              <div className="absolute bottom-0 left-0 w-[800px] h-[600px] bg-primary/10 blur-[100px] rounded-full pointer-events-none opacity-20" />
