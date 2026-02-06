@@ -1,25 +1,18 @@
 import { betterAuth } from "better-auth";
-import postgres from "postgres";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { db } from "@chronos/database";
+import * as authSchema from "@chronos/database/schema/auth";
 
 /**
- * Better Auth configuration using postgres.js (edge-compatible).
- * Works natively on Cloudflare Pages edge runtime - no Node.js compatibility needed.
+ * Better Auth configuration using Drizzle adapter with postgres.js.
+ * Edge-compatible, works natively on Cloudflare Pages.
  */
 
-if (!process.env.DATABASE_URL) {
-  throw new Error('DATABASE_URL is required');
-}
-
-const queryClient = postgres(process.env.DATABASE_URL, {
-  max: 1, // Cloudflare edge: minimize connections
-  idle_timeout: 20,
-  connect_timeout: 10,
-});
-
 export const auth = betterAuth({
-  database: queryClient,
-  databaseType: "pg",
-  schema: "auth",
+  database: drizzleAdapter(db, {
+    provider: "pg",
+    schema: authSchema,
+  }),
   secret: process.env.BETTER_AUTH_SECRET!,
   baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://automatonicai.com",
   basePath: "/api/auth",
