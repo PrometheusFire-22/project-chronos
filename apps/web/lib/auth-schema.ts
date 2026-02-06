@@ -6,7 +6,9 @@ export const user = authSchema.table("user", {
   id: text("id").primaryKey(),
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").default(false),
-  name: text("name"),
+  firstName: text("first_name"),
+
+  lastName: text("last_name"),
   image: text("image"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

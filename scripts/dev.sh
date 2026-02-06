@@ -6,7 +6,7 @@ set -euo pipefail
 # graceful shutdown.
 
 # --- Configuration ---
-DB_SERVICE_NAME="timescaledb"
+DB_SERVICE_NAME="postgres"
 WEB_APP_PROJECT="web"
 WORKER_APP_PROJECT="worker"
 
@@ -49,7 +49,9 @@ wait_for_port() {
 cleanup() {
   echo "🧹 Performing cleanup..."
   kill $(jobs -p) || true # Kill all background jobs
-  stop_db
+  if [ "${SHOULD_CLEANUP_DB:-false}" = "true" ]; then
+    stop_db
+  fi
   echo "👋 Cleanup complete. Exiting."
   exit 0
 }
@@ -59,10 +61,8 @@ trap cleanup SIGINT SIGTERM EXIT
 
 # --- Main Execution ---
 
-# 1. Start Database
-start_db
-
-# 2. Load environment variables from apps/web/.env.local
+# 1. Load environment variables from apps/web/.env.local
+# We do this FIRST so we can check DATABASE_URL
 if [ -f apps/web/.env.local ]; then
   set -a  # automatically export all variables
   source apps/web/.env.local
@@ -71,8 +71,28 @@ if [ -f apps/web/.env.local ]; then
   export CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_DB="${DATABASE_URL}"
 fi
 
+# 2. Start Database (only if using local DB)
+# Check if DATABASE_URL contains "localhost" or "127.0.0.1" or is empty
+if [[ -z "${DATABASE_URL:-}" ]] || [[ "${DATABASE_URL}" == *"localhost"* ]] || [[ "${DATABASE_URL}" == *"127.0.0.1"* ]] || [[ "${DATABASE_URL}" == *"postgres"* && "${DATABASE_URL}" != *"16.52.210.100"* ]]; then
+    # Note: Added check for specific IP to be safe, though verifying against localhost is usually enough.
+    # If DATABASE_URL is just "postgres" (service name), it arguably implies local docker network, but here we assume explicit URL.
+    # Simplest check: if it DOESN'T look like the remote IP, start local.
+    # Actually, let's be strict: Only start if explicitly local or unset.
+    if [[ -z "${DATABASE_URL:-}" ]] || [[ "${DATABASE_URL}" == *"localhost"* ]] || [[ "${DATABASE_URL}" == *"127.0.0.1"* ]]; then
+        start_db
+        SHOULD_CLEANUP_DB=true
+    else
+        echo "🌍 Using external database defined in DATABASE_URL. Skipping local DB startup."
+        SHOULD_CLEANUP_DB=false
+    fi
+else
+    # Fallback for weird cases, assume external if set but not local
+     echo "🌍 Using external database defined in DATABASE_URL. Skipping local DB startup."
+     SHOULD_CLEANUP_DB=false
+fi
+
 # Wait for DB port to be available
-if [ -z "${DATABASE_PORT}" ]; then
+if [ -z "${DATABASE_PORT:-}" ]; then
   echo "DATABASE_PORT not set. Assuming default 5432 and proceeding without waiting for port."
 else
   wait_for_port "${DATABASE_PORT}"

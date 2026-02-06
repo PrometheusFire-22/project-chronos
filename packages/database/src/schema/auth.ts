@@ -1,20 +1,57 @@
-import { pgTable, uuid, text, integer, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
+import { pgTable, text, integer, timestamp, uniqueIndex, boolean, pgSchema, uuid } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 
-// We likely need to reference the auth.user table, but since Better Auth manages that table
-// independently or via a different schema file, we might just reference it by ID string
-// or assume the table exists. However, for foreign key constraints in Drizzle,
-// we generally need the table object.
-// Given Better Auth is external, we might define the FK purely in SQL or
-// if we have the auth schema defined, import it.
-// For now, I'll define it as a standalone table in the 'auth' schema.
-
-// Note: Better Auth tables are usually in 'public' or a specific schema.
-// The implementation plan says `auth.user_usage`, so we'll put it in 'auth' schema.
-
-import { pgSchema } from "drizzle-orm/pg-core";
-
 export const authSchema = pgSchema("auth");
+
+export const user = authSchema.table("user", {
+  id: text("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  emailVerified: boolean("email_verified").default(false),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  image: text("image"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+  tier: text("tier").default("free"),
+  documentsProcessed: integer("documents_processed").default(0),
+  queriesThisMonth: integer("queries_this_month").default(0),
+  monthlyQueryLimit: integer("monthly_query_limit").default(100),
+});
+
+export const session = authSchema.table("session", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => user.id),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  token: text("token").notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const account = authSchema.table("account", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => user.id),
+  accountId: text("account_id").notNull(),
+  providerId: text("provider_id").notNull(),
+  accessToken: text("access_token"),
+  refreshToken: text("refresh_token"),
+  idToken: text("id_token"),
+  expiresAt: integer("expires_at"),
+  scope: text("scope"),
+  password: text("password"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const verification = authSchema.table("verification", {
+  id: text("id").primaryKey(),
+  identifier: text("identifier").notNull(),
+  value: text("value").notNull(),
+  expiresAt: integer("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
 
 export const userUsage = authSchema.table('user_usage', {
   id: uuid('id').defaultRandom().primaryKey().notNull(),

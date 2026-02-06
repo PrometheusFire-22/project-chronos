@@ -35,7 +35,7 @@ export const auth = betterAuth({
         const resend = new Resend(process.env.RESEND_API_KEY);
 
         const emailContent = getPasswordResetEmail({
-          userName: user.name || user.email.split('@')[0],
+          userName: user.firstName || user.email.split('@')[0],
           resetUrl: url,
         });
 
@@ -46,6 +46,7 @@ export const auth = betterAuth({
               subject: emailContent.subject,
               html: emailContent.html,
               text: emailContent.text,
+              react: undefined,
           });
           console.log("Resend API response:", result);
         } catch (err: any) {
@@ -69,7 +70,7 @@ export const auth = betterAuth({
         const resend = new Resend(process.env.RESEND_API_KEY);
 
         const emailContent = getVerificationEmail({
-          userName: user.name || user.email.split('@')[0],
+          userName: user.firstName || user.email.split('@')[0],
           verificationUrl: url,
         });
 
@@ -90,3 +91,5 @@ export const auth = betterAuth({
   },
 });
 console.log("Auth initialized with baseURL:", process.env.BETTER_AUTH_URL || "http://localhost:3000");
+
+export type Auth = typeof auth;

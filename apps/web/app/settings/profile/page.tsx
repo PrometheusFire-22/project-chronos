@@ -1,30 +1,39 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSession } from '@/lib/auth-client';
+import { useSession, CustomUser } from '@/lib/auth-client';
 import { authClient } from '@/lib/auth-client';
 import { User, ShieldCheck, ShieldAlert, Loader2 } from 'lucide-react';
 import { Button } from '@chronos/ui/components/button';
 
 export default function ProfilePage() {
   const { data: session } = useSession();
-  const user = session?.user;
+  const user = session?.user as unknown as CustomUser | undefined;
 
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [saveState, setSaveState] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
 
   useEffect(() => {
-    if (user?.name) setName(user.name);
-  }, [user?.name]);
+    if (user) {
+        setFirstName(user.firstName ?? '');
+        setLastName(user.lastName ?? '');
+    }
+  }, [user]);
 
   if (!user) return null;
 
-  const isDirty = name !== (user.name ?? '');
+  const isDirty = firstName !== (user.firstName ?? '') ||
+                  lastName !== (user.lastName ?? '');
 
   async function handleSave() {
     setSaveState('saving');
     try {
-      await authClient.updateUser({ name });
+      await authClient.updateUser({
+          firstName,
+          lastName,
+          name: `${firstName} ${lastName}`.trim()
+      } as any);
       setSaveState('success');
       setTimeout(() => setSaveState('idle'), 2000);
     } catch {
@@ -34,12 +43,13 @@ export default function ProfilePage() {
   }
 
   function handleCancel() {
-    setName(user?.name ?? '');
+    setFirstName(user?.firstName ?? user?.name?.split(' ')[0] ?? '');
+    setLastName(user?.lastName ?? user?.name?.split(' ').slice(1).join(' ') ?? '');
     setSaveState('idle');
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-4xl">
       <div>
         <h2 className="text-2xl font-bold text-white">Profile Settings</h2>
         <p className="text-gray-400 mt-1">Manage your account information and preferences.</p>
@@ -53,7 +63,7 @@ export default function ProfilePage() {
               <div className="w-24 h-24 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 p-[2px]">
                 <div className="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
                   {user.image ? (
-                    <img src={user.image} alt={user.name} className="w-full h-full object-cover" />
+                    <img src={user.image} alt="User" className="w-full h-full object-cover" />
                   ) : (
                     <User className="w-12 h-12 text-white/50" />
                   )}
@@ -64,23 +74,33 @@ export default function ProfilePage() {
               </div>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-white">{user.name}</h3>
+              <h3 className="text-lg font-semibold text-white">{firstName} {lastName}</h3>
               <p className="text-sm text-gray-400 max-w-[200px]">Update your public profile information here.</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-400">Full Name</label>
+              <label className="text-sm font-medium text-gray-400">First Name</label>
               <input
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 outline-none transition-all"
-                placeholder="Your name"
+                placeholder="First Name"
               />
             </div>
-            <div className="space-y-2 text-white">
+             <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-400">Last Name</label>
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 outline-none transition-all"
+                placeholder="Last Name"
+              />
+            </div>
+            <div className="space-y-2 text-white md:col-span-2">
               <label className="text-sm font-medium text-gray-400">Email Address</label>
               <div className="relative">
                 <input
