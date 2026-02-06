@@ -13,6 +13,8 @@ const pool = new Pool({
 
 export const auth = betterAuth({
   database: pool,
+  databaseType: "pg",
+  schema: "auth",
   secret: process.env.BETTER_AUTH_SECRET!,
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
   basePath: "/api/auth",
@@ -94,6 +96,16 @@ export const auth = betterAuth({
       emailVerified: "email_verified",
       createdAt: "created_at",
       updatedAt: "updated_at"
+    },
+    additionalFields: {
+      firstName: {
+        type: "string",
+        required: false
+      },
+      lastName: {
+        type: "string",
+        required: false
+      }
     }
   },
   session: {
