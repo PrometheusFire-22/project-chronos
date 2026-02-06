@@ -39,23 +39,32 @@ const config = {
  * - Prepared statement caching
  * - Type-safe queries via Drizzle ORM
  */
-export const queryClient = postgres({
-  host: config.host,
-  port: config.port,
-  username: config.user,
-  password: config.password,
-  database: config.database,
-  ssl: config.ssl,
-  max: config.max,
-  idle_timeout: config.idle_timeout,
-  connect_timeout: config.connect_timeout,
+export const queryClient = process.env.DATABASE_URL
+  ? postgres(process.env.DATABASE_URL, {
+      max: config.max,
+      idle_timeout: config.idle_timeout,
+      connect_timeout: config.connect_timeout,
+      prepare: true,
+      debug: process.env.NODE_ENV === 'development',
+      ssl: config.ssl,
+    })
+  : postgres({
+      host: config.host,
+      port: config.port,
+      username: config.user,
+      password: config.password,
+      database: config.database,
+      ssl: config.ssl,
+      max: config.max,
+      idle_timeout: config.idle_timeout,
+      connect_timeout: config.connect_timeout,
 
-  // Prepare SQL statements for reuse
-  prepare: true,
+      // Prepare SQL statements for reuse
+      prepare: true,
 
-  // Debug mode in development
-  debug: process.env.NODE_ENV === 'development',
-});
+      // Debug mode in development
+      debug: process.env.NODE_ENV === 'development',
+    });
 
 /**
  * Drizzle ORM instance

@@ -1,22 +1,16 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { drizzle } from "drizzle-orm/neon-serverless";
-import { Pool } from "@neondatabase/serverless";
-import * as schema from "./auth-schema";
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-const db = drizzle(pool, { schema });
+import { db } from "@chronos/database";
+import * as authSchema from "./auth-schema";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
-        user: schema.user,
-        session: schema.session,
-        account: schema.account,
-        verification: schema.verification
+        user: authSchema.user,
+        session: authSchema.session,
+        account: authSchema.account,
+        verification: authSchema.verification
     }
   }),
   secret: process.env.BETTER_AUTH_SECRET!,
