@@ -1,11 +1,9 @@
 import { betterAuth } from "better-auth";
-import { Pool } from "@neondatabase/serverless";
+import { Pool } from "pg";
 
 /**
- * Better Auth configuration using Neon Serverless Pool.
- *
- * @neondatabase/serverless is edge-compatible and works on Cloudflare Pages
- * while still connecting to standard PostgreSQL databases.
+ * Better Auth configuration using standard pg Pool.
+ * Works with Cloudflare Pages via nodejs_compat flag in wrangler.toml.
  */
 
 if (!process.env.DATABASE_URL) {
@@ -14,6 +12,8 @@ if (!process.env.DATABASE_URL) {
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: false, // Disable SSL for standard PostgreSQL
+  max: 1, // Cloudflare Workers: minimize connections
 });
 
 export const auth = betterAuth({
