@@ -1,12 +1,12 @@
 /**
  * Edge-compatible exports for Cloudflare Workers/Pages
  *
- * This file only exports code that works in Edge runtime (no Node.js dependencies).
- * Use this instead of the main index when importing in Edge runtime routes.
+ * postgres.js is fully edge-compatible, so we export the standard client.
+ * No separate edge client needed.
  */
 
-// Edge-compatible database client
-export { createHyperdriveClient } from './hyperdrive-client';
+// Standard postgres.js client (edge-compatible)
+export { db, queryClient, closeDatabase, testConnection } from './client';
 
 // Schema exports (no runtime dependencies)
 export * from './schema';

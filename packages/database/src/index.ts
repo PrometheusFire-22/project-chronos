@@ -21,7 +21,6 @@
 
 // Database client and utilities
 export { db, queryClient, closeDatabase, testConnection } from './client';
-export { createHyperdriveClient } from './hyperdrive-client';
 
 // Schema exports
 export * from './schema';

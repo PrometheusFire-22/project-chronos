@@ -1,23 +1,23 @@
 import { betterAuth } from "better-auth";
-import { Pool } from "pg";
+import postgres from "postgres";
 
 /**
- * Better Auth configuration using standard pg Pool.
- * Works with Cloudflare Pages via nodejs_compat flag in wrangler.toml.
+ * Better Auth configuration using postgres.js (edge-compatible).
+ * Works natively on Cloudflare Pages edge runtime - no Node.js compatibility needed.
  */
 
 if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is required');
 }
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: false, // Disable SSL for standard PostgreSQL
-  max: 1, // Cloudflare Workers: minimize connections
+const queryClient = postgres(process.env.DATABASE_URL, {
+  max: 1, // Cloudflare edge: minimize connections
+  idle_timeout: 20,
+  connect_timeout: 10,
 });
 
 export const auth = betterAuth({
-  database: pool,
+  database: queryClient,
   databaseType: "pg",
   schema: "auth",
   secret: process.env.BETTER_AUTH_SECRET!,
