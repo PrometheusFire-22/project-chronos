@@ -1,16 +1,15 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "@chronos/database";
-import * as authSchema from "@chronos/database/schema/auth";
+import { db, user, session, account, verification } from "@chronos/database";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
-        user: authSchema.user,
-        session: authSchema.session,
-        account: authSchema.account,
-        verification: authSchema.verification
+        user,
+        session,
+        account,
+        verification
     }
   }),
   secret: process.env.BETTER_AUTH_SECRET!,
