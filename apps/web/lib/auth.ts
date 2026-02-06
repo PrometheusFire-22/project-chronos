@@ -1,95 +1,134 @@
 import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "@chronos/database";
-import * as authSchema from "./auth-schema";
+import { Pool } from "pg";
+
+/**
+ * Better Auth configuration using standard pg Pool.
+ *
+ * This runs on Node.js runtime (not edge) because standard PostgreSQL
+ * connections require the Node.js 'net' module which isn't available on edge.
+ *
+ * The API route is configured with `export const runtime = 'nodejs'` to ensure
+ * it runs in Node.js environment.
+ */
+
+if (!process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL is required');
+}
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  options: "-c search_path=auth,public",
+});
 
 export const auth = betterAuth({
-  database: drizzleAdapter(db, {
-    provider: "pg",
-    schema: {
-        user: authSchema.user,
-        session: authSchema.session,
-        account: authSchema.account,
-        verification: authSchema.verification
-    }
-  }),
+  database: pool,
+  databaseType: "pg",
+  schema: "auth",
   secret: process.env.BETTER_AUTH_SECRET!,
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
   basePath: "/api/auth",
   logger: {
-      level: "debug",
+    level: "debug",
   },
-  trustedOrigins: ["https://automatonicai.com", "http://localhost:3000"],
+  trustedOrigins: [
+    "https://automatonicai.com",
+    "http://localhost:3000",
+  ],
   emailAndPassword: {
     enabled: true,
     async sendResetPassword({ user, url }: { user: any; url: string }) {
-        console.log("Attempting to send password reset email to:", user.email);
-        const { Resend } = await import("resend");
-        const { getPasswordResetEmail } = await import("../utils/emails/password-reset-email");
+      const { Resend } = await import("resend");
+      const { getPasswordResetEmail } = await import("../utils/emails/password-reset-email");
 
-        if (!process.env.RESEND_API_KEY) {
-          console.error("RESEND_API_KEY is not defined");
-          throw new Error("Email configuration missing");
-        }
+      if (!process.env.RESEND_API_KEY) {
+        throw new Error("RESEND_API_KEY not configured");
+      }
 
-        const resend = new Resend(process.env.RESEND_API_KEY);
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      const emailContent = getPasswordResetEmail({
+        userName: user.name || user.email.split('@')[0],
+        resetUrl: url,
+      });
 
-        const emailContent = getPasswordResetEmail({
-          userName: user.firstName || user.email.split('@')[0],
-          resetUrl: url,
-        });
-
-        try {
-          const result = await resend.emails.send({
-              from: "Chronos <updates@automatonicai.com>",
-              to: user.email,
-              subject: emailContent.subject,
-              html: emailContent.html,
-              text: emailContent.text,
-              react: undefined,
-          });
-          console.log("Resend API response:", result);
-        } catch (err: any) {
-          console.error("Resend send error:", err);
-          throw err;
-        }
+      await resend.emails.send({
+        from: "Chronos <updates@automatonicai.com>",
+        to: user.email,
+        subject: emailContent.subject,
+        html: emailContent.html,
+        text: emailContent.text,
+      });
     },
   },
   emailVerification: {
     sendOnSignUp: true,
     async sendVerificationEmail({ user, url }: { user: any; url: string }) {
-        console.log("Attempting to send verification email to:", user.email);
-        const { Resend } = await import("resend");
-        const { getVerificationEmail } = await import("../utils/emails/verification-email");
+      const { Resend } = await import("resend");
+      const { getVerificationEmail } = await import("../utils/emails/verification-email");
 
-        if (!process.env.RESEND_API_KEY) {
-          console.error("RESEND_API_KEY is not defined");
-          throw new Error("Email configuration missing");
-        }
+      if (!process.env.RESEND_API_KEY) {
+        throw new Error("RESEND_API_KEY not configured");
+      }
 
-        const resend = new Resend(process.env.RESEND_API_KEY);
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      const emailContent = getVerificationEmail({
+        userName: user.name || user.email.split('@')[0],
+        verificationUrl: url,
+      });
 
-        const emailContent = getVerificationEmail({
-          userName: user.firstName || user.email.split('@')[0],
-          verificationUrl: url,
-        });
-
-        try {
-          const result = await resend.emails.send({
-              from: "Chronos <updates@automatonicai.com>",
-              to: user.email,
-              subject: emailContent.subject,
-              html: emailContent.html,
-              text: emailContent.text,
-          });
-          console.log("Resend API response:", result);
-        } catch (err: any) {
-          console.error("Resend send error:", err);
-          throw err;
-        }
+      await resend.emails.send({
+        from: "Chronos <updates@automatonicai.com>",
+        to: user.email,
+        subject: emailContent.subject,
+        html: emailContent.html,
+        text: emailContent.text,
+      });
     },
   },
+  user: {
+    modelName: "user",
+    fields: {
+      emailVerified: "email_verified",
+      createdAt: "created_at",
+      updatedAt: "updated_at"
+    },
+    additionalFields: {
+      firstName: {
+        type: "string",
+        required: false
+      },
+      lastName: {
+        type: "string",
+        required: false
+      }
+    }
+  },
+  session: {
+    modelName: "session",
+    fields: {
+      userId: "user_id",
+      expiresAt: "expires_at",
+      ipAddress: "ip_address",
+      userAgent: "user_agent",
+      createdAt: "created_at",
+      updatedAt: "updated_at"
+    }
+  },
+  account: {
+    modelName: "account",
+    fields: {
+      userId: "user_id",
+      accountId: "account_id",
+      providerId: "provider_id",
+      accessToken: "access_token",
+      refreshToken: "refresh_token",
+      accessTokenExpiresAt: "access_token_expires_at",
+      refreshTokenExpiresAt: "refresh_token_expires_at",
+      createdAt: "created_at",
+      updatedAt: "updated_at"
+    }
+  },
 });
+
 console.log("Auth initialized with baseURL:", process.env.BETTER_AUTH_URL || "http://localhost:3000");
 
 export type Auth = typeof auth;
