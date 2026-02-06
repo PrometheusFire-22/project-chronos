@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { motion } from "framer-motion"
@@ -9,6 +9,14 @@ import { authClient } from "@/lib/auth-client"
 import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Input, Label, cn } from "@chronos/ui"
 
 export default function SignInPage() {
+    return (
+        <Suspense>
+            <SignInForm />
+        </Suspense>
+    )
+}
+
+function SignInForm() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const callbackUrl = searchParams.get("callbackUrl") || "/dashboard"
