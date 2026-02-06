@@ -34,7 +34,7 @@ export default function ProfilePage() {
   }
 
   function handleCancel() {
-    setName(user.name ?? '');
+    setName(user?.name ?? '');
     setSaveState('idle');
   }
 
