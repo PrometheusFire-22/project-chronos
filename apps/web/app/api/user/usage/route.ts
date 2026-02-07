@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server';
 import { db, eq } from '@chronos/database';
 import { userUsage } from '@chronos/database';
-import { auth } from '@/lib/auth';
+import { getAuth } from '@/lib/auth';
+
+export const runtime = 'nodejs';
 
 export async function GET(req: Request) {
   try {
+    const auth = await getAuth();
     const session = await auth.api.getSession({ headers: req.headers });
 
     if (!session?.user) {

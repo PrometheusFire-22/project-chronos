@@ -1,21 +1,35 @@
-import { betterAuth } from "better-auth";
-import { Pool } from "pg";
-import { getCloudflareContext } from "@opennextjs/cloudflare";
-
 /**
- * Better Auth configuration factory.
+ * Auth configuration and lazy factory.
  *
- * Creates auth instance per-request to access Cloudflare bindings.
- * Uses Hyperdrive for connection pooling when deployed to Cloudflare.
- * Falls back to DATABASE_URL env var for local development.
+ * All database connections are deferred until request time
+ * to ensure Cloudflare context is available for Hyperdrive.
  */
 
-function getConnectionString(): string {
+import { betterAuth } from "better-auth";
+import { Pool } from "pg";
+
+export type AuthUser = {
+  id: string;
+  email: string;
+  emailVerified: boolean;
+  name: string;
+  firstName?: string;
+  lastName?: string;
+  image?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+/**
+ * Get database connection string.
+ * MUST be called within request context for Cloudflare bindings.
+ */
+async function getConnectionString(): Promise<string> {
   // Try Cloudflare Hyperdrive binding first (production)
   try {
+    const { getCloudflareContext } = await import("@opennextjs/cloudflare");
     const ctx = getCloudflareContext();
     if (ctx?.env?.DB?.connectionString) {
-      console.log("[Auth] Using Hyperdrive connection");
       return ctx.env.DB.connectionString;
     }
   } catch {
@@ -24,21 +38,25 @@ function getConnectionString(): string {
 
   // Fall back to environment variable (local dev)
   if (process.env.DATABASE_URL) {
-    console.log("[Auth] Using DATABASE_URL from environment");
     return process.env.DATABASE_URL;
   }
 
-  throw new Error("No database connection available. Set DATABASE_URL or configure Hyperdrive binding.");
+  throw new Error("No database connection available");
 }
 
-function createAuthConfig() {
-  const connectionString = getConnectionString();
+/**
+ * Get auth instance - creates lazily per request.
+ * Safe to call from any route handler.
+ */
+export async function getAuth() {
+  const connectionString = await getConnectionString();
 
   const pool = new Pool({
     connectionString,
     ssl: { rejectUnauthorized: false },
-    max: 5,
-    connectionTimeoutMillis: 10000,
+    max: 1,
+    connectionTimeoutMillis: 5000,
+    idleTimeoutMillis: 1000,
   });
 
   return betterAuth({
@@ -48,9 +66,7 @@ function createAuthConfig() {
     secret: process.env.BETTER_AUTH_SECRET!,
     baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://automatonicai.com",
     basePath: "/api/auth",
-    logger: {
-      level: "debug",
-    },
+    logger: { level: "debug" },
     trustedOrigins: [
       "https://automatonicai.com",
       "https://project-chronos.pages.dev",
@@ -65,17 +81,12 @@ function createAuthConfig() {
       async sendResetPassword({ user, url }: { user: any; url: string }) {
         const { Resend } = await import("resend");
         const { getPasswordResetEmail } = await import("../utils/emails/password-reset-email");
-
-        if (!process.env.RESEND_API_KEY) {
-          throw new Error("RESEND_API_KEY not configured");
-        }
-
+        if (!process.env.RESEND_API_KEY) throw new Error("RESEND_API_KEY not configured");
         const resend = new Resend(process.env.RESEND_API_KEY);
         const emailContent = getPasswordResetEmail({
           userName: user.name || user.email.split('@')[0],
           resetUrl: url,
         });
-
         await resend.emails.send({
           from: "Chronos <updates@automatonicai.com>",
           to: user.email,
@@ -90,17 +101,12 @@ function createAuthConfig() {
       async sendVerificationEmail({ user, url }: { user: any; url: string }) {
         const { Resend } = await import("resend");
         const { getVerificationEmail } = await import("../utils/emails/verification-email");
-
-        if (!process.env.RESEND_API_KEY) {
-          throw new Error("RESEND_API_KEY not configured");
-        }
-
+        if (!process.env.RESEND_API_KEY) throw new Error("RESEND_API_KEY not configured");
         const resend = new Resend(process.env.RESEND_API_KEY);
         const emailContent = getVerificationEmail({
           userName: user.name || user.email.split('@')[0],
           verificationUrl: url,
         });
-
         await resend.emails.send({
           from: "Chronos <updates@automatonicai.com>",
           to: user.email,
@@ -112,20 +118,10 @@ function createAuthConfig() {
     },
     user: {
       modelName: "user",
-      fields: {
-        emailVerified: "email_verified",
-        createdAt: "created_at",
-        updatedAt: "updated_at"
-      },
+      fields: { emailVerified: "email_verified", createdAt: "created_at", updatedAt: "updated_at" },
       additionalFields: {
-        firstName: {
-          type: "string",
-          required: false
-        },
-        lastName: {
-          type: "string",
-          required: false
-        }
+        firstName: { type: "string", required: false },
+        lastName: { type: "string", required: false }
       }
     },
     session: {
@@ -133,53 +129,19 @@ function createAuthConfig() {
       expiresIn: 60 * 60 * 24 * 7,
       updateAge: 60 * 60 * 24,
       fields: {
-        userId: "user_id",
-        expiresAt: "expires_at",
-        ipAddress: "ip_address",
-        userAgent: "user_agent",
-        createdAt: "created_at",
-        updatedAt: "updated_at"
+        userId: "user_id", expiresAt: "expires_at", ipAddress: "ip_address",
+        userAgent: "user_agent", createdAt: "created_at", updatedAt: "updated_at"
       }
     },
     account: {
       modelName: "account",
       fields: {
-        userId: "user_id",
-        accountId: "account_id",
-        providerId: "provider_id",
-        accessToken: "access_token",
-        refreshToken: "refresh_token",
+        userId: "user_id", accountId: "account_id", providerId: "provider_id",
+        accessToken: "access_token", refreshToken: "refresh_token",
         accessTokenExpiresAt: "access_token_expires_at",
         refreshTokenExpiresAt: "refresh_token_expires_at",
-        createdAt: "created_at",
-        updatedAt: "updated_at"
+        createdAt: "created_at", updatedAt: "updated_at"
       }
     },
   });
 }
-
-// Cache for auth instance (only used within a single request)
-let cachedAuth: ReturnType<typeof createAuthConfig> | null = null;
-
-/**
- * Get or create auth instance.
- * Creates new instance on first call within request context.
- */
-export function getAuth() {
-  if (!cachedAuth) {
-    cachedAuth = createAuthConfig();
-  }
-  return cachedAuth;
-}
-
-// Legacy export for backwards compatibility with auth-client
-export const auth = {
-  get handler() {
-    return getAuth().handler;
-  },
-  get api() {
-    return getAuth().api;
-  }
-};
-
-export type Auth = ReturnType<typeof createAuthConfig>;

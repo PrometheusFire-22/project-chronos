@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
+import { getAuth } from '@/lib/auth';
+
+export const runtime = 'nodejs';
 
 /**
  * API endpoint to resend verification email
@@ -17,8 +19,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Use Better Auth's built-in sendVerificationEmail method
-    // Pass headers for proper context
+    const auth = await getAuth();
     await auth.api.sendVerificationEmail({
       body: { email },
       headers: request.headers
@@ -31,7 +32,6 @@ export async function POST(request: Request) {
       {
         error: 'Failed to send verification email',
         details: error?.message || 'Unknown error',
-        stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined
       },
       { status: 500 }
     );
