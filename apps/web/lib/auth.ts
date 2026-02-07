@@ -1,12 +1,15 @@
 /**
- * Auth configuration and lazy factory.
+ * Auth configuration using Drizzle Adapter.
  *
- * All database connections are deferred until request time
- * to ensure Cloudflare context is available for Hyperdrive.
+ * Uses postgres.js driver (same as @chronos/database) with drizzleAdapter
+ * to ensure schema-qualified table names (auth.user, auth.session, etc.)
  */
 
 import { betterAuth } from "better-auth";
-import { Pool } from "pg";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import postgres from "postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
+import * as authSchema from "@chronos/database/schema/auth";
 
 export type AuthUser = {
   id: string;
@@ -30,14 +33,17 @@ async function getConnectionString(): Promise<string> {
     const { getCloudflareContext } = await import("@opennextjs/cloudflare");
     const ctx = getCloudflareContext();
     if (ctx?.env?.DB?.connectionString) {
+      console.log("[Auth] Using Hyperdrive connection");
       return ctx.env.DB.connectionString;
     }
-  } catch {
+  } catch (e) {
     // Not in Cloudflare context (local dev)
+    console.log("[Auth] getCloudflareContext not available:", e);
   }
 
   // Fall back to environment variable (local dev)
   if (process.env.DATABASE_URL) {
+    console.log("[Auth] Using DATABASE_URL");
     return process.env.DATABASE_URL;
   }
 
@@ -51,24 +57,23 @@ async function getConnectionString(): Promise<string> {
 export async function getAuth() {
   const connectionString = await getConnectionString();
 
-  const pool = new Pool({
-    connectionString,
+  // Create postgres.js client (same driver used by @chronos/database)
+  const sql = postgres(connectionString, {
     ssl: { rejectUnauthorized: false },
     max: 1,
-    connectionTimeoutMillis: 5000,
-    idleTimeoutMillis: 1000,
+    idle_timeout: 1,
+    connect_timeout: 10,
+    prepare: false, // Required for Hyperdrive
   });
 
-  // Set search_path on each connection - more reliable than options parameter
-  // which may be stripped by Hyperdrive proxy
-  pool.on('connect', (client) => {
-    client.query('SET search_path TO auth, public;');
-  });
+  // Create Drizzle instance with auth schema
+  const db = drizzle(sql, { schema: authSchema });
 
   return betterAuth({
-    database: pool,
-    databaseType: "pg",
-    schema: "auth",
+    database: drizzleAdapter(db, {
+      provider: "pg",
+      schema: authSchema,
+    }),
     secret: process.env.BETTER_AUTH_SECRET!,
     baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://automatonicai.com",
     basePath: "/api/auth",
