@@ -1,13 +1,13 @@
 import { betterAuth } from "better-auth";
-import { Pool } from "@neondatabase/serverless";
+import { Pool } from "pg";
 
 /**
- * Better Auth configuration using Neon Serverless Pool.
+ * Better Auth configuration using standard pg Pool.
  *
- * @neondatabase/serverless is edge-compatible and works on Cloudflare Pages
- * while still connecting to standard PostgreSQL databases (including Lightsail).
+ * Uses Cloudflare Hyperdrive for connection pooling when deployed.
+ * Hyperdrive intercepts DATABASE_URL and routes through their edge network.
  *
- * This is the WORKING configuration - do not switch to regular 'pg' Pool.
+ * IMPORTANT: Do NOT use @neondatabase/serverless here - it bypasses Hyperdrive.
  */
 
 if (!process.env.DATABASE_URL) {
@@ -16,6 +16,9 @@ if (!process.env.DATABASE_URL) {
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+  max: 5,
+  connectionTimeoutMillis: 10000,
 });
 
 export const auth = betterAuth({
