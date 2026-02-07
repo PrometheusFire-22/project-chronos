@@ -1,60 +1,30 @@
 import { betterAuth } from "better-auth";
 import { Pool } from "pg";
-import { getRequestContext } from "@opennextjs/cloudflare";
 
 /**
- * Better Auth configuration with Cloudflare Hyperdrive support.
+ * Better Auth configuration using pg Pool.
  *
- * - Production (Cloudflare): Uses Hyperdrive binding for connection pooling
- * - Development (Local): Uses direct DATABASE_URL
+ * CRITICAL: Cloudflare Workers cannot establish direct TCP connections to PostgreSQL.
+ * You MUST use Cloudflare Hyperdrive and configure DATABASE_URL in Cloudflare Pages
+ * environment variables to point to your Hyperdrive connection string.
  *
- * Hyperdrive is required because Cloudflare Workers cannot establish
- * direct TCP connections to PostgreSQL, even with nodejs_compat.
+ * Hyperdrive connection string format:
+ * postgres://user:password@<hyperdrive-id>.hyperdrive.local/database
+ *
+ * Local development uses direct DATABASE_URL to your PostgreSQL instance.
  */
 
-let _auth: ReturnType<typeof betterAuth> | null = null;
-
-/**
- * Get database connection string.
- * - Cloudflare: Uses Hyperdrive binding (env.DB.connectionString)
- * - Local: Uses DATABASE_URL environment variable
- */
-async function getDbConnectionString(): Promise<string> {
-  // Try to get Hyperdrive connection string from Cloudflare binding
-  try {
-    const { env } = await getRequestContext();
-    if (env?.DB?.connectionString) {
-      console.log('[Auth] Using Hyperdrive connection');
-      return env.DB.connectionString;
-    }
-  } catch (e) {
-    // Not in Cloudflare context, fall through to DATABASE_URL
-  }
-
-  // Fallback to direct connection (local development)
-  if (!process.env.DATABASE_URL) {
-    throw new Error('DATABASE_URL is required');
-  }
-
-  console.log('[Auth] Using direct DATABASE_URL');
-  return process.env.DATABASE_URL;
+if (!process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL is required');
 }
 
-/**
- * Get or create Better Auth instance.
- * Lazy initialization allows us to access Hyperdrive binding at request time.
- */
-export async function getAuth() {
-  if (_auth) return _auth;
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: false,
+  max: 1,
+});
 
-  const connectionString = await getDbConnectionString();
-  const pool = new Pool({
-    connectionString,
-    ssl: false,
-    max: 1,
-  });
-
-  _auth = betterAuth({
+export const auth = betterAuth({
     database: pool,
     databaseType: "pg",
     schema: "auth",
@@ -169,9 +139,6 @@ export async function getAuth() {
     },
   });
 
-  console.log("Auth initialized with baseURL:", process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://automatonicai.com");
+console.log("Auth initialized with baseURL:", process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://automatonicai.com");
 
-  return _auth;
-}
-
-export type Auth = Awaited<ReturnType<typeof getAuth>>;
+export type Auth = typeof auth;
