@@ -1,38 +1,22 @@
 import { betterAuth } from "better-auth";
-import { Pool } from "pg";
+import { Pool } from "@neondatabase/serverless";
 
 /**
- * Better Auth configuration using pg Pool.
+ * Better Auth configuration using Neon Serverless Pool.
  *
- * CRITICAL: Cloudflare Workers cannot establish direct TCP connections to PostgreSQL.
- * You MUST use Cloudflare Hyperdrive and configure DATABASE_URL in Cloudflare Pages
- * environment variables to point to your Hyperdrive connection string.
+ * @neondatabase/serverless is edge-compatible and works on Cloudflare Pages
+ * while still connecting to standard PostgreSQL databases (including Lightsail).
  *
- * Hyperdrive connection string format:
- * postgres://user:password@<hyperdrive-id>.hyperdrive.local/database
- *
- * Local development uses direct DATABASE_URL to your PostgreSQL instance.
+ * This is the WORKING configuration - do not switch to regular 'pg' Pool.
  */
 
-// Allow build-time execution without DATABASE_URL (Next.js collects page data during build)
-// At runtime, Hyperdrive binding will provide the connection string
-const databaseUrl = process.env.DATABASE_URL || 'postgresql://placeholder:placeholder@localhost:5432/placeholder';
-
 if (!process.env.DATABASE_URL) {
-  console.warn('[Auth Init] DATABASE_URL not set - using placeholder for build time');
-} else {
-  console.log('[Auth Init] DATABASE_URL configured:', process.env.DATABASE_URL?.substring(0, 50) + '...');
+  throw new Error('DATABASE_URL is required');
 }
 
 const pool = new Pool({
-  connectionString: databaseUrl,
-  ssl: {
-    rejectUnauthorized: false, // Allow self-signed certs (AWS Lightsail uses them)
-  },
-  max: 1,
+  connectionString: process.env.DATABASE_URL,
 });
-
-console.log('[Auth Init] pg Pool created, initializing Better Auth...');
 
 export const auth = betterAuth({
     database: pool,
