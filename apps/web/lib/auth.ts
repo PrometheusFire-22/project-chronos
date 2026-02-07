@@ -14,15 +14,18 @@ import { Pool } from "pg";
  * Local development uses direct DATABASE_URL to your PostgreSQL instance.
  */
 
+// Allow build-time execution without DATABASE_URL (Next.js collects page data during build)
+// At runtime, Hyperdrive binding will provide the connection string
+const databaseUrl = process.env.DATABASE_URL || 'postgresql://placeholder:placeholder@localhost:5432/placeholder';
+
 if (!process.env.DATABASE_URL) {
-  console.error('[Auth Init] DATABASE_URL is not set');
-  throw new Error('DATABASE_URL is required');
+  console.warn('[Auth Init] DATABASE_URL not set - using placeholder for build time');
+} else {
+  console.log('[Auth Init] DATABASE_URL configured:', process.env.DATABASE_URL?.substring(0, 50) + '...');
 }
 
-console.log('[Auth Init] DATABASE_URL configured:', process.env.DATABASE_URL?.substring(0, 50) + '...');
-
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: databaseUrl,
   ssl: {
     rejectUnauthorized: false, // Allow self-signed certs (AWS Lightsail uses them)
   },
