@@ -15,14 +15,19 @@ import { Pool } from "pg";
  */
 
 if (!process.env.DATABASE_URL) {
+  console.error('[Auth Init] DATABASE_URL is not set');
   throw new Error('DATABASE_URL is required');
 }
+
+console.log('[Auth Init] DATABASE_URL configured:', process.env.DATABASE_URL?.substring(0, 50) + '...');
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: false,
   max: 1,
 });
+
+console.log('[Auth Init] pg Pool created, initializing Better Auth...');
 
 export const auth = betterAuth({
     database: pool,
