@@ -57,6 +57,8 @@ export async function getAuth() {
     max: 1,
     connectionTimeoutMillis: 5000,
     idleTimeoutMillis: 1000,
+    // Set search_path so Better Auth finds tables in auth schema
+    options: '-c search_path=auth,public',
   });
 
   return betterAuth({
