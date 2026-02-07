@@ -106,10 +106,9 @@ export async function getAuth() {
 
   const sql = postgres(connectionString, {
     ssl: { rejectUnauthorized: false },
-    max: 1,
-    idle_timeout: 1,
-    connect_timeout: 10,
-    prepare: false,
+    max: 5, // Cloudflare Workers limit on concurrent connections
+    fetch_types: false, // Avoid extra round-trip for array types
+    prepare: true, // Enable prepared statement caching
   });
 
   const db = drizzle(sql, { schema });
