@@ -22,7 +22,7 @@
     "postgres": "^3.4.4"
   },
   "devDependencies": {
-    "@types/node": "^25.0.3",
+    "@types/node": "^22.19.9",
     "dotenv": "^16.4.7",
     "drizzle-kit": "^0.31.8",
     "tsx": "^4.21.0",
