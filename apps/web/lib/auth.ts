@@ -57,8 +57,12 @@ export async function getAuth() {
     max: 1,
     connectionTimeoutMillis: 5000,
     idleTimeoutMillis: 1000,
-    // Set search_path so Better Auth finds tables in auth schema
-    options: '-c search_path=auth,public',
+  });
+
+  // Set search_path on each connection - more reliable than options parameter
+  // which may be stripped by Hyperdrive proxy
+  pool.on('connect', (client) => {
+    client.query('SET search_path TO auth, public;');
   });
 
   return betterAuth({
