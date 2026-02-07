@@ -76,15 +76,18 @@ export type AuthUser = {
 };
 
 /**
- * Get database connection string.
+ * Get database connection configuration.
  */
-async function getConnectionString(): Promise<string> {
+async function getConnectionConfig(): Promise<{ connectionString: string; isHyperdrive: boolean }> {
   // Try Cloudflare Hyperdrive binding first (production)
   try {
     const { getCloudflareContext } = await import("@opennextjs/cloudflare");
     const ctx = getCloudflareContext();
     if (ctx?.env?.DB?.connectionString) {
-      return ctx.env.DB.connectionString;
+      return {
+        connectionString: ctx.env.DB.connectionString,
+        isHyperdrive: true
+      };
     }
   } catch {
     // Not in Cloudflare context (local dev)
@@ -92,7 +95,10 @@ async function getConnectionString(): Promise<string> {
 
   // Fall back to environment variable (local dev)
   if (process.env.DATABASE_URL) {
-    return process.env.DATABASE_URL;
+    return {
+      connectionString: process.env.DATABASE_URL,
+      isHyperdrive: false
+    };
   }
 
   throw new Error("No database connection available");
@@ -102,10 +108,11 @@ async function getConnectionString(): Promise<string> {
  * Get auth instance - creates lazily per request.
  */
 export async function getAuth() {
-  const connectionString = await getConnectionString();
+  const { connectionString, isHyperdrive } = await getConnectionConfig();
 
   const sql = postgres(connectionString, {
-    ssl: { rejectUnauthorized: false },
+    // Only enable SSL for direct connections (Hyperdrive proxies handle SSL)
+    ssl: isHyperdrive ? false : { rejectUnauthorized: false },
     max: 5, // Cloudflare Workers limit on concurrent connections
     fetch_types: false, // Avoid extra round-trip for array types
     prepare: true, // Enable prepared statement caching

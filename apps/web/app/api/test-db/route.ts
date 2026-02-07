@@ -4,14 +4,17 @@ import postgres from 'postgres';
 
 export const runtime = 'nodejs';
 
-async function getConnectionString(): Promise<string> {
+async function getConnectionConfig(): Promise<{ connectionString: string; isHyperdrive: boolean }> {
   // Try Cloudflare Hyperdrive binding first (production)
   try {
     const { getCloudflareContext } = await import("@opennextjs/cloudflare");
     const ctx = getCloudflareContext();
     if (ctx?.env?.DB?.connectionString) {
       console.log("[TestDB] Using Hyperdrive connection");
-      return ctx.env.DB.connectionString;
+      return {
+        connectionString: ctx.env.DB.connectionString,
+        isHyperdrive: true
+      };
     }
   } catch (e) {
     console.log("[TestDB] getCloudflareContext not available:", e);
@@ -20,7 +23,10 @@ async function getConnectionString(): Promise<string> {
   // Fall back to environment variable (local dev)
   if (process.env.DATABASE_URL) {
     console.log("[TestDB] Using DATABASE_URL");
-    return process.env.DATABASE_URL;
+    return {
+      connectionString: process.env.DATABASE_URL,
+      isHyperdrive: false
+    };
   }
 
   throw new Error("No database connection available");
@@ -28,11 +34,12 @@ async function getConnectionString(): Promise<string> {
 
 export async function GET() {
   try {
-    const connectionString = await getConnectionString();
+    const { connectionString, isHyperdrive } = await getConnectionConfig();
     console.log("[TestDB] Connecting to:", connectionString.replace(/:[^:@]+@/, ':***@'));
 
     const sql = postgres(connectionString, {
-      ssl: { rejectUnauthorized: false },
+      // Only enable SSL for direct connections (Hyperdrive proxies handle SSL)
+      ssl: isHyperdrive ? false : { rejectUnauthorized: false },
       max: 1,
       fetch_types: false,
       prepare: true,
