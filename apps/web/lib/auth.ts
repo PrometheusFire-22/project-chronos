@@ -1,15 +1,67 @@
 /**
  * Auth configuration using Drizzle Adapter.
  *
- * Uses postgres.js driver (same as @chronos/database) with drizzleAdapter
- * to ensure schema-qualified table names (auth.user, auth.session, etc.)
+ * Schema is inlined to avoid cross-package import issues in Cloudflare Workers.
  */
 
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
-import * as authSchema from "@chronos/database/schema/auth";
+import { pgTable, pgSchema, text, boolean, timestamp, integer } from "drizzle-orm/pg-core";
+
+// Inline auth schema to avoid cross-package import issues in Worker
+const authSchema = pgSchema("auth");
+
+export const user = authSchema.table("user", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  emailVerified: boolean("email_verified").default(false),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  image: text("image"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const session = authSchema.table("session", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => user.id),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  token: text("token").notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const account = authSchema.table("account", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => user.id),
+  accountId: text("account_id").notNull(),
+  providerId: text("provider_id").notNull(),
+  accessToken: text("access_token"),
+  refreshToken: text("refresh_token"),
+  idToken: text("id_token"),
+  expiresAt: integer("expires_at"),
+  scope: text("scope"),
+  password: text("password"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const verification = authSchema.table("verification", {
+  id: text("id").primaryKey(),
+  identifier: text("identifier").notNull(),
+  value: text("value").notNull(),
+  expiresAt: integer("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Schema object for drizzleAdapter
+const schema = { user, session, account, verification };
 
 export type AuthUser = {
   id: string;
@@ -25,7 +77,6 @@ export type AuthUser = {
 
 /**
  * Get database connection string.
- * MUST be called within request context for Cloudflare bindings.
  */
 async function getConnectionString(): Promise<string> {
   // Try Cloudflare Hyperdrive binding first (production)
@@ -33,17 +84,14 @@ async function getConnectionString(): Promise<string> {
     const { getCloudflareContext } = await import("@opennextjs/cloudflare");
     const ctx = getCloudflareContext();
     if (ctx?.env?.DB?.connectionString) {
-      console.log("[Auth] Using Hyperdrive connection");
       return ctx.env.DB.connectionString;
     }
-  } catch (e) {
+  } catch {
     // Not in Cloudflare context (local dev)
-    console.log("[Auth] getCloudflareContext not available:", e);
   }
 
   // Fall back to environment variable (local dev)
   if (process.env.DATABASE_URL) {
-    console.log("[Auth] Using DATABASE_URL");
     return process.env.DATABASE_URL;
   }
 
@@ -52,32 +100,28 @@ async function getConnectionString(): Promise<string> {
 
 /**
  * Get auth instance - creates lazily per request.
- * Safe to call from any route handler.
  */
 export async function getAuth() {
   const connectionString = await getConnectionString();
 
-  // Create postgres.js client (same driver used by @chronos/database)
   const sql = postgres(connectionString, {
     ssl: { rejectUnauthorized: false },
     max: 1,
     idle_timeout: 1,
     connect_timeout: 10,
-    prepare: false, // Required for Hyperdrive
+    prepare: false,
   });
 
-  // Create Drizzle instance with auth schema
-  const db = drizzle(sql, { schema: authSchema });
+  const db = drizzle(sql, { schema });
 
   return betterAuth({
     database: drizzleAdapter(db, {
       provider: "pg",
-      schema: authSchema,
+      schema,
     }),
     secret: process.env.BETTER_AUTH_SECRET!,
     baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://automatonicai.com",
     basePath: "/api/auth",
-    logger: { level: "debug" },
     trustedOrigins: [
       "https://automatonicai.com",
       "https://project-chronos.pages.dev",
