@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000",
-    "build": "next build",
+    "build": "pnpm pages:build",
+    "next:build": "next build",
     "pages:build": "opennextjs-cloudflare build --config ../../wrangler.toml && mv .open-next/worker.js .open-next/_worker.js && cp -r .open-next/assets/* .open-next/ && node -e \"require('fs').writeFileSync('.open-next/_routes.json', JSON.stringify({version:1,include:['/*'],exclude:['/_next/*','/favicon.ico','/favicons/*','/logos/*','/illustrations/*','/robots.txt','/sitemap.xml','/BUILD_ID']},null,2))\"",
     "start": "next start",
     "lint": "next lint",
@@ -40,7 +41,7 @@
     "next-themes": "^0.4.6",
     "pg": "^8.18.0",
     "pmtiles": "^4.3.2",
-    "postgres": "^3.4.4",
+    "postgres": "^3.4.8",
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "react-hook-form": "^7.69.0",
