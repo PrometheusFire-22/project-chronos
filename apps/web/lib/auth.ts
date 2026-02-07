@@ -1,27 +1,47 @@
 import { betterAuth } from "better-auth";
 import { Pool } from "pg";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 /**
- * Better Auth configuration using standard pg Pool.
+ * Better Auth configuration factory.
  *
- * Uses Cloudflare Hyperdrive for connection pooling when deployed.
- * Hyperdrive intercepts DATABASE_URL and routes through their edge network.
- *
- * IMPORTANT: Do NOT use @neondatabase/serverless here - it bypasses Hyperdrive.
+ * Creates auth instance per-request to access Cloudflare bindings.
+ * Uses Hyperdrive for connection pooling when deployed to Cloudflare.
+ * Falls back to DATABASE_URL env var for local development.
  */
 
-if (!process.env.DATABASE_URL) {
-  throw new Error('DATABASE_URL is required');
+function getConnectionString(): string {
+  // Try Cloudflare Hyperdrive binding first (production)
+  try {
+    const ctx = getCloudflareContext();
+    if (ctx?.env?.DB?.connectionString) {
+      console.log("[Auth] Using Hyperdrive connection");
+      return ctx.env.DB.connectionString;
+    }
+  } catch {
+    // Not in Cloudflare context (local dev)
+  }
+
+  // Fall back to environment variable (local dev)
+  if (process.env.DATABASE_URL) {
+    console.log("[Auth] Using DATABASE_URL from environment");
+    return process.env.DATABASE_URL;
+  }
+
+  throw new Error("No database connection available. Set DATABASE_URL or configure Hyperdrive binding.");
 }
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-  max: 5,
-  connectionTimeoutMillis: 10000,
-});
+function createAuthConfig() {
+  const connectionString = getConnectionString();
 
-export const auth = betterAuth({
+  const pool = new Pool({
+    connectionString,
+    ssl: { rejectUnauthorized: false },
+    max: 5,
+    connectionTimeoutMillis: 10000,
+  });
+
+  return betterAuth({
     database: pool,
     databaseType: "pg",
     schema: "auth",
@@ -110,8 +130,8 @@ export const auth = betterAuth({
     },
     session: {
       modelName: "session",
-      expiresIn: 60 * 60 * 24 * 7, // 7 days
-      updateAge: 60 * 60 * 24, // Update session every 24 hours
+      expiresIn: 60 * 60 * 24 * 7,
+      updateAge: 60 * 60 * 24,
       fields: {
         userId: "user_id",
         expiresAt: "expires_at",
@@ -136,7 +156,30 @@ export const auth = betterAuth({
       }
     },
   });
+}
 
-console.log("Auth initialized with baseURL:", process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://automatonicai.com");
+// Cache for auth instance (only used within a single request)
+let cachedAuth: ReturnType<typeof createAuthConfig> | null = null;
 
-export type Auth = typeof auth;
+/**
+ * Get or create auth instance.
+ * Creates new instance on first call within request context.
+ */
+export function getAuth() {
+  if (!cachedAuth) {
+    cachedAuth = createAuthConfig();
+  }
+  return cachedAuth;
+}
+
+// Legacy export for backwards compatibility with auth-client
+export const auth = {
+  get handler() {
+    return getAuth().handler;
+  },
+  get api() {
+    return getAuth().api;
+  }
+};
+
+export type Auth = ReturnType<typeof createAuthConfig>;
