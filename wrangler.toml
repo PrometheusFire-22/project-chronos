@@ -16,8 +16,7 @@ NEXT_PUBLIC_API_URL = "https://api.automatonicai.com"
 [[hyperdrive]]
 binding = "DB"
 id = "57a11e939cad4f4a96422a12f07f8142"
-# localConnectionString set via CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_DB env var
-# or .dev.vars file for security (not committed to git)
+localConnectionString = "postgresql://chronos:DZ4eNOynmfYVOtG8c8TBlXIGVGlqkvWKQR5ixYYjAMs=@16.52.210.100:5432/chronos"
 
 [[r2_buckets]]
 binding = "MEDIA"

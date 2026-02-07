@@ -23,7 +23,9 @@ console.log('[Auth Init] DATABASE_URL configured:', process.env.DATABASE_URL?.su
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: false,
+  ssl: {
+    rejectUnauthorized: false, // Allow self-signed certs (AWS Lightsail uses them)
+  },
   max: 1,
 });
 
