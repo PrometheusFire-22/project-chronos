@@ -46,6 +46,7 @@ export const auth = betterAuth({
     },
     trustedOrigins: [
       "https://automatonicai.com",
+      "https://project-chronos.pages.dev",
       "http://localhost:3000",
     ],
     advanced: {
