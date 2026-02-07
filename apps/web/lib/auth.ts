@@ -1,12 +1,27 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "@chronos/database";
+import postgres from "postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
 import * as authSchema from "@chronos/database/schema/auth";
 
 /**
  * Better Auth configuration using Drizzle adapter with postgres.js.
- * Edge-compatible, works natively on Cloudflare Pages.
+ * Uses short timeouts to fail fast if database is unreachable.
  */
+
+if (!process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL environment variable is required');
+}
+
+// Create postgres client with short timeouts for Cloudflare Workers
+const queryClient = postgres(process.env.DATABASE_URL, {
+  max: 1,
+  connect_timeout: 5, // 5 seconds max to connect
+  idle_timeout: 20,
+  debug: false,
+});
+
+const db = drizzle(queryClient);
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
