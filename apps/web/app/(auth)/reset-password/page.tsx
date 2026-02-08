@@ -50,15 +50,19 @@ function ResetPasswordForm() {
         setError(null)
 
         try {
-            await authClient.resetPassword({
+            const { data, error: resetError } = await authClient.resetPassword({
                 newPassword: password,
                 token: token!,
             })
-            setSuccess(true)
-            // Redirect to sign-in after 3 seconds
-            setTimeout(() => {
-                router.push("/sign-in")
-            }, 3000)
+            if (resetError) {
+                setError(resetError.message || "Failed to reset password. The link may have expired.")
+            } else {
+                setSuccess(true)
+                // Redirect to sign-in after 3 seconds
+                setTimeout(() => {
+                    window.location.href = "/sign-in"
+                }, 3000)
+            }
         } catch (err: any) {
             setError(err?.message || "Something went wrong. Please try again.")
         } finally {

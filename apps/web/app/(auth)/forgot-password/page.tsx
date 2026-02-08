@@ -19,11 +19,16 @@ export default function ForgotPasswordPage() {
         setError(null)
 
         try {
-            await (authClient as any).forgetPassword({
+            const baseUrl = typeof window !== 'undefined' ? window.location.origin : ''
+            const { data, error: resetError } = await authClient.requestPasswordReset({
                 email,
-                redirectTo: "/reset-password",
+                redirectTo: `${baseUrl}/reset-password`,
             })
-            setSuccess(true)
+            if (resetError) {
+                setError(resetError.message || "Failed to send reset email.")
+            } else {
+                setSuccess(true)
+            }
         } catch (err) {
             setError("Something went wrong. Please try again.")
         } finally {
