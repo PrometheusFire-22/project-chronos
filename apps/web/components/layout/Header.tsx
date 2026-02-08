@@ -27,6 +27,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false)
 
   const { data: session, isPending } = useSession()
   const user = session?.user as unknown as CustomUser | undefined
@@ -121,48 +122,62 @@ export function Header() {
           {isPending ? (
              <div className="h-10 w-24 bg-muted/20 animate-pulse rounded-md" />
           ) : session ? (
-                     <div className="relative group">
+                     <div className="relative">
                 <button
+                    onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                     className="flex items-center gap-2 p-1 pr-3 rounded-full border border-border bg-background hover:bg-muted/50 transition-colors"
                 >
-                    <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold uppercase text-xs">
-                        {user?.firstName?.[0] || 'U'}{user?.lastName?.[0] || ''}
+                    <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold uppercase text-sm">
+                        {(user?.firstName || user?.name || user?.email || 'U').charAt(0).toUpperCase()}
                     </div>
-                    <span className="text-sm font-medium">{user?.firstName}</span>
-                    <ChevronDown size={14} className="text-muted-foreground" />
+                    <span className="text-sm font-medium">{user?.firstName || user?.name?.split(' ')[0] || 'User'}</span>
+                    <ChevronDown size={14} className={`text-muted-foreground transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
 
-                {/* User Dropdown */}
-                <div className="absolute right-0 top-full mt-2 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-right">
-                    <div className="bg-card/90 backdrop-blur-xl border border-border/50 rounded-xl shadow-xl overflow-hidden p-2">
-                        <div className="px-3 py-2 border-b border-border/50 mb-2">
-                            <p className="text-sm font-medium truncate">{user?.firstName} {user?.lastName}</p>
-                            <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                {/* User Dropdown - Click-based */}
+                {userDropdownOpen && (
+                  <>
+                    {/* Backdrop to close on click outside */}
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setUserDropdownOpen(false)}
+                    />
+                    <div className="absolute right-0 top-full mt-2 w-56 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="bg-card/95 backdrop-blur-xl border border-border/50 rounded-xl shadow-xl overflow-hidden p-2">
+                            <div className="px-3 py-2 border-b border-border/50 mb-2">
+                                <p className="text-sm font-medium truncate">{user?.firstName || user?.name?.split(' ')[0]} {user?.lastName || user?.name?.split(' ').slice(1).join(' ')}</p>
+                                <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                            </div>
+                            <Link
+                                href="/settings/overview"
+                                onClick={() => setUserDropdownOpen(false)}
+                                className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary rounded-lg transition-colors mb-1"
+                            >
+                                <User size={16} />
+                                Dashboard
+                            </Link>
+                            <Link
+                                href="/settings/profile"
+                                onClick={() => setUserDropdownOpen(false)}
+                                className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary rounded-lg transition-colors mb-1"
+                            >
+                                <Settings size={16} />
+                                Settings
+                            </Link>
+                            <button
+                                onClick={() => {
+                                    setUserDropdownOpen(false)
+                                    handleSignOut()
+                                }}
+                                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+                            >
+                                <LogOut size={16} />
+                                Sign Out
+                            </button>
                         </div>
-                        <Link
-                            href="/settings/overview"
-                            className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary rounded-lg transition-colors mb-1"
-
-                        >
-                            <User size={16} />
-                            Dashboard
-                        </Link>
-                        <Link
-                            href="/settings/profile"
-                            className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary rounded-lg transition-colors mb-1"
-                        >
-                            <Settings size={16} />
-                            Settings
-                        </Link>
-                        <button
-                            onClick={handleSignOut}
-                            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
-                        >
-                            <LogOut size={16} />
-                            Sign Out
-                        </button>
                     </div>
-                </div>
+                  </>
+                )}
              </div>
           ) : (
             <>
@@ -240,7 +255,9 @@ export function Header() {
                               {user?.image ? (
                                    <img src={user.image} alt={user.firstName || 'User'} className="w-full h-full rounded-full object-cover" />
                               ) : (
-                                  <User className="w-4 h-4 text-purple-400" />
+                                  <span className="text-xs font-bold text-purple-400">
+                                    {(user?.firstName || user?.name || user?.email || 'U').charAt(0).toUpperCase()}
+                                  </span>
                               )}
                             </div>
                             <div className="text-left">

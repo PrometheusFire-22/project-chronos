@@ -36,7 +36,8 @@ function SignInForm() {
                 password,
                 fetchOptions: {
                     onSuccess: () => {
-                        router.push(callbackUrl)
+                        // Use window.location for more reliable redirect after cookie is set
+                        window.location.href = callbackUrl
                     },
                     onError: (ctx) => {
                         setError(ctx.error.message)
