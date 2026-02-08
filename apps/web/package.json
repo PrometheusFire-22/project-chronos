@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000",
-    "build": "pnpm pages:build",
+    "build": "next build",
     "next:build": "next build",
     "pages:build": "opennextjs-cloudflare build --config ../../wrangler.toml && mv .open-next/worker.js .open-next/_worker.js && cp -r .open-next/assets/* .open-next/ && node -e \"require('fs').writeFileSync('.open-next/_routes.json', JSON.stringify({version:1,include:['/*'],exclude:['/_next/*','/favicon.ico','/favicons/*','/logos/*','/illustrations/*','/robots.txt','/sitemap.xml','/BUILD_ID']},null,2))\"",
     "start": "next start",
