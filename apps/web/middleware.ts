@@ -8,7 +8,8 @@ export function middleware(request: NextRequest) {
   const isProtected = protectedPaths.some((p) => pathname.startsWith(p));
   if (!isProtected) return NextResponse.next();
 
-  const sessionToken = request.cookies.get("better-auth.session_token");
+  // Cookie name uses the prefix from Better Auth config: "chronos"
+  const sessionToken = request.cookies.get("chronos.session_token");
   if (sessionToken) return NextResponse.next();
 
   const signInUrl = new URL("/sign-in", request.url);
