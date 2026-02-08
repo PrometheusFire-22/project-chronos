@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSession, CustomUser } from '@/lib/auth-client';
 import { authClient } from '@/lib/auth-client';
-import { User, ShieldCheck, ShieldAlert, Loader2 } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, Loader2 } from 'lucide-react';
 import { Button } from '@chronos/ui/components/button';
 
 export default function ProfilePage() {
@@ -75,7 +75,9 @@ export default function ProfilePage() {
                   {user.image ? (
                     <img src={user.image} alt="User" className="w-full h-full object-cover" />
                   ) : (
-                    <User className="w-12 h-12 text-white/50" />
+                    <span className="text-3xl font-bold text-white/80">
+                      {(firstName || user.name || user.email || 'U').charAt(0).toUpperCase()}
+                    </span>
                   )}
                 </div>
               </div>
