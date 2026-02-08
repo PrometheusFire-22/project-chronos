@@ -140,21 +140,40 @@ export async function getAuth() {
     emailAndPassword: {
       enabled: true,
       async sendResetPassword({ user, url }: { user: any; url: string }) {
-        const { Resend } = await import("resend");
-        const { getPasswordResetEmail } = await import("../utils/emails/password-reset-email");
-        if (!process.env.RESEND_API_KEY) throw new Error("RESEND_API_KEY not configured");
-        const resend = new Resend(process.env.RESEND_API_KEY);
-        const emailContent = getPasswordResetEmail({
-          userName: user.name || user.email.split('@')[0],
-          resetUrl: url,
-        });
-        await resend.emails.send({
-          from: "Chronos <updates@automatonicai.com>",
-          to: user.email,
-          subject: emailContent.subject,
-          html: emailContent.html,
-          text: emailContent.text,
-        });
+        try {
+          console.log("[sendResetPassword] Starting for user:", user.email);
+
+          const { Resend } = await import("resend");
+          console.log("[sendResetPassword] Resend imported successfully");
+
+          const { getPasswordResetEmail } = await import("../utils/emails/password-reset-email");
+          console.log("[sendResetPassword] Email template imported successfully");
+
+          if (!process.env.RESEND_API_KEY) {
+            console.error("[sendResetPassword] RESEND_API_KEY not configured!");
+            throw new Error("RESEND_API_KEY not configured");
+          }
+          console.log("[sendResetPassword] RESEND_API_KEY exists, length:", process.env.RESEND_API_KEY.length);
+
+          const resend = new Resend(process.env.RESEND_API_KEY);
+          const emailContent = getPasswordResetEmail({
+            userName: user.name || user.email.split('@')[0],
+            resetUrl: url,
+          });
+          console.log("[sendResetPassword] Email content generated, sending to:", user.email);
+
+          const result = await resend.emails.send({
+            from: "Chronos <updates@automatonicai.com>",
+            to: user.email,
+            subject: emailContent.subject,
+            html: emailContent.html,
+            text: emailContent.text,
+          });
+          console.log("[sendResetPassword] Email sent successfully:", JSON.stringify(result));
+        } catch (error: any) {
+          console.error("[sendResetPassword] Error:", error.message, error.stack);
+          throw error;
+        }
       },
     },
     emailVerification: {
