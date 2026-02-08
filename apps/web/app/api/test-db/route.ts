@@ -1,6 +1,6 @@
 
 import { NextResponse } from 'next/server';
-import postgres from 'postgres';
+import { Pool } from 'pg';
 
 export const runtime = 'nodejs';
 
@@ -33,28 +33,33 @@ async function getConnectionConfig(): Promise<{ connectionString: string; isHype
 }
 
 export async function GET() {
+  let pool: Pool | undefined;
   try {
     const { connectionString, isHyperdrive } = await getConnectionConfig();
+    // Mask password in logs
     console.log("[TestDB] Connecting to:", connectionString.replace(/:[^:@]+@/, ':***@'));
 
-    const sql = postgres(connectionString, {
+    pool = new Pool({
+      connectionString,
       // Only enable SSL for direct connections (Hyperdrive proxies handle SSL)
-      ssl: isHyperdrive ? false : { rejectUnauthorized: false },
+      ssl: isHyperdrive ? undefined : { rejectUnauthorized: false },
       max: 1,
-      fetch_types: false,
-      prepare: true,
+      connectionTimeoutMillis: 5000,
     });
 
-    const result = await sql`SELECT 1 as connected, current_database() as db_name, version() as version`;
-
-    await sql.end();
-
-    return NextResponse.json({
-      success: true,
-      data: result[0],
-      env: process.env.NODE_ENV,
-      runtime: process.env.NEXT_RUNTIME
-    });
+    const client = await pool.connect();
+    try {
+      const result = await client.query('SELECT 1 as connected, current_database() as db_name, version() as version');
+      return NextResponse.json({
+        success: true,
+        data: result.rows[0],
+        env: process.env.NODE_ENV,
+        runtime: process.env.NEXT_RUNTIME,
+        driver: 'pg'
+      });
+    } finally {
+      client.release();
+    }
   } catch (error: any) {
     console.error("[TestDB] Error:", error);
     return NextResponse.json({
@@ -63,5 +68,7 @@ export async function GET() {
       stack: error.stack,
       name: error.name
     }, { status: 500 });
+  } finally {
+    if (pool) await pool.end();
   }
 }

@@ -6,8 +6,8 @@
 
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import postgres from "postgres";
-import { drizzle } from "drizzle-orm/postgres-js";
+import { Pool } from "pg";
+import { drizzle } from "drizzle-orm/node-postgres";
 import { pgTable, pgSchema, text, boolean, timestamp, integer } from "drizzle-orm/pg-core";
 
 // Inline auth schema to avoid cross-package import issues in Worker
@@ -110,15 +110,15 @@ async function getConnectionConfig(): Promise<{ connectionString: string; isHype
 export async function getAuth() {
   const { connectionString, isHyperdrive } = await getConnectionConfig();
 
-  const sql = postgres(connectionString, {
+  const pool = new Pool({
+    connectionString,
     // Only enable SSL for direct connections (Hyperdrive proxies handle SSL)
-    ssl: isHyperdrive ? false : { rejectUnauthorized: false },
+    ssl: isHyperdrive ? undefined : { rejectUnauthorized: false },
     max: 5, // Cloudflare Workers limit on concurrent connections
-    fetch_types: false, // Avoid extra round-trip for array types
-    prepare: true, // Enable prepared statement caching
+    connectionTimeoutMillis: 5000,
   });
 
-  const db = drizzle(sql, { schema });
+  const db = drizzle(pool, { schema });
 
   return betterAuth({
     database: drizzleAdapter(db, {

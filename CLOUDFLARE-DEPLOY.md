@@ -60,14 +60,13 @@ tsx scripts/populate-about-content.ts
 ```bash
 cd apps/web
 
-# Build Next.js with Cloudflare adapter
-pnpm build
+# Build Next.js with OpenNext Cloudflare adapter
+pnpm pages:build
 
-# This creates .vercel/output/static/
-# (Yes, it's .vercel even for Cloudflare - it's the output format)
+# This creates .open-next/ directory with _worker.js and assets
 ```
 
-**Expected output**: Build completes without errors
+**Expected output**: Build completes without errors and "Worker saved in .open-next/worker.js"
 
 ---
 
@@ -86,8 +85,8 @@ pnpm wrangler login
 ### Step 5: Deploy to Cloudflare Pages
 
 ```bash
-# From apps/web directory
-pnpm wrangler pages deploy .vercel/output/static --project-name=chronos-web
+# From project root
+pnpm wrangler pages deploy apps/web/.open-next --project-name=project-chronos
 
 # Options:
 # - First deploy? Wrangler will create the project
@@ -97,7 +96,7 @@ pnpm wrangler pages deploy .vercel/output/static --project-name=chronos-web
 **Wrangler will**:
 1. Upload your build to Cloudflare
 2. Deploy to global edge network
-3. Give you a URL: `chronos-web.pages.dev`
+3. Give you a URL: `project-chronos.pages.dev`
 4. Set up SSL automatically
 
 ---
