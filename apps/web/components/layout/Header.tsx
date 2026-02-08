@@ -156,7 +156,7 @@ export function Header() {
                                 className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary rounded-lg transition-colors mb-1"
                             >
                                 <User size={16} />
-                                Dashboard
+                                Overview
                             </button>
                             <button
                                 onClick={() => {

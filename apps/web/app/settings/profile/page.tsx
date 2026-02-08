@@ -16,8 +16,11 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (user) {
-        setFirstName(user.firstName ?? '');
-        setLastName(user.lastName ?? '');
+        // Use firstName/lastName if set, otherwise parse from name field
+        const parsedFirstName = user.firstName || (user.name?.split(' ')[0] ?? '');
+        const parsedLastName = user.lastName || (user.name?.split(' ').slice(1).join(' ') ?? '');
+        setFirstName(parsedFirstName);
+        setLastName(parsedLastName);
     }
   }, [user]);
 
