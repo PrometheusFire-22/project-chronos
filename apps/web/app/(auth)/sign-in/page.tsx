@@ -1,11 +1,11 @@
 "use client"
 
-import { Suspense, useState, useEffect } from "react"
+import { Suspense, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Loader2 } from "lucide-react"
-import { authClient, useSession } from "@/lib/auth-client"
+import { authClient } from "@/lib/auth-client"
 import { Button, Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Input, Label, cn } from "@chronos/ui"
 
 export default function SignInPage() {
@@ -20,18 +20,10 @@ function SignInForm() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const callbackUrl = searchParams.get("callbackUrl") || "/settings/overview"
-    const { data: session, isPending } = useSession()
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
-
-    // Redirect if already authenticated
-    useEffect(() => {
-        if (!isPending && session?.user) {
-            window.location.href = callbackUrl
-        }
-    }, [session, isPending, callbackUrl])
 
     const handleSignIn = async (e: React.FormEvent) => {
         e.preventDefault()
