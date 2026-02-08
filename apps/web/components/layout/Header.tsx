@@ -148,22 +148,26 @@ export function Header() {
                                 <p className="text-sm font-medium truncate">{user?.firstName || user?.name?.split(' ')[0]} {user?.lastName || user?.name?.split(' ').slice(1).join(' ')}</p>
                                 <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
                             </div>
-                            <Link
-                                href="/settings/overview"
-                                onClick={() => setUserDropdownOpen(false)}
-                                className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary rounded-lg transition-colors mb-1"
+                            <button
+                                onClick={() => {
+                                    setUserDropdownOpen(false)
+                                    window.location.href = '/settings/overview'
+                                }}
+                                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary rounded-lg transition-colors mb-1"
                             >
                                 <User size={16} />
                                 Dashboard
-                            </Link>
-                            <Link
-                                href="/settings/profile"
-                                onClick={() => setUserDropdownOpen(false)}
-                                className="flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary rounded-lg transition-colors mb-1"
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setUserDropdownOpen(false)
+                                    window.location.href = '/settings/profile'
+                                }}
+                                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-primary/10 hover:text-primary rounded-lg transition-colors mb-1"
                             >
                                 <Settings size={16} />
                                 Settings
-                            </Link>
+                            </button>
                             <button
                                 onClick={() => {
                                     setUserDropdownOpen(false)
