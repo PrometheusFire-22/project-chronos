@@ -9,7 +9,9 @@ export function middleware(request: NextRequest) {
   if (!isProtected) return NextResponse.next();
 
   // Cookie name uses the prefix from Better Auth config: "chronos"
-  const sessionToken = request.cookies.get("chronos.session_token");
+  // In production, Better Auth adds "__Secure-" prefix when useSecureCookies is true
+  const sessionToken = request.cookies.get("__Secure-chronos.session_token")
+    || request.cookies.get("chronos.session_token"); // Fallback for local dev
   if (sessionToken) return NextResponse.next();
 
   const signInUrl = new URL("/sign-in", request.url);
