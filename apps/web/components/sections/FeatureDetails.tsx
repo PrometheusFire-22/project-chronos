@@ -19,6 +19,7 @@ import {
   Target,
   type LucideIcon
 } from 'lucide-react'
+import Image from 'next/image'
 import type { FeaturesCapability } from '@/lib/directus/types'
 import { renderRichText } from '@/lib/content-renderer'
 
@@ -46,6 +47,22 @@ const iconMap: Record<string, LucideIcon> = {
 
 interface FeatureDetailsProps {
   features: FeaturesCapability[]
+}
+
+function getFeatureImage(index: number, title: string): string {
+  const lowerTitle = title.toLowerCase()
+  if (lowerTitle.includes('relational') || lowerTitle.includes('sql')) return '/illustrations/relational-database-dark.svg'
+  if (lowerTitle.includes('vector') || lowerTitle.includes('embedding')) return '/illustrations/vector-database-dark.svg'
+  if (lowerTitle.includes('time') || lowerTitle.includes('series')) return '/illustrations/timeseries-database-dark.svg'
+
+  // Fallback by index if titles don't match expected keywords
+  switch (index) {
+    case 0: return '/illustrations/hero-dark.svg'
+    case 1: return '/illustrations/relational-database-dark.svg'
+    case 2: return '/illustrations/vector-database-dark.svg'
+    case 3: return '/illustrations/timeseries-database-dark.svg'
+    default: return '/illustrations/hero-dark.svg'
+  }
 }
 
 export function FeatureDetails({ features }: FeatureDetailsProps) {
@@ -109,19 +126,13 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
 
                 {/* Visual Placeholder */}
                 <div className={isEven ? 'lg:order-2' : 'lg:order-1'}>
-                  <div className="relative aspect-[4/3] rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 overflow-hidden">
-                    {/* Decorative content - in production this would be a screenshot or diagram */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="relative">
-                        <IconComponent className="w-32 h-32 text-slate-700" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-violet-500/20 to-transparent blur-xl" />
-                      </div>
-                    </div>
-
-                    {/* Floating UI Elements for visual interest */}
-                    <div className="absolute top-6 right-6 px-4 py-2 rounded-lg bg-slate-900/80 backdrop-blur border border-slate-700 text-sm text-slate-300">
-                      Live Preview
-                    </div>
+                  <div className="relative aspect-[4/3] rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden group-hover:border-slate-700 transition-colors">
+                     <Image
+                      src={getFeatureImage(index, feature.title)}
+                      alt={feature.title}
+                      fill
+                      className="object-contain p-8"
+                    />
                   </div>
                 </div>
               </div>

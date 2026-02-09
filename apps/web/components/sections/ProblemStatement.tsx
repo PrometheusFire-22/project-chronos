@@ -37,6 +37,15 @@ interface ProblemStatementProps {
   sectionData?: PageSection | null
 }
 
+// Helper to get icon by title if direct mapping fails
+function getIconForProblem(title: string, defaultIcon: LucideIcon): LucideIcon {
+  const lowerTitle = title.toLowerCase()
+  if (lowerTitle.includes('unstructured')) return FileSearch
+  if (lowerTitle.includes('credit ties') || lowerTitle.includes('network')) return Network
+  if (lowerTitle.includes('bottlenecks') || lowerTitle.includes('diligence')) return TrendingDown
+  return defaultIcon
+}
+
 export function ProblemStatement({ problems, sectionData }: ProblemStatementProps) {
   // Fallback values if CMS data is not available
   const headline = sectionData?.headline ?? 'The Problem: Information is Public. Intelligence is Hidden.'
@@ -59,7 +68,14 @@ export function ProblemStatement({ problems, sectionData }: ProblemStatementProp
         {/* Problem Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {problems.map((problem) => {
-            const IconComponent: LucideIcon = (problem.icon && problem.icon in iconMap) ? iconMap[problem.icon] : AlertCircle
+            // Priority: 1. Direct CMS icon mapping, 2. Title-based inference, 3. AlertCircle
+            let IconComponent: LucideIcon = AlertCircle
+
+            if (problem.icon && problem.icon in iconMap) {
+                IconComponent = iconMap[problem.icon]
+            } else {
+                IconComponent = getIconForProblem(problem.title, AlertCircle)
+            }
 
             return (
               <div
@@ -67,8 +83,8 @@ export function ProblemStatement({ problems, sectionData }: ProblemStatementProp
                 className="relative p-8 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-slate-700 transition-colors"
               >
                 {/* Icon */}
-                <div className="mb-4 w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center">
-                  <IconComponent className="w-6 h-6 text-red-400" />
+                <div className="mb-4 w-12 h-12 rounded-xl bg-violet-500/10 flex items-center justify-center">
+                  <IconComponent className="w-6 h-6 text-violet-400" />
                 </div>
 
                 {/* Title */}
