@@ -15,6 +15,9 @@ declare global {
     MEDIA?: {
       [key: string]: any;
     };
+    AVATARS?: {
+      [key: string]: any;
+    };
   }
 }
 
