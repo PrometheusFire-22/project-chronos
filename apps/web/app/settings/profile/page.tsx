@@ -5,6 +5,7 @@ import { useSession, CustomUser } from '@/lib/auth-client';
 import { authClient } from '@/lib/auth-client';
 import { ShieldCheck, ShieldAlert, Loader2 } from 'lucide-react';
 import { Button } from '@chronos/ui/components/button';
+import { AvatarUpload } from '@/components/profile/AvatarUpload';
 
 export default function ProfilePage() {
   const { data: session } = useSession();
@@ -72,22 +73,10 @@ export default function ProfilePage() {
         <div className="p-6 space-y-6">
           {/* Avatar Section */}
           <div className="flex items-center gap-6">
-            <div className="relative group">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 p-[2px]">
-                <div className="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
-                  {user.image ? (
-                    <img src={user.image} alt="User" className="w-full h-full object-cover" />
-                  ) : (
-                    <span className="text-3xl font-bold text-white/80">
-                      {(firstName || user.name || user.email || 'U').charAt(0).toUpperCase()}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                <span className="text-xs font-semibold text-white">Change</span>
-              </div>
-            </div>
+            <AvatarUpload
+              currentImage={user.image}
+              userName={firstName || user.name || user.email || 'U'}
+            />
             <div>
               <h3 className="text-lg font-semibold text-white">{firstName} {lastName}</h3>
               <p className="text-sm text-gray-400 max-w-[200px]">Update your public profile information here.</p>

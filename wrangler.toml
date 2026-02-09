@@ -11,6 +11,7 @@ pages_build_output_dir = "apps/web/.open-next"
 NEXT_PUBLIC_SITE_URL = "https://automatonicai.com"
 NEXT_PUBLIC_DIRECTUS_URL = "https://admin.automatonicai.com"
 NEXT_PUBLIC_API_URL = "https://api.automatonicai.com"
+R2_PUBLIC_URL = "https://pub-060e43df09e3ec3a256a6624ab7649f8.r2.dev"
 
 
 [[hyperdrive]]
