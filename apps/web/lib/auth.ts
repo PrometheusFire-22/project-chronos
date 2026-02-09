@@ -128,11 +128,21 @@ export async function getAuth() {
     secret: process.env.BETTER_AUTH_SECRET!,
     baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://automatonicai.com",
     basePath: "/api/auth",
-    trustedOrigins: [
-      "https://automatonicai.com",
-      "https://project-chronos.pages.dev",
-      "http://localhost:3000",
-    ],
+    trustedOrigins: (request) => {
+      const origins = [
+        "https://automatonicai.com",
+        "https://project-chronos.pages.dev",
+        "http://localhost:3000",
+      ];
+      // Add preview deployment origins dynamically from the request
+      if (request) {
+        const origin = request.headers.get("origin");
+        if (origin && origin.endsWith(".project-chronos.pages.dev") && origin.startsWith("https://")) {
+          origins.push(origin);
+        }
+      }
+      return origins;
+    },
     advanced: {
       cookiePrefix: "chronos",
       useSecureCookies: process.env.NODE_ENV === "production",
