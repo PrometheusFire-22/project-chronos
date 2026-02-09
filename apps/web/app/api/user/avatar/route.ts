@@ -25,19 +25,19 @@ const userTable = authSchema.table("user", {
   monthlyQueryLimit: integer("monthly_query_limit").default(100),
 });
 
-// R2 bucket public URL - configured in wrangler.toml [vars]
-const R2_PUBLIC_URL = process.env.R2_PUBLIC_URL || 'https://pub-060e43df09e3ec3a256a6624ab7649f8.r2.dev';
+// R2 avatars bucket public URL (chronos-avatars)
+const AVATARS_PUBLIC_URL = process.env.AVATARS_PUBLIC_URL || 'https://pub-4dde77d064a9487fa0fd95dc8b2c2935.r2.dev';
 
 // Max file size: 5MB
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
-async function getR2Bucket(): Promise<any> {
+async function getAvatarsBucket(): Promise<any> {
   try {
     const { getCloudflareContext } = await import("@opennextjs/cloudflare");
     const ctx = getCloudflareContext();
-    if (ctx?.env?.MEDIA) {
-      return ctx.env.MEDIA;
+    if (ctx?.env?.AVATARS) {
+      return ctx.env.AVATARS;
     }
   } catch {
     // Not in Cloudflare context
@@ -78,10 +78,10 @@ export async function POST(req: Request) {
 
     const userId = session.user.id;
 
-    // Get R2 bucket
-    const bucket = await getR2Bucket();
+    // Get R2 avatars bucket
+    const bucket = await getAvatarsBucket();
     if (!bucket) {
-      console.error('[Avatar] R2 bucket not available');
+      console.error('[Avatar] R2 avatars bucket not available');
       return NextResponse.json({ error: 'Storage not configured' }, { status: 503 });
     }
 
@@ -126,7 +126,7 @@ export async function POST(req: Request) {
     console.log(`[Avatar] Uploaded to R2: ${r2Key}`);
 
     // Construct public URL
-    const publicUrl = `${R2_PUBLIC_URL}/${r2Key}`;
+    const publicUrl = `${AVATARS_PUBLIC_URL}/${r2Key}`;
 
     // Update user.image in database
     const { connectionString, isHyperdrive } = await getConnectionConfig();
@@ -179,8 +179,8 @@ export async function DELETE(req: Request) {
 
     const userId = session.user.id;
 
-    // Get R2 bucket and delete all avatar files for user
-    const bucket = await getR2Bucket();
+    // Get R2 avatars bucket and delete all avatar files for user
+    const bucket = await getAvatarsBucket();
     if (bucket) {
       // List and delete any existing avatars
       const list = await bucket.list({ prefix: `avatars/${userId}/` });

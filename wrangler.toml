@@ -22,3 +22,7 @@ localConnectionString = "postgresql://chronos:DZ4eNOynmfYVOtG8c8TBlXIGVGlqkvWKQR
 [[r2_buckets]]
 binding = "MEDIA"
 bucket_name = "chronos-media"
+
+[[r2_buckets]]
+binding = "AVATARS"
+bucket_name = "chronos-avatars"
