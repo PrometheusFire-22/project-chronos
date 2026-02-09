@@ -127,8 +127,18 @@ export function Header() {
                     onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                     className="flex items-center gap-2 p-1 pr-3 rounded-full border border-border bg-background hover:bg-muted/50 transition-colors"
                 >
-                    <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold uppercase text-base">
-                        {(user?.firstName || user?.name || user?.email || 'U').charAt(0).toUpperCase()}
+                    <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden">
+                        {user?.image ? (
+                            <img
+                                src={user.image}
+                                alt={user.firstName || user.name || 'User'}
+                                className="w-full h-full object-cover"
+                            />
+                        ) : (
+                            <span className="text-primary font-bold uppercase text-base">
+                                {(user?.firstName || user?.name || user?.email || 'U').charAt(0).toUpperCase()}
+                            </span>
+                        )}
                     </div>
                     <span className="text-sm font-medium">{user?.firstName || user?.name?.split(' ')[0] || 'User'}</span>
                     <ChevronDown size={14} className={`text-muted-foreground transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
