@@ -50,7 +50,7 @@ export function Header() {
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/90 dark:bg-slate-950/80 backdrop-blur-md border-b border-zinc-200 dark:border-white/10 shadow-sm'
+          ? 'bg-background/80 backdrop-blur-md border-b border-border shadow-sm'
           : 'bg-transparent border-b border-transparent'
       }`}
     >
@@ -89,13 +89,13 @@ export function Header() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute top-full left-0 mt-1 w-48 bg-white/90 dark:bg-slate-950/90 backdrop-blur-xl border border-zinc-200 dark:border-white/10 rounded-xl shadow-xl overflow-hidden"
+                        className="absolute top-full left-0 mt-1 w-48 bg-popover/95 backdrop-blur-xl border border-border rounded-xl shadow-xl overflow-hidden"
                       >
                         {link.children.map((child) => (
                           <Link
                             key={child.href}
                             href={child.href}
-                            className="block px-4 py-3 text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-primary transition-colors"
+                            className="block px-4 py-3 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground transition-colors"
                           >
                             {child.label}
                           </Link>

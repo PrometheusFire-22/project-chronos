@@ -61,10 +61,10 @@ export default function DashboardPage() {
             {/* Header Section */}
             <motion.div variants={itemVariants} className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-purple-100 to-indigo-200">
+                    <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground via-purple-500 to-indigo-500">
                         Overview
                     </h1>
-                    <p className="text-gray-400 mt-2">Welcome back, {user.firstName}. View your activity and usage.</p>
+                    <p className="text-muted-foreground mt-2">Welcome back, {user.firstName}. View your activity and usage.</p>
                 </div>
             </motion.div>
 
@@ -73,16 +73,16 @@ export default function DashboardPage() {
 
                 {/* Profile Card */}
                 <motion.div variants={itemVariants} className="md:col-span-1">
-                    <div className="h-full p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex flex-col gap-6 relative overflow-hidden group">
+                    <div className="h-full p-6 bg-card/50 backdrop-blur-xl border border-border rounded-2xl flex flex-col gap-6 relative overflow-hidden group">
                             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                         <div className="flex items-center gap-4 relative z-10">
                             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 p-[2px]">
-                                <div className="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
+                                <div className="w-full h-full rounded-full bg-background flex items-center justify-center overflow-hidden">
                                     {user.image ? (
                                         <img src={user.image} alt="User" className="w-full h-full object-cover" />
                                     ) : (
-                                        <User className="w-8 h-8 text-white/50" />
+                                        <User className="w-8 h-8 text-muted-foreground" />
                                     )}
                                 </div>
                             </div>
@@ -93,10 +93,10 @@ export default function DashboardPage() {
                         </div>
 
                         <div className="space-y-3 relative z-10">
-                            <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5">
+                            <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border border-border">
                                 <div className="flex items-center gap-3">
-                                    <Shield className={cn("w-4 h-4", user.emailVerified ? "text-emerald-400" : "text-amber-400")} />
-                                    <span className="text-sm text-gray-300">Account Status</span>
+                                    <Shield className={cn("w-4 h-4", user.emailVerified ? "text-emerald-500" : "text-amber-500")} />
+                                    <span className="text-sm text-muted-foreground">Account Status</span>
                                 </div>
                                 <span className={cn("text-xs font-medium px-2 py-1 rounded-full", user.emailVerified ? "bg-emerald-500/20 text-emerald-300" : "bg-amber-500/20 text-amber-300")}>
                                     {user.emailVerified ? "Verified" : "Unverified"}
@@ -134,7 +134,7 @@ export default function DashboardPage() {
                                             ? "bg-emerald-500/20 border-emerald-500/30 text-emerald-300 cursor-default"
                                             : verificationState === 'error'
                                             ? "bg-red-500/20 border-red-500/30 text-red-300"
-                                            : "bg-white/5 border-white/10 text-gray-300 hover:bg-white/10 hover:border-white/20"
+                                            : "bg-muted/50 border-border text-muted-foreground hover:bg-muted hover:border-muted-foreground/20"
                                     )}
                                 >
                                     {verificationState === 'loading' && (
@@ -158,10 +158,10 @@ export default function DashboardPage() {
                                     {verificationState === 'idle' && "Resend Verification Email"}
                                 </button>
                             )}
-                            <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5">
+                            <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border border-border">
                                 <div className="flex items-center gap-3">
-                                        <CreditCard className="w-4 h-4 text-purple-400" />
-                                    <span className="text-sm text-gray-300">Plan</span>
+                                        <CreditCard className="w-4 h-4 text-purple-500" />
+                                    <span className="text-sm text-muted-foreground">Plan</span>
                                 </div>
                                 <span className="text-xs font-medium px-2 py-1 rounded-full bg-purple-500/20 text-purple-300">
                                     Free Tier
@@ -173,31 +173,32 @@ export default function DashboardPage() {
 
                 {/* Stats / RAG Placeholder */}
                 <motion.div variants={itemVariants} className="md:col-span-2">
-                    <div className="h-full p-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex flex-col justify-between relative overflow-hidden group">
+                    <div className="h-full p-6 bg-card/50 backdrop-blur-xl border border-border rounded-2xl flex flex-col justify-between relative overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                         <div className="relative z-10">
                             <div className="flex items-center justify-between mb-6">
                                 <h3 className="text-xl font-semibold flex items-center gap-2">
-                                    <Zap className="w-5 h-5 text-yellow-400" />
+                                    <Zap className="w-5 h-5 text-yellow-500" />
                                     Usage Analytics
                                 </h3>
-                                <span className="text-xs text-gray-500">Monthly Cycle</span>
+                                <span className="text-xs text-muted-foreground">Monthly Cycle</span>
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 {/* PDF Uploads */}
-                                <div className="p-4 rounded-xl bg-black/20 border border-white/5">
+                                {/* PDF Uploads */}
+                                <div className="p-4 rounded-xl bg-background/50 border border-border">
                                     <div className="flex justify-between items-start mb-2">
-                                        <span className="text-sm text-gray-400">PDF Uploads</span>
-                                        <FileText className="w-4 h-4 text-indigo-400" />
+                                        <span className="text-sm text-muted-foreground">PDF Uploads</span>
+                                        <FileText className="w-4 h-4 text-indigo-500" />
                                     </div>
                                     <div className="flex items-baseline gap-2">
                                         <span className="text-2xl font-bold">{usage?.pdfUploadCount ?? 0}</span>
-                                        <span className="text-sm text-gray-500">/ {usage?.pdfUploadLimit ?? 3}</span>
+                                        <span className="text-sm text-muted-foreground">/ {usage?.pdfUploadLimit ?? 3}</span>
                                     </div>
                                     {/* Progress Bar */}
-                                    <div className="w-full h-1.5 bg-white/10 rounded-full mt-3 overflow-hidden">
+                                    <div className="w-full h-1.5 bg-muted rounded-full mt-3 overflow-hidden">
                                         <div
                                             className="h-full bg-indigo-500 transition-all duration-500"
                                             style={{ width: `${Math.min(((usage?.pdfUploadCount ?? 0) / (usage?.pdfUploadLimit ?? 3)) * 100, 100)}%` }}
@@ -206,16 +207,16 @@ export default function DashboardPage() {
                                 </div>
 
                                 {/* Pages (Token Proxy) */}
-                                <div className="p-4 rounded-xl bg-black/20 border border-white/5">
+                                <div className="p-4 rounded-xl bg-background/50 border border-border">
                                     <div className="flex justify-between items-start mb-2">
-                                        <span className="text-sm text-gray-400">Total Pages</span>
-                                        <FileText className="w-4 h-4 text-purple-400" />
+                                        <span className="text-sm text-muted-foreground">Total Pages</span>
+                                        <FileText className="w-4 h-4 text-purple-500" />
                                     </div>
                                     <div className="flex items-baseline gap-2">
                                         <span className="text-2xl font-bold">{usage?.totalPageCount ?? 0}</span>
-                                        <span className="text-sm text-gray-500">/ {usage?.totalPageLimit ?? 120}</span>
+                                        <span className="text-sm text-muted-foreground">/ {usage?.totalPageLimit ?? 120}</span>
                                     </div>
-                                    <div className="w-full h-1.5 bg-white/10 rounded-full mt-3 overflow-hidden">
+                                    <div className="w-full h-1.5 bg-muted rounded-full mt-3 overflow-hidden">
                                         <div
                                             className="h-full bg-purple-500 transition-all duration-500"
                                             style={{ width: `${Math.min(((usage?.totalPageCount ?? 0) / (usage?.totalPageLimit ?? 120)) * 100, 100)}%` }}
@@ -224,17 +225,17 @@ export default function DashboardPage() {
                                 </div>
 
                                 {/* Queries */}
-                                <div className="p-4 rounded-xl bg-black/20 border border-white/5">
+                                <div className="p-4 rounded-xl bg-background/50 border border-border">
                                     <div className="flex justify-between items-start mb-2">
-                                        <span className="text-sm text-gray-400">Queries</span>
-                                        <Zap className="w-4 h-4 text-cyan-400" />
+                                        <span className="text-sm text-muted-foreground">Queries</span>
+                                        <Zap className="w-4 h-4 text-cyan-500" />
                                     </div>
                                     <div className="flex items-baseline gap-2">
                                         <span className="text-2xl font-bold">{usage?.queryCount ?? 0}</span>
-                                        <span className="text-sm text-gray-500">/ {usage?.queryLimit ?? 5}</span>
+                                        <span className="text-sm text-muted-foreground">/ {usage?.queryLimit ?? 5}</span>
                                     </div>
                                         {/* Progress Bar */}
-                                        <div className="w-full h-1.5 bg-white/10 rounded-full mt-3 overflow-hidden">
+                                        <div className="w-full h-1.5 bg-muted rounded-full mt-3 overflow-hidden">
                                         <div
                                             className="h-full bg-cyan-500 transition-all duration-500"
                                             style={{ width: `${Math.min(((usage?.queryCount ?? 0) / (usage?.queryLimit ?? 5)) * 100, 100)}%` }}

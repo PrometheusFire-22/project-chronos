@@ -13,16 +13,16 @@ function UsageBar({ label, value, limit, color, icon: Icon }: {
 }) {
   const pct = Math.min((value / limit) * 100, 100);
   return (
-    <div className="p-4 rounded-xl bg-black/20 border border-white/5">
+    <div className="p-4 rounded-xl bg-background/50 border border-border">
       <div className="flex justify-between items-start mb-2">
-        <span className="text-sm text-gray-400">{label}</span>
+        <span className="text-sm text-muted-foreground">{label}</span>
         <Icon className={`w-4 h-4 ${color}`} />
       </div>
       <div className="flex items-baseline gap-2">
-        <span className="text-2xl font-bold text-white">{value}</span>
-        <span className="text-sm text-gray-500">/ {limit}</span>
+        <span className="text-2xl font-bold text-foreground">{value}</span>
+        <span className="text-sm text-muted-foreground">/ {limit}</span>
       </div>
-      <div className="w-full h-1.5 bg-white/10 rounded-full mt-3 overflow-hidden">
+      <div className="w-full h-1.5 bg-muted rounded-full mt-3 overflow-hidden">
         <div
           className={`h-full ${color.replace('text-', 'bg-')} transition-all duration-500`}
           style={{ width: `${pct}%` }}
@@ -38,18 +38,18 @@ export default function BillingPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-white">Billing & Plans</h2>
-        <p className="text-gray-400 mt-1">Manage your subscription and billing details.</p>
+        <h2 className="text-2xl font-bold text-foreground">Billing & Plans</h2>
+        <p className="text-muted-foreground mt-1">Manage your subscription and billing details.</p>
       </div>
 
       {/* Usage Section */}
-      <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-xl">
+      <div className="bg-card/50 border border-border rounded-2xl p-6 backdrop-blur-xl">
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-            <Zap className="w-5 h-5 text-yellow-400" />
+          <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+            <Zap className="w-5 h-5 text-yellow-500" />
             Current Usage
           </h3>
-          <span className="text-xs text-gray-500">Monthly Cycle</span>
+          <span className="text-xs text-muted-foreground">Monthly Cycle</span>
         </div>
         {isLoading ? (
           <div className="flex items-center justify-center py-8">
@@ -97,7 +97,7 @@ export default function BillingPage() {
 
             <div className="space-y-3">
               {['3 PDF Uploads / Month', '120 Pages / Month', 'Basic Analytics'].map((feature) => (
-                <div key={feature} className="flex items-center gap-2 text-gray-300">
+                <div key={feature} className="flex items-center gap-2 text-gray-200">
                   <Check className="w-4 h-4 text-emerald-500" />
                   <span>{feature}</span>
                 </div>
@@ -111,17 +111,17 @@ export default function BillingPage() {
         </div>
 
         {/* Payment Method Placeholder */}
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col justify-center items-center text-center gap-4">
-          <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center">
-            <CreditCard className="w-8 h-8 text-gray-400" />
+        <div className="bg-card/50 border border-border rounded-2xl p-6 flex flex-col justify-center items-center text-center gap-4">
+          <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center">
+            <CreditCard className="w-8 h-8 text-muted-foreground" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-white">No Payment Method</h3>
-            <p className="text-gray-400 text-sm max-w-xs mx-auto mt-2">
+            <h3 className="text-lg font-semibold text-foreground">No Payment Method</h3>
+            <p className="text-muted-foreground text-sm max-w-xs mx-auto mt-2">
               Add a payment method to upgrade your plan and unlock premium features.
             </p>
           </div>
-          <Button variant="outline" className="border-white/10 text-white hover:bg-white/5 mt-2">
+          <Button variant="outline" className="border-border text-foreground hover:bg-muted mt-2">
             Add Payment Method
           </Button>
         </div>

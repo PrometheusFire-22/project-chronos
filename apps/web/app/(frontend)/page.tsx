@@ -77,12 +77,12 @@ export default async function HomePage() {
 
     // Return fallback UI
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center max-w-md mx-auto px-4">
-          <h1 className="text-2xl font-bold text-white mb-4">
+          <h1 className="text-2xl font-bold text-foreground mb-4">
             Unable to load content
           </h1>
-          <p className="text-slate-400 mb-6">
+          <p className="text-muted-foreground mb-6">
             We're experiencing technical difficulties. Please try again later.
           </p>
           <a

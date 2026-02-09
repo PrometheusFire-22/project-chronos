@@ -65,11 +65,11 @@ export default function ProfilePage() {
   return (
     <div className="space-y-8 max-w-4xl">
       <div>
-        <h2 className="text-2xl font-bold text-white">Profile Settings</h2>
-        <p className="text-gray-400 mt-1">Manage your account information and preferences.</p>
+        <h2 className="text-2xl font-bold text-foreground">Profile Settings</h2>
+        <p className="text-muted-foreground mt-1">Manage your account information and preferences.</p>
       </div>
 
-      <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-xl">
+      <div className="bg-card/50 border border-border rounded-2xl overflow-hidden backdrop-blur-xl">
         <div className="p-6 space-y-6">
           {/* Avatar Section */}
           <div className="flex items-center gap-6">
@@ -78,40 +78,40 @@ export default function ProfilePage() {
               userName={firstName || user.name || user.email || 'U'}
             />
             <div>
-              <h3 className="text-lg font-semibold text-white">{firstName} {lastName}</h3>
-              <p className="text-sm text-gray-400 max-w-[200px]">Update your public profile information here.</p>
+              <h3 className="text-lg font-semibold text-foreground">{firstName} {lastName}</h3>
+              <p className="text-sm text-muted-foreground max-w-[200px]">Update your public profile information here.</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-400">First Name</label>
+              <label className="text-sm font-medium text-muted-foreground">First Name</label>
               <input
                 type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
-                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 outline-none transition-all"
+                className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-foreground focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 outline-none transition-all"
                 placeholder="First Name"
               />
             </div>
              <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-400">Last Name</label>
+              <label className="text-sm font-medium text-muted-foreground">Last Name</label>
               <input
                 type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
-                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 outline-none transition-all"
+                className="w-full bg-background border border-border rounded-xl px-4 py-2.5 text-foreground focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 outline-none transition-all"
                 placeholder="Last Name"
               />
             </div>
-            <div className="space-y-2 text-white md:col-span-2">
-              <label className="text-sm font-medium text-gray-400">Email Address</label>
+            <div className="space-y-2 text-foreground md:col-span-2">
+              <label className="text-sm font-medium text-muted-foreground">Email Address</label>
               <div className="relative">
                 <input
                   type="email"
                   defaultValue={user.email}
                   disabled
-                  className="w-full bg-black/20 border border-white/5 rounded-xl px-4 py-2.5 text-gray-400 cursor-not-allowed outline-none"
+                  className="w-full bg-muted border border-border rounded-xl px-4 py-2.5 text-muted-foreground cursor-not-allowed outline-none"
                 />
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
                   {user.emailVerified ? (
@@ -131,7 +131,7 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <div className="p-4 bg-white/[0.02] border-t border-white/10 flex items-center justify-end gap-3">
+        <div className="p-4 bg-muted/20 border-t border-border flex items-center justify-end gap-3">
           {saveState === 'success' && (
             <span className="text-sm text-emerald-400">Saved successfully!</span>
           )}
@@ -140,7 +140,7 @@ export default function ProfilePage() {
           )}
           <Button
             variant="ghost"
-            className="text-gray-400 hover:text-white"
+            className="text-muted-foreground hover:text-foreground"
             onClick={handleCancel}
             disabled={!isDirty || saveState === 'saving'}
           >

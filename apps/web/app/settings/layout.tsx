@@ -8,10 +8,12 @@ export default function SettingsLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col font-sans selection:bg-purple-500/30">
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-primary/30">
         {/* Background Gradients */}
-        <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-black to-black pointer-events-none" />
-        <div className="fixed inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] opacity-20 pointer-events-none" />
+        <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-background to-background pointer-events-none dark:opacity-100 opacity-0" />
+        <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-100/40 via-background to-background pointer-events-none dark:opacity-0 opacity-100" />
+
+        <div className="fixed inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] dark:opacity-20 opacity-5 pointer-events-none" />
 
         <Header />
 
@@ -20,8 +22,8 @@ export default function SettingsLayout({
                 {/* Sidebar */}
                 <aside className="lg:w-64 flex-shrink-0">
                     <div className="sticky top-24">
-                        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-xl">
-                            <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4 px-4">
+                        <div className="bg-card/50 backdrop-blur-xl border border-border rounded-2xl p-4 shadow-sm">
+                            <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4 px-4">
                                 Settings
                             </h2>
                             <SettingsNav />
