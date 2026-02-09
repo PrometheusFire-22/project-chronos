@@ -8,12 +8,8 @@ export default function SettingsLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-primary/30">
-        {/* Background Gradients */}
-        <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-background to-background pointer-events-none dark:opacity-100 opacity-0" />
-        <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-100/40 via-background to-background pointer-events-none dark:opacity-0 opacity-100" />
-
-        <div className="fixed inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))] dark:opacity-20 opacity-5 pointer-events-none" />
+    <div className="min-h-screen bg-transparent text-foreground flex flex-col font-sans selection:bg-primary/30">
+        {/* Background Gradients handled in RootLayout now */}
 
         <Header />
 

@@ -119,7 +119,7 @@ export function AvatarUpload({
       <div className="relative group">
         {/* Avatar circle with gradient border */}
         <div className="w-24 h-24 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 p-[2px]">
-          <div className="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden">
+          <div className="w-full h-full rounded-full bg-background flex items-center justify-center overflow-hidden">
             {displayImage ? (
               <img
                 src={displayImage}
@@ -127,7 +127,7 @@ export function AvatarUpload({
                 className="w-full h-full object-cover"
               />
             ) : (
-              <span className="text-3xl font-bold text-white/80">
+              <span className="text-3xl font-bold text-muted-foreground">
                 {initial}
               </span>
             )}
