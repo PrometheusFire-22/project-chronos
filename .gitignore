@@ -173,6 +173,10 @@ coverage/
 # - tsconfig.json (TypeScript config)
 # - All .ts/.tsx source files
 
+# Marketing Assets - Ignore working files and typo corrections
+marketing/assets/logos/archive/
+marketing/assets/logos/typo-correction/
+
 
 
 .nx/cache
