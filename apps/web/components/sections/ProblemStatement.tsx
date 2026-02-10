@@ -83,8 +83,8 @@ export function ProblemStatement({ problems, sectionData }: ProblemStatementProp
                 className="relative p-8 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-slate-700 transition-colors"
               >
                 {/* Icon */}
-                <div className="mb-4 w-12 h-12 rounded-xl bg-violet-500/10 flex items-center justify-center">
-                  <IconComponent className="w-6 h-6 text-violet-400" />
+                <div className="mb-4 w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                  <IconComponent className="w-6 h-6 text-purple-400" />
                 </div>
 
                 {/* Title */}

@@ -33,22 +33,22 @@ const iconMap: Record<string, LucideIcon> = {
 // Color mapping for pillar accent colors
 const colorMap: Record<number, { bg: string; icon: string; border: string; glow: string }> = {
   0: {
-    bg: 'bg-violet-500/10',
-    icon: 'text-violet-400',
-    border: 'border-violet-500/20',
-    glow: 'group-hover:shadow-violet-500/20'
+    bg: 'bg-purple-500/10',
+    icon: 'text-purple-400',
+    border: 'border-purple-500/20',
+    glow: 'group-hover:shadow-purple-500/20'
   },
   1: {
-    bg: 'bg-sky-500/10',
-    icon: 'text-sky-400',
-    border: 'border-sky-500/20',
-    glow: 'group-hover:shadow-sky-500/20'
+    bg: 'bg-indigo-500/10',
+    icon: 'text-indigo-400',
+    border: 'border-indigo-500/20',
+    glow: 'group-hover:shadow-indigo-500/20'
   },
   2: {
-    bg: 'bg-emerald-500/10',
-    icon: 'text-emerald-400',
-    border: 'border-emerald-500/20',
-    glow: 'group-hover:shadow-emerald-500/20'
+    bg: 'bg-pink-500/10',
+    icon: 'text-pink-400',
+    border: 'border-pink-500/20',
+    glow: 'group-hover:shadow-pink-500/20'
   },
   3: {
     bg: 'bg-amber-500/10',

@@ -13,8 +13,8 @@ export function FeaturesHero({ hero }: FeaturesHeroProps) {
   return (
     <section className="relative overflow-hidden bg-slate-950 pt-32 pb-24 lg:pt-40 lg:pb-32">
       {/* Background Gradients */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-violet-500/20 blur-[120px] rounded-full mix-blend-screen opacity-30 pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-sky-500/20 blur-[120px] rounded-full mix-blend-screen opacity-20 pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-purple-500/20 blur-[120px] rounded-full mix-blend-screen opacity-30 pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-indigo-500/20 blur-[120px] rounded-full mix-blend-screen opacity-20 pointer-events-none" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
@@ -36,16 +36,16 @@ export function FeaturesHero({ hero }: FeaturesHeroProps) {
 
           {/* Four Pillars Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
-            <div className="p-6 rounded-xl bg-gradient-to-br from-violet-500/10 to-transparent border border-violet-500/20">
-              <Network className="w-8 h-8 text-violet-400 mx-auto mb-3" />
+            <div className="p-6 rounded-xl bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/20">
+              <Network className="w-8 h-8 text-purple-400 mx-auto mb-3" />
               <div className="text-sm font-semibold text-white">Graph Database</div>
             </div>
-            <div className="p-6 rounded-xl bg-gradient-to-br from-sky-500/10 to-transparent border border-sky-500/20">
-              <Database className="w-8 h-8 text-sky-400 mx-auto mb-3" />
+            <div className="p-6 rounded-xl bg-gradient-to-br from-indigo-500/10 to-transparent border border-indigo-500/20">
+              <Database className="w-8 h-8 text-indigo-400 mx-auto mb-3" />
               <div className="text-sm font-semibold text-white">Vector Search</div>
             </div>
-            <div className="p-6 rounded-xl bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/20">
-              <TrendingUp className="w-8 h-8 text-emerald-400 mx-auto mb-3" />
+            <div className="p-6 rounded-xl bg-gradient-to-br from-pink-500/10 to-transparent border border-pink-500/20">
+              <TrendingUp className="w-8 h-8 text-pink-400 mx-auto mb-3" />
               <div className="text-sm font-semibold text-white">Time-Series</div>
             </div>
             <div className="p-6 rounded-xl bg-gradient-to-br from-amber-500/10 to-transparent border border-amber-500/20">

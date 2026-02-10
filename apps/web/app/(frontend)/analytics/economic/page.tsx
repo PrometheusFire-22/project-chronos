@@ -126,21 +126,21 @@ export default async function EconomicAnalyticsPage({ searchParams }: PageProps)
     );
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-slate-100 transition-colors duration-500">
+        <div className="min-h-screen bg-transparent text-foreground transition-colors duration-500">
             <div className="container mx-auto py-12 px-6">
                 <header className="mb-12 relative">
-                    <div className="absolute -top-24 -left-24 w-96 h-96 bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
+                    <div className="absolute -top-24 -left-24 w-96 h-96 bg-purple-500/10 blur-[120px] rounded-full pointer-events-none" />
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10">
                         <div>
                             <div className="flex items-center gap-2 mb-2">
-                                <span className="px-3 py-1 bg-blue-500/10 text-blue-500 text-xs font-bold tracking-widest uppercase rounded-full border border-blue-500/20">
+                                <span className="px-3 py-1 bg-purple-500/10 text-purple-500 text-xs font-bold tracking-widest uppercase rounded-full border border-purple-500/20">
                                     Correlation Intelligence
                                 </span>
                             </div>
-                            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-500 dark:from-white dark:to-slate-400">
+                            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground via-purple-500 to-indigo-500">
                                 Global Economic Analytics
                             </h1>
-                            <p className="mt-3 text-lg text-slate-600 dark:text-slate-400 max-w-2xl font-medium">
+                            <p className="mt-3 text-lg text-muted-foreground max-w-2xl font-medium">
                                 Cross-pollinate macroeconomic indicators with real-time telemetry to discover hidden market signals.
                             </p>
                         </div>
@@ -159,7 +159,7 @@ export default async function EconomicAnalyticsPage({ searchParams }: PageProps)
 
                     <div className="xl:col-span-3 space-y-8">
                         <div className="relative group">
-                            <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-emerald-500 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
+                            <div className="absolute -inset-1 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
                             <div className="relative">
                                 <EconomicChart
                                     data={chartData}
@@ -172,10 +172,10 @@ export default async function EconomicAnalyticsPage({ searchParams }: PageProps)
 
                         <div>
                             <div className="flex items-center gap-3 mb-6">
-                                <h3 className="text-xs font-bold tracking-widest uppercase text-slate-500 dark:text-slate-500">
+                                <h3 className="text-xs font-bold tracking-widest uppercase text-muted-foreground">
                                     Active Indicators
                                 </h3>
-                                <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
+                                <div className="h-px flex-1 bg-border" />
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -188,7 +188,7 @@ export default async function EconomicAnalyticsPage({ searchParams }: PageProps)
                                     />
                                 ))}
                                 {activeMetadata.length === 0 && (
-                                    <div className="col-span-full py-12 flex flex-col items-center justify-center text-slate-400 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">
+                                    <div className="col-span-full py-12 flex flex-col items-center justify-center text-muted-foreground border-2 border-dashed border-border rounded-2xl">
                                         <p className="text-sm font-medium">No indicators selected. Choose from the catalog to begin analysis.</p>
                                     </div>
                                 )}

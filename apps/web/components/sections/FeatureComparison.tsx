@@ -75,7 +75,7 @@ export function FeatureComparison({ comparisonItems, sectionData }: FeatureCompa
             <div className="grid grid-cols-3 gap-4 bg-slate-900 p-6 border-b border-slate-800">
               <div className="text-slate-500 text-sm font-medium">Feature</div>
               <div className="text-center">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-violet-500/20 to-sky-500/20 border border-violet-500/30">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500/20 to-indigo-500/20 border border-purple-500/30">
                   <span className="text-white font-semibold">Chronos</span>
                 </div>
               </div>
@@ -110,7 +110,7 @@ export function FeatureComparison({ comparisonItems, sectionData }: FeatureCompa
             </p>
             <a
               href={sectionData?.cta_link ?? '#waitlist'}
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-gradient-to-r from-violet-500 to-sky-500 text-white font-semibold hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold hover:opacity-90 transition-opacity"
             >
               Get Early Access
             </a>

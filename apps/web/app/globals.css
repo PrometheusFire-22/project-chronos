@@ -14,7 +14,7 @@
        ======================================== */
 
     /* Base colors */
-    --background: 0 0% 100%; /* #FFFFFF */
+    --background: 210 40% 98%; /* #F8FAFC - Slate-50 (Off-white) */
     --foreground: 222.2 84% 4.9%; /* #0F172A - slate-900 */
 
     /* Semantic colors (shadcn/ui standard) */
@@ -28,10 +28,10 @@
     --accent-foreground: 210 40% 98%;
 
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted-foreground: 215.4 16.3% 40%; /* Darker than before (was 46.9%) for better contrast */
 
     /* UI elements */
-    --border: 214.3 31.8% 91.4%;
+    --border: 214.3 31.8% 85%; /* Slightly darker border for visibility on off-white */
     --input: 214.3 31.8% 91.4%;
     --ring: 262 83% 58%; /* Purple focus ring */
 
@@ -123,8 +123,12 @@
 
   /* Glow Orbit Animations */
   @keyframes spin-glow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   .glow-orbit-container {
@@ -158,7 +162,9 @@
   }
 
   @keyframes rotate-border {
-    to { --border-angle: 360deg; }
+    to {
+      --border-angle: 360deg;
+    }
   }
 
   .group:hover .glow-orbit-border {

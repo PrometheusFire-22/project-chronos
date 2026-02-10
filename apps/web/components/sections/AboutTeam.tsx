@@ -19,8 +19,8 @@ export function AboutTeam() {
           {/* Team Member 1 - Placeholder */}
           <div className="group p-6 rounded-2xl bg-slate-950 border border-slate-800 hover:border-slate-700 transition-all duration-300">
             {/* Avatar Placeholder */}
-            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-violet-500/20 to-sky-500/20 mb-4 mx-auto flex items-center justify-center">
-              <div className="text-3xl font-bold text-violet-400">A</div>
+            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-purple-500/20 to-indigo-500/20 mb-4 mx-auto flex items-center justify-center">
+              <div className="text-3xl font-bold text-purple-400">A</div>
             </div>
 
             {/* Name & Role */}
@@ -60,7 +60,7 @@ export function AboutTeam() {
 
         {/* Join Team CTA */}
         <div className="mt-20 text-center">
-          <div className="inline-block p-8 rounded-2xl bg-gradient-to-br from-violet-500/10 to-sky-500/10 border border-violet-500/20 max-w-2xl">
+          <div className="inline-block p-8 rounded-2xl bg-gradient-to-br from-purple-500/10 to-indigo-500/10 border border-purple-500/20 max-w-2xl">
             <h3 className="text-2xl font-bold text-white mb-4">
               Join Our Team
             </h3>
@@ -71,7 +71,7 @@ export function AboutTeam() {
             </p>
             <a
               href="mailto:careers@chronos.ai"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-violet-500 to-sky-500 text-white font-semibold hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold hover:opacity-90 transition-opacity"
             >
               <Mail className="w-5 h-5" />
               Get in Touch

@@ -49,33 +49,33 @@ export default async function SolutionsPage() {
   };
 
   const colorMap: Record<string, { bg: string; text: string; border: string }> = {
-    'solutions-feature-1': { bg: 'bg-blue-500/10', text: 'text-blue-500', border: 'border-blue-500/50' },
+    'solutions-feature-1': { bg: 'bg-purple-500/10', text: 'text-purple-500', border: 'border-purple-500/50' },
     'solutions-feature-2': { bg: 'bg-violet-500/10', text: 'text-violet-500', border: 'border-violet-500/50' },
-    'solutions-feature-3': { bg: 'bg-emerald-500/10', text: 'text-emerald-500', border: 'border-emerald-500/50' },
+    'solutions-feature-3': { bg: 'bg-indigo-500/10', text: 'text-indigo-500', border: 'border-indigo-500/50' },
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#020617] text-slate-900 dark:text-slate-100 transition-colors duration-500">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
       {/* Hero Section */}
       <div className="relative overflow-hidden pt-24 pb-16 lg:pt-32 lg:pb-24">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-purple-500/10 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="container mx-auto px-6 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <span className="inline-block px-3 py-1 mb-6 text-xs font-bold tracking-widest text-blue-500 uppercase bg-blue-500/10 rounded-full border border-blue-500/20">
+            <span className="inline-block px-3 py-1 mb-6 text-xs font-bold tracking-widest text-purple-500 uppercase bg-purple-500/10 rounded-full border border-purple-500/20">
               Consulting & Advisory
             </span>
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-8 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 dark:from-white dark:via-slate-200 dark:to-slate-400">
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-8 bg-clip-text text-transparent bg-gradient-to-r from-foreground via-purple-500 to-indigo-500">
               {hero.headline}
             </h1>
-            <p className="text-xl text-slate-600 dark:text-slate-400 leading-relaxed mb-10 max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground leading-relaxed mb-10 max-w-2xl mx-auto">
               {hero.subheadline}
             </p>
             {hero.cta_text && hero.cta_link && (
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a
                   href={hero.cta_link}
-                  className="inline-flex items-center px-8 py-4 text-base font-bold text-white transition-all bg-blue-600 rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40"
+                  className="inline-flex items-center px-8 py-4 text-base font-bold text-white transition-all bg-purple-600 rounded-xl hover:bg-purple-700 shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40"
                 >
                   {hero.cta_text}
                   <ArrowRight className="ml-2 w-5 h-5" />
@@ -87,7 +87,7 @@ export default async function SolutionsPage() {
       </div>
 
       {/* Features Grid */}
-      <div className="py-24 bg-white dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800">
+      <div className="py-24 bg-card/50 border-t border-border">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {features.map((feature) => {
@@ -97,13 +97,13 @@ export default async function SolutionsPage() {
               return (
                 <div
                   key={feature.id}
-                  className={`group p-8 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:${colors.border} transition-all duration-300`}
+                  className={`group p-8 rounded-2xl bg-card border border-border hover:${colors.border} transition-all duration-300`}
                 >
                   <div className={`w-14 h-14 rounded-xl ${colors.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
                     <Icon className={`w-7 h-7 ${colors.text}`} />
                   </div>
                   <h3 className="text-xl font-bold mb-4">{feature.headline}</h3>
-                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                  <p className="text-muted-foreground leading-relaxed">
                     {feature.subheadline}
                   </p>
                 </div>

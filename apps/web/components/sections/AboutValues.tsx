@@ -32,7 +32,7 @@ export function AboutValues({ values }: AboutValuesProps) {
   return (
     <section className="relative bg-slate-950 py-24 lg:py-32">
       {/* Background accent */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
 
       <div className="container mx-auto px-4">
         {/* Section Header */}
@@ -52,9 +52,9 @@ export function AboutValues({ values }: AboutValuesProps) {
 
             // Cycle through accent colors
             const colorClasses = [
-              { bg: 'bg-violet-500/10', icon: 'text-violet-400', border: 'border-violet-500/20' },
-              { bg: 'bg-sky-500/10', icon: 'text-sky-400', border: 'border-sky-500/20' },
-              { bg: 'bg-emerald-500/10', icon: 'text-emerald-400', border: 'border-emerald-500/20' },
+              { bg: 'bg-purple-500/10', icon: 'text-purple-400', border: 'border-purple-500/20' },
+              { bg: 'bg-indigo-500/10', icon: 'text-indigo-400', border: 'border-indigo-500/20' },
+              { bg: 'bg-pink-500/10', icon: 'text-pink-400', border: 'border-pink-500/20' },
             ]
             const colors = colorClasses[index % 3]
 

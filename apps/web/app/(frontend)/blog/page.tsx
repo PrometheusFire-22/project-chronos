@@ -43,16 +43,16 @@ export default async function BlogListingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Hero Section */}
       <section className="relative py-20 sm:py-32">
-        <div className="absolute inset-0 bg-grid-white/[0.02] -z-10" />
+        <div className="absolute inset-0 bg-grid-white/[0.02] -z-10 dark:opacity-100 opacity-0" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6">
               Blog
             </h1>
-            <p className="text-lg sm:text-xl text-zinc-400">
+            <p className="text-lg sm:text-xl text-muted-foreground">
               Insights, updates, and best practices for relationship intelligence in private markets.
             </p>
           </div>
@@ -64,7 +64,7 @@ export default async function BlogListingPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {posts.length === 0 ? (
             <div className="max-w-2xl mx-auto text-center py-16">
-              <p className="text-zinc-400 text-lg">
+              <p className="text-muted-foreground text-lg">
                 No blog posts yet. Check back soon for insights and updates!
               </p>
             </div>
@@ -97,11 +97,11 @@ function BlogPostCard({ post }: { post: BlogPost }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-900/50 backdrop-blur transition-all hover:border-primary/50 hover:bg-slate-900/70 hover:shadow-2xl hover:shadow-primary/10"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card/50 backdrop-blur transition-all hover:border-primary/50 hover:bg-card/80 hover:shadow-2xl hover:shadow-primary/10"
     >
       {/* Featured Image */}
       {post.featured_image && (
-        <div className="aspect-video overflow-hidden bg-slate-800">
+        <div className="aspect-video overflow-hidden bg-muted">
           <img
             src={post.featured_image}
             alt={post.title}
@@ -122,19 +122,19 @@ function BlogPostCard({ post }: { post: BlogPost }) {
         )}
 
         {/* Title */}
-        <h3 className="mb-2 text-xl font-semibold text-white group-hover:text-primary transition-colors">
+        <h3 className="mb-2 text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
           {post.title}
         </h3>
 
         {/* Excerpt */}
         {post.excerpt && (
-          <p className="mb-4 text-sm text-zinc-400 line-clamp-3">
+          <p className="mb-4 text-sm text-muted-foreground line-clamp-3">
             {post.excerpt}
           </p>
         )}
 
         {/* Meta Info */}
-        <div className="mt-auto flex flex-wrap items-center gap-4 text-xs text-zinc-500">
+        <div className="mt-auto flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-1">
             <Calendar className="h-3.5 w-3.5" />
             <span>{publishedDate}</span>

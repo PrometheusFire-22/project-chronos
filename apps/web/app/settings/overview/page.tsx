@@ -68,11 +68,11 @@ export default function DashboardPage() {
                 </div>
             </motion.div>
 
-            {/* Main Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Main Grid - Stacked Layout */}
+            <div className="flex flex-col gap-6">
 
                 {/* Profile Card */}
-                <motion.div variants={itemVariants} className="md:col-span-1">
+                <motion.div variants={itemVariants} className="w-full">
                     <div className="h-full p-6 bg-card/50 backdrop-blur-xl border border-border rounded-2xl flex flex-col gap-6 relative overflow-hidden group">
                             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -172,7 +172,7 @@ export default function DashboardPage() {
                 </motion.div>
 
                 {/* Stats / RAG Placeholder */}
-                <motion.div variants={itemVariants} className="md:col-span-2">
+                <motion.div variants={itemVariants} className="w-full">
                     <div className="h-full p-6 bg-card/50 backdrop-blur-xl border border-border rounded-2xl flex flex-col justify-between relative overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 

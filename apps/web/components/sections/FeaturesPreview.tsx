@@ -56,7 +56,7 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
   return (
     <section className="relative bg-slate-900 py-24 lg:py-32">
       {/* Background gradient accent */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-violet-500/50 to-transparent" />
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
 
       <div className="container mx-auto px-4">
         {/* Section Header */}
@@ -81,12 +81,12 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
               >
                 {/* Icon and Title Row */}
                 <div className="flex items-start gap-4 mb-4">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-violet-500/20 to-sky-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <IconComponent className="w-5 h-5 text-violet-400" />
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/20 to-indigo-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <IconComponent className="w-5 h-5 text-purple-400" />
                   </div>
 
                   <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-white group-hover:text-violet-300 transition-colors">
+                    <h3 className="text-lg font-semibold text-white group-hover:text-purple-300 transition-colors">
                       {feature.title}
                     </h3>
                   </div>
@@ -99,7 +99,7 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
                 />
 
                 {/* Hover indicator */}
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-violet-500 to-sky-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-b-xl" />
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-indigo-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-b-xl" />
               </div>
             )
           })}
@@ -113,7 +113,7 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a
               href="#"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-violet-500 to-sky-500 text-white font-medium hover:opacity-90 transition-opacity"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium hover:opacity-90 transition-opacity"
             >
               Explore All Features
               <Layers className="w-4 h-4" />

@@ -68,15 +68,15 @@ export function UseCases({ useCases, sectionData }: UseCasesProps) {
               <div
                 key={useCase.id}
                 className={`group relative p-8 rounded-2xl border transition-all duration-300 ${isEven
-                  ? 'bg-gradient-to-br from-violet-500/5 to-transparent border-violet-500/20 hover:border-violet-500/40'
-                  : 'bg-gradient-to-br from-sky-500/5 to-transparent border-sky-500/20 hover:border-sky-500/40'
+                  ? 'bg-gradient-to-br from-purple-500/5 to-transparent border-purple-500/20 hover:border-purple-500/40'
+                  : 'bg-gradient-to-br from-indigo-500/5 to-transparent border-indigo-500/20 hover:border-indigo-500/40'
                   } hover:shadow-xl`}
               >
                 {/* Icon */}
                 <div
                   className={`mb-6 w-12 h-12 rounded-xl flex items-center justify-center ${isEven
-                    ? 'bg-violet-500/10 text-violet-400'
-                    : 'bg-sky-500/10 text-sky-400'
+                    ? 'bg-purple-500/10 text-purple-400'
+                    : 'bg-indigo-500/10 text-indigo-400'
                     }`}
                 >
                   <IconComponent className="w-6 h-6" />
@@ -96,8 +96,8 @@ export function UseCases({ useCases, sectionData }: UseCasesProps) {
                 {/* Decorative gradient line */}
                 <div
                   className={`absolute bottom-0 left-0 w-full h-0.5 rounded-b-2xl scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left ${isEven
-                    ? 'bg-gradient-to-r from-violet-500 to-transparent'
-                    : 'bg-gradient-to-r from-sky-500 to-transparent'
+                    ? 'bg-gradient-to-r from-purple-500 to-transparent'
+                    : 'bg-gradient-to-r from-indigo-500 to-transparent'
                     }`}
                 />
               </div>
@@ -115,7 +115,7 @@ export function UseCases({ useCases, sectionData }: UseCasesProps) {
           </p>
           <a
             href={sectionData?.cta_link ?? '#waitlist'}
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-gradient-to-r from-violet-500 to-sky-500 text-white font-semibold hover:opacity-90 transition-opacity shadow-lg shadow-violet-500/25"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold hover:opacity-90 transition-opacity shadow-lg shadow-purple-500/25"
           >
             {sectionData?.cta_link ? 'Get Early Access' : 'Join the Waitlist'}
             <Target className="w-5 h-5" />

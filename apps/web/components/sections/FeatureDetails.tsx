@@ -95,8 +95,8 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
                 {/* Content */}
                 <div className={isEven ? 'lg:order-1' : 'lg:order-2'}>
                   {/* Icon */}
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500/20 to-sky-500/20 border border-violet-500/20 mb-6">
-                    <IconComponent className="w-8 h-8 text-violet-400" />
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/20 mb-6">
+                    <IconComponent className="w-8 h-8 text-purple-400" />
                   </div>
 
                   {/* Title */}

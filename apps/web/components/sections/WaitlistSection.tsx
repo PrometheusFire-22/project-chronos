@@ -10,7 +10,7 @@ export function WaitlistSection() {
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-12 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-sm font-medium mb-6">
             <Sparkles className="w-4 h-4" />
             Early Access
           </div>
@@ -38,8 +38,8 @@ export function WaitlistSection() {
             <div className="space-y-6">
               {/* Benefit 1 */}
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-violet-500/10 flex items-center justify-center">
-                  <Sparkles className="w-6 h-6 text-violet-400" />
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                  <Sparkles className="w-6 h-6 text-purple-400" />
                 </div>
                 <div>
                   <h4 className="text-lg font-semibold text-white mb-2">
@@ -53,8 +53,8 @@ export function WaitlistSection() {
 
               {/* Benefit 2 */}
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-sky-500/10 flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-sky-400" />
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center">
+                  <TrendingUp className="w-6 h-6 text-indigo-400" />
                 </div>
                 <div>
                   <h4 className="text-lg font-semibold text-white mb-2">
@@ -68,8 +68,8 @@ export function WaitlistSection() {
 
               {/* Benefit 3 */}
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-                  <Users className="w-6 h-6 text-emerald-400" />
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center">
+                  <Users className="w-6 h-6 text-pink-400" />
                 </div>
                 <div>
                   <h4 className="text-lg font-semibold text-white mb-2">

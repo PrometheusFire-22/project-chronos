@@ -30,8 +30,8 @@ export function HeroSection({ data }: HeroSectionProps) {
   return (
     <section className="relative overflow-hidden bg-slate-950 pt-16 pb-32 md:pt-24 lg:pt-32">
         {/* Background Gradients */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-sky-500/20 blur-[120px] rounded-full mix-blend-screen opacity-30 pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-violet-500/20 blur-[120px] rounded-full mix-blend-screen opacity-20 pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-purple-500/20 blur-[120px] rounded-full mix-blend-screen opacity-30 pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-indigo-500/20 blur-[120px] rounded-full mix-blend-screen opacity-20 pointer-events-none" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
@@ -47,8 +47,8 @@ export function HeroSection({ data }: HeroSectionProps) {
             <motion.div variants={fadeIn} className="flex items-start">
                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 text-xs font-medium">
                   <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
                   </span>
                   v1.0 Public Beta Live
                </div>
@@ -57,7 +57,7 @@ export function HeroSection({ data }: HeroSectionProps) {
             {/* Headline */}
             <motion.div variants={fadeIn}>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4 leading-[1.1]">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-sky-400 to-emerald-400">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground via-purple-500 to-indigo-500">
                   {data.headline}
                 </span>
               </h1>
@@ -86,9 +86,9 @@ export function HeroSection({ data }: HeroSectionProps) {
 
             {/* Tags */}
             <motion.div variants={fadeIn} className="mt-8 pt-8 border-t border-slate-800/50 flex flex-wrap gap-4 text-sm text-slate-500">
-                <span className="flex items-center gap-1.5"><Network size={16} className="text-violet-400"/> Graph Analysis</span>
-                <span className="flex items-center gap-1.5"><Database size={16} className="text-sky-400"/> Vector Search</span>
-                <span className="flex items-center gap-1.5"><Globe size={16} className="text-emerald-400"/> Geospatial Ops</span>
+                <span className="flex items-center gap-1.5"><Network size={16} className="text-purple-400"/> Graph Analysis</span>
+                <span className="flex items-center gap-1.5"><Database size={16} className="text-indigo-400"/> Vector Search</span>
+                <span className="flex items-center gap-1.5"><Globe size={16} className="text-pink-400"/> Geospatial Ops</span>
             </motion.div>
 
           </motion.div>
@@ -101,7 +101,7 @@ export function HeroSection({ data }: HeroSectionProps) {
             className="relative lg:h-[600px] w-full flex items-center justify-center p-8 lg:p-0"
           >
              {/* Glowing Card Effect */}
-             <div className="absolute inset-0 bg-gradient-to-tr from-violet-500/10 to-sky-500/10 rounded-3xl border border-white/5 backdrop-blur-sm -z-10" />
+             <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 to-indigo-500/10 rounded-3xl border border-white/5 backdrop-blur-sm -z-10" />
 
              {/* The Graph Illustration */}
              <Image
@@ -120,7 +120,7 @@ export function HeroSection({ data }: HeroSectionProps) {
                className="absolute top-1/4 right-0 p-4 bg-slate-900/90 backdrop-blur border border-slate-700 rounded-xl shadow-xl max-w-[200px]"
              >
                 <div className="flex items-center gap-3 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-violet-500/20 flex items-center justify-center text-violet-400">
+                    <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400">
                        <Activity size={16} />
                     </div>
                     <div>
@@ -129,7 +129,7 @@ export function HeroSection({ data }: HeroSectionProps) {
                     </div>
                 </div>
                 <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-violet-500 to-sky-500 w-[98%]" />
+                    <div className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 w-[98%]" />
                 </div>
              </motion.div>
 
