@@ -56,47 +56,47 @@ export function FeatureComparison({ comparisonItems, sectionData }: FeatureCompa
   ]
 
   return (
-    <section className="relative bg-slate-950 py-24 lg:py-32">
+    <section className="relative bg-background py-24 lg:py-32">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             {headline}
           </h2>
-          <p className="text-lg text-slate-400">
+          <p className="text-lg text-muted-foreground">
             {subheadline}
           </p>
         </div>
 
         {/* Comparison Table */}
         <div className="max-w-5xl mx-auto">
-          <div className="rounded-2xl border border-slate-800 overflow-hidden">
+          <div className="rounded-2xl border border-border overflow-hidden">
             {/* Table Header */}
-            <div className="grid grid-cols-3 gap-4 bg-slate-900 p-6 border-b border-slate-800">
-              <div className="text-slate-500 text-sm font-medium">Feature</div>
+            <div className="grid grid-cols-3 gap-4 bg-muted p-6 border-b border-border">
+              <div className="text-muted-foreground text-sm font-medium">Feature</div>
               <div className="text-center">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500/20 to-indigo-500/20 border border-purple-500/30">
-                  <span className="text-white font-semibold">Chronos</span>
+                  <span className="text-foreground font-semibold">Chronos</span>
                 </div>
               </div>
-              <div className="text-center text-slate-400 font-medium">Traditional Tools</div>
+              <div className="text-center text-muted-foreground font-medium">Traditional Tools</div>
             </div>
 
             {/* Table Rows */}
-            <div className="divide-y divide-slate-800">
+            <div className="divide-y divide-border">
               {features.map((feature, index) => (
                 <div
                   key={index}
-                  className="grid grid-cols-3 gap-4 p-6 bg-slate-950 hover:bg-slate-900/50 transition-colors"
+                  className="grid grid-cols-3 gap-4 p-6 bg-card hover:bg-muted/50 transition-colors"
                 >
-                  <div className="text-white font-medium">{feature.category}</div>
+                  <div className="text-foreground font-medium">{feature.category}</div>
                   <div className="flex items-center gap-3">
-                    <Check className="w-5 h-5 text-emerald-400 flex-shrink-0" />
-                    <span className="text-slate-300 text-sm">{feature.chronos_value}</span>
+                    <Check className="w-5 h-5 text-emerald-500 flex-shrink-0" />
+                    <span className="text-foreground text-sm">{feature.chronos_value}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <X className="w-5 h-5 text-red-400 flex-shrink-0" />
-                    <span className="text-slate-500 text-sm">{feature.traditional_value}</span>
+                    <X className="w-5 h-5 text-red-500 flex-shrink-0" />
+                    <span className="text-muted-foreground text-sm">{feature.traditional_value}</span>
                   </div>
                 </div>
               ))}
@@ -105,7 +105,7 @@ export function FeatureComparison({ comparisonItems, sectionData }: FeatureCompa
 
           {/* Bottom CTA */}
           <div className="mt-12 text-center">
-            <p className="text-slate-400 mb-6">
+            <p className="text-muted-foreground mb-6">
               {sectionData?.cta_text ?? 'Ready to find the edge in the Canadian liquidity reset?'}
             </p>
             <a

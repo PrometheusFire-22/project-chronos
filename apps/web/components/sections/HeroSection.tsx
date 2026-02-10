@@ -28,10 +28,10 @@ interface HeroSectionProps {
 
 export function HeroSection({ data }: HeroSectionProps) {
   return (
-    <section className="relative overflow-hidden bg-slate-950 pt-16 pb-32 md:pt-24 lg:pt-32">
+    <section className="relative overflow-hidden bg-background pt-16 pb-32 md:pt-24 lg:pt-32">
         {/* Background Gradients */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-purple-500/20 blur-[120px] rounded-full mix-blend-screen opacity-30 pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-indigo-500/20 blur-[120px] rounded-full mix-blend-screen opacity-20 pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-purple-500/20 blur-[120px] rounded-full mix-blend-screen dark:mix-blend-screen opacity-100 dark:opacity-30 pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-indigo-500/20 blur-[120px] rounded-full mix-blend-screen dark:mix-blend-screen opacity-50 dark:opacity-20 pointer-events-none" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
@@ -43,9 +43,9 @@ export function HeroSection({ data }: HeroSectionProps) {
             animate="visible"
             className="flex flex-col gap-6"
           >
-            {/* Pill */}
+             {/* Pill */}
             <motion.div variants={fadeIn} className="flex items-start">
-               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 text-xs font-medium">
+               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-muted border border-border text-muted-foreground text-xs font-medium">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
@@ -62,22 +62,21 @@ export function HeroSection({ data }: HeroSectionProps) {
                 </span>
               </h1>
               {data.subheadline && (
-                <p className="text-lg sm:text-xl text-slate-400 max-w-xl leading-relaxed">
+                <p className="text-lg sm:text-xl text-muted-foreground max-w-xl leading-relaxed">
                   {data.subheadline}
                 </p>
               )}
             </motion.div>
 
-            {/* CTAs */}
             <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 mt-2">
               <Link href={data.cta_primary_link}>
-                <Button size="lg" className="bg-white text-slate-950 hover:bg-slate-200 font-semibold h-12 px-8 text-base">
+                <Button size="lg" className="bg-foreground text-background hover:bg-foreground/90 font-semibold h-12 px-8 text-base shadow-lg shadow-purple-500/20">
                   {data.cta_primary_text} <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
               {data.cta_secondary_text && data.cta_secondary_link && (
                 <Link href={data.cta_secondary_link}>
-                  <Button variant="outline" size="lg" className="border-slate-800 text-white hover:bg-slate-800 h-12 px-8 text-base">
+                  <Button variant="outline" size="lg" className="border-border text-foreground hover:bg-muted h-12 px-8 text-base">
                     {data.cta_secondary_text}
                   </Button>
                 </Link>
@@ -85,7 +84,7 @@ export function HeroSection({ data }: HeroSectionProps) {
             </motion.div>
 
             {/* Tags */}
-            <motion.div variants={fadeIn} className="mt-8 pt-8 border-t border-slate-800/50 flex flex-wrap gap-4 text-sm text-slate-500">
+            <motion.div variants={fadeIn} className="mt-8 pt-8 border-t border-border flex flex-wrap gap-4 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1.5"><Network size={16} className="text-purple-400"/> Graph Analysis</span>
                 <span className="flex items-center gap-1.5"><Database size={16} className="text-indigo-400"/> Vector Search</span>
                 <span className="flex items-center gap-1.5"><Globe size={16} className="text-pink-400"/> Geospatial Ops</span>
@@ -101,7 +100,7 @@ export function HeroSection({ data }: HeroSectionProps) {
             className="relative lg:h-[600px] w-full flex items-center justify-center p-8 lg:p-0"
           >
              {/* Glowing Card Effect */}
-             <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 to-indigo-500/10 rounded-3xl border border-white/5 backdrop-blur-sm -z-10" />
+             <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 to-indigo-500/10 rounded-3xl border border-border backdrop-blur-sm -z-10" />
 
              {/* The Graph Illustration */}
              <Image
@@ -124,11 +123,11 @@ export function HeroSection({ data }: HeroSectionProps) {
                        <Activity size={16} />
                     </div>
                     <div>
-                        <div className="text-xs text-slate-400">Signal Strength</div>
-                        <div className="text-sm font-bold text-white">98.4% Match</div>
+                        <div className="text-xs text-muted-foreground">Signal Strength</div>
+                        <div className="text-sm font-bold text-foreground">98.4% Match</div>
                     </div>
                 </div>
-                <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
                     <div className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 w-[98%]" />
                 </div>
              </motion.div>

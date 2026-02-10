@@ -53,14 +53,14 @@ export function ProblemStatement({ problems, sectionData }: ProblemStatementProp
     'In a distressed market, the data you need is buried in 300-page monitor reports and fragmented spreadsheets. By the time you find the connection, the window has closed.'
 
   return (
-    <section className="relative bg-slate-950 py-24 lg:py-32">
+    <section className="relative bg-background py-24 lg:py-32">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             {headline}
           </h2>
-          <p className="text-lg text-slate-400">
+          <p className="text-lg text-muted-foreground">
             {subheadline}
           </p>
         </div>
@@ -80,7 +80,7 @@ export function ProblemStatement({ problems, sectionData }: ProblemStatementProp
             return (
               <div
                 key={problem.id}
-                className="relative p-8 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-slate-700 transition-colors"
+                className="relative p-8 rounded-2xl bg-card border border-border hover:border-border/80 transition-colors"
               >
                 {/* Icon */}
                 <div className="mb-4 w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
@@ -88,13 +88,13 @@ export function ProblemStatement({ problems, sectionData }: ProblemStatementProp
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-semibold text-white mb-3">
+                <h3 className="text-xl font-semibold text-foreground mb-3">
                   {problem.title}
                 </h3>
 
                 {/* Description */}
                 <div
-                  className="prose prose-invert max-w-none prose-sm"
+                  className="prose dark:prose-invert prose-slate max-w-none prose-sm"
                   dangerouslySetInnerHTML={{ __html: renderRichText(problem.description) }}
                 />
               </div>

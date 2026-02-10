@@ -88,7 +88,7 @@ export default function DashboardPage() {
                             </div>
                             <div>
                                 <h3 className="font-semibold text-lg">{user.firstName} {user.lastName}</h3>
-                                <p className="text-sm text-gray-400 truncate max-w-[150px]">{user.email}</p>
+                                <p className="text-sm text-gray-400 truncate">{user.email}</p>
                             </div>
                         </div>
 

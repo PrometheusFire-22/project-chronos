@@ -70,14 +70,14 @@ export function SolutionPillars({ pillars, sectionData }: SolutionPillarsProps) 
     'Four powerful database modalities working in harmony to deliver unprecedented insights'
 
   return (
-    <section className="relative bg-slate-950 py-24 lg:py-32">
+    <section className="relative bg-background py-24 lg:py-32">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             {headline}
           </h2>
-          <p className="text-lg text-slate-400">
+          <p className="text-lg text-muted-foreground">
             {subheadline}
           </p>
         </div>
@@ -91,7 +91,7 @@ export function SolutionPillars({ pillars, sectionData }: SolutionPillarsProps) 
             return (
               <div
                 key={pillar.id}
-                className={`group relative p-8 rounded-2xl bg-slate-900/50 border ${colors.border} hover:border-opacity-50 transition-all duration-300 ${colors.glow} hover:shadow-2xl`}
+                className={`group relative p-8 rounded-2xl bg-card border ${colors.border} hover:border-opacity-50 transition-all duration-300 ${colors.glow} hover:shadow-2xl`}
               >
                 {/* Icon */}
                 <div className={`mb-6 w-14 h-14 rounded-xl ${colors.bg} flex items-center justify-center`}>
@@ -99,13 +99,13 @@ export function SolutionPillars({ pillars, sectionData }: SolutionPillarsProps) 
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-semibold text-white mb-3">
+                <h3 className="text-xl font-semibold text-foreground mb-3">
                   {pillar.title}
                 </h3>
 
                 {/* Description */}
                 <div
-                  className="prose prose-invert max-w-none prose-sm"
+                  className="prose dark:prose-invert prose-slate max-w-none prose-sm"
                   dangerouslySetInnerHTML={{ __html: renderRichText(pillar.description) }}
                 />
 
@@ -118,7 +118,7 @@ export function SolutionPillars({ pillars, sectionData }: SolutionPillarsProps) 
 
         {/* Bottom tagline */}
         <div className="text-center mt-12">
-          <p className="text-sm text-slate-500 max-w-2xl mx-auto">
+          <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
             {sectionData?.cta_text ?? 'Unifying public market ruins with private deal flow through one intelligence layer.'}
           </p>
         </div>

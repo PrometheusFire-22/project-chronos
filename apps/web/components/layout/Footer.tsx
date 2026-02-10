@@ -46,7 +46,7 @@ export function Footer() {
               <img
                 src="/logos/final/logo-wordmark-full.svg"
                 alt="Automatonic AI"
-                className="h-10 w-auto brightness-0 invert"
+                className="h-10 w-auto"
               />
             </Link>
             <p className="text-slate-400 text-sm leading-relaxed">

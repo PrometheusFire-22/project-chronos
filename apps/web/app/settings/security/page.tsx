@@ -49,8 +49,10 @@ export default function SecurityPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-foreground">Security Settings</h2>
-        <p className="text-muted-foreground mt-1">Manage your password and security preferences.</p>
+        <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground via-purple-500 to-indigo-500">
+            Security Settings
+        </h1>
+        <p className="text-muted-foreground mt-2">Manage your password and security preferences.</p>
       </div>
 
       <div className="bg-card/50 border border-border rounded-2xl overflow-hidden backdrop-blur-xl divide-y divide-border/50">

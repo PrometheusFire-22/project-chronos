@@ -46,14 +46,14 @@ export function UseCases({ useCases, sectionData }: UseCasesProps) {
     'From venture capital to private equity, discover how top firms use Chronos to gain a competitive edge'
 
   return (
-    <section className="relative bg-slate-950 py-24 lg:py-32">
+    <section className="relative bg-background py-24 lg:py-32">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             {headline}
           </h2>
-          <p className="text-lg text-slate-400">
+          <p className="text-lg text-muted-foreground">
             {subheadline}
           </p>
         </div>
@@ -83,13 +83,13 @@ export function UseCases({ useCases, sectionData }: UseCasesProps) {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-semibold text-white mb-3">
+                <h3 className="text-xl font-semibold text-foreground mb-3">
                   {useCase.title}
                 </h3>
 
                 {/* Description */}
                 <div
-                  className="prose prose-invert max-w-none"
+                  className="prose dark:prose-invert prose-slate max-w-none"
                   dangerouslySetInnerHTML={{ __html: renderRichText(useCase.description) }}
                 />
 
@@ -107,10 +107,10 @@ export function UseCases({ useCases, sectionData }: UseCasesProps) {
 
         {/* Bottom CTA */}
         <div className="text-center mt-16 pt-12 border-t border-slate-800/50">
-          <h3 className="text-2xl font-bold text-white mb-4">
+          <h3 className="text-2xl font-bold text-foreground mb-4">
             {sectionData?.cta_text ?? 'Ready to find the edge in the Canadian liquidity reset?'}
           </h3>
-          <p className="text-slate-400 mb-6 max-w-2xl mx-auto">
+          <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
             Join the waitlist to get early access to Chronos and discover hidden opportunities in special situations
           </p>
           <a

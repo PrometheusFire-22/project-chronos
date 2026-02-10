@@ -38,8 +38,10 @@ export default function BillingPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-foreground">Billing & Plans</h2>
-        <p className="text-muted-foreground mt-1">Manage your subscription and billing details.</p>
+        <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-foreground via-purple-500 to-indigo-500">
+            Billing & Plans
+        </h1>
+        <p className="text-muted-foreground mt-2">Manage your subscription and billing details.</p>
       </div>
 
       {/* Usage Section */}

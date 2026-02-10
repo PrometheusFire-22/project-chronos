@@ -42,11 +42,11 @@ export function SettingsNav() {
             className={cn(
               'flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200',
               isActive
-                ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20'
-                : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent'
+                ? 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20'
+                : 'text-muted-foreground hover:text-foreground hover:bg-accent border border-transparent'
             )}
           >
-            <link.icon className={cn('w-4 h-4', isActive ? 'text-purple-400' : 'text-gray-500')} />
+            <link.icon className={cn('w-4 h-4', isActive ? 'text-purple-600 dark:text-purple-400' : 'text-muted-foreground')} />
             {link.name}
           </Link>
         );

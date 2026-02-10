@@ -87,7 +87,7 @@ export default async function SolutionsPage() {
       </div>
 
       {/* Features Grid */}
-      <div className="py-24 bg-card/50 border-t border-border">
+      <div className="py-24 bg-muted/30 border-t border-border">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {features.map((feature) => {
@@ -97,7 +97,7 @@ export default async function SolutionsPage() {
               return (
                 <div
                   key={feature.id}
-                  className={`group p-8 rounded-2xl bg-card border border-border hover:${colors.border} transition-all duration-300`}
+                  className={`group p-8 rounded-2xl bg-card border border-border hover:${colors.border} transition-all duration-300 shadow-sm hover:shadow-md`}
                 >
                   <div className={`w-14 h-14 rounded-xl ${colors.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
                     <Icon className={`w-7 h-7 ${colors.text}`} />

@@ -61,7 +61,7 @@ export function Header() {
           <img
             src="/logos/final/logo-wordmark-full.svg"
             alt="Automatonic AI"
-            className="h-16 w-auto dark:brightness-0 dark:invert"
+            className="h-16 w-auto"
           />
         </Link>
 

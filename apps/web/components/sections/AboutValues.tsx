@@ -30,17 +30,17 @@ interface AboutValuesProps {
 
 export function AboutValues({ values }: AboutValuesProps) {
   return (
-    <section className="relative bg-slate-950 py-24 lg:py-32">
+    <section className="relative bg-background py-24 lg:py-32">
       {/* Background accent */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
 
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             Our Values
           </h2>
-          <p className="text-lg text-slate-400">
+          <p className="text-lg text-muted-foreground">
             The principles that guide everything we do at Chronos
           </p>
         </div>
@@ -52,16 +52,16 @@ export function AboutValues({ values }: AboutValuesProps) {
 
             // Cycle through accent colors
             const colorClasses = [
-              { bg: 'bg-purple-500/10', icon: 'text-purple-400', border: 'border-purple-500/20' },
-              { bg: 'bg-indigo-500/10', icon: 'text-indigo-400', border: 'border-indigo-500/20' },
-              { bg: 'bg-pink-500/10', icon: 'text-pink-400', border: 'border-pink-500/20' },
+              { bg: 'bg-purple-500/10', icon: 'text-purple-600 dark:text-purple-400', border: 'border-purple-500/20' },
+              { bg: 'bg-indigo-500/10', icon: 'text-indigo-600 dark:text-indigo-400', border: 'border-indigo-500/20' },
+              { bg: 'bg-pink-500/10', icon: 'text-pink-600 dark:text-pink-400', border: 'border-pink-500/20' },
             ]
             const colors = colorClasses[index % 3]
 
             return (
               <div
                 key={value.id}
-                className={`p-8 rounded-2xl bg-slate-900/50 border ${colors.border} hover:border-opacity-50 transition-all duration-300 group`}
+                className={`p-8 rounded-2xl bg-card border ${colors.border} hover:border-opacity-50 transition-all duration-300 group`}
               >
                 {/* Icon */}
                 <div className={`w-14 h-14 rounded-xl ${colors.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
@@ -69,13 +69,13 @@ export function AboutValues({ values }: AboutValuesProps) {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-bold text-white mb-3">
+                <h3 className="text-xl font-bold text-foreground mb-3">
                   {value.title}
                 </h3>
 
                 {/* Description */}
                 <div
-                  className="prose prose-invert max-w-none"
+                  className="prose dark:prose-invert prose-slate max-w-none"
                   dangerouslySetInnerHTML={{ __html: renderRichText(value.description) }}
                 />
               </div>
