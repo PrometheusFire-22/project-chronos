@@ -25,8 +25,10 @@ export function AboutHero({ hero }: AboutHeroProps) {
           </div>
 
           {/* Headline - from Directus */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-[1.1]">
-            {headline}
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-[1.1]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground via-purple-500 to-indigo-500">
+              {headline}
+            </span>
           </h1>
 
           {/* Subheadline - from Directus */}

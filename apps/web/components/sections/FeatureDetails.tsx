@@ -102,6 +102,27 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
                         text: 'text-rose-500'
                     }
                 }
+                if (lowerTitle.includes('strategic') && lowerTitle.includes('introduction')) {
+                     return {
+                        bg: 'bg-emerald-500/10',
+                        border: 'border-emerald-500/20',
+                        text: 'text-emerald-500'
+                    }
+                }
+                if (lowerTitle.includes('syndicate') && lowerTitle.includes('exposure')) {
+                     return {
+                        bg: 'bg-blue-500/10',
+                        border: 'border-blue-500/20',
+                        text: 'text-blue-500'
+                    }
+                }
+                if (lowerTitle.includes('contextual') && lowerTitle.includes('market')) {
+                     return {
+                        bg: 'bg-amber-500/10',
+                        border: 'border-amber-500/20',
+                        text: 'text-amber-500'
+                    }
+                }
 
                 // Default
                  return {

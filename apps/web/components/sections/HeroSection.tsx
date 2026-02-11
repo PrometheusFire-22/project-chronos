@@ -70,7 +70,7 @@ export function HeroSection({ data }: HeroSectionProps) {
 
             <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 mt-2">
               <Link href={data.cta_primary_link}>
-                <Button size="lg" className="bg-foreground text-background hover:bg-foreground/90 font-semibold h-12 px-8 text-base shadow-lg shadow-purple-500/20">
+                <Button size="lg" className="bg-foreground text-background hover:bg-neutral-800 dark:hover:bg-neutral-200 font-semibold h-12 px-8 text-base shadow-lg shadow-purple-500/20">
                   {data.cta_primary_text} <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
@@ -84,10 +84,10 @@ export function HeroSection({ data }: HeroSectionProps) {
             </motion.div>
 
             {/* Tags */}
-            <motion.div variants={fadeIn} className="mt-8 pt-8 border-t border-border flex flex-wrap gap-4 text-sm text-muted-foreground">
-                <span className="flex items-center gap-1.5"><Network size={16} className="text-purple-400"/> Graph Analysis</span>
-                <span className="flex items-center gap-1.5"><Database size={16} className="text-indigo-400"/> Vector Search</span>
-                <span className="flex items-center gap-1.5"><Globe size={16} className="text-pink-400"/> Geospatial Ops</span>
+            <motion.div variants={fadeIn} className="mt-8 pt-8 border-t border-border grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-muted-foreground w-full">
+                <span className="flex items-center justify-center sm:justify-start gap-2"><Network size={24} className="text-purple-400"/> Graph Analysis</span>
+                <span className="flex items-center justify-center sm:justify-start gap-2"><Database size={24} className="text-indigo-400"/> Vector Search</span>
+                <span className="flex items-center justify-center sm:justify-start gap-2"><Globe size={24} className="text-emerald-500"/> Geospatial Ops</span>
             </motion.div>
 
           </motion.div>

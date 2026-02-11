@@ -94,6 +94,33 @@ export function UseCases({ useCases, sectionData }: UseCasesProps) {
                   line: 'from-emerald-500'
                 }
               }
+              if (lowerTitle.includes('strategic') && lowerTitle.includes('introduction')) { // Strategic Introduction Mapping -> Green
+                 return {
+                  bg: 'bg-emerald-500/10',
+                  text: 'text-emerald-500',
+                  border: 'border-emerald-500/20 hover:border-emerald-500/40',
+                  gradient: 'from-emerald-500/5',
+                  line: 'from-emerald-500'
+                }
+              }
+              if (lowerTitle.includes('syndicate') && lowerTitle.includes('exposure')) { // Syndicate Exposure Intelligence -> Blue
+                 return {
+                  bg: 'bg-blue-500/10',
+                  text: 'text-blue-500',
+                  border: 'border-blue-500/20 hover:border-blue-500/40',
+                  gradient: 'from-blue-500/5',
+                  line: 'from-blue-500'
+                }
+              }
+              if (lowerTitle.includes('contextual') && lowerTitle.includes('market')) { // Contextual Market Alerts -> Yellow
+                 return {
+                  bg: 'bg-amber-500/10',
+                  text: 'text-amber-500',
+                  border: 'border-amber-500/20 hover:border-amber-500/40',
+                  gradient: 'from-amber-500/5',
+                  line: 'from-amber-500'
+                }
+              }
 
               // Fallback to alternating pattern
               const isEven = index % 2 === 0
@@ -137,7 +164,7 @@ export function UseCases({ useCases, sectionData }: UseCasesProps) {
 
                 {/* Description */}
                 <div
-                  className="prose dark:prose-invert prose-slate max-w-none text-base"
+                  className="prose dark:prose-invert prose-slate max-w-none text-base text-slate-600 dark:text-slate-300"
                   dangerouslySetInnerHTML={{ __html: renderRichText(useCase.description) }}
                 />
 

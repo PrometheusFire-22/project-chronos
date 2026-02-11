@@ -76,7 +76,7 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
             // Color logic
             const getFeatureColors = (title: string) => {
               const lowerTitle = title.toLowerCase()
-              if (lowerTitle.includes('usage') || lowerTitle.includes('analytics')) {
+                if (lowerTitle.includes('usage') || lowerTitle.includes('analytics')) {
                 return {
                   from: 'from-rose-500/20',
                   to: 'to-pink-500/20',
@@ -90,6 +90,30 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
                   to: 'to-green-500/20',
                   text: 'text-emerald-500 group-hover:text-emerald-600 dark:hover:text-emerald-400',
                    titleHover: 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400'
+                }
+              }
+               if (lowerTitle.includes('strategic') && lowerTitle.includes('introduction')) {
+                return {
+                  from: 'from-emerald-500/20',
+                  to: 'to-green-500/20',
+                  text: 'text-emerald-500 group-hover:text-emerald-600 dark:hover:text-emerald-400',
+                   titleHover: 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400'
+                }
+              }
+               if (lowerTitle.includes('syndicate') && lowerTitle.includes('exposure')) {
+                return {
+                  from: 'from-blue-500/20',
+                  to: 'to-cyan-500/20',
+                  text: 'text-blue-500 group-hover:text-blue-600 dark:hover:text-blue-400',
+                   titleHover: 'group-hover:text-blue-600 dark:group-hover:text-blue-400'
+                }
+              }
+               if (lowerTitle.includes('contextual') && lowerTitle.includes('market')) {
+                return {
+                   from: 'from-amber-500/20',
+                   to: 'to-yellow-500/20',
+                   text: 'text-amber-500 group-hover:text-amber-600 dark:hover:text-amber-400',
+                   titleHover: 'group-hover:text-amber-600 dark:group-hover:text-amber-400'
                 }
               }
               // Default
@@ -115,7 +139,7 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
                   </div>
 
                   <div className="flex-1">
-                    <h3 className={`text-lg font-semibold text-foreground ${colors.titleHover} transition-colors`}>
+                    <h3 className={`text-2xl font-bold text-foreground ${colors.titleHover} transition-colors`}>
                       {feature.title}
                     </h3>
                   </div>
@@ -123,7 +147,7 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
 
                 {/* Description */}
                 <div
-                  className="prose prose-invert prose-sm max-w-none"
+                  className="prose prose-invert max-w-none text-base text-slate-600 dark:text-slate-300"
                   dangerouslySetInnerHTML={{ __html: renderRichText(feature.description) }}
                 />
 
