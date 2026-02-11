@@ -81,7 +81,16 @@ export function ProblemStatement({ problems, sectionData }: ProblemStatementProp
             const getProblemColors = (title: string) => {
                 const lowerTitle = title.toLowerCase()
 
-                if (lowerTitle.includes('invisible')) { // Invisible Credit Ties -> Yellow
+                if (lowerTitle.includes('invisible')) { // Invisible Credit Ties -> Purple
+                    return {
+                        bg: 'bg-purple-500/10',
+                        text: 'text-purple-500',
+                        border: 'border-purple-500/20 hover:border-purple-500/40',
+                        gradient: 'from-purple-500/5',
+                        line: 'from-purple-500'
+                    }
+                }
+                if (lowerTitle.includes('trapped') || lowerTitle.includes('unstructured')) { // Trapped in Unstructured Data -> Yellow
                     return {
                         bg: 'bg-amber-500/10',
                         text: 'text-amber-500',
@@ -99,13 +108,14 @@ export function ProblemStatement({ problems, sectionData }: ProblemStatementProp
                         line: 'from-pink-500'
                     }
                 }
-                 // Default (Trapped in Unstructured Data, etc.) -> Purple
+                 // Default -> Blue/Gray or keep Purple if not matched? User only specified swaps.
+                 // Let's keep default as Purple but maybe lighter?
                  return {
-                        bg: 'bg-purple-500/10',
-                        text: 'text-purple-400',
-                        border: 'border-purple-500/20 hover:border-purple-500/40',
-                        gradient: 'from-purple-500/5',
-                        line: 'from-purple-500'
+                        bg: 'bg-slate-500/10',
+                        text: 'text-slate-500',
+                        border: 'border-slate-500/20 hover:border-slate-500/40',
+                        gradient: 'from-slate-500/5',
+                        line: 'from-slate-500'
                     }
             }
 

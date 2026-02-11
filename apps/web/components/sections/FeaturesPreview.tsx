@@ -94,10 +94,10 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
               }
                if (lowerTitle.includes('strategic') && lowerTitle.includes('introduction')) {
                 return {
-                  from: 'from-emerald-500/20',
-                  to: 'to-green-500/20',
-                  text: 'text-emerald-500 group-hover:text-emerald-600 dark:hover:text-emerald-400',
-                   titleHover: 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400'
+                  from: 'from-amber-500/20',
+                  to: 'to-yellow-500/20',
+                  text: 'text-amber-500 group-hover:text-amber-600 dark:hover:text-amber-400',
+                   titleHover: 'group-hover:text-amber-600 dark:group-hover:text-amber-400'
                 }
               }
                if (lowerTitle.includes('syndicate') && lowerTitle.includes('exposure')) {
@@ -110,10 +110,10 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
               }
                if (lowerTitle.includes('contextual') && lowerTitle.includes('market')) {
                 return {
-                   from: 'from-amber-500/20',
-                   to: 'to-yellow-500/20',
-                   text: 'text-amber-500 group-hover:text-amber-600 dark:hover:text-amber-400',
-                   titleHover: 'group-hover:text-amber-600 dark:group-hover:text-amber-400'
+                   from: 'from-emerald-500/20',
+                   to: 'to-green-500/20',
+                   text: 'text-emerald-500 group-hover:text-emerald-600 dark:hover:text-emerald-400',
+                   titleHover: 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400'
                 }
               }
               // Default

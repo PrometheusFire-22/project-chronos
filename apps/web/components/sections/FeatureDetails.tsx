@@ -1,5 +1,6 @@
 import {
   Search,
+  FileSearch,
   Sparkles,
   Shield,
   Zap,
@@ -123,6 +124,35 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
                         text: 'text-amber-500'
                     }
                 }
+                // New Mappings
+                if (lowerTitle.includes('liquidity') && lowerTitle.includes('timing')) { // Liquidity Timing -> Yellow
+                     return {
+                        bg: 'bg-amber-500/10',
+                        border: 'border-amber-500/20',
+                        text: 'text-amber-500'
+                    }
+                }
+                if (lowerTitle.includes('location') && lowerTitle.includes('risk')) { // Location Risk Mapping -> Green
+                     return {
+                        bg: 'bg-emerald-500/10',
+                        border: 'border-emerald-500/20',
+                        text: 'text-emerald-500'
+                    }
+                }
+                if (lowerTitle.includes('document') && lowerTitle.includes('parsing')) { // AI Document Parsing -> Purple
+                     return {
+                        bg: 'bg-purple-500/10',
+                        border: 'border-purple-500/20',
+                        text: 'text-purple-500'
+                    }
+                }
+                if (lowerTitle.includes('market') && lowerTitle.includes('network')) { // Market Network Mapping -> Purple
+                     return {
+                        bg: 'bg-purple-500/10',
+                        border: 'border-purple-500/20',
+                        text: 'text-purple-500'
+                    }
+                }
 
                 // Default
                  return {
@@ -133,6 +163,15 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
             }
 
             const colors = getFeatureColors(feature.title)
+
+            // Icon Override Logic
+            let DisplayIcon = IconComponent
+            const lowerTitle = feature.title.toLowerCase()
+
+            if (lowerTitle.includes('market') && lowerTitle.includes('network')) DisplayIcon = Network // 3-node graph
+            if (lowerTitle.includes('document') && lowerTitle.includes('parsing')) DisplayIcon = FileSearch // Document search
+            if (lowerTitle.includes('location') && lowerTitle.includes('risk')) DisplayIcon = Globe // Globe
+            if (lowerTitle.includes('liquidity') && lowerTitle.includes('timing')) DisplayIcon = TrendingUp // Line chart/Trending up
 
             return (
               <div
@@ -145,7 +184,7 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
                 <div className={isEven ? 'lg:order-1' : 'lg:order-2'}>
                   {/* Icon */}
                   <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl ${colors.bg} ${colors.border} border mb-6`}>
-                    <IconComponent className={`w-8 h-8 ${colors.text}`} />
+                    <DisplayIcon className={`w-8 h-8 ${colors.text}`} />
                   </div>
 
                   {/* Title */}
@@ -155,7 +194,7 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
 
                   {/* Description */}
                   <div
-                    className="prose prose-lg max-w-none text-muted-foreground"
+                    className="prose prose-lg max-w-none text-muted-foreground prose-strong:text-foreground dark:prose-strong:text-white"
                     dangerouslySetInnerHTML={{ __html: renderRichText(feature.description) }}
                   />
 

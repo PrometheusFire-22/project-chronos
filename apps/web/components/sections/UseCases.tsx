@@ -94,13 +94,22 @@ export function UseCases({ useCases, sectionData }: UseCasesProps) {
                   line: 'from-emerald-500'
                 }
               }
-              if (lowerTitle.includes('strategic') && lowerTitle.includes('introduction')) { // Strategic Introduction Mapping -> Green
+              if (lowerTitle.includes('location') || lowerTitle.includes('view') && lowerTitle.includes('location')) { // The Location View -> Green
                  return {
                   bg: 'bg-emerald-500/10',
                   text: 'text-emerald-500',
                   border: 'border-emerald-500/20 hover:border-emerald-500/40',
                   gradient: 'from-emerald-500/5',
                   line: 'from-emerald-500'
+                }
+              }
+              if (lowerTitle.includes('strategic') && lowerTitle.includes('introduction')) { // Strategic Introduction Mapping -> Yellow
+                 return {
+                  bg: 'bg-amber-500/10',
+                  text: 'text-amber-500',
+                  border: 'border-amber-500/20 hover:border-amber-500/40',
+                  gradient: 'from-amber-500/5',
+                  line: 'from-amber-500'
                 }
               }
               if (lowerTitle.includes('syndicate') && lowerTitle.includes('exposure')) { // Syndicate Exposure Intelligence -> Blue
@@ -112,13 +121,13 @@ export function UseCases({ useCases, sectionData }: UseCasesProps) {
                   line: 'from-blue-500'
                 }
               }
-              if (lowerTitle.includes('contextual') && lowerTitle.includes('market')) { // Contextual Market Alerts -> Yellow
+              if (lowerTitle.includes('contextual') && lowerTitle.includes('market')) { // Contextual Market Alerts -> Green
                  return {
-                  bg: 'bg-amber-500/10',
-                  text: 'text-amber-500',
-                  border: 'border-amber-500/20 hover:border-amber-500/40',
-                  gradient: 'from-amber-500/5',
-                  line: 'from-amber-500'
+                  bg: 'bg-emerald-500/10',
+                  text: 'text-emerald-500',
+                  border: 'border-emerald-500/20 hover:border-emerald-500/40',
+                  gradient: 'from-emerald-500/5',
+                  line: 'from-emerald-500'
                 }
               }
 
@@ -158,7 +167,7 @@ export function UseCases({ useCases, sectionData }: UseCasesProps) {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-2xl font-bold text-foreground mb-3">
+                <h3 className="text-3xl sm:text-4xl font-bold text-foreground mb-3">
                   {useCase.title}
                 </h3>
 

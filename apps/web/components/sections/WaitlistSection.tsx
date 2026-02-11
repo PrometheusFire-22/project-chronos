@@ -10,7 +10,7 @@ export function WaitlistSection() {
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-12 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-500 text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 text-sm font-medium mb-6">
             <Sparkles className="w-4 h-4" />
             Early Access
           </div>
@@ -68,8 +68,8 @@ export function WaitlistSection() {
 
               {/* Benefit 3 */}
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-rose-500/10 flex items-center justify-center">
-                  <Users className="w-6 h-6 text-rose-500" />
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                  <Users className="w-6 h-6 text-blue-500" />
                 </div>
                 <div>
                   <h4 className="text-lg font-semibold text-foreground mb-2">

@@ -70,7 +70,7 @@ export function HeroSection({ data }: HeroSectionProps) {
 
             <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 mt-2">
               <Link href={data.cta_primary_link}>
-                <Button size="lg" className="bg-foreground text-background hover:bg-neutral-800 dark:hover:bg-neutral-200 font-semibold h-12 px-8 text-base shadow-lg shadow-purple-500/20">
+                <Button size="lg" className="bg-foreground text-background hover:bg-purple-600 hover:text-white dark:hover:bg-purple-600 font-semibold h-12 px-8 text-base shadow-lg shadow-purple-500/20">
                   {data.cta_primary_text} <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>

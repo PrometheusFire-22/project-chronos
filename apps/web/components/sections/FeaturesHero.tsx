@@ -37,7 +37,6 @@ export function FeaturesHero({ hero }: FeaturesHeroProps) {
           </p>
 
           {/* Four Pillars Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
             <div className="p-6 rounded-xl bg-purple-500/5 border border-purple-500/20">
               <Network className="w-8 h-8 text-purple-500 mx-auto mb-3" />
               <div className="text-sm font-semibold text-foreground">Graph Database</div>
@@ -46,15 +45,14 @@ export function FeaturesHero({ hero }: FeaturesHeroProps) {
               <Database className="w-8 h-8 text-indigo-500 mx-auto mb-3" />
               <div className="text-sm font-semibold text-foreground">Vector Search</div>
             </div>
-            <div className="p-6 rounded-xl bg-pink-500/5 border border-pink-500/20">
-              <TrendingUp className="w-8 h-8 text-pink-500 mx-auto mb-3" />
+            <div className="p-6 rounded-xl bg-amber-500/5 border border-amber-500/20">
+              <TrendingUp className="w-8 h-8 text-amber-500 mx-auto mb-3" />
               <div className="text-sm font-semibold text-foreground">Time-Series</div>
             </div>
-            <div className="p-6 rounded-xl bg-amber-500/5 border border-amber-500/20">
-              <Globe className="w-8 h-8 text-amber-500 mx-auto mb-3" />
+            <div className="p-6 rounded-xl bg-emerald-500/5 border border-emerald-500/20">
+              <Globe className="w-8 h-8 text-emerald-500 mx-auto mb-3" />
               <div className="text-sm font-semibold text-foreground">Geospatial</div>
             </div>
-          </div>
         </div>
       </div>
     </section>
