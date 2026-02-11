@@ -163,7 +163,7 @@ export function UseCases({ useCases, sectionData }: UseCasesProps) {
                 <div
                   className={`mb-6 w-12 h-12 rounded-xl flex items-center justify-center ${colors.bg} ${colors.text}`}
                 >
-                  <IconComponent className="w-6 h-6" />
+                  <IconComponent className={`w-6 h-6 ${colors.text}`} />
                 </div>
 
                 {/* Title */}
@@ -173,7 +173,7 @@ export function UseCases({ useCases, sectionData }: UseCasesProps) {
 
                 {/* Description */}
                 <div
-                  className="prose dark:prose-invert prose-slate max-w-none text-base text-slate-600 dark:text-slate-300"
+                  className="prose dark:prose-invert prose-slate max-w-none text-lg text-slate-600 dark:text-slate-300"
                   dangerouslySetInnerHTML={{ __html: renderRichText(useCase.description) }}
                 />
 

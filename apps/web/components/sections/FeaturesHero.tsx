@@ -37,6 +37,7 @@ export function FeaturesHero({ hero }: FeaturesHeroProps) {
           </p>
 
           {/* Four Pillars Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="p-6 rounded-xl bg-purple-500/5 border border-purple-500/20">
               <Network className="w-8 h-8 text-purple-500 mx-auto mb-3" />
               <div className="text-sm font-semibold text-foreground">Graph Database</div>
@@ -53,6 +54,7 @@ export function FeaturesHero({ hero }: FeaturesHeroProps) {
               <Globe className="w-8 h-8 text-emerald-500 mx-auto mb-3" />
               <div className="text-sm font-semibold text-foreground">Geospatial</div>
             </div>
+          </div>
         </div>
       </div>
     </section>
