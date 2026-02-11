@@ -1,6 +1,7 @@
 import React from 'react';
 import { getPageSectionsByPage } from '@/lib/directus';
-import { ArrowRight, ShieldAlert, BarChart2, Zap } from 'lucide-react';
+import { ArrowRight, ShieldAlert } from 'lucide-react';
+import { SolutionPillars } from '@/components/sections/SolutionPillars';
 import { notFound } from 'next/navigation';
 
 // Enable ISR with 60-second revalidation
@@ -41,19 +42,6 @@ export default async function SolutionsPage() {
     updated: hero.updated_at
   });
 
-  // Icon mapping for features
-  const iconMap: Record<string, typeof ShieldAlert> = {
-    'solutions-feature-1': ShieldAlert,
-    'solutions-feature-2': BarChart2,
-    'solutions-feature-3': Zap,
-  };
-
-  const colorMap: Record<string, { bg: string; text: string; border: string }> = {
-    'solutions-feature-1': { bg: 'bg-purple-500/10', text: 'text-purple-500', border: 'border-purple-500/50' },
-    'solutions-feature-2': { bg: 'bg-violet-500/10', text: 'text-violet-500', border: 'border-violet-500/50' },
-    'solutions-feature-3': { bg: 'bg-indigo-500/10', text: 'text-indigo-500', border: 'border-indigo-500/50' },
-  };
-
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
       {/* Hero Section */}
@@ -86,32 +74,13 @@ export default async function SolutionsPage() {
         </div>
       </div>
 
-      {/* Features Grid */}
-      <div className="py-24 bg-muted/30 border-t border-border">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {features.map((feature) => {
-              const Icon = iconMap[feature.section_key] || ShieldAlert;
-              const colors = colorMap[feature.section_key] || colorMap['solutions-feature-1'];
-
-              return (
-                <div
-                  key={feature.id}
-                  className={`group p-8 rounded-2xl bg-card border border-border hover:${colors.border} transition-all duration-300 shadow-sm hover:shadow-md`}
-                >
-                  <div className={`w-14 h-14 rounded-xl ${colors.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                    <Icon className={`w-7 h-7 ${colors.text}`} />
-                  </div>
-                  <h3 className="text-xl font-bold mb-4">{feature.headline}</h3>
-                  <p className="text-foreground/80 leading-relaxed">
-                    {feature.subheadline}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+      {/* Solution Pillars */}
+      <SolutionPillars features={features.map(f => ({
+        id: f.id,
+        section_key: f.section_key,
+        headline: f.headline,
+        content: f.subheadline || ''
+      }))} />
     </div>
   );
 }

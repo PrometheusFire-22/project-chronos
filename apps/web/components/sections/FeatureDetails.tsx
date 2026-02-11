@@ -214,12 +214,12 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
 
                 {/* Visual Placeholder */}
                 <div className={isEven ? 'lg:order-2' : 'lg:order-1'}>
-                  <div className="relative aspect-[4/3] rounded-2xl bg-card border border-border overflow-hidden shadow-lg">
+                  <div className="relative aspect-[4/3] rounded-2xl bg-muted border border-border overflow-hidden shadow-lg">
                      <Image
                       src={getFeatureImage(index, feature.title)}
                       alt={feature.title}
                       fill
-                      className="object-contain p-8"
+                      className="object-cover"
                     />
                   </div>
                 </div>

@@ -1,160 +1,93 @@
-import {
-  Network,
-  Database,
-  TrendingUp,
-  Globe,
-  Zap,
-  Activity,
-  BarChart3,
-  Map,
-  GitGraph,
-  Box,
-  MapPin,
-  type LucideIcon
-} from 'lucide-react'
-import type { HomepagePillar, PageSection } from '@/lib/directus/types'
-import { renderRichText } from '@/lib/content-renderer'
 
-// Icon mapping for solution pillar icons
-const iconMap: Record<string, LucideIcon> = {
-  'network': Network,
-  'database': Database,
-  'trending-up': TrendingUp,
-  'globe': Globe,
-  'zap': Zap,
-  'activity': Activity,
-  'bar-chart-3': BarChart3,
-  'map': Map,
-  'git-graph': GitGraph,
-  'box': Box,
-  'map-pin': MapPin,
-}
+import React from 'react';
+import { ShieldAlert, BarChart2, Zap, LucideIcon, ArrowRight } from 'lucide-react';
+import { renderRichText } from '@/lib/content-renderer';
 
-// Color mapping logic
-const getPillarColors = (title: string, index: number) => {
-  const lowerTitle = title.toLowerCase()
-
-  if (lowerTitle.includes('global') || lowerTitle.includes('vision')) {
-    return {
-      bg: 'bg-blue-500/10',
-      icon: 'text-blue-500',
-      border: 'border-blue-500/20',
-      glow: 'group-hover:shadow-blue-500/20'
-    }
-  }
-  if (lowerTitle.includes('deep') || lowerTitle.includes('analysis')) {
-    return {
-      bg: 'bg-purple-500/10',
-      icon: 'text-purple-500',
-      border: 'border-purple-500/20',
-      glow: 'group-hover:shadow-purple-500/20'
-    }
-  }
-  if (lowerTitle.includes('strategic') || lowerTitle.includes('execution')) {
-    return {
-      bg: 'bg-rose-500/10', // Red/Pink -> Rose
-      icon: 'text-rose-500',
-      border: 'border-rose-500/20',
-      glow: 'group-hover:shadow-rose-500/20'
-    }
-  }
-
-  // Fallback / default mapping for others
-  const defaults = [
-    {
-      bg: 'bg-purple-500/10',
-      icon: 'text-purple-400',
-      border: 'border-purple-500/20',
-      glow: 'group-hover:shadow-purple-500/20'
-    },
-    {
-       bg: 'bg-indigo-500/10',
-      icon: 'text-indigo-400',
-      border: 'border-indigo-500/20',
-      glow: 'group-hover:shadow-indigo-500/20'
-    },
-    {
-       bg: 'bg-pink-500/10',
-      icon: 'text-pink-400',
-      border: 'border-pink-500/20',
-      glow: 'group-hover:shadow-pink-500/20'
-    },
-    {
-       bg: 'bg-amber-500/10',
-      icon: 'text-amber-400',
-      border: 'border-amber-500/20',
-      glow: 'group-hover:shadow-amber-500/20'
-    }
-  ]
-
-  return defaults[index % defaults.length]
-}
-
+// Interface for the props
 interface SolutionPillarsProps {
-  pillars: HomepagePillar[]
-  sectionData?: PageSection | null
+  features: {
+    id: string;
+    section_key: string;
+    headline: string;
+    subheadline?: string;
+    content: string; // rich text
+  }[];
 }
 
-export function SolutionPillars({ pillars, sectionData }: SolutionPillarsProps) {
-  // Fallback values if CMS data is not available
-  const headline = sectionData?.headline ?? 'Multi-Model Intelligence'
-  const subheadline = sectionData?.subheadline ??
-    'Four powerful database modalities working in harmony to deliver unprecedented insights'
+export function SolutionPillars({ features }: SolutionPillarsProps) {
+
+  // Icon mapping
+  const iconMap: Record<string, LucideIcon> = {
+    'solutions-feature-1': ShieldAlert,
+    'solutions-feature-2': BarChart2,
+    'solutions-feature-3': Zap,
+  };
+
+  // Color mapping
+  const colorMap: Record<string, { bg: string; text: string; border: string; gradient: string }> = {
+    'solutions-feature-1': {
+      bg: 'bg-purple-500/10',
+      text: 'text-purple-500',
+      border: 'border-purple-500/50',
+      gradient: 'from-purple-500/20'
+    },
+    'solutions-feature-2': {
+      bg: 'bg-violet-500/10',
+      text: 'text-violet-500',
+      border: 'border-violet-500/50',
+      gradient: 'from-violet-500/20'
+    },
+    'solutions-feature-3': {
+      bg: 'bg-indigo-500/10',
+      text: 'text-indigo-500',
+      border: 'border-indigo-500/50',
+      gradient: 'from-indigo-500/20'
+    },
+  };
 
   return (
-    <section className="relative bg-background py-24 lg:py-32">
-      <div className="container mx-auto px-4">
-        {/* Section Header */}
-        <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            {headline}
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            {subheadline}
-          </p>
-        </div>
-
-        {/* Pillars Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-          {pillars.map((pillar, index) => {
-            const IconComponent: LucideIcon = (pillar.icon && pillar.icon in iconMap) ? iconMap[pillar.icon] : Database
-            const colors = getPillarColors(pillar.title, index)
+    <div className="py-24 bg-muted/30 border-t border-border">
+      <div className="container mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          {features.map((feature) => {
+            const Icon = iconMap[feature.section_key] || ShieldAlert;
+            // Default to first color if not found
+            const colors = colorMap[feature.section_key] || colorMap['solutions-feature-1'];
 
             return (
               <div
-                key={pillar.id}
-                className={`group relative p-8 rounded-2xl bg-card border ${colors.border} hover:border-opacity-50 transition-all duration-300 ${colors.glow} hover:shadow-2xl`}
+                key={feature.id}
+                className={`group relative p-8 rounded-2xl bg-card border border-border hover:${colors.border} transition-all duration-300 shadow-sm hover:shadow-md overflow-hidden`}
               >
-                {/* Icon */}
-                <div className={`mb-6 w-14 h-14 rounded-xl ${colors.bg} flex items-center justify-center`}>
-                  <IconComponent className={`w-7 h-7 ${colors.icon}`} />
+                 {/*
+                    FIX: Removed the strong gradient overlay that was obscuring text.
+                    Instead, using a subtle background gradient that fades out.
+                 */}
+                <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-br ${colors.gradient} to-transparent`} />
+
+                <div className="relative z-10">
+                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-colors ${colors.bg} ${colors.text}`}>
+                    <Icon className="w-7 h-7" />
+                  </div>
+
+                  <h3 className="text-2xl font-bold mb-4 text-foreground">
+                    {feature.headline}
+                  </h3>
+
+                  <div
+                    className="prose prose-sm dark:prose-invert text-muted-foreground"
+                    dangerouslySetInnerHTML={{ __html: renderRichText(feature.content) }}
+                  />
+
+                   <div className="mt-6 pt-6 border-t border-border/50 flex items-center text-sm font-medium text-foreground opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                    Learn more <ArrowRight className="ml-2 w-4 h-4" />
+                  </div>
                 </div>
-
-                {/* Title */}
-                <h3 className="text-xl font-semibold text-foreground mb-3">
-                  {pillar.title}
-                </h3>
-
-                {/* Description */}
-                <div
-                  className="prose dark:prose-invert prose-slate max-w-none prose-sm"
-                  dangerouslySetInnerHTML={{ __html: renderRichText(pillar.description) }}
-                />
-
-                {/* Decorative corner accent */}
-                <div className={`absolute top-4 right-4 w-2 h-2 rounded-full ${colors.bg} ${colors.icon} opacity-60`} />
               </div>
-            )
+            );
           })}
         </div>
-
-        {/* Bottom tagline */}
-        <div className="text-center mt-12">
-          <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
-            {sectionData?.cta_text ?? 'Unifying public market ruins with private deal flow through one intelligence layer.'}
-          </p>
-        </div>
       </div>
-    </section>
-  )
+    </div>
+  );
 }
