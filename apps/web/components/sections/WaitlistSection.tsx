@@ -38,8 +38,8 @@ export function WaitlistSection() {
             <div className="space-y-6">
               {/* Benefit 1 */}
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                  <Sparkles className="w-6 h-6 text-purple-500" />
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center">
+                  <Sparkles className="w-6 h-6 text-amber-500" />
                 </div>
                 <div>
                   <h4 className="text-lg font-semibold text-foreground mb-2">
@@ -53,8 +53,8 @@ export function WaitlistSection() {
 
               {/* Benefit 2 */}
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-indigo-500" />
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+                  <TrendingUp className="w-6 h-6 text-emerald-500" />
                 </div>
                 <div>
                   <h4 className="text-lg font-semibold text-foreground mb-2">
@@ -68,8 +68,8 @@ export function WaitlistSection() {
 
               {/* Benefit 3 */}
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center">
-                  <Users className="w-6 h-6 text-pink-500" />
+                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-rose-500/10 flex items-center justify-center">
+                  <Users className="w-6 h-6 text-rose-500" />
                 </div>
                 <div>
                   <h4 className="text-lg font-semibold text-foreground mb-2">

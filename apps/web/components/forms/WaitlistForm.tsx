@@ -118,14 +118,14 @@ export function WaitlistForm() {
       <div className="space-y-4">
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
-            Email Address <span className="text-red-400">*</span>
+          <label htmlFor="email" className="block text-base font-semibold text-foreground mb-2">
+            Email Address <span className="text-red-500">*</span>
           </label>
           <input
             {...register('email')}
             type="email"
             id="email"
-            className="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+            className="w-full px-4 py-3 rounded-lg bg-purple-500/5 border border-purple-500/20 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:bg-purple-500/10 transition-all"
             placeholder="your.email@example.com"
             disabled={submissionState === 'submitting'}
           />
@@ -137,31 +137,31 @@ export function WaitlistForm() {
         {/* First Name & Last Name */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-slate-300 mb-2">
-              First Name <span className="text-red-400">*</span>
+            <label htmlFor="firstName" className="block text-base font-semibold text-foreground mb-2">
+              First Name <span className="text-red-500">*</span>
             </label>
             <input
               {...register('firstName')}
               type="text"
               id="firstName"
-              className="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-3 rounded-lg bg-purple-500/5 border border-purple-500/20 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:bg-purple-500/10 transition-all"
               placeholder="John"
               disabled={submissionState === 'submitting'}
             />
             {errors.firstName && (
-              <p className="mt-2 text-sm text-red-400">{errors.firstName.message}</p>
+              <p className="mt-2 text-sm text-red-500">{errors.firstName.message}</p>
             )}
           </div>
 
           <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-slate-300 mb-2">
-              Last Name <span className="text-red-400">*</span>
+            <label htmlFor="lastName" className="block text-base font-semibold text-foreground mb-2">
+              Last Name <span className="text-red-500">*</span>
             </label>
             <input
               {...register('lastName')}
               type="text"
               id="lastName"
-              className="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-3 rounded-lg bg-purple-500/5 border border-purple-500/20 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:bg-purple-500/10 transition-all"
               placeholder="Smith"
               disabled={submissionState === 'submitting'}
             />
@@ -173,14 +173,14 @@ export function WaitlistForm() {
 
         {/* Company */}
         <div>
-          <label htmlFor="company" className="block text-sm font-medium text-slate-300 mb-2">
+          <label htmlFor="company" className="block text-base font-semibold text-foreground mb-2">
             Company
           </label>
           <input
             {...register('company')}
             type="text"
             id="company"
-            className="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+            className="w-full px-4 py-3 rounded-lg bg-purple-500/5 border border-purple-500/20 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:bg-purple-500/10 transition-all"
             placeholder="Acme Capital"
             disabled={submissionState === 'submitting'}
           />
@@ -188,14 +188,14 @@ export function WaitlistForm() {
 
         {/* Role */}
         <div>
-          <label htmlFor="role" className="block text-sm font-medium text-slate-300 mb-2">
+          <label htmlFor="role" className="block text-base font-semibold text-foreground mb-2">
             Role
           </label>
           <input
             {...register('role')}
             type="text"
             id="role"
-            className="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-800 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+            className="w-full px-4 py-3 rounded-lg bg-purple-500/5 border border-purple-500/20 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:bg-purple-500/10 transition-all"
             placeholder="Investment Partner"
             disabled={submissionState === 'submitting'}
           />
@@ -203,13 +203,13 @@ export function WaitlistForm() {
 
         {/* How did you hear about us */}
         <div>
-          <label htmlFor="heardFrom" className="block text-sm font-medium text-slate-300 mb-2">
+          <label htmlFor="heardFrom" className="block text-base font-semibold text-foreground mb-2">
             How did you hear about us?
           </label>
           <select
             {...register('heardFrom')}
             id="heardFrom"
-            className="w-full px-4 py-3 rounded-lg bg-slate-900 border border-slate-800 text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all"
+            className="w-full px-4 py-3 rounded-lg bg-purple-500/5 border border-purple-500/20 text-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:bg-purple-500/10 transition-all placeholder:text-muted-foreground"
             disabled={submissionState === 'submitting'}
           >
             <option value="">Select an option</option>

@@ -30,32 +30,64 @@ const iconMap: Record<string, LucideIcon> = {
   'map-pin': MapPin,
 }
 
-// Color mapping for pillar accent colors
-const colorMap: Record<number, { bg: string; icon: string; border: string; glow: string }> = {
-  0: {
-    bg: 'bg-purple-500/10',
-    icon: 'text-purple-400',
-    border: 'border-purple-500/20',
-    glow: 'group-hover:shadow-purple-500/20'
-  },
-  1: {
-    bg: 'bg-indigo-500/10',
-    icon: 'text-indigo-400',
-    border: 'border-indigo-500/20',
-    glow: 'group-hover:shadow-indigo-500/20'
-  },
-  2: {
-    bg: 'bg-pink-500/10',
-    icon: 'text-pink-400',
-    border: 'border-pink-500/20',
-    glow: 'group-hover:shadow-pink-500/20'
-  },
-  3: {
-    bg: 'bg-amber-500/10',
-    icon: 'text-amber-400',
-    border: 'border-amber-500/20',
-    glow: 'group-hover:shadow-amber-500/20'
-  },
+// Color mapping logic
+const getPillarColors = (title: string, index: number) => {
+  const lowerTitle = title.toLowerCase()
+
+  if (lowerTitle.includes('global') || lowerTitle.includes('vision')) {
+    return {
+      bg: 'bg-blue-500/10',
+      icon: 'text-blue-500',
+      border: 'border-blue-500/20',
+      glow: 'group-hover:shadow-blue-500/20'
+    }
+  }
+  if (lowerTitle.includes('deep') || lowerTitle.includes('analysis')) {
+    return {
+      bg: 'bg-purple-500/10',
+      icon: 'text-purple-500',
+      border: 'border-purple-500/20',
+      glow: 'group-hover:shadow-purple-500/20'
+    }
+  }
+  if (lowerTitle.includes('strategic') || lowerTitle.includes('execution')) {
+    return {
+      bg: 'bg-rose-500/10', // Red/Pink -> Rose
+      icon: 'text-rose-500',
+      border: 'border-rose-500/20',
+      glow: 'group-hover:shadow-rose-500/20'
+    }
+  }
+
+  // Fallback / default mapping for others
+  const defaults = [
+    {
+      bg: 'bg-purple-500/10',
+      icon: 'text-purple-400',
+      border: 'border-purple-500/20',
+      glow: 'group-hover:shadow-purple-500/20'
+    },
+    {
+       bg: 'bg-indigo-500/10',
+      icon: 'text-indigo-400',
+      border: 'border-indigo-500/20',
+      glow: 'group-hover:shadow-indigo-500/20'
+    },
+    {
+       bg: 'bg-pink-500/10',
+      icon: 'text-pink-400',
+      border: 'border-pink-500/20',
+      glow: 'group-hover:shadow-pink-500/20'
+    },
+    {
+       bg: 'bg-amber-500/10',
+      icon: 'text-amber-400',
+      border: 'border-amber-500/20',
+      glow: 'group-hover:shadow-amber-500/20'
+    }
+  ]
+
+  return defaults[index % defaults.length]
 }
 
 interface SolutionPillarsProps {
@@ -86,7 +118,7 @@ export function SolutionPillars({ pillars, sectionData }: SolutionPillarsProps) 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
           {pillars.map((pillar, index) => {
             const IconComponent: LucideIcon = (pillar.icon && pillar.icon in iconMap) ? iconMap[pillar.icon] : Database
-            const colors = colorMap[index % 4]
+            const colors = getPillarColors(pillar.title, index)
 
             return (
               <div

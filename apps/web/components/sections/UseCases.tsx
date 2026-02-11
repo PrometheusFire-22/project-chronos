@@ -62,43 +62,88 @@ export function UseCases({ useCases, sectionData }: UseCasesProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
           {useCases.map((useCase, index) => {
             const IconComponent: LucideIcon = (useCase.icon && useCase.icon in iconMap) ? iconMap[useCase.icon] : Briefcase
-            const isEven = index % 2 === 0
+
+            // Color mapping logic based on title
+            const getUseCaseColors = (title: string, index: number) => {
+              const lowerTitle = title.toLowerCase()
+
+              if (lowerTitle.includes('referral')) { // Distressed Referral Pathfinding
+                return {
+                  bg: 'bg-indigo-500/10',
+                  text: 'text-indigo-400',
+                  border: 'border-indigo-500/20 hover:border-indigo-500/40',
+                  gradient: 'from-indigo-500/5',
+                  line: 'from-indigo-500'
+                }
+              }
+              if (lowerTitle.includes('forced seller')) { // Forced Seller Discovery
+                 return {
+                  bg: 'bg-purple-500/10',
+                  text: 'text-purple-400',
+                  border: 'border-purple-500/20 hover:border-purple-500/40',
+                  gradient: 'from-purple-500/5',
+                  line: 'from-purple-500'
+                }
+              }
+               if (lowerTitle.includes('contagion')) { // Regional Contagion Mapping
+                 return {
+                  bg: 'bg-emerald-500/10',
+                  text: 'text-emerald-500', // Green
+                  border: 'border-emerald-500/20 hover:border-emerald-500/40',
+                  gradient: 'from-emerald-500/5',
+                  line: 'from-emerald-500'
+                }
+              }
+
+              // Fallback to alternating pattern
+              const isEven = index % 2 === 0
+              if (isEven) {
+                 return {
+                  bg: 'bg-purple-500/10',
+                  text: 'text-purple-400',
+                  border: 'border-purple-500/20 hover:border-purple-500/40',
+                  gradient: 'from-purple-500/5',
+                  line: 'from-purple-500'
+                }
+              } else {
+                 return {
+                  bg: 'bg-indigo-500/10',
+                  text: 'text-indigo-400',
+                  border: 'border-indigo-500/20 hover:border-indigo-500/40',
+                  gradient: 'from-indigo-500/5',
+                  line: 'from-indigo-500'
+                }
+              }
+            }
+
+            const colors = getUseCaseColors(useCase.title, index)
 
             return (
               <div
                 key={useCase.id}
-                className={`group relative p-8 rounded-2xl border transition-all duration-300 ${isEven
-                  ? 'bg-gradient-to-br from-purple-500/5 to-transparent border-purple-500/20 hover:border-purple-500/40'
-                  : 'bg-gradient-to-br from-indigo-500/5 to-transparent border-indigo-500/20 hover:border-indigo-500/40'
-                  } hover:shadow-xl`}
+                className={`group relative p-8 rounded-2xl border transition-all duration-300 bg-gradient-to-br ${colors.gradient} to-transparent ${colors.border} hover:shadow-xl`}
               >
                 {/* Icon */}
                 <div
-                  className={`mb-6 w-12 h-12 rounded-xl flex items-center justify-center ${isEven
-                    ? 'bg-purple-500/10 text-purple-400'
-                    : 'bg-indigo-500/10 text-indigo-400'
-                    }`}
+                  className={`mb-6 w-12 h-12 rounded-xl flex items-center justify-center ${colors.bg} ${colors.text}`}
                 >
                   <IconComponent className="w-6 h-6" />
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-semibold text-foreground mb-3">
+                <h3 className="text-2xl font-bold text-foreground mb-3">
                   {useCase.title}
                 </h3>
 
                 {/* Description */}
                 <div
-                  className="prose dark:prose-invert prose-slate max-w-none"
+                  className="prose dark:prose-invert prose-slate max-w-none text-base"
                   dangerouslySetInnerHTML={{ __html: renderRichText(useCase.description) }}
                 />
 
                 {/* Decorative gradient line */}
                 <div
-                  className={`absolute bottom-0 left-0 w-full h-0.5 rounded-b-2xl scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left ${isEven
-                    ? 'bg-gradient-to-r from-purple-500 to-transparent'
-                    : 'bg-gradient-to-r from-indigo-500 to-transparent'
-                    }`}
+                  className={`absolute bottom-0 left-0 w-full h-0.5 rounded-b-2xl scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left bg-gradient-to-r ${colors.line} to-transparent`}
                 />
               </div>
             )

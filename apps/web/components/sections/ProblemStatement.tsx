@@ -77,25 +77,64 @@ export function ProblemStatement({ problems, sectionData }: ProblemStatementProp
                 IconComponent = getIconForProblem(problem.title, AlertCircle)
             }
 
+            // Custom color logic
+            const getProblemColors = (title: string) => {
+                const lowerTitle = title.toLowerCase()
+
+                if (lowerTitle.includes('invisible')) { // Invisible Credit Ties -> Yellow
+                    return {
+                        bg: 'bg-amber-500/10',
+                        text: 'text-amber-500',
+                        border: 'border-amber-500/20 hover:border-amber-500/40',
+                        gradient: 'from-amber-500/5',
+                        line: 'from-amber-500'
+                    }
+                }
+                if (lowerTitle.includes('bottlenecks') || lowerTitle.includes('diligence')) { // Due Diligence Bottlenecks -> Red/Pink
+                    return {
+                        bg: 'bg-pink-500/10',
+                        text: 'text-pink-500',
+                        border: 'border-pink-500/20 hover:border-pink-500/40',
+                        gradient: 'from-pink-500/5',
+                        line: 'from-pink-500'
+                    }
+                }
+                 // Default (Trapped in Unstructured Data, etc.) -> Purple
+                 return {
+                        bg: 'bg-purple-500/10',
+                        text: 'text-purple-400',
+                        border: 'border-purple-500/20 hover:border-purple-500/40',
+                        gradient: 'from-purple-500/5',
+                        line: 'from-purple-500'
+                    }
+            }
+
+            const colors = getProblemColors(problem.title)
+
             return (
               <div
                 key={problem.id}
-                className="relative p-8 rounded-2xl bg-card border border-border hover:border-border/80 transition-colors"
+                className={`group relative p-8 rounded-2xl bg-card border transition-all duration-300 ${colors.border} hover:shadow-xl bg-gradient-to-br ${colors.gradient} to-transparent`}
               >
                 {/* Icon */}
-                <div className="mb-4 w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
-                  <IconComponent className="w-6 h-6 text-purple-400" />
+                <div className={`mb-4 w-12 h-12 rounded-xl flex items-center justify-center ${colors.bg}`}>
+                  <IconComponent className={`w-6 h-6 ${colors.text}`} />
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-semibold text-foreground mb-3">
+                <h3 className="text-2xl font-bold text-foreground mb-3">
                   {problem.title}
                 </h3>
 
                 {/* Description */}
                 <div
-                  className="prose dark:prose-invert prose-slate max-w-none prose-sm"
+                  className="prose dark:prose-invert prose-slate max-w-none text-base"
                   dangerouslySetInnerHTML={{ __html: renderRichText(problem.description) }}
+                />
+
+                 {/* Decorative gradient line */}
+                <div
+                  className={`absolute bottom-0 left-0 w-full h-0.5 rounded-b-2xl scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left bg-gradient-to-r ${colors.line} to-transparent`}
                 />
               </div>
             )

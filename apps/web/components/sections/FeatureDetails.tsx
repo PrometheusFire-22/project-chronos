@@ -85,6 +85,34 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
             const IconComponent: LucideIcon = (feature.icon && feature.icon in iconMap) ? iconMap[feature.icon] : Sparkles
             const isEven = index % 2 === 0
 
+            const getFeatureColors = (title: string) => {
+                const lowerTitle = title.toLowerCase()
+
+                if (lowerTitle.includes('contagion')) {
+                     return {
+                        bg: 'bg-emerald-500/10',
+                        border: 'border-emerald-500/20',
+                        text: 'text-emerald-500'
+                    }
+                }
+                if (lowerTitle.includes('usage') || lowerTitle.includes('analytics')) {
+                     return {
+                        bg: 'bg-rose-500/10',
+                        border: 'border-rose-500/20',
+                        text: 'text-rose-500'
+                    }
+                }
+
+                // Default
+                 return {
+                        bg: 'bg-purple-500/10',
+                        border: 'border-purple-500/20',
+                        text: 'text-purple-500'
+                    }
+            }
+
+            const colors = getFeatureColors(feature.title)
+
             return (
               <div
                 key={feature.id}
@@ -95,8 +123,8 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
                 {/* Content */}
                 <div className={isEven ? 'lg:order-1' : 'lg:order-2'}>
                   {/* Icon */}
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-purple-500/10 border border-purple-500/20 mb-6">
-                    <IconComponent className="w-8 h-8 text-purple-500" />
+                  <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl ${colors.bg} ${colors.border} border mb-6`}>
+                    <IconComponent className={`w-8 h-8 ${colors.text}`} />
                   </div>
 
                   {/* Title */}

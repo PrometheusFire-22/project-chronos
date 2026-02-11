@@ -73,6 +73,36 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
           {features.map((feature) => {
             const IconComponent: LucideIcon = (feature.icon && feature.icon in iconMap) ? iconMap[feature.icon] : Sparkles
 
+            // Color logic
+            const getFeatureColors = (title: string) => {
+              const lowerTitle = title.toLowerCase()
+              if (lowerTitle.includes('usage') || lowerTitle.includes('analytics')) {
+                return {
+                  from: 'from-rose-500/20',
+                  to: 'to-pink-500/20',
+                  text: 'text-rose-500 group-hover:text-rose-600 dark:hover:text-rose-400',
+                  titleHover: 'group-hover:text-rose-600 dark:group-hover:text-rose-400'
+                }
+              }
+               if (lowerTitle.includes('contagion')) {
+                return {
+                  from: 'from-emerald-500/20',
+                  to: 'to-green-500/20',
+                  text: 'text-emerald-500 group-hover:text-emerald-600 dark:hover:text-emerald-400',
+                   titleHover: 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400'
+                }
+              }
+              // Default
+              return {
+                from: 'from-purple-500/20',
+                to: 'to-indigo-500/20',
+                text: 'text-purple-400 group-hover:text-purple-600 dark:group-hover:text-purple-300',
+                titleHover: 'group-hover:text-purple-600 dark:group-hover:text-purple-300'
+              }
+            }
+
+            const colors = getFeatureColors(feature.title)
+
             return (
               <div
                 key={feature.id}
@@ -80,12 +110,12 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
               >
                 {/* Icon and Title Row */}
                 <div className="flex items-start gap-4 mb-4">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/20 to-indigo-500/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <IconComponent className="w-5 h-5 text-purple-400" />
+                  <div className={`flex-shrink-0 w-12 h-12 rounded-lg bg-gradient-to-br ${colors.from} ${colors.to} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
+                    <IconComponent className={`w-6 h-6 ${colors.text.split(' ')[0]}`} />
                   </div>
 
                   <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-foreground group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors">
+                    <h3 className={`text-lg font-semibold text-foreground ${colors.titleHover} transition-colors`}>
                       {feature.title}
                     </h3>
                   </div>
