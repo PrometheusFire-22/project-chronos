@@ -88,7 +88,7 @@ export default function DashboardPage() {
                             </div>
                             <div>
                                 <h3 className="font-semibold text-lg">{user.firstName} {user.lastName}</h3>
-                                <p className="text-sm text-gray-400 truncate">{user.email}</p>
+                                <p className="text-sm text-foreground/80 font-medium truncate">{user.email}</p>
                             </div>
                         </div>
 
@@ -98,7 +98,7 @@ export default function DashboardPage() {
                                     <Shield className={cn("w-4 h-4", user.emailVerified ? "text-emerald-500" : "text-amber-500")} />
                                     <span className="text-sm text-muted-foreground">Account Status</span>
                                 </div>
-                                <span className={cn("text-xs font-medium px-2 py-1 rounded-full", user.emailVerified ? "bg-emerald-500/20 text-emerald-300" : "bg-amber-500/20 text-amber-300")}>
+                                <span className={cn("text-xs font-bold px-2.5 py-1 rounded-full", user.emailVerified ? "bg-emerald-500/20 text-emerald-400" : "bg-amber-500/20 text-amber-400")}>
                                     {user.emailVerified ? "Verified" : "Unverified"}
                                 </span>
                             </div>
@@ -163,7 +163,7 @@ export default function DashboardPage() {
                                         <CreditCard className="w-4 h-4 text-purple-500" />
                                     <span className="text-sm text-muted-foreground">Plan</span>
                                 </div>
-                                <span className="text-xs font-medium px-2 py-1 rounded-full bg-purple-500/20 text-purple-300">
+                                <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-400">
                                     Free Tier
                                 </span>
                             </div>

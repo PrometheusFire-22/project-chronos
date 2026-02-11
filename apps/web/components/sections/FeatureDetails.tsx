@@ -67,14 +67,14 @@ function getFeatureImage(index: number, title: string): string {
 
 export function FeatureDetails({ features }: FeatureDetailsProps) {
   return (
-    <section className="relative bg-slate-900 py-24 lg:py-32">
+    <section className="relative bg-background py-24 lg:py-32">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
             Everything You Need to Succeed
           </h2>
-          <p className="text-lg text-slate-400">
+          <p className="text-lg text-muted-foreground">
             A comprehensive suite of tools designed specifically for private market intelligence
           </p>
         </div>
@@ -95,30 +95,30 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
                 {/* Content */}
                 <div className={isEven ? 'lg:order-1' : 'lg:order-2'}>
                   {/* Icon */}
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/20 mb-6">
-                    <IconComponent className="w-8 h-8 text-purple-400" />
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-purple-500/10 border border-purple-500/20 mb-6">
+                    <IconComponent className="w-8 h-8 text-purple-500" />
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+                  <h3 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
                     {feature.title}
                   </h3>
 
                   {/* Description */}
                   <div
-                    className="prose prose-invert prose-lg max-w-none"
+                    className="prose prose-lg max-w-none text-muted-foreground"
                     dangerouslySetInnerHTML={{ __html: renderRichText(feature.description) }}
                   />
 
                   {/* Key Points - if description is long, we could split it */}
-                  <div className="flex flex-wrap gap-3">
-                    <span className="px-3 py-1 rounded-full bg-slate-800 text-slate-300 text-sm">
+                  <div className="flex flex-wrap gap-3 mt-6">
+                    <span className="px-3 py-1 rounded-full bg-muted text-muted-foreground border border-border text-sm font-medium">
                       Enterprise-Ready
                     </span>
-                    <span className="px-3 py-1 rounded-full bg-slate-800 text-slate-300 text-sm">
+                    <span className="px-3 py-1 rounded-full bg-muted text-muted-foreground border border-border text-sm font-medium">
                       Real-Time
                     </span>
-                    <span className="px-3 py-1 rounded-full bg-slate-800 text-slate-300 text-sm">
+                    <span className="px-3 py-1 rounded-full bg-muted text-muted-foreground border border-border text-sm font-medium">
                       AI-Powered
                     </span>
                   </div>
@@ -126,7 +126,7 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
 
                 {/* Visual Placeholder */}
                 <div className={isEven ? 'lg:order-2' : 'lg:order-1'}>
-                  <div className="relative aspect-[4/3] rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden group-hover:border-slate-700 transition-colors">
+                  <div className="relative aspect-[4/3] rounded-2xl bg-card border border-border overflow-hidden shadow-lg">
                      <Image
                       src={getFeatureImage(index, feature.title)}
                       alt={feature.title}

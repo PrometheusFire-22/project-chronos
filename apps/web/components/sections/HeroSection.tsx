@@ -103,14 +103,15 @@ export function HeroSection({ data }: HeroSectionProps) {
              <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 to-indigo-500/10 rounded-3xl border border-border backdrop-blur-sm -z-10" />
 
              {/* The Graph Illustration */}
-             <Image
-                src="/illustrations/hero-graph.svg"
-                alt="Graph Network Visualization"
-                width={600}
-                height={500}
-                className="w-full h-auto drop-shadow-2xl"
-                priority
-             />
+             <div className="relative w-full h-full min-h-[400px] lg:min-h-[500px]">
+                <Image
+                    src="/illustrations/hero-graph.svg"
+                    alt="Graph Network Visualization"
+                    fill
+                    className="object-cover rounded-3xl shadow-2xl"
+                    priority
+                />
+             </div>
 
              {/* Floating Elements (Decorative) */}
              <motion.div

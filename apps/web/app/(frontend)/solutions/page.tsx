@@ -103,7 +103,7 @@ export default async function SolutionsPage() {
                     <Icon className={`w-7 h-7 ${colors.text}`} />
                   </div>
                   <h3 className="text-xl font-bold mb-4">{feature.headline}</h3>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-foreground/80 leading-relaxed">
                     {feature.subheadline}
                   </p>
                 </div>

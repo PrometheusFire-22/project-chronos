@@ -11,7 +11,7 @@ export function FeaturesHero({ hero }: FeaturesHeroProps) {
   const subheadline = hero?.subheadline || 'Unified graph, vector, geospatial, and time-series capabilities built for special situations investors navigating the Canadian liquidity reset.'
 
   return (
-    <section className="relative overflow-hidden bg-slate-950 pt-32 pb-24 lg:pt-40 lg:pb-32">
+    <section className="relative overflow-hidden bg-background pt-32 pb-24 lg:pt-40 lg:pb-32">
       {/* Background Gradients */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-purple-500/20 blur-[120px] rounded-full mix-blend-screen opacity-30 pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-indigo-500/20 blur-[120px] rounded-full mix-blend-screen opacity-20 pointer-events-none" />
@@ -19,38 +19,38 @@ export function FeaturesHero({ hero }: FeaturesHeroProps) {
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 border border-slate-800 text-slate-300 text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted border border-border text-muted-foreground text-sm font-medium mb-6">
             <Database className="w-4 h-4" />
             Platform Features
           </div>
 
           {/* Headline - from Directus */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-[1.1]">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-[1.1]">
             {headline}
           </h1>
 
           {/* Subheadline - from Directus */}
-          <p className="text-xl text-slate-400 mb-12 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
             {subheadline}
           </p>
 
           {/* Four Pillars Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
-            <div className="p-6 rounded-xl bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/20">
-              <Network className="w-8 h-8 text-purple-400 mx-auto mb-3" />
-              <div className="text-sm font-semibold text-white">Graph Database</div>
+            <div className="p-6 rounded-xl bg-purple-500/5 border border-purple-500/20">
+              <Network className="w-8 h-8 text-purple-500 mx-auto mb-3" />
+              <div className="text-sm font-semibold text-foreground">Graph Database</div>
             </div>
-            <div className="p-6 rounded-xl bg-gradient-to-br from-indigo-500/10 to-transparent border border-indigo-500/20">
-              <Database className="w-8 h-8 text-indigo-400 mx-auto mb-3" />
-              <div className="text-sm font-semibold text-white">Vector Search</div>
+            <div className="p-6 rounded-xl bg-indigo-500/5 border border-indigo-500/20">
+              <Database className="w-8 h-8 text-indigo-500 mx-auto mb-3" />
+              <div className="text-sm font-semibold text-foreground">Vector Search</div>
             </div>
-            <div className="p-6 rounded-xl bg-gradient-to-br from-pink-500/10 to-transparent border border-pink-500/20">
-              <TrendingUp className="w-8 h-8 text-pink-400 mx-auto mb-3" />
-              <div className="text-sm font-semibold text-white">Time-Series</div>
+            <div className="p-6 rounded-xl bg-pink-500/5 border border-pink-500/20">
+              <TrendingUp className="w-8 h-8 text-pink-500 mx-auto mb-3" />
+              <div className="text-sm font-semibold text-foreground">Time-Series</div>
             </div>
-            <div className="p-6 rounded-xl bg-gradient-to-br from-amber-500/10 to-transparent border border-amber-500/20">
-              <Globe className="w-8 h-8 text-amber-400 mx-auto mb-3" />
-              <div className="text-sm font-semibold text-white">Geospatial</div>
+            <div className="p-6 rounded-xl bg-amber-500/5 border border-amber-500/20">
+              <Globe className="w-8 h-8 text-amber-500 mx-auto mb-3" />
+              <div className="text-sm font-semibold text-foreground">Geospatial</div>
             </div>
           </div>
         </div>

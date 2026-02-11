@@ -53,13 +53,13 @@ export function Footer() {
               Advanced financial analytics for the modern era. Graph-based intelligence for data-driven decisions.
             </p>
             <div className="flex items-center gap-4 mt-2">
-              <Link href="#" className="text-slate-400 hover:text-white transition-colors" aria-label="Github">
+              <Link href="https://github.com/PrometheusFire-22/" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors" aria-label="Github">
                 <Github size={20} />
               </Link>
-              <Link href="#" className="text-slate-400 hover:text-white transition-colors" aria-label="X (Twitter)">
+              <Link href="https://x.com/AutomatonicAI" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors" aria-label="X (Twitter)">
                 <XIcon size={20} />
               </Link>
-              <Link href="#" className="text-slate-400 hover:text-white transition-colors" aria-label="LinkedIn">
+              <Link href="https://www.linkedin.com/in/geoffbevans/" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors" aria-label="LinkedIn">
                 <Linkedin size={20} />
               </Link>
             </div>
