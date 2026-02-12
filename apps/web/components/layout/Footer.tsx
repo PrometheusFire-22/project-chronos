@@ -10,22 +10,11 @@ const XIcon = ({ size = 20 }: { size?: number }) => (
 
 const FOOTER_LINKS = {
   product: [
-    { label: 'Features', href: '/features' },
-    { label: 'Integrations', href: '/integrations' },
-    { label: 'Changelog', href: '/changelog' },
-    { label: 'Documentation', href: '/docs' },
-  ],
-  company: [
-    { label: 'About', href: '/about' },
-    { label: 'Careers', href: '/careers' },
+    { label: 'Solutions', href: '/solutions' },
     { label: 'Contact', href: '/contact' },
-    { label: 'Partners', href: '/partners' },
   ],
   resources: [
     { label: 'Blog', href: '/blog' },
-    { label: 'Community', href: '/community' },
-    { label: 'Help Center', href: '/help' },
-    { label: 'Status', href: '/status' },
   ],
   legal: [
     { label: 'Privacy Policy', href: '/privacy' },
@@ -38,9 +27,9 @@ export function Footer() {
   return (
     <footer className="bg-slate-950 text-slate-200 border-t border-slate-800 relative z-10">
       <div className="container mx-auto px-4 py-12 md:py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
           {/* Brand Column */}
-          <div className="col-span-2 lg:col-span-1 flex flex-col gap-4">
+          <div className="col-span-2 md:col-span-1 flex flex-col gap-4">
             <Link href="/" className="flex items-center gap-2 font-bold text-xl text-white">
               {/* Footer is always dark theme, so we force the 'dark mode' logo style (white text) */}
               <img
@@ -70,19 +59,6 @@ export function Footer() {
             <h3 className="font-semibold text-white mb-4">Product</h3>
             <ul className="space-y-3">
               {FOOTER_LINKS.product.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-slate-400 hover:text-primary transition-colors text-sm">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-semibold text-white mb-4">Company</h3>
-            <ul className="space-y-3">
-              {FOOTER_LINKS.company.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-slate-400 hover:text-primary transition-colors text-sm">
                     {link.label}

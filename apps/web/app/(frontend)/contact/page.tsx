@@ -116,16 +116,16 @@ export default function ContactPage() {
               <h3 className="font-semibold text-white mb-4">Looking for something specific?</h3>
               <div className="space-y-3">
                 <Link
-                  href="/features"
+                  href="/solutions"
                   className="block text-slate-400 hover:text-violet-400 transition-colors"
                 >
-                  → View Platform Features
+                  → View Our Solutions
                 </Link>
                 <Link
-                  href="/about"
+                  href="/blog"
                   className="block text-slate-400 hover:text-violet-400 transition-colors"
                 >
-                  → Learn About Our Team
+                  → Read Our Blog
                 </Link>
                 <Link
                   href="/privacy"
