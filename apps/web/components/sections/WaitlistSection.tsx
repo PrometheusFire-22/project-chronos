@@ -14,10 +14,10 @@ export function WaitlistSection() {
             <Sparkles className="w-4 h-4" />
             Early Access
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+          <h2 className="heading-section text-foreground mb-4">
             Join the Waitlist
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-body-lg">
             Be among the first to experience the future of private market intelligence. Early access users get exclusive benefits and priority onboarding.
           </p>
         </div>

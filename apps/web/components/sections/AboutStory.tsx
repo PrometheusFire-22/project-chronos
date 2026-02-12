@@ -27,10 +27,10 @@ export function AboutStory({ sectionData }: AboutStoryProps) {
       <div className="container mx-auto px-4">
         {/* Main Story */}
         <div className="max-w-4xl mx-auto mb-20">
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">
+          <h2 className="heading-section text-foreground mb-6">
             {headline}
           </h2>
-          <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
+          <div className="space-y-6 text-body-lg">
             {paragraphs.map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
             ))}
@@ -41,8 +41,8 @@ export function AboutStory({ sectionData }: AboutStoryProps) {
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {/* Mission */}
           <div className="p-8 rounded-2xl bg-card border border-border">
-            <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center mb-6">
-              <Target className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+            <div className="w-12 h-12 rounded-xl bg-rose-500/10 flex items-center justify-center mb-6">
+              <Target className="w-6 h-6 text-rose-600 dark:text-rose-400" />
             </div>
             <h3 className="text-xl font-bold text-foreground mb-4">Mission</h3>
             <p className="text-muted-foreground leading-relaxed">
@@ -53,8 +53,8 @@ export function AboutStory({ sectionData }: AboutStoryProps) {
 
           {/* Vision */}
           <div className="p-8 rounded-2xl bg-card border border-border">
-            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 flex items-center justify-center mb-6">
-              <Lightbulb className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+            <div className="w-12 h-12 rounded-xl bg-yellow-500/10 flex items-center justify-center mb-6">
+              <Lightbulb className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
             </div>
             <h3 className="text-xl font-bold text-foreground mb-4">Vision</h3>
             <p className="text-muted-foreground leading-relaxed">
@@ -65,8 +65,8 @@ export function AboutStory({ sectionData }: AboutStoryProps) {
 
           {/* Approach */}
           <div className="p-8 rounded-2xl bg-card border border-border">
-            <div className="w-12 h-12 rounded-xl bg-pink-500/10 flex items-center justify-center mb-6">
-              <TrendingUp className="w-6 h-6 text-pink-600 dark:text-pink-400" />
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-6">
+              <TrendingUp className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
             </div>
             <h3 className="text-xl font-bold text-foreground mb-4">Approach</h3>
             <p className="text-muted-foreground leading-relaxed">

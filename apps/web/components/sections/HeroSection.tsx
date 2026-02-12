@@ -56,7 +56,7 @@ export function HeroSection({ data }: HeroSectionProps) {
 
             {/* Headline */}
             <motion.div variants={fadeIn}>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4 leading-[1.1]">
+              <h1 className="heading-hero tracking-tight mb-4">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground via-purple-500 to-indigo-500">
                   {data.headline}
                 </span>
@@ -69,10 +69,11 @@ export function HeroSection({ data }: HeroSectionProps) {
             </motion.div>
 
             <motion.div variants={fadeIn} className="flex flex-col sm:flex-row gap-4 mt-2">
-              <Link href={data.cta_primary_link}>
-                <Button size="lg" className="bg-foreground text-background hover:!bg-purple-600 hover:!text-white dark:hover:!bg-purple-600 font-semibold h-12 px-8 text-base shadow-lg shadow-purple-500/20">
-                  {data.cta_primary_text} <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+              <Link
+                href={data.cta_primary_link}
+                className="inline-flex items-center justify-center h-12 px-8 text-base font-semibold rounded-md bg-foreground text-background hover:bg-purple-600 hover:text-white transition-colors shadow-lg shadow-purple-500/20"
+              >
+                {data.cta_primary_text} <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
               {data.cta_secondary_text && data.cta_secondary_link && (
                 <Link href={data.cta_secondary_link}>

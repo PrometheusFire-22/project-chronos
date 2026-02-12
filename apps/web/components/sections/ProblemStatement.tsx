@@ -57,10 +57,10 @@ export function ProblemStatement({ problems, sectionData }: ProblemStatementProp
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+          <h2 className="heading-section text-foreground mb-4">
             {headline}
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-body-lg">
             {subheadline}
           </p>
         </div>
@@ -132,7 +132,7 @@ export function ProblemStatement({ problems, sectionData }: ProblemStatementProp
                 </div>
 
                 {/* Title */}
-                <h3 className="text-2xl font-bold text-foreground mb-3">
+                <h3 className="heading-card text-foreground mb-3">
                   {problem.title}
                 </h3>
 

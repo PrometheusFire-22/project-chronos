@@ -72,10 +72,10 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+          <h2 className="heading-section text-foreground mb-4">
             Everything You Need to Succeed
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-body-lg">
             A comprehensive suite of tools designed specifically for private market intelligence
           </p>
         </div>
@@ -176,7 +176,7 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
             return (
               <div
                 key={feature.id}
-                className={`grid lg:grid-cols-2 gap-12 items-center ${
+                className={`grid lg:grid-cols-2 gap-12 items-stretch ${
                   isEven ? '' : 'lg:flex-row-reverse'
                 }`}
               >
@@ -214,7 +214,7 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
 
                 {/* Visual Placeholder */}
                 <div className={isEven ? 'lg:order-2' : 'lg:order-1'}>
-                  <div className="relative aspect-[4/3] rounded-2xl bg-muted border border-border overflow-hidden shadow-lg">
+                  <div className="relative h-full min-h-[350px] rounded-2xl bg-muted border border-border overflow-hidden shadow-lg">
                      <Image
                       src={getFeatureImage(index, feature.title)}
                       alt={feature.title}

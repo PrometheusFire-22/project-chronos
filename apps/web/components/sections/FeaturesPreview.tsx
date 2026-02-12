@@ -60,10 +60,10 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
 
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
+          <h2 className="heading-section text-foreground mb-4">
             {headline}
           </h2>
-          <p className="text-lg text-muted-foreground">
+          <p className="text-body-lg">
             {subheadline}
           </p>
         </div>
@@ -116,6 +116,14 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
                    titleHover: 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400'
                 }
               }
+              if (lowerTitle.includes('location')) {
+                return {
+                  from: 'from-emerald-500/20',
+                  to: 'to-green-500/20',
+                  text: 'text-emerald-500 group-hover:text-emerald-600 dark:hover:text-emerald-400',
+                  titleHover: 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400'
+                }
+              }
               // Default
               return {
                 from: 'from-purple-500/20',
@@ -139,7 +147,7 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
                   </div>
 
                   <div className="flex-1">
-                    <h3 className={`text-2xl font-bold text-foreground ${colors.titleHover} transition-colors`}>
+                    <h3 className={`heading-card text-foreground ${colors.titleHover} transition-colors`}>
                       {feature.title}
                     </h3>
                   </div>
@@ -147,7 +155,7 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
 
                 {/* Description */}
                 <div
-                  className="prose prose-invert max-w-none text-base text-slate-600 dark:text-slate-300"
+                  className="prose prose-invert max-w-none text-body-lg"
                   dangerouslySetInnerHTML={{ __html: renderRichText(feature.description) }}
                 />
 

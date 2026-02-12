@@ -46,7 +46,7 @@ export function SolutionPillars({ features }: SolutionPillarsProps) {
   };
 
   return (
-    <div className="py-24 bg-muted/30 border-t border-border">
+    <div className="py-24 bg-muted border-t border-border">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {features.map((feature) => {
