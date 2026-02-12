@@ -2,28 +2,24 @@
 import React from 'react';
 import { ShieldAlert, BarChart2, Zap, LucideIcon, ArrowRight } from 'lucide-react';
 import { renderRichText } from '@/lib/content-renderer';
+import type { HomepagePillar, PageSection } from '@/lib/directus/types';
 
-// Interface for the props
 interface SolutionPillarsProps {
-  features: {
-    id: string;
-    section_key: string;
-    headline: string;
-    subheadline?: string;
-    content: string; // rich text
-  }[];
+  pillars: HomepagePillar[];
+  sectionData?: PageSection | null;
 }
 
-export function SolutionPillars({ features }: SolutionPillarsProps) {
+export function SolutionPillars({ pillars, sectionData }: SolutionPillarsProps) {
+  const features = pillars;
 
-  // Icon mapping
+  // Icon mapping by slug
   const iconMap: Record<string, LucideIcon> = {
     'solutions-feature-1': ShieldAlert,
     'solutions-feature-2': BarChart2,
     'solutions-feature-3': Zap,
   };
 
-  // Color mapping
+  // Color mapping by slug
   const colorMap: Record<string, { bg: string; text: string; border: string; gradient: string }> = {
     'solutions-feature-1': {
       bg: 'bg-purple-500/10',
@@ -50,9 +46,9 @@ export function SolutionPillars({ features }: SolutionPillarsProps) {
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {features.map((feature) => {
-            const Icon = iconMap[feature.section_key] || ShieldAlert;
+            const Icon = iconMap[feature.slug] || ShieldAlert;
             // Default to first color if not found
-            const colors = colorMap[feature.section_key] || colorMap['solutions-feature-1'];
+            const colors = colorMap[feature.slug] || colorMap['solutions-feature-1'];
 
             return (
               <div
@@ -71,12 +67,12 @@ export function SolutionPillars({ features }: SolutionPillarsProps) {
                   </div>
 
                   <h3 className="text-2xl font-bold mb-4 text-foreground">
-                    {feature.headline}
+                    {feature.title}
                   </h3>
 
                   <div
                     className="prose prose-sm dark:prose-invert text-muted-foreground"
-                    dangerouslySetInnerHTML={{ __html: renderRichText(feature.content) }}
+                    dangerouslySetInnerHTML={{ __html: renderRichText(feature.description) }}
                   />
 
                    <div className="mt-6 pt-6 border-t border-border/50 flex items-center text-sm font-medium text-foreground opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
