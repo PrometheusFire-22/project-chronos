@@ -10,23 +10,13 @@ import { useSession, signOut, CustomUser } from '@/lib/auth-client'
 import { useRouter } from 'next/navigation'
 
 const NAV_LINKS = [
-  { href: '/features', label: 'Features' },
   { href: '/solutions', label: 'Solutions' },
-  {
-    label: 'Analytics',
-    children: [
-      { href: '/analytics/economic', label: 'Economic' },
-      { href: '/analytics/geospatial', label: 'Geospatial' }
-    ]
-  },
-  { href: '/about', label: 'About' },
   { href: '/blog', label: 'Blog' },
 ]
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [userDropdownOpen, setUserDropdownOpen] = useState(false)
 
   const { data: session, isPending } = useSession()
@@ -68,51 +58,13 @@ export function Header() {
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
           {NAV_LINKS.map((link) => (
-            <div key={link.label} className="relative group">
-              {link.children ? (
-                <div
-                  className="relative"
-                  onMouseEnter={() => setActiveDropdown(link.label)}
-                  onMouseLeave={() => setActiveDropdown(null)}
-                >
-                  <button
-                    className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-primary transition-colors py-2"
-                  >
-                    {link.label}
-                    <ChevronDown size={14} />
-                  </button>
-
-                  <AnimatePresence>
-                    {activeDropdown === link.label && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        transition={{ duration: 0.2 }}
-                        className="absolute top-full left-0 mt-1 w-48 bg-popover/95 backdrop-blur-xl border border-border rounded-xl shadow-xl overflow-hidden"
-                      >
-                        {link.children.map((child) => (
-                          <Link
-                            key={child.href}
-                            href={child.href}
-                            className="block px-4 py-3 text-sm text-foreground/80 hover:bg-accent hover:text-accent-foreground transition-colors"
-                          >
-                            {child.label}
-                          </Link>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ) : (
-                <Link
-                  href={link.href}
-                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-                >
-                  {link.label}
-                </Link>
-              )}
-            </div>
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+            >
+              {link.label}
+            </Link>
           ))}
         </nav>
 
@@ -232,33 +184,14 @@ export function Header() {
           >
             <div className="container px-4 py-4 flex flex-col gap-4">
               {NAV_LINKS.map((link) => (
-                <div key={link.label}>
-                  {link.children ? (
-                    <div className="space-y-2">
-                       <div className="text-base font-medium text-foreground py-2">{link.label}</div>
-                       <div className="pl-4 border-l border-border space-y-2">
-                          {link.children.map(child => (
-                            <Link
-                              key={child.href}
-                              href={child.href}
-                              onClick={() => setIsMobileMenuOpen(false)}
-                              className="block text-sm text-muted-foreground hover:text-primary py-1"
-                            >
-                              {child.label}
-                            </Link>
-                          ))}
-                       </div>
-                    </div>
-                  ) : (
-                    <Link
-                      href={link.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block text-base font-medium text-foreground hover:text-primary py-2"
-                    >
-                      {link.label}
-                    </Link>
-                  )}
-                </div>
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block text-base font-medium text-foreground hover:text-primary py-2"
+                >
+                  {link.label}
+                </Link>
               ))}
               <div className="pt-4 border-t border-border space-y-3">
                   {session ? (
