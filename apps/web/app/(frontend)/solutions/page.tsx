@@ -75,11 +75,17 @@ export default async function SolutionsPage() {
       </div>
 
       {/* Solution Pillars */}
-      <SolutionPillars features={features.map(f => ({
+      <SolutionPillars pillars={features.map(f => ({
         id: f.id,
-        section_key: f.section_key,
-        headline: f.headline,
-        content: f.subheadline || ''
+        slug: f.section_key,
+        title: f.headline,
+        description: f.subheadline || '',
+        icon: null,
+        image: null,
+        sort_order: 0,
+        enabled: true,
+        created_at: f.created_at || new Date().toISOString(),
+        updated_at: f.updated_at || new Date().toISOString(),
       }))} />
     </div>
   );
