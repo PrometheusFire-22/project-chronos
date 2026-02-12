@@ -127,8 +127,8 @@ export function ProblemStatement({ problems, sectionData }: ProblemStatementProp
                 className={`group relative p-8 rounded-2xl bg-card border transition-all duration-300 ${colors.border} hover:shadow-xl bg-gradient-to-br ${colors.gradient} to-transparent`}
               >
                 {/* Icon */}
-                <div className={`mb-4 w-12 h-12 rounded-xl flex items-center justify-center ${colors.bg}`}>
-                  <IconComponent className={`w-6 h-6 ${colors.text}`} />
+                <div className={`icon-container mb-4 ${colors.bg}`}>
+                  <IconComponent className={`icon-md ${colors.text}`} />
                 </div>
 
                 {/* Title */}
@@ -138,7 +138,7 @@ export function ProblemStatement({ problems, sectionData }: ProblemStatementProp
 
                 {/* Description */}
                 <div
-                  className="prose dark:prose-invert prose-slate max-w-none text-base"
+                  className="prose-card"
                   dangerouslySetInnerHTML={{ __html: renderRichText(problem.description) }}
                 />
 

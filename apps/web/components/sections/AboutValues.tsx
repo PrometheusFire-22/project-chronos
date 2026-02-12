@@ -82,18 +82,18 @@ export function AboutValues({ values }: AboutValuesProps) {
                 className={`p-8 rounded-2xl bg-card border ${colors.border} hover:border-opacity-50 transition-all duration-300 group`}
               >
                 {/* Icon */}
-                <div className={`w-14 h-14 rounded-xl ${colors.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  <IconComponent className={`w-7 h-7 ${colors.icon}`} />
+                <div className={`icon-container-lg ${colors.bg} mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                  <IconComponent className={`icon-lg ${colors.icon}`} />
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-bold text-foreground mb-3">
+                <h3 className="heading-card text-foreground mb-3">
                   {value.title}
                 </h3>
 
                 {/* Description */}
                 <div
-                  className="prose dark:prose-invert prose-slate max-w-none"
+                  className="prose-card"
                   dangerouslySetInnerHTML={{ __html: renderRichText(value.description) }}
                 />
               </div>

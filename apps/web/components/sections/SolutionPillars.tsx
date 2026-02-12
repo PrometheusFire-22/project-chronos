@@ -62,16 +62,16 @@ export function SolutionPillars({ pillars, sectionData }: SolutionPillarsProps) 
                 <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-br ${colors.gradient} to-transparent`} />
 
                 <div className="relative z-10">
-                  <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 transition-colors ${colors.bg} ${colors.text}`}>
-                    <Icon className="w-7 h-7" />
+                  <div className={`icon-container-lg mb-6 transition-colors ${colors.bg} ${colors.text}`}>
+                    <Icon className="icon-lg" />
                   </div>
 
-                  <h3 className="text-2xl font-bold mb-4 text-foreground">
+                  <h3 className="heading-card mb-4 text-foreground">
                     {feature.title}
                   </h3>
 
                   <div
-                    className="prose prose-sm dark:prose-invert text-muted-foreground"
+                    className="prose-card"
                     dangerouslySetInnerHTML={{ __html: renderRichText(feature.description) }}
                   />
 

@@ -161,19 +161,19 @@ export function UseCases({ useCases, sectionData }: UseCasesProps) {
               >
                 {/* Icon */}
                 <div
-                  className={`mb-6 w-12 h-12 rounded-xl flex items-center justify-center ${colors.bg} ${colors.text}`}
+                  className={`icon-container mb-6 ${colors.bg} ${colors.text}`}
                 >
-                  <IconComponent className={`w-6 h-6 ${colors.text}`} />
+                  <IconComponent className={`icon-md ${colors.text}`} />
                 </div>
 
                 {/* Title */}
-                <h3 className="text-3xl sm:text-4xl font-bold text-foreground mb-3">
+                <h3 className="heading-card text-foreground mb-3">
                   {useCase.title}
                 </h3>
 
                 {/* Description */}
                 <div
-                  className="prose dark:prose-invert prose-slate max-w-none text-lg text-slate-600 dark:text-slate-300"
+                  className="prose-card"
                   dangerouslySetInnerHTML={{ __html: renderRichText(useCase.description) }}
                 />
 
@@ -188,7 +188,7 @@ export function UseCases({ useCases, sectionData }: UseCasesProps) {
 
         {/* Bottom CTA */}
         <div className="text-center mt-16 pt-12 border-t border-slate-800/50">
-          <h3 className="text-2xl font-bold text-foreground mb-4">
+          <h3 className="heading-card text-foreground mb-4">
             {sectionData?.cta_text ?? 'Ready to find the edge in the Canadian liquidity reset?'}
           </h3>
           <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">

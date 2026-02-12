@@ -183,18 +183,18 @@ export function FeatureDetails({ features }: FeatureDetailsProps) {
                 {/* Content */}
                 <div className={isEven ? 'lg:order-1' : 'lg:order-2'}>
                   {/* Icon */}
-                  <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl ${colors.bg} ${colors.border} border mb-6`}>
-                    <DisplayIcon className={`w-8 h-8 ${colors.text}`} />
+                  <div className={`icon-container-lg ${colors.bg} ${colors.border} border mb-6`}>
+                    <DisplayIcon className={`icon-lg ${colors.text}`} />
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
+                  <h3 className="heading-card-lg text-foreground mb-4">
                     {feature.title}
                   </h3>
 
                   {/* Description */}
                   <div
-                    className="prose prose-lg max-w-none text-muted-foreground prose-strong:text-foreground dark:prose-strong:text-white"
+                    className="prose-feature"
                     dangerouslySetInnerHTML={{ __html: renderRichText(feature.description) }}
                   />
 

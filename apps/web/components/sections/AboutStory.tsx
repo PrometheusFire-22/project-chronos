@@ -41,10 +41,10 @@ export function AboutStory({ sectionData }: AboutStoryProps) {
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {/* Mission */}
           <div className="p-8 rounded-2xl bg-card border border-border">
-            <div className="w-12 h-12 rounded-xl bg-rose-500/10 flex items-center justify-center mb-6">
-              <Target className="w-6 h-6 text-rose-600 dark:text-rose-400" />
+            <div className="icon-container bg-rose-500/10 mb-6">
+              <Target className="icon-md text-rose-600 dark:text-rose-400" />
             </div>
-            <h3 className="text-xl font-bold text-foreground mb-4">Mission</h3>
+            <h3 className="heading-card text-foreground mb-4">Mission</h3>
             <p className="text-muted-foreground leading-relaxed">
               Democratize access to relationship intelligence, empowering every investor to make
               data-driven decisions with confidence.
@@ -53,10 +53,10 @@ export function AboutStory({ sectionData }: AboutStoryProps) {
 
           {/* Vision */}
           <div className="p-8 rounded-2xl bg-card border border-border">
-            <div className="w-12 h-12 rounded-xl bg-yellow-500/10 flex items-center justify-center mb-6">
-              <Lightbulb className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+            <div className="icon-container bg-yellow-500/10 mb-6">
+              <Lightbulb className="icon-md text-yellow-600 dark:text-yellow-400" />
             </div>
-            <h3 className="text-xl font-bold text-foreground mb-4">Vision</h3>
+            <h3 className="heading-card text-foreground mb-4">Vision</h3>
             <p className="text-muted-foreground leading-relaxed">
               A world where hidden market connections are instantly discoverable, enabling smarter
               capital allocation and fostering innovation.
@@ -65,10 +65,10 @@ export function AboutStory({ sectionData }: AboutStoryProps) {
 
           {/* Approach */}
           <div className="p-8 rounded-2xl bg-card border border-border">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-6">
-              <TrendingUp className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+            <div className="icon-container bg-emerald-500/10 mb-6">
+              <TrendingUp className="icon-md text-emerald-600 dark:text-emerald-400" />
             </div>
-            <h3 className="text-xl font-bold text-foreground mb-4">Approach</h3>
+            <h3 className="heading-card text-foreground mb-4">Approach</h3>
             <p className="text-muted-foreground leading-relaxed">
               Combine cutting-edge technology with deep domain expertise to build products that
               investors love to use every day.

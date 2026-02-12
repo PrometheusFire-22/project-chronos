@@ -86,9 +86,9 @@ export function HeroSection({ data }: HeroSectionProps) {
 
             {/* Tags */}
             <motion.div variants={fadeIn} className="mt-8 pt-8 border-t border-border grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-muted-foreground w-full">
-                <span className="flex items-center justify-center sm:justify-start gap-2"><Network size={24} className="text-purple-400"/> Graph Analysis</span>
-                <span className="flex items-center justify-center sm:justify-start gap-2"><Database size={24} className="text-indigo-400"/> Vector Search</span>
-                <span className="flex items-center justify-center sm:justify-start gap-2"><Globe size={24} className="text-emerald-500"/> Geospatial Ops</span>
+                <span className="flex items-center justify-center sm:justify-start gap-2"><Network className="icon-md text-purple-500"/> Graph Analysis</span>
+                <span className="flex items-center justify-center sm:justify-start gap-2"><Database className="icon-md text-indigo-500"/> Vector Search</span>
+                <span className="flex items-center justify-center sm:justify-start gap-2"><Globe className="icon-md text-emerald-500"/> Geospatial Ops</span>
             </motion.div>
 
           </motion.div>

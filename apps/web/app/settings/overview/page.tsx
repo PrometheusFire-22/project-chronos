@@ -5,6 +5,7 @@ import { useSession, CustomUser } from '@/lib/auth-client'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { User, Shield, Zap, FileText, Settings, CreditCard } from 'lucide-react'
+import DashboardLoading from './loading'
 import { Button } from '@chronos/ui/components/button'
 import { cn } from '@chronos/ui'
 import { useUsage } from '@/hooks/useUsage'
@@ -22,11 +23,7 @@ export default function DashboardPage() {
   }, [session, isPending, router])
 
   if (isPending || !session) {
-    return (
-        <div className="min-h-screen bg-black flex items-center justify-center">
-            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-        </div>
-    )
+    return <DashboardLoading />
   }
 
   const user = session.user as unknown as CustomUser

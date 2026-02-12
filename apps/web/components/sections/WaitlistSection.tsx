@@ -31,15 +31,15 @@ export function WaitlistSection() {
 
           {/* Right: Benefits */}
           <div className="order-1 lg:order-2 space-y-6">
-            <h3 className="text-2xl font-bold text-foreground mb-6">
+            <h3 className="heading-card text-foreground mb-6">
               What You&apos;ll Get
             </h3>
 
             <div className="space-y-6">
               {/* Benefit 1 */}
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center">
-                  <Sparkles className="w-6 h-6 text-amber-500" />
+                <div className="flex-shrink-0 icon-container bg-amber-500/10">
+                  <Sparkles className="icon-md text-amber-500" />
                 </div>
                 <div>
                   <h4 className="text-lg font-semibold text-foreground mb-2">
@@ -53,8 +53,8 @@ export function WaitlistSection() {
 
               {/* Benefit 2 */}
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-emerald-500" />
+                <div className="flex-shrink-0 icon-container bg-emerald-500/10">
+                  <TrendingUp className="icon-md text-emerald-500" />
                 </div>
                 <div>
                   <h4 className="text-lg font-semibold text-foreground mb-2">
@@ -68,8 +68,8 @@ export function WaitlistSection() {
 
               {/* Benefit 3 */}
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
-                  <Users className="w-6 h-6 text-blue-500" />
+                <div className="flex-shrink-0 icon-container bg-blue-500/10">
+                  <Users className="icon-md text-blue-500" />
                 </div>
                 <div>
                   <h4 className="text-lg font-semibold text-foreground mb-2">

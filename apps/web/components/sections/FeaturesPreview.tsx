@@ -128,7 +128,7 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
               return {
                 from: 'from-purple-500/20',
                 to: 'to-indigo-500/20',
-                text: 'text-purple-400 group-hover:text-purple-600 dark:group-hover:text-purple-300',
+                text: 'text-purple-500 group-hover:text-purple-600 dark:group-hover:text-purple-300',
                 titleHover: 'group-hover:text-purple-600 dark:group-hover:text-purple-300'
               }
             }
@@ -142,8 +142,8 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
               >
                 {/* Icon and Title Row */}
                 <div className="flex items-start gap-4 mb-4">
-                  <div className={`flex-shrink-0 w-12 h-12 rounded-lg bg-gradient-to-br ${colors.from} ${colors.to} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-                    <IconComponent className={`w-6 h-6 ${colors.text.split(' ')[0]}`} />
+                  <div className={`flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br ${colors.from} ${colors.to} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
+                    <IconComponent className={`icon-md ${colors.text.split(' ')[0]}`} />
                   </div>
 
                   <div className="flex-1">
@@ -155,7 +155,7 @@ export function FeaturesPreview({ features, sectionData }: FeaturesPreviewProps)
 
                 {/* Description */}
                 <div
-                  className="prose prose-invert max-w-none text-body-lg"
+                  className="prose-card"
                   dangerouslySetInnerHTML={{ __html: renderRichText(feature.description) }}
                 />
 

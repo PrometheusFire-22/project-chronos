@@ -13,8 +13,16 @@ Defined in `apps/web/app/globals.css` inside `@layer components`. Use these clas
 | `.heading-hero` | `text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1]` | Page-level `<h1>` on hero sections |
 | `.heading-section` | `text-3xl sm:text-4xl font-bold` | Section `<h2>` headings (e.g. "Our Values") |
 | `.heading-card` | `text-xl sm:text-2xl font-bold` | Card or feature titles |
+| `.heading-card-lg` | `text-2xl sm:text-3xl font-bold` | Feature detail layout titles |
 | `.text-body-lg` | `text-lg text-muted-foreground leading-relaxed` | Lead paragraphs, section subtitles |
 | `.text-body` | `text-base text-muted-foreground` | Standard body text |
+| `.prose-card` | `prose prose-sm dark:prose-invert max-w-none text-muted-foreground` | CMS rich text in cards |
+| `.prose-feature` | `prose prose-lg dark:prose-invert max-w-none text-muted-foreground prose-strong:text-foreground dark:prose-strong:text-white` | Feature detail rich text |
+| `.icon-container` | `w-12 h-12 rounded-xl flex items-center justify-center` | Standard icon box (12x12) |
+| `.icon-container-lg` | `w-14 h-14 rounded-xl flex items-center justify-center` | Large icon box (14x14) |
+| `.icon-sm` | `w-5 h-5` | Small icons (table check/x) |
+| `.icon-md` | `w-6 h-6` | Standard icons |
+| `.icon-lg` | `w-7 h-7` | Large icons |
 
 ### Usage example
 
@@ -24,7 +32,18 @@ Defined in `apps/web/app/globals.css` inside `@layer components`. Use these clas
 
 <h2 className="heading-section text-foreground mb-4">Section</h2>
 <h3 className="heading-card text-foreground mb-3">Card Title</h3>
+<h3 className="heading-card-lg text-foreground mb-4">Feature Detail Title</h3>
 <p className="text-body">Card description text.</p>
+<div className="prose-card" dangerouslySetInnerHTML={{ __html: richText }} />
+<div className="prose-feature" dangerouslySetInnerHTML={{ __html: richText }} />
+
+{/* Icons */}
+<div className="icon-container bg-purple-500/10">
+  <Icon className="icon-md text-purple-500" />
+</div>
+<div className="icon-container-lg bg-purple-500/10">
+  <Icon className="icon-lg text-purple-500" />
+</div>
 ```
 
 ### Notes
@@ -59,21 +78,25 @@ Content-aware color is applied via title-matching logic in each section componen
 
 ### Icon background pattern
 
-Icon containers follow a consistent pattern:
+Icon containers use design system tokens:
 
 ```tsx
-<div className="w-12 h-12 rounded-xl bg-{color}-500/10 flex items-center justify-center">
-  <Icon className="w-6 h-6 text-{color}-600 dark:text-{color}-400" />
+<div className="icon-container bg-{color}-500/10">
+  <Icon className="icon-md text-{color}-600 dark:text-{color}-400" />
 </div>
 ```
 
 For larger variants (14x14):
 
 ```tsx
-<div className="w-14 h-14 rounded-xl bg-{color}-500/10 flex items-center justify-center">
-  <Icon className="w-7 h-7 text-{color}-600 dark:text-{color}-400" />
+<div className="icon-container-lg bg-{color}-500/10">
+  <Icon className="icon-lg text-{color}-600 dark:text-{color}-400" />
 </div>
 ```
+
+### Icon color rule
+
+Use `text-{color}-500` everywhere. Only add `dark:text-{color}-400` when the icon appears on a background that needs extra contrast.
 
 ---
 

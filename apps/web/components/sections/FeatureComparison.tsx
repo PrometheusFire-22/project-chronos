@@ -91,11 +91,11 @@ export function FeatureComparison({ comparisonItems, sectionData }: FeatureCompa
                 >
                   <div className="text-foreground font-medium">{feature.category}</div>
                   <div className="flex items-center gap-3">
-                    <Check className="w-5 h-5 text-emerald-500 flex-shrink-0" />
+                    <Check className="icon-sm text-emerald-500 flex-shrink-0" />
                     <span className="text-foreground text-sm">{feature.chronos_value}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <X className="w-5 h-5 text-red-500 flex-shrink-0" />
+                    <X className="icon-sm text-red-500 flex-shrink-0" />
                     <span className="text-muted-foreground text-sm">{feature.traditional_value}</span>
                   </div>
                 </div>
