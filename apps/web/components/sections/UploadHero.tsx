@@ -2,13 +2,14 @@
 
 import { useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
+import { useSession } from '@/lib/auth-client'
 import { FileDropzone } from '@/components/upload/FileDropzone'
 import { ProcessingSteps } from '@/components/upload/ProcessingSteps'
 import { ContactsTable } from '@/components/upload/ContactsTable'
 import { Button } from '@chronos/ui/components/button'
 import { ArrowRight, FileSearch, Brain, Download } from 'lucide-react'
 
-type ViewState = 'upload' | 'processing' | 'results' | 'error'
+type ViewState = 'upload' | 'processing' | 'results' | 'error' | 'limit_reached'
 
 interface ExtractionResult {
   contacts: {
@@ -40,11 +41,15 @@ const staggerContainer = {
 }
 
 export function UploadHero() {
+  const { data: session } = useSession()
+  const isAuthenticated = !!session?.user
+
   const [viewState, setViewState] = useState<ViewState>('upload')
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [currentStep, setCurrentStep] = useState(0)
   const [result, setResult] = useState<ExtractionResult | null>(null)
   const [errorMessage, setErrorMessage] = useState('')
+  const [upgradeUrl, setUpgradeUrl] = useState('')
 
   const handleFileSelected = useCallback((file: File) => {
     setSelectedFile(file)
@@ -85,6 +90,12 @@ export function UploadHero() {
 
       if (!response.ok) {
         const error = await response.json()
+        if (error.error === 'limit_reached') {
+          setErrorMessage(error.message)
+          setUpgradeUrl(error.upgrade_url || '/sign-up')
+          setViewState('limit_reached')
+          return
+        }
         throw new Error(error.error || 'Processing failed')
       }
 
@@ -210,8 +221,29 @@ export function UploadHero() {
                   metadata={result.document_metadata}
                   onDownloadCsv={handleDownloadCsv}
                   onReset={handleReset}
-                  isAuthenticated={false} // TODO: wire to useSession (CHRONOS-544)
+                  isAuthenticated={isAuthenticated}
                 />
+              )}
+
+              {viewState === 'limit_reached' && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="space-y-4 text-center py-4"
+                >
+                  <p className="text-sm text-muted-foreground">{errorMessage}</p>
+                  <a href={upgradeUrl}>
+                    <Button className="gap-2">
+                      {isAuthenticated ? 'Upgrade Plan' : 'Sign Up Free'}
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </a>
+                  <div>
+                    <Button variant="ghost" size="sm" onClick={handleReset}>
+                      Back
+                    </Button>
+                  </div>
+                </motion.div>
               )}
 
               {viewState === 'error' && (

@@ -26,3 +26,7 @@ bucket_name = "chronos-media"
 [[r2_buckets]]
 binding = "AVATARS"
 bucket_name = "chronos-avatars"
+
+[[r2_buckets]]
+binding = "DOCUMENTS"
+bucket_name = "chronos-documents"
