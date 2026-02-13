@@ -239,14 +239,14 @@ export async function POST(request: Request) {
 
     // Store extraction result (all users, including anon)
     const contactsList = result.contacts || []
-    await db.insert(extractions).values({
+    const [insertedRow] = await db.insert(extractions).values({
       userId,
       fileName: file.name,
       r2Key,
       contacts: contactsList,
       documentMetadata: result.document_metadata || {},
       contactCount: contactsList.length,
-    })
+    }).returning({ id: extractions.id })
     console.log(`[Documents] Extraction persisted: ${contactsList.length} contacts, user=${userId || 'anon'}`)
 
     // Increment usage counters (auth'd users only)
@@ -258,6 +258,22 @@ export async function POST(request: Request) {
           updatedAt: new Date(),
         })
         .where(eq(userUsage.userId, userId))
+    }
+
+    // Populate knowledge graph (fire-and-forget, non-blocking)
+    if (insertedRow?.id && contactsList.length > 0) {
+      fetch(`${BACKEND_URL}/api/populate-graph`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          extraction_id: insertedRow.id,
+          contacts: contactsList,
+          document_metadata: result.document_metadata || {},
+          file_name: file.name,
+        }),
+      }).catch((err) => {
+        console.error('[Documents] Graph population failed (non-blocking):', err)
+      })
     }
 
     // 6. Build response

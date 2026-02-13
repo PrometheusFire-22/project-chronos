@@ -6,8 +6,9 @@ import { useSession } from '@/lib/auth-client'
 import { FileDropzone } from '@/components/upload/FileDropzone'
 import { ProcessingSteps } from '@/components/upload/ProcessingSteps'
 import { ContactsTable } from '@/components/upload/ContactsTable'
+import { ExtractionHistory } from '@/components/upload/ExtractionHistory'
 import { Button } from '@chronos/ui/components/button'
-import { ArrowRight, FileSearch, Brain, Download } from 'lucide-react'
+import { ArrowRight, FileSearch, Brain, Download, Clock } from 'lucide-react'
 
 type ViewState = 'upload' | 'processing' | 'results' | 'error' | 'limit_reached'
 
@@ -50,6 +51,8 @@ export function UploadHero() {
   const [result, setResult] = useState<ExtractionResult | null>(null)
   const [errorMessage, setErrorMessage] = useState('')
   const [upgradeUrl, setUpgradeUrl] = useState('')
+  const [historyOpen, setHistoryOpen] = useState(false)
+  const [loadedFileName, setLoadedFileName] = useState<string | null>(null)
 
   const handleFileSelected = useCallback((file: File) => {
     setSelectedFile(file)
@@ -63,6 +66,7 @@ export function UploadHero() {
     setSelectedFile(null)
     setResult(null)
     setErrorMessage('')
+    setLoadedFileName(null)
     setViewState('upload')
     setCurrentStep(0)
   }, [])
@@ -143,6 +147,48 @@ export function UploadHero() {
     URL.revokeObjectURL(url)
   }, [selectedFile, result])
 
+  const handleLoadExtraction = useCallback((extraction: {
+    fileName: string
+    contacts: ExtractionResult['contacts']
+    document_metadata: ExtractionResult['document_metadata']
+  }) => {
+    setResult({
+      contacts: extraction.contacts,
+      document_metadata: extraction.document_metadata,
+    })
+    setLoadedFileName(extraction.fileName)
+    setViewState('results')
+  }, [])
+
+  const handleDownloadLoadedCsv = useCallback(() => {
+    if (!result) return
+
+    const csvRows = [
+      ['Name', 'Role', 'Firm', 'Email', 'Phone', 'Address'],
+      ...result.contacts.map((c) => [
+        c.name,
+        c.role,
+        c.firm,
+        c.email || '',
+        c.phone || '',
+        c.address || '',
+      ]),
+    ]
+    const csvContent = csvRows.map((row) =>
+      row.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(',')
+    ).join('\n')
+
+    const baseName = (loadedFileName || selectedFile?.name || 'extraction')
+      .replace(/\.pdf$/i, '')
+    const blob = new Blob([csvContent], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${baseName}_contacts.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }, [result, loadedFileName, selectedFile])
+
   return (
     <section className="relative overflow-hidden bg-background pb-16 pt-24 lg:pb-24 lg:pt-32">
       {/* Background gradient */}
@@ -190,6 +236,19 @@ export function UploadHero() {
           {/* Right column — interactive area */}
           <motion.div variants={fadeIn} className="w-full">
             <div className="rounded-2xl border border-border bg-card p-6 shadow-lg shadow-black/5">
+              {isAuthenticated && (
+                <div className="mb-4 flex justify-end">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setHistoryOpen(true)}
+                    className="gap-1.5 text-muted-foreground"
+                  >
+                    <Clock className="h-3.5 w-3.5" />
+                    History
+                  </Button>
+                </div>
+              )}
               {viewState === 'upload' && (
                 <div className="space-y-4">
                   <FileDropzone
@@ -219,7 +278,7 @@ export function UploadHero() {
                 <ContactsTable
                   contacts={result.contacts}
                   metadata={result.document_metadata}
-                  onDownloadCsv={handleDownloadCsv}
+                  onDownloadCsv={loadedFileName ? handleDownloadLoadedCsv : handleDownloadCsv}
                   onReset={handleReset}
                   isAuthenticated={isAuthenticated}
                 />
@@ -262,6 +321,12 @@ export function UploadHero() {
           </motion.div>
         </motion.div>
       </div>
+
+      <ExtractionHistory
+        open={historyOpen}
+        onOpenChange={setHistoryOpen}
+        onLoadExtraction={handleLoadExtraction}
+      />
     </section>
   )
 }

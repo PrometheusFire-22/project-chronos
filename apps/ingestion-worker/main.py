@@ -10,6 +10,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from services.contact_extractor import extract_contacts
 from services.directus_client import DirectusClient
+from services.graph_populator import populate_graph
 from services.ingestion_service import IngestionService
 from utils.csv_generator import contacts_to_csv
 
@@ -46,6 +47,13 @@ class DirectusWebhookPayload(BaseModel):
     collection: str
     keys: list[str]
     payload: dict | None = None
+
+
+class PopulateGraphRequest(BaseModel):
+    extraction_id: str
+    contacts: list[dict]
+    document_metadata: dict
+    file_name: str
 
 
 async def process_file_job(file_id: str):
@@ -177,3 +185,28 @@ async def extract_contacts_endpoint(
         )
 
     return extraction
+
+
+@app.post("/api/populate-graph")
+async def populate_graph_endpoint(req: PopulateGraphRequest):
+    """
+    Populate the CCAA knowledge graph from an extraction result.
+    Called by the Next.js upload route after persisting an extraction.
+    """
+    logger.info(
+        f"Graph population request: extraction={req.extraction_id}, "
+        f"{len(req.contacts)} contacts, file={req.file_name}"
+    )
+
+    try:
+        result = await run_in_threadpool(
+            populate_graph,
+            extraction_id=req.extraction_id,
+            contacts=req.contacts,
+            document_metadata=req.document_metadata,
+            file_name=req.file_name,
+        )
+        return result
+    except Exception as e:
+        logger.error(f"Graph population failed: {e}", exc_info=True)
+        raise HTTPException(502, f"Graph population failed: {e}") from e
