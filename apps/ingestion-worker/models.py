@@ -20,6 +20,20 @@ class DocumentRaw(Base):
     markdown_content = Column(Text, nullable=True)  # NEW: Full markdown with emojis ✅🚀📊
 
 
+class Extraction(Base):
+    __tablename__ = "extractions"
+    __table_args__ = {"schema": "ingestion"}
+
+    id = Column(UUID(as_uuid=True), primary_key=True, server_default=func.gen_random_uuid())
+    user_id = Column(Text, nullable=True)  # auth.user.id, null for anon
+    file_name = Column(Text, nullable=False)
+    r2_key = Column(Text, nullable=True)
+    contacts = Column(JSONB, nullable=False, server_default="[]")
+    document_metadata = Column(JSONB, server_default="{}")
+    contact_count = Column(Integer, nullable=False, server_default="0")
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+
 class DocumentChunk(Base):
     __tablename__ = "document_chunks"
     __table_args__ = {"schema": "ingestion"}

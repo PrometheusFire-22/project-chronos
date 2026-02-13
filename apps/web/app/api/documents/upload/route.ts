@@ -3,7 +3,7 @@ import { Pool } from 'pg'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { eq, sql } from 'drizzle-orm'
 import { getAuth } from '@/lib/auth'
-import { text, timestamp, integer, pgSchema, uuid, uniqueIndex } from 'drizzle-orm/pg-core'
+import { text, timestamp, integer, json, pgSchema, uuid, uniqueIndex } from 'drizzle-orm/pg-core'
 
 export const runtime = 'nodejs'
 
@@ -26,6 +26,19 @@ const userUsage = authSchema.table('user_usage', {
 }, (table) => ({
   uniqueUserUsage: uniqueIndex('unique_user_usage').on(table.userId),
 }))
+
+// Inline extractions schema (ingestion.extractions)
+const ingestionSchema = pgSchema('ingestion')
+const extractions = ingestionSchema.table('extractions', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  userId: text('user_id'),
+  fileName: text('file_name').notNull(),
+  r2Key: text('r2_key'),
+  contacts: json('contacts').notNull().default([]),
+  documentMetadata: json('document_metadata').default({}),
+  contactCount: integer('contact_count').notNull().default(0),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+})
 
 // --- Cloudflare bindings helpers ---
 
@@ -210,9 +223,34 @@ export async function POST(request: Request) {
       )
     }
 
-    // 5. Increment usage counters
-    if (userId && pool) {
-      const db = drizzle(pool)
+    // 5. Persist extraction + increment usage
+    // Ensure pool exists (may not if anon user — create one now)
+    if (!pool) {
+      const { connectionString, isHyperdrive } = await getConnectionConfig()
+      pool = new Pool({
+        connectionString,
+        ssl: isHyperdrive ? undefined : { rejectUnauthorized: false },
+        max: 1,
+        connectionTimeoutMillis: 5000,
+      })
+    }
+
+    const db = drizzle(pool)
+
+    // Store extraction result (all users, including anon)
+    const contactsList = result.contacts || []
+    await db.insert(extractions).values({
+      userId,
+      fileName: file.name,
+      r2Key,
+      contacts: contactsList,
+      documentMetadata: result.document_metadata || {},
+      contactCount: contactsList.length,
+    })
+    console.log(`[Documents] Extraction persisted: ${contactsList.length} contacts, user=${userId || 'anon'}`)
+
+    // Increment usage counters (auth'd users only)
+    if (userId) {
       await db
         .update(userUsage)
         .set({
