@@ -18,6 +18,9 @@ declare global {
     AVATARS?: {
       [key: string]: any;
     };
+    DOCUMENTS?: {
+      [key: string]: any;
+    };
   }
 }
 
