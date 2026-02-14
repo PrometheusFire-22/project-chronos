@@ -75,8 +75,12 @@ async def extract_contacts(markdown_content: str) -> ExtractionResult:
         ],
         response_format={"type": "json_object"},
         temperature=0.0,
-        max_tokens=4096,
+        max_tokens=16384,
     )
+
+    if response.choices[0].finish_reason == "length":
+        logger.warning("⚠️ GPT-4o response was truncated (hit max_tokens limit)")
+        raise ValueError("GPT-4o response truncated — document may have too many contacts")
 
     result = json.loads(response.choices[0].message.content)
     contact_count = len(result.get("contacts", []))
