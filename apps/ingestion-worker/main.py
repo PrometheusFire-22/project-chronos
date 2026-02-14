@@ -22,7 +22,11 @@ app = FastAPI(title="Chronos Ingestion Worker", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "https://chronos.automatonicai.com"],
+    allow_origins=[
+        "http://localhost:3000",
+        "https://automatonicai.com",
+        "https://www.automatonicai.com",
+    ],
     allow_methods=["POST"],
     allow_headers=["*"],
 )
@@ -88,6 +92,7 @@ async def process_file_job(file_id: str):
 
 
 @app.get("/health")
+@app.head("/health")
 async def health_check():
     return {"status": "online", "service": "ingestion-worker"}
 
