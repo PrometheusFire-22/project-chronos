@@ -11,7 +11,9 @@ const DIRECTUS_URL =
 export type ContactSubmissionStatus = 'new' | 'contacted' | 'qualified' | 'closed';
 
 export interface ContactSubmissionCreate {
-  name: string;
+  first_name: string;
+  last_name: string;
+  name: string; // full name — kept for display convenience
   email: string;
   company?: string;
   subject: string;

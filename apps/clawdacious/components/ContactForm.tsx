@@ -9,7 +9,8 @@ const inputClass =
 
 export function ContactForm() {
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     company: '',
     subject: '',
@@ -33,7 +34,7 @@ export function ContactForm() {
       if (!response.ok) throw new Error('Failed to send message')
 
       setStatus('success')
-      setFormData({ name: '', email: '', company: '', subject: '', message: '' })
+      setFormData({ firstName: '', lastName: '', email: '', company: '', subject: '', message: '' })
     } catch {
       setStatus('error')
       setErrorMessage(
@@ -74,20 +75,38 @@ export function ContactForm() {
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="grid sm:grid-cols-2 gap-5">
           <div>
-            <label htmlFor="cf-name" className="block text-sm font-medium text-foreground mb-2">
-              Name *
+            <label htmlFor="cf-firstName" className="block text-sm font-medium text-foreground mb-2">
+              First Name *
             </label>
             <input
               type="text"
-              id="cf-name"
-              name="name"
+              id="cf-firstName"
+              name="firstName"
               required
-              value={formData.name}
+              value={formData.firstName}
               onChange={handleChange}
               className={inputClass}
-              placeholder="Your full name"
+              placeholder="Jane"
             />
           </div>
+          <div>
+            <label htmlFor="cf-lastName" className="block text-sm font-medium text-foreground mb-2">
+              Last Name *
+            </label>
+            <input
+              type="text"
+              id="cf-lastName"
+              name="lastName"
+              required
+              value={formData.lastName}
+              onChange={handleChange}
+              className={inputClass}
+              placeholder="Smith"
+            />
+          </div>
+        </div>
+
+        <div className="grid sm:grid-cols-2 gap-5">
           <div>
             <label htmlFor="cf-email" className="block text-sm font-medium text-foreground mb-2">
               Email *
@@ -100,17 +119,11 @@ export function ContactForm() {
               value={formData.email}
               onChange={handleChange}
               className={inputClass}
-              placeholder="your@email.com"
+              placeholder="jane@yourbusiness.com"
             />
           </div>
-        </div>
-
-        <div className="grid sm:grid-cols-2 gap-5">
           <div>
-            <label
-              htmlFor="cf-company"
-              className="block text-sm font-medium text-foreground mb-2"
-            >
+            <label htmlFor="cf-company" className="block text-sm font-medium text-foreground mb-2">
               Company
             </label>
             <input
@@ -123,35 +136,30 @@ export function ContactForm() {
               placeholder="Your business name"
             />
           </div>
-          <div>
-            <label
-              htmlFor="cf-subject"
-              className="block text-sm font-medium text-foreground mb-2"
-            >
-              I&apos;m interested in... *
-            </label>
-            <select
-              id="cf-subject"
-              name="subject"
-              required
-              value={formData.subject}
-              onChange={handleChange}
-              className={inputClass}
-            >
-              <option value="">Select a topic</option>
-              <option value="ai-setup">AI Assistant Setup</option>
-              <option value="ongoing-support">Ongoing Support</option>
-              <option value="custom-integration">Custom Integration</option>
-              <option value="general">General Inquiry</option>
-            </select>
-          </div>
         </div>
 
         <div>
-          <label
-            htmlFor="cf-message"
-            className="block text-sm font-medium text-foreground mb-2"
+          <label htmlFor="cf-subject" className="block text-sm font-medium text-foreground mb-2">
+            I&apos;m interested in... *
+          </label>
+          <select
+            id="cf-subject"
+            name="subject"
+            required
+            value={formData.subject}
+            onChange={handleChange}
+            className={inputClass}
           >
+            <option value="">Select a topic</option>
+            <option value="ai-setup">AI Assistant Setup</option>
+            <option value="ongoing-support">Ongoing Support</option>
+            <option value="custom-integration">Custom Integration</option>
+            <option value="general">General Inquiry</option>
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="cf-message" className="block text-sm font-medium text-foreground mb-2">
             Message *
           </label>
           <textarea

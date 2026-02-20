@@ -25,21 +25,24 @@ const subjectLabels: Record<string, string> = {
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { name, email, company, subject, message } = body
+    const { firstName, lastName, email, company, subject, message } = body
 
-    if (!name || !email || !subject || !message) {
+    if (!firstName || !lastName || !email || !subject || !message) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
       )
     }
 
+    const name = `${firstName} ${lastName}`.trim()
     const subjectLabel = subjectLabels[subject] || subject
 
     // 1. Write to Directus for audit trail
     let submissionId: string | null = null
     try {
       submissionId = await createContactSubmission({
+        first_name: firstName,
+        last_name: lastName,
         name,
         email,
         company,
@@ -60,7 +63,8 @@ export async function POST(request: Request) {
         twentyCompanyId = await createTwentyCompany(company)
       }
       twentyPersonId = await createTwentyPerson({
-        name,
+        firstName,
+        lastName,
         email,
         companyId: twentyCompanyId ?? undefined,
       })

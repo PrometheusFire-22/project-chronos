@@ -1,5 +1,5 @@
 /**
- * TwentyCRM REST API Client (Server-side only)
+ * TwentyCRM GraphQL Client (Server-side only)
  *
  * Uses TWENTY_API_KEY — never expose to the browser.
  * Import only in API routes and server actions.
@@ -10,13 +10,9 @@
 const TWENTY_URL =
   process.env.TWENTY_URL || 'https://crm.automatonicai.com';
 
-interface TwentyResponse<T> {
-  data: T;
-}
-
-async function twentyPost<T>(
-  endpoint: string,
-  data: unknown
+async function twentyGraphQL<T>(
+  query: string,
+  variables: Record<string, unknown>
 ): Promise<T | null> {
   const apiKey = process.env.TWENTY_API_KEY;
   if (!apiKey) {
@@ -25,36 +21,35 @@ async function twentyPost<T>(
   }
 
   try {
-    const response = await fetch(`${TWENTY_URL}/api${endpoint}`, {
+    const response = await fetch(`${TWENTY_URL}/graphql`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${apiKey}`,
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ query, variables }),
     });
 
-    if (!response.ok) {
-      const error = await response.json().catch(() => null);
-      console.error(`[TwentyCRM] POST ${endpoint} failed ${response.status}:`, error);
+    const json = await response.json() as { data?: T; errors?: { message: string; extensions?: { code?: string } }[] };
+
+    if (json.errors?.length) {
+      // Duplicate entry is non-fatal — return null so the pipeline continues
+      const isDuplicate = json.errors.some(
+        (e) => e.extensions?.code === 'BAD_USER_INPUT' && e.message.includes('duplicate')
+      );
+      if (isDuplicate) {
+        console.warn('[TwentyCRM] Duplicate entry detected — skipping');
+        return null;
+      }
+      console.error('[TwentyCRM] GraphQL errors:', json.errors);
       return null;
     }
 
-    const result = (await response.json()) as TwentyResponse<T> | T;
-    // Twenty REST API returns { data: {...} } or just the object depending on version
-    return (result as TwentyResponse<T>).data ?? (result as T);
+    return json.data ?? null;
   } catch (err) {
-    console.error(`[TwentyCRM] POST ${endpoint} threw:`, err);
+    console.error('[TwentyCRM] Request failed:', err);
     return null;
   }
-}
-
-function splitName(fullName: string): { firstName: string; lastName: string } {
-  const parts = fullName.trim().split(/\s+/);
-  return {
-    firstName: parts[0] ?? fullName,
-    lastName: parts.slice(1).join(' ') || '',
-  };
 }
 
 /**
@@ -62,19 +57,25 @@ function splitName(fullName: string): { firstName: string; lastName: string } {
  * Returns the person's ID or null if creation failed.
  */
 export async function createTwentyPerson(params: {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   companyId?: string;
 }): Promise<string | null> {
-  const { firstName, lastName } = splitName(params.name);
+  const data = await twentyGraphQL<{ createPerson: { id: string } }>(
+    `mutation CreatePerson($data: PersonCreateInput!) {
+      createPerson(data: $data) { id }
+    }`,
+    {
+      data: {
+        name: { firstName: params.firstName, lastName: params.lastName },
+        emails: { primaryEmail: params.email },
+        ...(params.companyId && { companyId: params.companyId }),
+      },
+    }
+  );
 
-  const person = await twentyPost<{ id: string }>('/people', {
-    name: { firstName, lastName },
-    emails: { primaryEmail: params.email },
-    ...(params.companyId && { companyId: params.companyId }),
-  });
-
-  return person?.id ?? null;
+  return data?.createPerson?.id ?? null;
 }
 
 /**
@@ -82,11 +83,14 @@ export async function createTwentyPerson(params: {
  * Returns the company's ID or null if creation failed.
  */
 export async function createTwentyCompany(name: string): Promise<string | null> {
-  const company = await twentyPost<{ id: string }>('/companies', {
-    name,
-  });
+  const data = await twentyGraphQL<{ createCompany: { id: string } }>(
+    `mutation CreateCompany($data: CompanyCreateInput!) {
+      createCompany(data: $data) { id }
+    }`,
+    { data: { name } }
+  );
 
-  return company?.id ?? null;
+  return data?.createCompany?.id ?? null;
 }
 
 /**
@@ -98,18 +102,24 @@ export async function createTwentyOpportunity(params: {
   personId: string | null;
   companyId: string | null;
 }): Promise<string | null> {
-  // Default close date: 30 days out
   const closeDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
     .toISOString()
     .split('T')[0];
 
-  const opportunity = await twentyPost<{ id: string }>('/opportunities', {
-    name: params.name,
-    stage: 'NEW',
-    closeDate,
-    ...(params.personId && { pointOfContactId: params.personId }),
-    ...(params.companyId && { companyId: params.companyId }),
-  });
+  const data = await twentyGraphQL<{ createOpportunity: { id: string } }>(
+    `mutation CreateOpportunity($data: OpportunityCreateInput!) {
+      createOpportunity(data: $data) { id }
+    }`,
+    {
+      data: {
+        name: params.name,
+        stage: 'NEW',
+        closeDate,
+        ...(params.personId && { pointOfContactId: params.personId }),
+        ...(params.companyId && { companyId: params.companyId }),
+      },
+    }
+  );
 
-  return opportunity?.id ?? null;
+  return data?.createOpportunity?.id ?? null;
 }
