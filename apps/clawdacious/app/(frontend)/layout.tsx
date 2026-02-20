@@ -8,7 +8,7 @@ export default async function FrontendLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen flex-col font-sans bg-background text-foreground">
+    <div className="relative z-10 flex min-h-screen flex-col font-sans text-foreground">
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
