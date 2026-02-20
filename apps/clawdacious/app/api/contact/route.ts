@@ -52,6 +52,14 @@ export async function POST(request: Request) {
         source: 'contact-form',
       })
     } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err)
+      // Unique constraint violation on email
+      if (msg.includes('unique') || msg.includes('UNIQUE') || msg.includes('duplicate')) {
+        return NextResponse.json(
+          { error: 'duplicate_email', message: "We already have a message from this email address. If you have a new inquiry, please email geoff@clawdacious.com directly." },
+          { status: 409 }
+        )
+      }
       console.error('[Contact] Directus write failed (non-fatal):', err)
     }
 

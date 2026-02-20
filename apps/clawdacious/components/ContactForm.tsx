@@ -31,7 +31,18 @@ export function ContactForm() {
         body: JSON.stringify(formData),
       })
 
-      if (!response.ok) throw new Error('Failed to send message')
+      if (!response.ok) {
+        if (response.status === 409) {
+          const data = await response.json().catch(() => ({}))
+          setStatus('error')
+          setErrorMessage(
+            data.message ||
+              'We already have a message from this email address. Please email geoff@clawdacious.com directly if you have a new inquiry.'
+          )
+          return
+        }
+        throw new Error('Failed to send message')
+      }
 
       setStatus('success')
       setFormData({ firstName: '', lastName: '', email: '', company: '', subject: '', message: '' })
