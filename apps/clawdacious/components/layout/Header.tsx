@@ -49,7 +49,7 @@ export function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+              className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors"
             >
               {link.label}
             </Link>
@@ -71,7 +71,7 @@ export function Header() {
           <ThemeToggle />
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 text-muted-foreground hover:text-foreground"
+            className="p-2 text-slate-600 dark:text-slate-300 hover:text-foreground"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>

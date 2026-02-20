@@ -103,7 +103,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
     font-feature-settings: 'rlig' 1, 'calt' 1;
   }
 }
@@ -182,19 +182,19 @@
     @apply text-xl sm:text-2xl font-bold;
   }
   .text-body-lg {
-    @apply text-lg text-muted-foreground leading-relaxed;
+    @apply text-lg text-slate-600 dark:text-slate-300 leading-relaxed;
   }
   .text-body {
-    @apply text-base text-muted-foreground;
+    @apply text-base text-slate-600 dark:text-slate-300;
   }
   .heading-card-lg {
     @apply text-2xl sm:text-3xl font-bold;
   }
   .prose-card {
-    @apply prose prose-sm dark:prose-invert max-w-none text-muted-foreground;
+    @apply prose prose-sm dark:prose-invert max-w-none text-slate-600 dark:text-slate-300;
   }
   .prose-feature {
-    @apply prose prose-lg dark:prose-invert max-w-none text-muted-foreground prose-strong:text-foreground;
+    @apply prose prose-lg dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 prose-strong:text-foreground;
   }
   .icon-container {
     @apply w-12 h-12 rounded-xl flex items-center justify-center;

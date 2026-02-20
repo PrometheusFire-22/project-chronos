@@ -22,14 +22,14 @@ export default function PrivacyPage() {
         <div className="mb-12">
           <Link
             href="/"
-            className="inline-flex items-center text-muted-foreground hover:text-foreground transition-colors mb-6"
+            className="inline-flex items-center text-slate-600 dark:text-slate-300 hover:text-foreground transition-colors mb-6"
           >
             ← Back to Home
           </Link>
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
             Privacy Policy
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-slate-600 dark:text-slate-300 text-lg">
             Last updated: January 5, 2026
           </p>
         </div>

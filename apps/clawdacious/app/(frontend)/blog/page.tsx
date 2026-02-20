@@ -66,7 +66,7 @@ export default async function BlogListingPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {posts.length === 0 ? (
             <div className="max-w-2xl mx-auto text-center py-16">
-              <p className="text-muted-foreground text-lg">
+              <p className="text-slate-600 dark:text-slate-300 text-lg">
                 No blog posts yet. Check back soon for insights and updates!
               </p>
             </div>
@@ -130,13 +130,13 @@ function BlogPostCard({ post }: { post: BlogPost }) {
 
         {/* Excerpt */}
         {post.excerpt && (
-          <p className="mb-4 text-sm text-muted-foreground line-clamp-3">
+          <p className="mb-4 text-sm text-slate-600 dark:text-slate-300 line-clamp-3">
             {post.excerpt}
           </p>
         )}
 
         {/* Meta Info */}
-        <div className="mt-auto flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
+        <div className="mt-auto flex flex-wrap items-center gap-4 text-xs text-slate-600 dark:text-slate-300">
           <div className="flex items-center gap-1">
             <Calendar className="h-3.5 w-3.5" />
             <span>{publishedDate}</span>

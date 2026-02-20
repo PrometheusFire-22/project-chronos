@@ -55,7 +55,7 @@ export function ContactForm() {
           <h3 className="text-emerald-500 dark:text-emerald-400 font-semibold mb-2">
             Message Sent!
           </h3>
-          <p className="text-muted-foreground">
+          <p className="text-slate-600 dark:text-slate-300">
             Thank you. I'll get back to you within 24 hours.
           </p>
           <button
@@ -175,7 +175,7 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={status === 'loading'}
-          className="w-full px-6 py-4 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+          className="w-full px-6 py-4 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600 disabled:bg-muted disabled:text-slate-600 dark:text-slate-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
         >
           {status === 'loading' ? (
             <>
@@ -190,7 +190,7 @@ export function ContactForm() {
           )}
         </button>
 
-        <p className="text-xs text-muted-foreground text-center">
+        <p className="text-xs text-slate-600 dark:text-slate-300 text-center">
           By submitting, you agree to our{' '}
           <Link href="/privacy" className="text-red-400 hover:text-red-300">
             Privacy Policy

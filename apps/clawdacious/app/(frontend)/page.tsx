@@ -248,7 +248,7 @@ export default async function HomePage() {
               </Link>
             </div>
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-slate-600 dark:text-slate-300">
               Less than the cost of 4 hours of admin help — and it works around the clock.
             </p>
           </div>
@@ -258,11 +258,11 @@ export default async function HomePage() {
       {/* ── INDUSTRY STRIP ───────────────────────────────────── */}
       <div className="border-y border-border bg-muted/30 py-4 overflow-hidden">
         <div className="flex items-center gap-2 justify-center flex-wrap px-4">
-          <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider mr-2">
+          <span className="text-xs text-slate-600 dark:text-slate-300 font-medium uppercase tracking-wider mr-2">
             Serving GTA
           </span>
           {INDUSTRIES.map((industry, i) => (
-            <span key={industry} className="flex items-center gap-2 text-sm text-muted-foreground">
+            <span key={industry} className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
               {i > 0 && <span className="text-border">·</span>}
               {industry}
             </span>
@@ -289,7 +289,7 @@ export default async function HomePage() {
               >
                 <div className="mb-4 text-red-400">{feature.icon}</div>
                 <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                <p className="text-muted-foreground">{feature.description}</p>
+                <p className="text-slate-600 dark:text-slate-300">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -317,12 +317,12 @@ export default async function HomePage() {
                   <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-red-500/10 text-red-400">
                     {step.icon}
                   </div>
-                  <span className="text-xs font-bold tracking-widest text-muted-foreground uppercase">
+                  <span className="text-xs font-bold tracking-widest text-slate-600 dark:text-slate-300 uppercase">
                     Step {step.step}
                   </span>
                 </div>
                 <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
-                <p className="text-muted-foreground">{step.description}</p>
+                <p className="text-slate-600 dark:text-slate-300">{step.description}</p>
               </div>
             ))}
           </div>
@@ -350,12 +350,12 @@ export default async function HomePage() {
                   <Users className="h-4 w-4 text-red-400 shrink-0" />
                   <span className="font-semibold text-sm">{item.role}</span>
                 </div>
-                <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
-                  <span className="text-muted-foreground font-medium">Pain: </span>{item.pain}
+                <p className="text-xs text-slate-600 dark:text-slate-300 mb-3 leading-relaxed">
+                  <span className="text-slate-600 dark:text-slate-300 font-medium">Pain: </span>{item.pain}
                 </p>
                 <div className="flex items-start gap-2">
                   <Check className="h-3.5 w-3.5 text-red-400 mt-0.5 shrink-0" />
-                  <p className="text-xs text-muted-foreground leading-relaxed">{item.win}</p>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{item.win}</p>
                 </div>
               </div>
             ))}
@@ -395,15 +395,15 @@ export default async function HomePage() {
 
                 <div className="mb-6">
                   <h3 className="text-xl font-bold mb-1">{plan.name}</h3>
-                  <p className="text-sm text-muted-foreground">{plan.tagline}</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">{plan.tagline}</p>
                 </div>
 
                 <div className="mb-6 pb-6 border-b border-border">
                   <div className="flex items-baseline gap-1.5">
                     <span className="text-4xl font-bold">{plan.setup}</span>
-                    <span className="text-muted-foreground text-sm">setup</span>
+                    <span className="text-slate-600 dark:text-slate-300 text-sm">setup</span>
                   </div>
-                  <p className="text-muted-foreground text-sm mt-1.5">
+                  <p className="text-slate-600 dark:text-slate-300 text-sm mt-1.5">
                     then{' '}
                     <span className="text-foreground font-semibold">{plan.monthly}/month</span>
                   </p>
@@ -413,7 +413,7 @@ export default async function HomePage() {
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-2.5">
                       <Check className="h-4 w-4 text-red-400 mt-0.5 shrink-0" />
-                      <span className="text-sm text-muted-foreground">{feature}</span>
+                      <span className="text-sm text-slate-600 dark:text-slate-300">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -435,14 +435,14 @@ export default async function HomePage() {
 
           {/* Pricing footnotes */}
           <div className="max-w-2xl mx-auto mt-10 space-y-2 text-center">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-slate-600 dark:text-slate-300">
               Not sure which plan fits? Most clients start with Professional.{' '}
               <Link href="/#contact" className="text-red-400 hover:text-red-300 underline underline-offset-2">
                 Get in touch
               </Link>{' '}
               and we'll figure it out together.
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-slate-600 dark:text-slate-300">
               API and LLM usage costs (typically $20–60/month) are billed directly to you by the provider — not bundled in. We'll set it up and explain it during onboarding.
             </p>
           </div>
@@ -468,7 +468,7 @@ export default async function HomePage() {
                   className="p-6 rounded-xl border border-border bg-card"
                 >
                   <h3 className="font-semibold text-foreground mb-3">{faq.q}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{faq.a}</p>
+                  <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">{faq.a}</p>
                 </div>
               ))}
             </div>
@@ -500,7 +500,7 @@ export default async function HomePage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-foreground">Call directly</p>
-                    <p className="text-muted-foreground group-hover:text-red-400 transition-colors">(416) 824-6865</p>
+                    <p className="text-slate-600 dark:text-slate-300 group-hover:text-red-400 transition-colors">(416) 824-6865</p>
                   </div>
                 </a>
 
@@ -513,7 +513,7 @@ export default async function HomePage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-foreground">Email</p>
-                    <p className="text-muted-foreground group-hover:text-red-400 transition-colors">geoff@clawdacious.com</p>
+                    <p className="text-slate-600 dark:text-slate-300 group-hover:text-red-400 transition-colors">geoff@clawdacious.com</p>
                   </div>
                 </a>
 
@@ -523,7 +523,7 @@ export default async function HomePage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-foreground">Location</p>
-                    <p className="text-muted-foreground">Greater Toronto Area, Canada</p>
+                    <p className="text-slate-600 dark:text-slate-300">Greater Toronto Area, Canada</p>
                   </div>
                 </div>
 
@@ -533,7 +533,7 @@ export default async function HomePage() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-foreground">Response time</p>
-                    <p className="text-muted-foreground">Within 24 hours</p>
+                    <p className="text-slate-600 dark:text-slate-300">Within 24 hours</p>
                   </div>
                 </div>
               </div>

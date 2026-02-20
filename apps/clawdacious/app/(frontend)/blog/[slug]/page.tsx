@@ -133,7 +133,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300 hover:text-primary transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Blog
@@ -160,13 +160,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
             {/* Excerpt */}
             {post.excerpt && (
-              <p className="text-xl text-muted-foreground mb-8">
+              <p className="text-xl text-slate-600 dark:text-slate-300 mb-8">
                 {post.excerpt}
               </p>
             )}
 
             {/* Meta Information */}
-            <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground/70 pb-8 border-b border-border">
+            <div className="flex flex-wrap items-center gap-6 text-sm text-slate-600 dark:text-slate-300/70 pb-8 border-b border-border">
               {post.author && (
                 <div className="flex items-center gap-2">
                   <User className="h-4 w-4" />
@@ -207,7 +207,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 prose-strong:text-foreground prose-strong:font-semibold
                 prose-code:text-primary prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
                 prose-pre:bg-muted prose-pre:border prose-pre:border-border
-                prose-blockquote:border-l-primary prose-blockquote:text-muted-foreground
+                prose-blockquote:border-l-primary prose-blockquote:text-slate-600 dark:text-slate-300
                 prose-img:rounded-xl prose-img:border prose-img:border-border
                 prose-ul:text-foreground/80
                 prose-ol:text-foreground/80
@@ -222,7 +222,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   {post.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="inline-flex items-center rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground"
+                      className="inline-flex items-center rounded-full bg-muted px-3 py-1 text-xs text-slate-600 dark:text-slate-300"
                     >
                       #{tag}
                     </span>
@@ -244,7 +244,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     <h3 className="text-lg font-semibold text-foreground mb-1">
                       {post.author}
                     </h3>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-slate-600 dark:text-slate-300">
                       Author
                     </p>
                   </div>

@@ -50,7 +50,7 @@ export default async function AboutPage() {
                 {aboutHero?.headline || 'AI That Works. Support You Can Call.'}
               </span>
             </h1>
-            <p className="text-lg sm:text-xl text-muted-foreground">
+            <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300">
               {aboutHero?.subheadline || 'Clawdacious is a GTA-based AI consultancy built for small business owners who know AI is the future — but don\'t have the time or technical background to figure it out themselves.'}
             </p>
           </div>
@@ -64,7 +64,7 @@ export default async function AboutPage() {
             <div className="max-w-3xl mx-auto">
               <h2 className="text-3xl font-bold mb-6">{storySection.headline}</h2>
               {storySection.subheadline && (
-                <p className="text-lg text-muted-foreground leading-relaxed">
+                <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
                   {storySection.subheadline}
                 </p>
               )}
@@ -85,7 +85,7 @@ export default async function AboutPage() {
                   className="p-8 rounded-2xl border border-border bg-card backdrop-blur"
                 >
                   <h3 className="text-xl font-semibold mb-3">{value.title}</h3>
-                  <p className="text-muted-foreground">{value.description}</p>
+                  <p className="text-slate-600 dark:text-slate-300">{value.description}</p>
                 </div>
               ))}
             </div>
@@ -98,7 +98,7 @@ export default async function AboutPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center p-12 rounded-2xl border border-red-500/20 bg-card backdrop-blur">
             <h2 className="text-3xl font-bold text-foreground mb-4">Let's Talk About Your Business</h2>
-            <p className="text-lg text-muted-foreground mb-8">
+            <p className="text-lg text-slate-600 dark:text-slate-300 mb-8">
               15 minutes is enough to know whether this makes sense for you. No pitch, no pressure — just an honest conversation.
             </p>
             <Link

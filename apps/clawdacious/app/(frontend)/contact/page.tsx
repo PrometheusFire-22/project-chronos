@@ -33,7 +33,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <h3 className="font-semibold text-foreground mb-1">Email</h3>
-                <a href="mailto:geoff@clawdacious.com" className="text-muted-foreground hover:text-red-400 transition-colors">
+                <a href="mailto:geoff@clawdacious.com" className="text-slate-600 dark:text-slate-300 hover:text-red-400 transition-colors">
                   geoff@clawdacious.com
                 </a>
               </div>
@@ -45,7 +45,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <h3 className="font-semibold text-foreground mb-1">Phone</h3>
-                <a href="tel:+14168246865" className="text-muted-foreground hover:text-red-400 transition-colors">
+                <a href="tel:+14168246865" className="text-slate-600 dark:text-slate-300 hover:text-red-400 transition-colors">
                   (416) 824-6865
                 </a>
               </div>
@@ -57,7 +57,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <h3 className="font-semibold text-foreground mb-1">Response time</h3>
-                <p className="text-muted-foreground">Within 24 hours</p>
+                <p className="text-slate-600 dark:text-slate-300">Within 24 hours</p>
               </div>
             </div>
 
@@ -67,7 +67,7 @@ export default function ContactPage() {
               </div>
               <div>
                 <h3 className="font-semibold text-foreground mb-1">Location</h3>
-                <p className="text-muted-foreground">Greater Toronto Area, Canada</p>
+                <p className="text-slate-600 dark:text-slate-300">Greater Toronto Area, Canada</p>
               </div>
             </div>
           </div>
