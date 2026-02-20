@@ -340,22 +340,22 @@ export default async function HomePage() {
               If you run a service business in the GTA and handle a lot of the same communication over and over — yes.
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {WHO_ITS_FOR.map((item) => (
               <div
                 key={item.role}
-                className="p-6 rounded-xl border border-border bg-card backdrop-blur hover:border-red-500/30 transition-colors"
+                className="p-8 rounded-2xl border border-border bg-card backdrop-blur hover:border-red-500/30 transition-colors"
               >
-                <div className="flex items-center gap-2 mb-3">
-                  <Users className="h-4 w-4 text-red-400 shrink-0" />
-                  <span className="font-semibold text-sm">{item.role}</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <Users className="h-6 w-6 text-red-400 shrink-0" />
+                  <span className="font-semibold text-xl">{item.role}</span>
                 </div>
-                <p className="text-xs text-slate-600 dark:text-slate-300 mb-3 leading-relaxed">
-                  <span className="text-slate-600 dark:text-slate-300 font-medium">Pain: </span>{item.pain}
+                <p className="text-sm text-slate-600 dark:text-slate-300 mb-4 leading-relaxed">
+                  <span className="font-medium">Pain: </span>{item.pain}
                 </p>
                 <div className="flex items-start gap-2">
-                  <Check className="h-3.5 w-3.5 text-red-400 mt-0.5 shrink-0" />
-                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{item.win}</p>
+                  <Check className="h-4 w-4 text-red-400 mt-0.5 shrink-0" />
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{item.win}</p>
                 </div>
               </div>
             ))}
