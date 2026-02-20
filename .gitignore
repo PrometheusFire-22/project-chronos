@@ -149,6 +149,7 @@ yarn.lock
 # Build outputs and generated files
 # lib/ (Commented out: Blocks packages/ui/lib source code)
 !apps/web/lib/
+!apps/clawdacious/lib/
 !packages/*/lib/
 # dist/ (already ignored above)
 # build/ (already ignored above)
