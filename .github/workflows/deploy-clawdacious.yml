@@ -39,9 +39,6 @@ jobs:
           NEXT_PUBLIC_DIRECTUS_URL: https://admin.automatonicai.com
           R2_PUBLIC_URL: https://pub-060e43df09e3ec3a256a6624ab7649f8.r2.dev
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          DIRECTUS_ADMIN_TOKEN: ${{ secrets.DIRECTUS_ADMIN_TOKEN }}
-          TWENTY_URL: https://crm.automatonicai.com
-          TWENTY_API_KEY: ${{ secrets.TWENTY_API_KEY }}
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
