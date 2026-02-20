@@ -17,6 +17,7 @@ export interface ContactSubmissionCreate {
   email: string;
   company?: string;
   subject: string;
+  subject_label: string; // human-readable label, e.g. "AI Assistant Setup"
   message: string;
   source?: string;
   ip_address?: string;

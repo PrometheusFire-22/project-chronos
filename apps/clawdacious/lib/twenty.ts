@@ -3,16 +3,13 @@
  *
  * Uses TWENTY_API_KEY — never expose to the browser.
  * Import only in API routes and server actions.
- *
- * Generate your API key at: https://crm.automatonicai.com/settings/developers
  */
 
-const TWENTY_URL =
-  process.env.TWENTY_URL || 'https://crm.automatonicai.com';
+const TWENTY_URL = process.env.TWENTY_URL || 'https://crm.automatonicai.com';
 
-async function twentyGraphQL<T>(
+async function twentyGQL<T>(
   query: string,
-  variables: Record<string, unknown>
+  variables?: Record<string, unknown>
 ): Promise<T | null> {
   const apiKey = process.env.TWENTY_API_KEY;
   if (!apiKey) {
@@ -30,18 +27,13 @@ async function twentyGraphQL<T>(
       body: JSON.stringify({ query, variables }),
     });
 
-    const json = await response.json() as { data?: T; errors?: { message: string; extensions?: { code?: string } }[] };
+    const json = await response.json() as {
+      data?: T;
+      errors?: { message: string; extensions?: { code?: string } }[];
+    };
 
     if (json.errors?.length) {
-      // Duplicate entry is non-fatal — return null so the pipeline continues
-      const isDuplicate = json.errors.some(
-        (e) => e.extensions?.code === 'BAD_USER_INPUT' && e.message.includes('duplicate')
-      );
-      if (isDuplicate) {
-        console.warn('[TwentyCRM] Duplicate entry detected — skipping');
-        return null;
-      }
-      console.error('[TwentyCRM] GraphQL errors:', json.errors);
+      console.error('[TwentyCRM] GraphQL errors:', JSON.stringify(json.errors));
       return null;
     }
 
@@ -52,9 +44,56 @@ async function twentyGraphQL<T>(
   }
 }
 
+// ---------------------------------------------------------------------------
+// Company
+// ---------------------------------------------------------------------------
+
+async function findCompanyByName(name: string): Promise<string | null> {
+  const data = await twentyGQL<{
+    companies: { edges: { node: { id: string } }[] };
+  }>(`query FindCompany($name: StringFilter!) {
+    companies(filter: { name: { eq: $name } }) {
+      edges { node { id } }
+    }
+  }`, { name });
+  return data?.companies?.edges?.[0]?.node?.id ?? null;
+}
+
 /**
- * Creates a Person record in TwentyCRM.
- * Returns the person's ID or null if creation failed.
+ * Creates a Company or returns the existing one's ID (upsert by name).
+ */
+export async function createTwentyCompany(name: string): Promise<string | null> {
+  const data = await twentyGQL<{ createCompany: { id: string } }>(
+    `mutation CreateCompany($data: CompanyCreateInput!) {
+      createCompany(data: $data) { id }
+    }`,
+    { data: { name } }
+  );
+
+  if (data?.createCompany?.id) return data.createCompany.id;
+
+  // Duplicate — look up the existing record
+  return findCompanyByName(name);
+}
+
+// ---------------------------------------------------------------------------
+// Person
+// ---------------------------------------------------------------------------
+
+async function findPersonByEmail(email: string): Promise<string | null> {
+  const data = await twentyGQL<{
+    people: { edges: { node: { id: string } }[] };
+  }>(`query FindPerson($email: StringFilter!) {
+    people(filter: { emails: { primaryEmail: { eq: $email } } }) {
+      edges { node { id } }
+    }
+  }`, { email });
+  return data?.people?.edges?.[0]?.node?.id ?? null;
+}
+
+/**
+ * Creates a Person or returns the existing one's ID (upsert by email).
+ * Also links the person to their company if they don't have one yet.
  */
 export async function createTwentyPerson(params: {
   firstName: string;
@@ -62,7 +101,7 @@ export async function createTwentyPerson(params: {
   email: string;
   companyId?: string;
 }): Promise<string | null> {
-  const data = await twentyGraphQL<{ createPerson: { id: string } }>(
+  const data = await twentyGQL<{ createPerson: { id: string } }>(
     `mutation CreatePerson($data: PersonCreateInput!) {
       createPerson(data: $data) { id }
     }`,
@@ -75,27 +114,27 @@ export async function createTwentyPerson(params: {
     }
   );
 
-  return data?.createPerson?.id ?? null;
+  if (data?.createPerson?.id) return data.createPerson.id;
+
+  // Duplicate — look up the existing record, then update company if needed
+  const existingId = await findPersonByEmail(params.email);
+  if (existingId && params.companyId) {
+    await twentyGQL(
+      `mutation UpdatePerson($id: ID!, $data: PersonUpdateInput!) {
+        updatePerson(id: $id, data: $data) { id }
+      }`,
+      { id: existingId, data: { companyId: params.companyId } }
+    );
+  }
+  return existingId;
 }
 
-/**
- * Creates a Company record in TwentyCRM.
- * Returns the company's ID or null if creation failed.
- */
-export async function createTwentyCompany(name: string): Promise<string | null> {
-  const data = await twentyGraphQL<{ createCompany: { id: string } }>(
-    `mutation CreateCompany($data: CompanyCreateInput!) {
-      createCompany(data: $data) { id }
-    }`,
-    { data: { name } }
-  );
-
-  return data?.createCompany?.id ?? null;
-}
+// ---------------------------------------------------------------------------
+// Opportunity
+// ---------------------------------------------------------------------------
 
 /**
- * Creates an Opportunity record in TwentyCRM.
- * Returns the opportunity's ID or null if creation failed.
+ * Creates an Opportunity linked to the contact's person and company.
  */
 export async function createTwentyOpportunity(params: {
   name: string;
@@ -106,7 +145,7 @@ export async function createTwentyOpportunity(params: {
     .toISOString()
     .split('T')[0];
 
-  const data = await twentyGraphQL<{ createOpportunity: { id: string } }>(
+  const data = await twentyGQL<{ createOpportunity: { id: string } }>(
     `mutation CreateOpportunity($data: OpportunityCreateInput!) {
       createOpportunity(data: $data) { id }
     }`,

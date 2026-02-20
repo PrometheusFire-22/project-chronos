@@ -47,6 +47,7 @@ export async function POST(request: Request) {
         email,
         company,
         subject,
+        subject_label: subjectLabel,
         message,
         source: 'contact-form',
       })
