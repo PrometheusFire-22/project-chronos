@@ -1,0 +1,22 @@
+{
+  "name": "clawdacious",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/clawdacious",
+  "projectType": "application",
+  "tags": [
+    "type:app",
+    "scope:marketing"
+  ],
+  "targets": {
+    "build": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "pages:build"
+      },
+      "outputs": [
+        "{projectRoot}/.open-next"
+      ],
+      "cache": true
+    }
+  }
+}

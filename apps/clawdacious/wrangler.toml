@@ -1,0 +1,14 @@
+name = "clawdacious"
+compatibility_date = "2025-12-29"
+compatibility_flags = ["nodejs_compat"]
+
+pages_build_output_dir = ".open-next"
+
+[vars]
+NEXT_PUBLIC_SITE_URL = "https://clawdacious.com"
+NEXT_PUBLIC_DIRECTUS_URL = "https://admin.automatonicai.com"
+R2_PUBLIC_URL = "https://pub-060e43df09e3ec3a256a6624ab7649f8.r2.dev"
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "chronos-media"

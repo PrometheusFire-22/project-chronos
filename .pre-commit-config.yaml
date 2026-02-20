@@ -51,6 +51,7 @@ repos:
       - id: check-added-large-files
         name: Prevent large files (>1MB)
         args: ["--maxkb=1000"]
+        exclude: '^apps/.*/public/'
 
       - id: check-merge-conflict
         name: Check for merge conflict markers
