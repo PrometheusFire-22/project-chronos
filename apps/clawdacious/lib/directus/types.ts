@@ -191,6 +191,31 @@ export const CTASectionSchema = z.object({
 export type CTASection = z.infer<typeof CTASectionSchema>;
 
 // =============================================================================
+// Contact Submissions
+// =============================================================================
+
+export const ContactSubmissionSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  email: z.string().email(),
+  company: z.string().nullable(),
+  subject: z.string(),
+  message: z.string(),
+  status: z.enum(['new', 'contacted', 'qualified', 'closed']),
+  source: z.string().nullable(),
+  ip_address: z.string().nullable(),
+  twenty_person_id: z.string().nullable(),
+  twenty_company_id: z.string().nullable(),
+  twenty_opportunity_id: z.string().nullable(),
+  email_sent: z.boolean(),
+  notes: z.string().nullable(),
+  date_created: z.string().datetime(),
+  date_updated: z.string().datetime().nullable(),
+});
+
+export type ContactSubmission = z.infer<typeof ContactSubmissionSchema>;
+
+// =============================================================================
 // Directus API Response Wrappers
 // =============================================================================
 
