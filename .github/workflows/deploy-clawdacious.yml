@@ -3,7 +3,7 @@ name: Deploy Clawdacious to Cloudflare Pages
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'apps/clawdacious/**'
   workflow_dispatch:
