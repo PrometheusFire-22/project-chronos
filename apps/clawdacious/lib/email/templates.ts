@@ -216,7 +216,7 @@ export function confirmationEmail(data: ContactEmailData): string {
               <img src="${BRAND.logo}" alt="Cornelius the AI Concierge" width="64" height="64"
                 style="border-radius:12px;display:block;margin:0 auto 18px;object-fit:cover;" />
               <div style="color:${BRAND.coral};font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;">CLAWDACIOUS</div>
-              <div style="color:${BRAND.mutedLight};font-size:12px;letter-spacing:1px;">The AI That Actually Does Things</div>
+              <div style="color:${BRAND.mutedLight};font-size:12px;letter-spacing:1px;">Your Business Never Misses Another Lead</div>
             </td>
           </tr>
 
@@ -325,7 +325,7 @@ export function confirmationEmail(data: ContactEmailData): string {
                   <td style="padding:16px 22px;text-align:center;">
                     <p style="color:#7F1D1D;font-size:13px;line-height:1.65;margin:0;">
                       Need something urgent? Reach us directly at
-                      <a href="mailto:geoff@clawdacious.com" style="color:${BRAND.coral};font-weight:600;text-decoration:none;">geoff@clawdacious.com</a>
+                      <a href="mailto:geoff@clawdacious.com" style="color:${BRAND.coral};font-weight:600;text-decoration:none;">geoff@clawdacious.com</a><br>
                       or call <a href="tel:+14168246865" style="color:${BRAND.coral};font-weight:600;text-decoration:none;">(416) 824-6865</a>.
                     </p>
                   </td>
@@ -339,7 +339,7 @@ export function confirmationEmail(data: ContactEmailData): string {
           <tr>
             <td style="background-color:${BRAND.dark};border-radius:0 0 12px 12px;padding:24px 32px;text-align:center;">
               <p style="color:#475569;font-size:12px;margin:0 0 6px 0;">© ${year} Clawdacious &nbsp;·&nbsp; Greater Toronto Area, Canada</p>
-              <p style="color:${BRAND.coral};font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0;">The AI That Actually Does Things</p>
+              <p style="color:${BRAND.coral};font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin:0;">Your Business Never Misses Another Lead</p>
             </td>
           </tr>
 
