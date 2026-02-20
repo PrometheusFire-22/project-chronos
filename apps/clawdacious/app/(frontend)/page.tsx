@@ -222,12 +222,12 @@ export default async function HomePage() {
             </div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-8">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground to-red-400">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground to-red-600 dark:to-red-400">
                 {headline}
               </span>
             </h1>
 
-            <p className="text-lg sm:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-10">
+            <p className="text-lg sm:text-xl text-slate-800 dark:text-slate-100 max-w-2xl mx-auto mb-10">
               {subheadline}
             </p>
 
@@ -277,7 +277,7 @@ export default async function HomePage() {
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
               Not a Chatbot. Your Business, Running 24/7.
             </h2>
-            <p className="text-lg text-slate-600 dark:text-slate-300">
+            <p className="text-lg text-slate-800 dark:text-slate-100">
               A private AI assistant configured specifically for how you work — connected to your tools, trained on your business, always on.
             </p>
           </div>
@@ -303,7 +303,7 @@ export default async function HomePage() {
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
               Up and Running in 24–48 Hours
             </h2>
-            <p className="text-lg text-slate-600 dark:text-slate-300">
+            <p className="text-lg text-slate-800 dark:text-slate-100">
               You don't need to know anything technical. That's exactly what we're here for.
             </p>
           </div>
@@ -336,7 +336,7 @@ export default async function HomePage() {
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
               Is This For You?
             </h2>
-            <p className="text-lg text-slate-600 dark:text-slate-300">
+            <p className="text-lg text-slate-800 dark:text-slate-100">
               If you run a service business in the GTA and handle a lot of the same communication over and over — yes.
             </p>
           </div>
@@ -370,7 +370,7 @@ export default async function HomePage() {
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
               Simple, Transparent Pricing
             </h2>
-            <p className="text-lg text-slate-600 dark:text-slate-300">
+            <p className="text-lg text-slate-800 dark:text-slate-100">
               One-time setup fee. Low monthly retainer. No hidden costs. Cancel anytime.
             </p>
           </div>
@@ -457,7 +457,7 @@ export default async function HomePage() {
               <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
                 Common Questions
               </h2>
-              <p className="text-lg text-slate-600 dark:text-slate-300">
+              <p className="text-lg text-slate-800 dark:text-slate-100">
                 Honest answers. No fluff.
               </p>
             </div>
@@ -486,7 +486,7 @@ export default async function HomePage() {
               <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
                 Ready to Stop Doing Admin Manually?
               </h2>
-              <p className="text-lg text-slate-600 dark:text-slate-300 mb-10">
+              <p className="text-lg text-slate-800 dark:text-slate-100 mb-10">
                 Tell me about your business. I'll tell you exactly what your AI assistant would do — and what it'll cost. No pitch, no pressure.
               </p>
 

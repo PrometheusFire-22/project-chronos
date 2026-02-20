@@ -50,7 +50,7 @@ export default async function BlogListingPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground to-red-400">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-foreground to-red-600 dark:to-red-400">
                 Blog
               </span>
             </h1>
