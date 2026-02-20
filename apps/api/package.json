@@ -12,7 +12,7 @@
   "dependencies": {
     "@hono/node-server": "^1.13.7",
     "dotenv": "^16.4.7",
-    "hono": "^4.11.7",
+    "hono": "^4.11.10",
     "pg": "^8.13.1"
   },
   "devDependencies": {
