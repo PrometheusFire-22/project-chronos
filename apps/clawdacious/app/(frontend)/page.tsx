@@ -12,8 +12,13 @@ import {
   ChevronDown,
   MapPin,
   Clock,
-  Users,
   Mail,
+  House,
+  Scale,
+  NotebookPen,
+  ChartNoAxesCombined,
+  Wrench,
+  Target,
 } from 'lucide-react'
 import { ContactForm } from '@/components/ContactForm'
 
@@ -132,31 +137,37 @@ const PRICING = [
 
 const WHO_ITS_FOR = [
   {
+    icon: <House className="h-6 w-6 text-red-400 shrink-0" />,
     role: 'Realtors',
     pain: 'Missing leads while showing homes',
     win: 'Never lose a client because you were busy with another one',
   },
   {
+    icon: <Scale className="h-6 w-6 text-red-400 shrink-0" />,
     role: 'Lawyers & Law Clerks',
     pain: 'Intake calls, scheduling, repetitive client questions',
     win: 'Intake handled automatically — you only talk to qualified clients',
   },
   {
+    icon: <NotebookPen className="h-6 w-6 text-red-400 shrink-0" />,
     role: 'Accountants & Bookkeepers',
     pain: 'Tax season volume, appointment overload',
     win: 'Handles the inquiry flood in busy season so you can focus on the work',
   },
   {
+    icon: <ChartNoAxesCombined className="h-6 w-6 text-red-400 shrink-0" />,
     role: 'Financial Advisors',
     pain: 'Scheduling, follow-ups, compliance-sensitive communication',
     win: 'Automates scheduling and follow-ups while you stay in control of advice',
   },
   {
+    icon: <Wrench className="h-6 w-6 text-red-400 shrink-0" />,
     role: 'Contractors & Trades',
     pain: 'Missed calls on job sites, quote follow-ups',
     win: 'Quotes follow up themselves — close more jobs without more calls',
   },
   {
+    icon: <Target className="h-6 w-6 text-red-400 shrink-0" />,
     role: 'Coaches & Consultants',
     pain: 'Discovery call booking, qualifying time-wasters',
     win: 'Every call you take is pre-qualified and worth your time',
@@ -347,7 +358,7 @@ export default async function HomePage() {
                 className="p-8 rounded-2xl border border-border bg-card backdrop-blur hover:border-red-500/30 transition-colors"
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <Users className="h-6 w-6 text-red-400 shrink-0" />
+                  {item.icon}
                   <span className="font-semibold text-xl">{item.role}</span>
                 </div>
                 <p className="text-sm text-slate-600 dark:text-slate-300 mb-4 leading-relaxed">
